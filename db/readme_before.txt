@@ -1,0 +1,1 @@
+Se debe crear la bd metalbit2 previamente y luego importar la BD
