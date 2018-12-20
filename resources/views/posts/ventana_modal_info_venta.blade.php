@@ -14,7 +14,7 @@
             </div>
             <div class="modal-body">
               <h5 class="modal-title" id="exampleModalLabel">Ingresa la cantidad de {{$ad->moneda}} que quieres adquirir en {{$ad->cripto_moneda}}</h5>
-                <form method="POST" id="ad-form" action="{{$ad->url_api}}">
+                <form method="POST" id="ad_form_{{$ad->id}}" action="{{$ad->url_api}}">
                        <input  type="hidden" id="num_val_crip_moneda_{{$ad->id}}" value="{{$ad->precio_moneda_cf}}">
 
                        <input  type="hidden" id="id_crip_moneda_{{$ad->id}}" value="{{$ad->id_cripto_moneda}}"> 
@@ -60,7 +60,13 @@
                         @else
                             <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
                         @endif
-                          
+                         <div class="modal-body">
+                          <i class="fa fa-info-circle"></i>
+                          <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
+                          <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')">
+                          <div class="dropzone"></div>            
+                          <label id="msnEspera_{{$ad->id}}"></label>
+                        </div>   
                         <div class="modal-body">
 
                           

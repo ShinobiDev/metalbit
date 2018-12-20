@@ -67,6 +67,7 @@
                       $('#users-table').DataTable({
                         'language':
                           {
+                            "responsive":       true,
                             "sProcessing":     "Procesando...",
                             "sLengthMenu":     "Mostrar _MENU_ registros",
                             "sZeroRecords":    "No se encontraron resultados",
@@ -98,7 +99,8 @@
                   $(function (){
                       $('#comprar-table').DataTable({
                         'language':
-                          {
+                          { 
+                            "responsive":       true,
                             "sProcessing":     "Procesando...",
                             "sLengthMenu":     "Mostrar _MENU_ registros",
                             "sZeroRecords":    "No se encontraron resultados",

@@ -299,7 +299,12 @@ class UsersController extends Controller
 
         return redirect()->route('users.index')->with('success', 'Usuario Eliminado correctamente');
     }
-
+    /**
+     * Funcion para hacer cambio del correo
+     * @param  [type] $id           [description]
+     * @param  [type] $nuevo_correo [description]
+     * @return [type]               [description]
+     */
     public function cambio_correo($id,$nuevo_correo){
         if(filter_var($nuevo_correo, FILTER_VALIDATE_EMAIL)){
             $dd=User::where("id",$id)->get();
@@ -328,7 +333,10 @@ class UsersController extends Controller
     
         
     }
-
+    /**
+     * Funcion para ver las bonificaciones
+     * @return [type] [description]
+     */
     public function mis_bonificaciones(){
         $bonificaciones=DB::table("bonificaciones")
                                ->select('users.id',
@@ -344,7 +352,11 @@ class UsersController extends Controller
                 ->with('success', 'Estas son tus bonificaciones');                        
                                
     }
-
+    /**
+     * Funcion para validar el codigo de referido de un usuario
+     * @param  [type] $cod [description]
+     * @return [type]      [description]
+     */
     public function validar_codigo($cod){
         if($cod=="-"){
              return response()->json(["respuesta"=>true]);
@@ -355,7 +367,11 @@ class UsersController extends Controller
         }
         return response()->json(["respuesta"=>false]);
     }
-
+    /**
+     * FUncion para cambiar la clave
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
     public function cambio_clave(Request $request){
       //dd(Hash::make($request['password']));
       //dd($request);
@@ -419,7 +435,12 @@ class UsersController extends Controller
                 ->with('success', 'Aqui esta el listado de los clic que haz visto');         
     }
 
-
+    /**
+     * Funcion para cambiar el horario del dia
+     * @param  [type] $id       [description]
+     * @param  [type] $horarios [description]
+     * @return [type]           [description]
+     */
     public function cambiar_horario( $id,$horarios){
         //dd($horarios);
         DB::table('detalle_horario_usuario')->where('id',$id)->update([
@@ -427,7 +448,12 @@ class UsersController extends Controller
                                                                 ]);
         return response()->json(["respuesta"=>true]);
     }
-
+    /**
+     * Funcion para cambia el estado del dia 
+     * @param  [type] $id     [description]
+     * @param  [type] $estado [description]
+     * @return [type]         [description]
+     */
     public function cambiar_estado_dia($id,$estado){
         
         if($estado=="false"){
@@ -439,6 +465,13 @@ class UsersController extends Controller
                                                                     'estado_dia'=>$estado2                  
                                                                    ]);
         return response()->json(["respuesta"=>true,"estado"=>$estado2]);   
+    }
+
+    public function registrar_wallet(Request $request){
+        dd($request["datos"]);
+    }
+    public function registrar_wallet_qr(Request $request,$id){
+        dd($request);
     }
 }
 

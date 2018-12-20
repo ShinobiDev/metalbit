@@ -1,10 +1,31 @@
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
 <script type="text/javascript">
   @if(auth()->user()!=null)
     var id_usuario= '{{auth()->user()->id}}';
   @else
     var id_usuario= '0'; 
   @endif  
+    var _id_anuncio=0;
 </script>
+<script type="text/javascript">
+  new Dropzone('.dropzone',{
+    //url:"/",
+    url:"{{config('app.url')}}"+"/registrar_wallet_qr/"+_id_anuncio,
+    dictDefaultMessage:"Sube aquí tu código QR (solo se permiten imagenes con formato PNG,JPEG o JPG)",
+    maxFiles:1,
+    maxFilesize:1,//MB
+    acceptedFiles: "image/*",
+    dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
+    //dictInvalidFileType:"Solo esta permitido subir imagenes",
+    headers:{
+      'X-CSRF-TOKEN':'{{csrf_token()}}'
+    }
+  });
+  Dropzone.autoDiscover=false;
+</script>
+
+
 <script type="text/javascript">
       var url_global= "{{config('app.url')}}";
 
@@ -31,12 +52,13 @@
           });  
         }
        /*funcion que hace la peticion ajax */ 
-      function peticion_ajax(metodo,url,func){
+      function peticion_ajax(metodo,url,func,datos){
               //debe ir como core y no public la url en producccion
              $.ajax({
                    type: metodo,
                    url: url_global+"/"+url,
                    dataType: "json",
+                   data:datos,
                    success: function(result){
                          
                          func(result);
@@ -194,5 +216,26 @@
          */
         function mostrar_cargando(el,width,msn){
           $('#'+el).html('<div class="loading text-green"><img src="https://k46.kn3.net/taringa/C/7/8/D/4/A/vagonettas/5C9.gif" width="'+width+'" alt="loading" /><br/>'+msn+'</div>');
+        }
+        /**
+         * Funcion que registra el wallet del cliente
+         * @param  {[type]} e [description]
+         * @return {[type]}   [description]
+         */
+        function registrar_wallet(e,id){
+          mostrar_cargando("msnEspera_"+id,10,"Estamos registrando el wallet, una vez finalizado el proceso habilitaremos el botón de compra ...");
+          console.log(document.getElementById("ad_form_"+id).elements.codigo_wallet[0]);
+          console.log(document.getElementById("ad_form_"+id).elements.codigo_wallet[1]);
+          var wallet
+          if(document.getElementById("ad_form_"+id).elements.codigo_wallet[0].value != ""){
+            wallet=document.getElementById("ad_form_"+id).elements.codigo_wallet[0].value;
+          }else if(document.getElementById("ad_form_"+id).elements.codigo_wallet[1].value != ""){
+            wallet=document.getElementById("ad_form_"+id).elements.codigo_wallet[1].value;
+          }
+          document.getElementById("btn_comprar_"+id).disabled=true;
+          peticion_ajax("post","registrar_wallet",function(rs){
+            console.log(rs);
+          },{datos:wallet});
+          //"datos":document.getElementById("ad_form_"+id).elements.codigo_wallet
         }
 </script>

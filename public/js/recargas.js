@@ -36,6 +36,7 @@ function descontar_recargar(id_ventana,id_anuncio,costo,tipo){
 			         if(result.ad_visible==false){
 			         	$("#btn_info_"+id_anuncio).css({"display":"none"});	
 			         	$("#btn_compra_"+id_anuncio).css({"display":"none"});	
+			         	_id_anuncio=id_anuncio;
 			         }else{
 			         	if(tipo=="info"){
 			         		$("#btn_info_"+id_anuncio).css({"display":"none"});	
