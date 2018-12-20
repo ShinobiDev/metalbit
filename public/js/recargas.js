@@ -5,7 +5,7 @@ function descontar_recargar(id_ventana,id_anuncio,costo,tipo){
  
 	console.log(document.getElementById(id_ventana));
 	   $("#"+id_ventana).addClass( "in" );
-	 	console.log(document.getElementById(id_ventana));
+	 
 	   $("#"+id_ventana).css({"display": "block", "padding-right": "21px"});
        
        $.ajaxSetup({
@@ -32,16 +32,17 @@ function descontar_recargar(id_ventana,id_anuncio,costo,tipo){
 		         type: "GET",
 		         url: url_global+"/descontar_recargas/"+id_anuncio+"/"+costo+"/"+user_id.value+"/"+tipo+"/"+tot+"/"+valor,
 		         dataType: "json",
-		         success: function(result){
-		          console.log(result);
-		         if(result.ad_visible==false){
-		         	$("#btn_"+id_anuncio).css({"display":"none"});	
-		         }else{
-		         	$("#btn_"+id_anuncio).css({"display":"none"});	
-		         	$("#anc_"+id_anuncio).css({"display":""});	
-		         }
-		          
-		             
+		         success: function(result){		        
+			         if(result.ad_visible==false){
+			         	$("#btn_info_"+id_anuncio).css({"display":"none"});	
+			         	$("#btn_compra_"+id_anuncio).css({"display":"none"});	
+			         }else{
+			         	if(tipo=="info"){
+			         		$("#btn_info_"+id_anuncio).css({"display":"none"});	
+			         		$("#anc_"+id_anuncio).css({"display":""});		
+			         	}
+			         	
+			         }	             
 		         },
 			     error: function(err){
 			         console.log(err);
