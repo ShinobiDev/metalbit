@@ -33,10 +33,11 @@ function descontar_recargar(id_ventana,id_anuncio,costo,tipo){
 		         url: url_global+"/descontar_recargas/"+id_anuncio+"/"+costo+"/"+user_id.value+"/"+tipo+"/"+tot+"/"+valor,
 		         dataType: "json",
 		         success: function(result){		        
+			         _id_anuncio=id_anuncio;
 			         if(result.ad_visible==false){
 			         	$("#btn_info_"+id_anuncio).css({"display":"none"});	
 			         	$("#btn_compra_"+id_anuncio).css({"display":"none"});	
-			         	_id_anuncio=id_anuncio;
+			         	
 			         }else{
 			         	if(tipo=="info"){
 			         		$("#btn_info_"+id_anuncio).css({"display":"none"});	

@@ -8,16 +8,20 @@
   @endif  
     var _id_anuncio=0;
 </script>
+ <!--
+ * Aqui gestiono dropzone 
+ * @type {String}
+ -->
 <script type="text/javascript">
   new Dropzone('.dropzone',{
     //url:"/",
     url:"{{config('app.url')}}"+"/registrar_wallet_qr/"+_id_anuncio,
     dictDefaultMessage:"Sube aquí tu código QR (solo se permiten imagenes con formato PNG,JPEG o JPG)",
     maxFiles:1,
-    maxFilesize:1,//MB
+    maxFilesize:10,//MB
     acceptedFiles: "image/*",
     dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
-    //dictInvalidFileType:"Solo esta permitido subir imagenes",
+    dictInvalidFileType:"Solo esta permitido subir imagenes",
     headers:{
       'X-CSRF-TOKEN':'{{csrf_token()}}'
     }
@@ -123,23 +127,13 @@
 
           //tengo que hacer una peticion a la api de coin market para consultar elnuevo valor 
           peticion_ajax("get","obtener_valor_moneda_valida/"+document.getElementById("id_crip_moneda_"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value,function(rs){
-               
-                //Calculo d eel valor por la moneda seleccionada pero no autorizada
-              
-                               
-                
                 //cambio el valor de la moneda permitida
                 var tt=number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price),2,".","")*number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," ");
                 document.getElementById("stValorMonedaValida_"+id).innerHTML=number_format(tt,2,".",",")+" "+
                 document.getElementById("hd_mon_valido_"+id).value;
 
                 document.getElementById("hd_pre_mon_valido"+id).value=number_format(tt,2,".","");
-
-
-
-
                 var hs=cod_anuncio+"/"+document.getElementById("hd_pre_mon_valido"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
-                //peticion para el hash
                 peticion_ajax("get","hash_anuncio/"+hs,function(rs){
 
                        
@@ -224,18 +218,16 @@
          */
         function registrar_wallet(e,id){
           mostrar_cargando("msnEspera_"+id,10,"Estamos registrando el wallet, una vez finalizado el proceso habilitaremos el botón de compra ...");
-          console.log(document.getElementById("ad_form_"+id).elements.codigo_wallet[0]);
-          console.log(document.getElementById("ad_form_"+id).elements.codigo_wallet[1]);
-          var wallet
-          if(document.getElementById("ad_form_"+id).elements.codigo_wallet[0].value != ""){
-            wallet=document.getElementById("ad_form_"+id).elements.codigo_wallet[0].value;
-          }else if(document.getElementById("ad_form_"+id).elements.codigo_wallet[1].value != ""){
-            wallet=document.getElementById("ad_form_"+id).elements.codigo_wallet[1].value;
+          console.log(document.getElementById("ad_form_"+id).elements.codigo_wallet);
+          
+          var wallet;
+          if(document.getElementById("ad_form_"+id).elements.codigo_wallet.value != ""){
+            wallet=document.getElementById("ad_form_"+id).elements.codigo_wallet.value;
           }
           document.getElementById("btn_comprar_"+id).disabled=true;
           peticion_ajax("post","registrar_wallet",function(rs){
             console.log(rs);
-          },{datos:wallet});
+          },{"datos":wallet});
           //"datos":document.getElementById("ad_form_"+id).elements.codigo_wallet
         }
 </script>

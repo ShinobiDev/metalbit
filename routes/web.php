@@ -73,7 +73,7 @@ Route::get("anuncios_vistos","Admin\UsersController@anuncios_vistos_por_mi")->na
 Route::get("ver_mas_comentarios/{id}/{min}/{max}","AnunciosController@ver_mas_comentarios");
 Route::get("cambiar_horario/{id}/{hor}","Admin\UsersController@cambiar_horario");
 Route::get("cambiar_estado_dia/{id}/{estado}","Admin\UsersController@cambiar_estado_dia");
-Route::post("registrar_wallet","Admin\UsersController@registrar_wallet");
+Route::post("registrar_wallet/{id}","Admin\UsersController@registrar_wallet");
 Route::post("registrar_wallet_qr/{id}","Admin\UsersController@registrar_wallet_qr");
 
 
@@ -91,7 +91,6 @@ Route::get('response_recarga',function(){
 	$r=new App\Recargas;
 	return $r->registro_recargas($_REQUEST);	
 });
-
 
 Route::get('confirmation_recarga',function(){
 	$r=new App\Recargas;

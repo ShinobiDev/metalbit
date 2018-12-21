@@ -443,9 +443,10 @@ class UsersController extends Controller
      */
     public function cambiar_horario( $id,$horarios){
         //dd($horarios);
-        DB::table('detalle_horario_usuario')->where('id',$id)->update([
-                                                                    'horario'=>$horarios                  
-                                                                ]);
+        DB::table('detalle_horario_usuario')->where('id',$id)
+                                            ->update([
+                                                        'horario'=>$horarios                  
+                                                      ]);
         return response()->json(["respuesta"=>true]);
     }
     /**
@@ -461,17 +462,18 @@ class UsersController extends Controller
         }else{
             $estado2='ABIERTO';
         }
-        DB::table('detalle_horario_usuario')->where('id',$id)->update([
-                                                                    'estado_dia'=>$estado2                  
-                                                                   ]);
+        DB::table('detalle_horario_usuario')
+                ->where('id',$id)->update([
+                        'estado_dia'=>$estado2                  
+                       ]);
         return response()->json(["respuesta"=>true,"estado"=>$estado2]);   
     }
 
-    public function registrar_wallet(Request $request){
-        dd($request["datos"]);
+    public function registrar_wallet(Request $request,$id){
+        dd([$request["datos"],$id,auth()->user()->id]);
     }
     public function registrar_wallet_qr(Request $request,$id){
-        dd($request);
+        dd($request->file('file'));
     }
 }
 
