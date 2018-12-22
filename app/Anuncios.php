@@ -312,7 +312,7 @@ class Anuncios extends Model
                   ->where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ["metodo_pago","PENDIENTE"]
+                      ["estado_pago","PENDIENTE"]
                     ])->get();
             if(count($pg)>0){
                   $empresa=Payu::all();
@@ -324,7 +324,7 @@ class Anuncios extends Model
                       ->where([
                           ["id_anuncio",$id_ad],
                           ['id_user_compra',$comprador[0]->id],
-                          ["metodo_pago","PENDIENTE"]
+                          ["estado_pago","PENDIENTE"]
                         ])
                       ->update([
                      'transactionId' => $req['reference_pol'],
@@ -387,11 +387,17 @@ class Anuncios extends Model
               //dd($empresa);
               $id_ad=explode("-",$req['referenceCode'])[1];
               //dd([$comprador[0]->id,$id_ad]);  
+              /*dd([DB::table("pago")
+                  ->where([
+                      ["id_anuncio",(int)$id_ad],
+                      ['id_user_compra',$comprador[0]->id],
+                      ["metodo_pago","PENDIENTE"]
+                    ])->get(),$comprador[0]->id,(int)$id_ad]);*/
               DB::table("pagos")
                   ->where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ["metodo_pago","PENDIENTE"]
+                      ["estado_pago","PENDIENTE"]
                     ])
                   ->update([
                  'transactionId' => $req['reference_pol'],
@@ -403,14 +409,15 @@ class Anuncios extends Model
                ]);
 
           }
-          
+          //dd($req['reference_pol']);
           $anuncio=Anuncios::where("id",$id_ad)->get();
           $anunciante=User::where(".id",$anuncio[0]->user_id)->get();
           $pg=pagos::where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      'transactionId' => $req['reference_pol']
+                      //['transactionId' , $req['reference_pol']]
                     ])->get();
+          //dd( [$comprador[0],$anunciante[0],$anuncio[0],$pg]);
           //aqui debo enviar los datos de confirmación a la cuenta de correo
           NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0]],[],"CompraPendiente");
           
@@ -433,7 +440,7 @@ class Anuncios extends Model
                   ->where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ["metodo_pago","PENDIENTE"]
+                      ["estado_pago","PENDIENTE"]
                     ])->get();
 
         if(count($pg)>0){

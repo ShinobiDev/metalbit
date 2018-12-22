@@ -20,6 +20,17 @@ Anuncio:
     | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
+@if($ad[2]->code_wallet!=null)
+	## Código wallet ##
+	## {{$ad[2]->code_wallet}} ##	
+@elseif($ad[2]->image_wallet!=null)
+	##DESCARGA EL QR##
+	{{ config('app.url') }}{{$ad[2]->image_wallet}}
+@else
+	## Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos ##
+@endif
+
+
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 
