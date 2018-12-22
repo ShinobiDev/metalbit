@@ -75,6 +75,10 @@ Route::get("cambiar_horario/{id}/{hor}","Admin\UsersController@cambiar_horario")
 Route::get("cambiar_estado_dia/{id}/{estado}","Admin\UsersController@cambiar_estado_dia");
 Route::post("registrar_wallet/{id}","Admin\UsersController@registrar_wallet");
 Route::post("registrar_wallet_qr/{id}","Admin\UsersController@registrar_wallet_qr");
+Route::get('registrar_codigo_wallet/{id}',"Admin\UsersController@registrar_codigo_wallet_email");
+Route::get('ver_mis_compras/{id}',"Admin\UsersController@ver_mis_compras")->name('mis_compras');
+Route::get('ver_mis_ventas/{id}',"Admin\UsersController@ver_mis_ventas")->name('mis_ventas');
+Route::get('ver_todas_las_transacciones',"Admin\UsersController@ver_todas_las_transacciones")->name('ver_todas_las_transacciones');
 
 
 /*respuesta de payu para compras*/

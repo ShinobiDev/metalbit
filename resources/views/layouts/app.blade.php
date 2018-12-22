@@ -48,14 +48,27 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
 
-                       @guest
-                        <!-- <li>
-                           <a href="{{route('login')}}">Vender</a>
+                      @role('Admin')
+                        <li>
+                           <a href="{{route('anuncios.create')}}">Crear anuncios</a>
+                        </li>
+                        <input type="hidden" value="{{Auth::user()->id}}" id="user_id">
+                        <li>                          
+                           <a href="{{route('recargas.index')}}">Estadistica Recargas</a>                           
                         </li>
                         <li>
-                           <a href="{{route('login')}}">Comprar</a>
-                        </li>-->
-                      @else
+                          <a href="{{route('anuncios.all',['id'=>Auth::user()->id])}}">Todos los anuncios</a>
+                        </li>
+                        <li>                          
+                           <a href="{{route('ver_todas_las_transacciones')}}">Estadistica de transacciones</a>                           
+                        </li>
+                        <li>                          
+                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>                                 
+                        </li>
+                        
+                        
+                      @endrole
+                      @role('Comerciante')
                         <li>
                            <a href="{{route('anuncios.create')}}">Crear anuncios</a>
                         </li>
@@ -64,20 +77,16 @@
                         </li>
                         <input type="hidden" value="{{Auth::user()->id}}" id="user_id">
                         <li>                          
-                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>     
-                            {{--<a  data-toggle="modal" data-target="#exampleModalLong">Recargar</a>--}}
-                           {{-- @include('partials.ventana_recargas')--}}
-                        </li>
-                            
-                      @endguest
-                      @role('Admin')
-                        <li>                          
-                           <a href="{{route('recargas.index')}}">Estadistica Recargas</a>                           
+                           <a href="{{route('mis_compras',['id'=>auth()->user()->id])}}">Mis compras</a>                           
                         </li>
                         <li>
-                          <a href="{{route('anuncios.all',['id'=>Auth::user()->id])}}">Todos los anuncios</a>
+                          <a href="{{route('mis_ventas',['id'=>auth()->user()->id])}}">Mis ventas</a>                           
                         </li>
+                        <li>                          
+                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>                                 
+                        </li>                        
                       @endrole
+
                     </ul>
                     
 

@@ -3,17 +3,20 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, Hemos registrado una compra Pendiente falta que la confirmes.
+Estimad@ {{$user->name}}, hemos registrado una posible compra, solo falta que la confirmes, realiza el pago en la entidad de tu elección y una vez se realice la confirmación, te enviaremos la información correspondiente para realizar la transacción
 
 
 
 ## Resumen Oferta ##
 Anuncio:
-Estado: PENDIENTE
-#Anunciante
+Estado de la compra: PENDIENTE
+
+#Datos del vendedor
 Nombre: {{$ad[0]->name}}
 Teléfono: {{$ad[0]->phone}}
 Correo electrónico: {{$ad[0]->email}}
+
+## Resumen Oferta ##
 
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
@@ -21,19 +24,15 @@ Correo electrónico: {{$ad[0]->email}}
     | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
-@if($ad[2]->code_wallet!="" || $ad[2]->image_wallet!="")
-	## Código wallet ##
+@if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
+	## Esta pendiente el registro de tu código wallet, recuerda que es importante que realices este proceso para darle a conocer al vendedor la información requerida para hacer la transacción ##
 
-	@if($ad[2]->code_wallet!="")
-		## {{$ad[2]->code_wallet}} ##	
-	@else
-		##DESCARGA EL QR##
-		{{ config('app.url') }}{{$ad[2]->image_wallet}}
-	@endif
-@else
-	##Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos##
+@component('mail::button', ['url' => url('registrar_codigo_wallet'.'/'.$ad[2]->transactionId)])
+Registrar Código Wallet
+@endcomponent
+
 @endif
-
+	
 
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}

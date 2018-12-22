@@ -17,6 +17,7 @@ use App\Anuncios;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Hash;
+use App\pagos;
 
 
 
@@ -468,7 +469,12 @@ class UsersController extends Controller
                        ]);
         return response()->json(["respuesta"=>true,"estado"=>$estado2]);   
     }
-
+    /**
+     * Funcion para realizar el registro del codigo wallet 
+     * @param  Request $request [description]
+     * @param  [type]  $id      [description]
+     * @return [type]           [description]
+     */
     public function registrar_wallet(Request $request,$id){
         //dd([$request["datos"],$request["valor_moneda"],$request["cantidad_moneda_comprada"],$id,auth()->user()->id]);
 
@@ -516,8 +522,59 @@ class UsersController extends Controller
          
 
     }
+    /**
+     * Funcion para registarr el codigo qr del wallet
+     * @param  Request $request [description]
+     * @param  [type]  $id      [description]
+     * @return [type]           [description]
+     */
     public function registrar_wallet_qr(Request $request,$id){
         dd($request->file('file'));
+    }
+    /**
+     * Funcion para registar el codigo wallet desde el email
+     * @param  [type] $id_transaccion [description]
+     * @return [type]                 [description]
+     */
+    public function registrar_codigo_wallet_email($id_transaccion){
+        dd($id_transaccion);
+    }
+    /**
+     * Funcion para consultar las compras que ha realizado un usuario
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function ver_mis_compras($id){
+        
+        $pag=pagos::join('anuncios','anuncios.id','pagos.id_anuncio')
+                    ->join('users','users.id','anuncios.user_id')
+                    ->where('id_user_compra',$id)
+                    ->get();
+        //dd($pag);
+        return view('posts.mis_compras')
+                ->with('mis_compras',$pag);
+                   
+
+    }
+    /**
+     * Funcion para rconsultar las ventas que ha realizado
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function ver_mis_ventas($id){
+        $pag=pagos::join('anuncios','anuncios.id','pagos.id_anuncio')
+                    ->join('users','users.id','anuncios.user_id')
+                    ->where('anuncios.user_id',$id)
+                    ->get();
+        //dd($pag);                    
+        return view('posts.mis_ventas')
+                ->with('mis_ventas',$pag);
+    }
+    public function ver_todas_las_transacciones(){
+        $pag=pagos::join('anuncios','anuncios.id','pagos.id_anuncio')
+                    ->join('users','users.id','anuncios.user_id')
+                    ->get();
+        dd($pag);        
     }
 }
 
