@@ -17,10 +17,10 @@ Correo electrónico: {{$ad[0]->email}}
 @endcomponent
 
 
-@if($ad[2]->code_wallet!=null)
+@if($ad[2]->code_wallet!="")
 	## Código wallet ##
 	## {{$ad[2]->code_wallet}} ##	
-@elseif($ad[2]->image_wallet!=null)
+@elseif($ad[2]->image_wallet!="")
 	##DESCARGA EL QR##
 	{{ config('app.url') }}{{$ad[2]->image_wallet}}
 @else

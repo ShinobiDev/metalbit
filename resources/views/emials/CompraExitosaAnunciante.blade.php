@@ -20,10 +20,10 @@ Anuncio:
     | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
-@if($ad[2]->code_wallet!=null)
+@if($ad[2]->code_wallet!="")
 	## Código wallet ##
 	## {{$ad[2]->code_wallet}} ##	
-@elseif($ad[2]->image_wallet!=null)
+@elseif($ad[2]->image_wallet!="")
 	##DESCARGA EL QR##
 	{{ config('app.url') }}{{$ad[2]->image_wallet}}
 @else

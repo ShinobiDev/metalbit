@@ -20,9 +20,7 @@ Correo electrónico:{{$ad[0]->email}}
     | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
-@if($ad[2]->code_wallet==null)
-	##Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos##
-@elseif($ad[2]->image_wallet==null)
+@if($ad[2]->code_wallet=="" || $ad[2]->image_wallet=="")
 	##Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos##
 @endif
 

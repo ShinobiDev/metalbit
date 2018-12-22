@@ -143,12 +143,12 @@ class RecargasController extends Controller
     public function registro_consulta_ad($anuncio,$costo,$user_id,$tipo,$cantidad,$precio)
     {
 
-        /*if($tipo=="compra"){
+        if($tipo=="compra"){
             $id_a=$anuncio;
             $id_u=$user_id;
             $PG=DB::table('pagos')->where([
                                         ["id_anuncio",$id_a],
-                                        ["metodo_pago","PENDIENTE"],
+                                        ["estado_pago","PENDIENTE"],
                                         ["id_user_compra",$id_u]
                                     ])->get();
             if(count($PG)>0){
@@ -156,23 +156,23 @@ class RecargasController extends Controller
                              ->where("id",$PG[0]->id)  
                              ->update(["transactionId"=>"-",
                                 "transactionQuantity"=>$cantidad,
-                                "transactionState"=>0,
+                                "transactionState"=>'Sin compra',
                                 "transation_value"=>$precio,
                                 "id_anuncio"=>$id_a,
-                                "metodo_pago"=>'PENDIENTE',
+                                "estado_pago"=>'PENDIENTE',
                                 "id_user_compra"=>$id_u]);
                 
                 
             }else{
                 DB::table('pagos')->insert(["transactionId"=>"-",
                                 "transactionQuantity"=>$cantidad,
-                                "transactionState"=>0,
+                                "transactionState"=>'Sin compra',
                                 "transation_value"=>$precio,
                                 "id_anuncio"=>$id_a,
-                                "metodo_pago"=>'PENDIENTE',
+                                "estado_pago"=>'PENDIENTE',
                                 "id_user_compra"=>$id_u]);
             }
-        } */   
+        } 
 
 
         $ad=Anuncios::where("id",$anuncio)->get();
