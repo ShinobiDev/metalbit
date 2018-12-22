@@ -5,9 +5,9 @@
 
 Estimad@ {{$user->name}}, Hemos registardo una nueva venta de un anuncio en METALBIT
 
-##COMPRADOR##
+##Datos vendedor##
 Usuario : {{$ad[0]->name}}
-Telefono: {{$ad[0]->phone}},
+Teléfono: {{$ad[0]->phone}},
 Email: {{$ad[0]->email}},
 
 
@@ -15,9 +15,9 @@ Email: {{$ad[0]->email}},
 Anuncio:
 
 @component('mail::table')
-    | tipo | cripto moneda | divisa | 
-    |:--------|:----------|
-    | {{$ad[1]->tipo_anuncio}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[1]->nombre_moneda}} | 
+    | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
+    |:----------|:----------|:----------|:----------|:----------|
+    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan

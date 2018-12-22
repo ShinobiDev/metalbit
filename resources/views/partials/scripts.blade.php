@@ -27,6 +27,7 @@
     }
   });
   Dropzone.autoDiscover=false;
+
 </script>
 
 
@@ -127,13 +128,23 @@
 
           //tengo que hacer una peticion a la api de coin market para consultar elnuevo valor 
           peticion_ajax("get","obtener_valor_moneda_valida/"+document.getElementById("id_crip_moneda_"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value,function(rs){
+               
+                //Calculo d eel valor por la moneda seleccionada pero no autorizada
+              
+                               
+                
                 //cambio el valor de la moneda permitida
                 var tt=number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price),2,".","")*number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," ");
                 document.getElementById("stValorMonedaValida_"+id).innerHTML=number_format(tt,2,".",",")+" "+
                 document.getElementById("hd_mon_valido_"+id).value;
 
                 document.getElementById("hd_pre_mon_valido"+id).value=number_format(tt,2,".","");
+
+
+
+
                 var hs=cod_anuncio+"/"+document.getElementById("hd_pre_mon_valido"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
+                //peticion para el hash
                 peticion_ajax("get","hash_anuncio/"+hs,function(rs){
 
                        
@@ -212,22 +223,34 @@
           $('#'+el).html('<div class="loading text-green"><img src="https://k46.kn3.net/taringa/C/7/8/D/4/A/vagonettas/5C9.gif" width="'+width+'" alt="loading" /><br/>'+msn+'</div>');
         }
         /**
-         * Funcion que registra el wallet del cliente
+         * Funcion que registra el wallet del cliente desde el input text
          * @param  {[type]} e [description]
          * @return {[type]}   [description]
          */
-        function registrar_wallet(e,id){
-          mostrar_cargando("msnEspera_"+id,10,"Estamos registrando el wallet, una vez finalizado el proceso habilitaremos el botón de compra ...");
-          console.log(document.getElementById("ad_form_"+id).elements.codigo_wallet);
-          
+        function registrar_wallet(e,id_ad){
+          mostrar_cargando("msnEspera_"+id_ad,10,"Estamos registrando el wallet, una vez finalizado el proceso habilitaremos el botón de compra ...");
+           
+           var val =document.getElementById("num_val_crip_moneda_"+id_ad).value;
+           var cant=document.getElementById("num_cantidad_moneda_"+id_ad).value;
+           
+           var t=parseFloat(cant)/parseFloat(val);
+           document.getElementById("h5Total_"+id_ad).value=t;
+           document.getElementById("hdh5_total_"+id_ad).value=t;
+           document.getElementById("h5Total_"+id_ad).innerHTML=number_format(t,2,",",".");
+           document.getElementById("hd_valor_venta_"+id_ad).value=cant;
+           
           var wallet;
-          if(document.getElementById("ad_form_"+id).elements.codigo_wallet.value != ""){
-            wallet=document.getElementById("ad_form_"+id).elements.codigo_wallet.value;
+          if(document.getElementById("ad_form_"+id_ad).elements.codigo_wallet.value != ""){
+            wallet=document.getElementById("ad_form_"+id_ad).elements.codigo_wallet.value;
           }
-          document.getElementById("btn_comprar_"+id).disabled=true;
-          peticion_ajax("post","registrar_wallet",function(rs){
+          document.getElementById("btn_comprar_"+id_ad).disabled=true;
+          peticion_ajax("post","registrar_wallet/"+id_ad,function(rs){
             console.log(rs);
-          },{"datos":wallet});
+            document.getElementById("msnEspera_"+id_ad).innerHTML=rs.mensaje;
+            if(rs.respuesta){
+              document.getElementById("btn_comprar_"+id_ad).disabled=false;
+            }
+          },{"datos":wallet,"valor_moneda":document.getElementById("num_cantidad_moneda_"+id_ad).value,"cantidad_moneda_comprada":t});
           //"datos":document.getElementById("ad_form_"+id).elements.codigo_wallet
         }
 </script>

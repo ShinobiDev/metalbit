@@ -470,7 +470,51 @@ class UsersController extends Controller
     }
 
     public function registrar_wallet(Request $request,$id){
-        dd([$request["datos"],$id,auth()->user()->id]);
+        //dd([$request["datos"],$request["valor_moneda"],$request["cantidad_moneda_comprada"],$id,auth()->user()->id]);
+
+        $PG=DB::table('pagos')->where([
+                                    ["id_anuncio",$id],
+                                    ["transactionState","=","Sin compra"],
+                                    //["code_wallet","=",null],
+                                    ["id_user_compra",auth()->user()->id]
+                                ])
+                                ->orwhere([
+                                    ["id_anuncio",$id],
+                                    ["transactionState","=","Pago Aceptado"],
+                                    //["code_wallet","=",null],
+                                    ["id_user_compra",auth()->user()->id]
+                                ])
+                                ->get();
+         //dd($PG);                       
+         if(count($PG)>0){
+
+                DB::table('pagos')
+                         ->where("id",$PG[0]->id)  
+                         ->update([
+                            "code_wallet"=>$request["datos"],
+                            "transactionQuantity"=>$request["cantidad_moneda_comprada"],                            
+                            "transation_value"=>$request["valor_moneda"],
+                         ]);            
+                         
+               return response()->json(["mensaje"=>"Wallet actualizado, ya puedes realizar la compra","respuesta"=>true]);                                     
+           
+         }else{
+            
+            DB::table('pagos')->insert(["transactionId"=>"-",
+                            "transactionQuantity"=>0,
+                            "transactionStatePayu"=>0,
+                            "transation_value"=>0,
+                            "id_anuncio"=>$id,
+                            "metodo_pago"=>'PENDIENTE',
+                            "id_user_compra"=>auth()->user()->id,
+                            "code_wallet"=>$request["datos"],                           
+                            "transactionQuantity"=>$request["cantidad_moneda_comprada"],                            
+                            "transation_value"=>$request["valor_moneda"], 
+                            ]);
+            return response()->json(["mensaje"=>"Wallet registrado, ya puedes realizar la compra","respuesta"=>true]);
+         }
+         
+
     }
     public function registrar_wallet_qr(Request $request,$id){
         dd($request->file('file'));

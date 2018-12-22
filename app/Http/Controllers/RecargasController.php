@@ -143,7 +143,7 @@ class RecargasController extends Controller
     public function registro_consulta_ad($anuncio,$costo,$user_id,$tipo,$cantidad,$precio)
     {
 
-        if($tipo=="compra"){
+        /*if($tipo=="compra"){
             $id_a=$anuncio;
             $id_u=$user_id;
             $PG=DB::table('pagos')->where([
@@ -172,7 +172,7 @@ class RecargasController extends Controller
                                 "metodo_pago"=>'PENDIENTE',
                                 "id_user_compra"=>$id_u]);
             }
-        }    
+        } */   
 
 
         $ad=Anuncios::where("id",$anuncio)->get();

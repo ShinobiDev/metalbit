@@ -10,9 +10,16 @@ Estimad@ {{$user->name}}, Hemos registrado una compra Pendiente falta que la con
 ## Resumen Oferta ##
 Anuncio:
 Estado: PENDIENTE
+#Anunciante
+Nombre: {{$ad[0]->name}}
+Teléfono: {{$ad[0]->phone}}
+Correo electrónico: {{$ad[0]->email}}
 
-
-
+@component('mail::table')
+    | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
+    |:----------|:----------|:----------|:----------|:----------|
+    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
+@endcomponent
 
 
 

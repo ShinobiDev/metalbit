@@ -412,7 +412,7 @@ class AnunciosController extends Controller
                          ->where("id",$PG[0]->id)  
                          ->update(["transactionId"=>"-",
                             "transactionQuantity"=>$cantidad,
-                            "transactionState"=>0,
+                            "transactionStatePayu"=>0,
                             "transation_value"=>$p,
                             "id_anuncio"=>$id_a,
                             "metodo_pago"=>'PENDIENTE',
@@ -422,7 +422,7 @@ class AnunciosController extends Controller
          }else{
             DB::table('pagos')->insert(["transactionId"=>"-",
                             "transactionQuantity"=>$cantidad,
-                            "transactionState"=>0,
+                            "transactionStatePayu"=>0,
                             "transation_value"=>$p,
                             "id_anuncio"=>$id_a,
                             "metodo_pago"=>'PENDIENTE',
