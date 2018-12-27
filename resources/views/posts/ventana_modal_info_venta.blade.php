@@ -24,35 +24,20 @@
 
                             <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
                            value="{{$ad->limite_min}}" 
-                           onchange="cambiar_valor_form_payu_moneda_valida('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
-
-                            
-                              
+                           onchange="cambiar_valor_form_payu_moneda_valida('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>                           
                         @else
                             <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
                              value="{{$ad->limite_min}}" 
                              onchange="cambiar_valor_form_payu('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
-
-
-                        @endif
-
-                       
+                        @endif                       
                        <div class="modal-body">
                             <h5 class="modal-title" id="exampleModalLabel">Precio de venta  {{$ad->cripto_moneda}} $ {{ $ad->precio_moneda}} en {{$ad->moneda}}</h5>
-
-
                           </div>
-
-                           <div class="modal-body">
-
-                              
+                           <div class="modal-body">                              
                                 <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> {{ number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",",".")}} </span> {{$ad->cripto_moneda}}</h5>
-                              
-
                         </div>
                        
-                       <input type="hidden" id="hd_moneda_original" value="{{$ad->moneda}}">
-                       
+                       <input type="hidden" id="hd_moneda_original" value="{{$ad->moneda}}">                       
                         @if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
                             @include("posts.no_permitidos")   
                             <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{ number_format(((float)number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.',''),2,'.',''))*number_format($ad->precio_moneda_usd_sf,2,'.','') ,2,'.','')   
@@ -67,17 +52,14 @@
                           <div class="dropzone"></div>            
                           <label id="msnEspera_{{$ad->id}}"></label>
                         </div>   
-                        <div class="modal-body">
-
-                          
-                          @if(Auth::user()->id!=$ad->id_anunciante)
+                        <div class="modal-body">                  
+                          @if(auth::user()->id!=$ad->id_anunciante)
                             @include('payu.botonpayu')
                           @endif
                         </div>  
                 </form>    
             </div> 
-            <div class="modal-body">
-              
+            <div class="modal-body">              
               <b>Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}
               <b>Estado: </b> {{$ad->horario->estado_dia}}
             </div>

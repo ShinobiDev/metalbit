@@ -52,7 +52,12 @@ class User extends Authenticatable
 
       return $this->roles->pluck('display_name')->implode(', ');
     }
-
+    /**
+     * Funcion para consulatr el horario de un usuario
+     * @param  [type] $id  [description]
+     * @param  [type] $dia [description]
+     * @return [type]      [description]
+     */
     public function ver_horarios($id,$dia){
         $dia_n="";
         //dd($dia);
@@ -114,8 +119,35 @@ class User extends Authenticatable
 
 
         return array("respuesta"=>true,"horario"=>$horarios[0]);
-
-
+    }
+    /**
+     * Funcion para consultar si usuario tiene compra pendiente
+     * @param  [type] $id_anuncio [description]
+     * @param  [type] $id_usuario [description]
+     * @return [type]             [description]
+     */
+    public function compra_pendiente($id_anuncio,$id_usuario){
+        $pg=pagos::where([
+                ['id_anuncio',$id_anuncio],
+                ['id_user_compra',$id_usuario],
+                ['transactionState','Pendiente']
+            ])
+            ->orwhere([
+                ['id_anuncio',$id_anuncio],
+                ['id_user_compra',$id_usuario],
+                ['code_wallet','']
+            ])
+            ->orwhere([
+                ['id_anuncio',$id_anuncio],
+                ['id_user_compra',$id_usuario],
+                ['image_wallet','']
+            ])
+            ->get();
         
+        if(count($pg)>0){
+          return array("respuesta"=>true,"pago"=>$pg[0]->transactionId);
+        }else{
+          return array("respuesta"=>false,"pago"=>"0");
+        }
     }
 }

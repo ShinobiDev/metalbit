@@ -79,6 +79,10 @@ Route::get('registrar_codigo_wallet/{id}',"Admin\UsersController@registrar_codig
 Route::get('ver_mis_compras/{id}',"Admin\UsersController@ver_mis_compras")->name('mis_compras');
 Route::get('ver_mis_ventas/{id}',"Admin\UsersController@ver_mis_ventas")->name('mis_ventas');
 Route::get('ver_todas_las_transacciones',"Admin\UsersController@ver_todas_las_transacciones")->name('ver_todas_las_transacciones');
+Route::post('registrar_wallet_transaccion_realizada/{id}','Admin\UsersController@registrar_wallet_transaccion_realizada')->name('registrar_wallet_transaccion_realizada');
+Route::post('registrar_hash_transaccion_realizada/{id}','Admin\UsersController@registrar_hash_transaccion_realizada')->name('registrar_hash_transaccion_realizada');
+Route::post('confirmar_transaccion/{id}','Admin\UsersController@confirmar_transaccion')->name('confirmar_transaccion');
+
 
 
 /*respuesta de payu para compras*/

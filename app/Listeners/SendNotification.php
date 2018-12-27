@@ -30,9 +30,10 @@ class SendNotification
                 $url.="http://metalbit.co/core/login/";
 
             }
-        //dd($url);    
+            
+        //dd($event);  
         Mail::to($event->user->email)->queue(
-          //dd($event)  
+          
           new NotificationMail($event->user, $event->ad,$event->recarga,$event->tipo,$url)
         );
 

@@ -26,12 +26,13 @@ class NotificationMail extends Mailable
      */
     public function __construct($user, $ad, $recarga,$tipo,$url)
     {
-       //dd($this->tipo);
+       //dd([$user, $ad, $recarga,$tipo,$url]);
        $this->user = $user;
        $this->ad = $ad;
        $this->recarga = $recarga;
        $this->tipo = $tipo;
        $this->url = $url;
+       //dd($this);
     }
 
     /**
@@ -111,12 +112,18 @@ class NotificationMail extends Mailable
                 break;    
             case 'CompraPendienteAnunciante':
                 return $this->markdown('emials.CompraPendienteAnunciante')
-                            ->subject('Hemos registrado una nueva compra en uno de tus anuncios '. config('app.name'));
+                            ->subject('Hemos registrado una nueva compra en uno de tus anuncios'. config('app.name'));
                 # code...
                 break;    
             case 'CriptoMonedaInhabilitada':
                 return $this->markdown('emials.AlertAdNoHabilitada')
-                            ->subject('Algo pasa con tu anuncio '. config('app.name'));
+                            ->subject('Uno de tus anuncios ha presentado una falla'. config('app.name'));
+                # code...
+                break;
+            case 'WalletRegistrado':
+
+                return $this->markdown('emials.WalletRegistrado')
+                            ->subject('Un reciente comprador a registrado un wallet'. config('app.name'));
                 # code...
                 break;
             default:

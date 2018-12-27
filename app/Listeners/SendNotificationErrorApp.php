@@ -22,8 +22,7 @@ class SendNotificationErrorApp
      */
     public function handle(NotificacionError $event)
     {   
-        Mail::to($event->user->email)->queue(
-            
+        Mail::to($event->user->email)->queue(            
           new NotificationError($event->user, $event->error)
         );
 

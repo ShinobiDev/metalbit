@@ -25,17 +25,18 @@ Correo electrónico: {{$ad[0]->email}}
 @if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
 		## Esta pendiente el registro de tu código wallet, recuerda que es importante que realices este proceso para darle a conocer al vendedor la información requerida para hacer la transacción ##
 
-@component('mail::button', ['url' => url('registrar_codigo_wallet'.'/'.$ad[2]->transactionId)])
+@component('mail::button', ['url' => url('ver_mis_compras/'.$user->id.'?='.$ad[2]->transactionId)])
 Registrar Código Wallet
 @endcomponent
 
+
 @else
 	@if($ad[2]->code_wallet!="")
-		## Código wallet ##
-		## {{$ad[2]->code_wallet}} ##	
+		#[Ver código wallet][1]	
+		[1]:{{ config('app.url') }}.'/ver_mis_compras/'.$user->id.'?='.$ad[2]->transactionId#
 	@elseif($ad[2]->image_wallet!="")
-		##DESCARGA EL QR##
-		{{ config('app.url') }}{{$ad[2]->image_wallet}}
+		#[DESCARGA EL QR][1]
+		[1]:{{ config('app.url') }}.'/ver_mis_compras/'.$user->id'?='.$ad[2]->transactionId#
 	@endif
 @endif
 

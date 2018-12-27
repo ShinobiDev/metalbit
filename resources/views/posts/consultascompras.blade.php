@@ -74,12 +74,19 @@
                             @if($ad->btn_info)
 
                                 @if($ad->visto!="")
-                                   <a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary">Ya lo Viste</a>
+                                   <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary">Ya lo Viste</a>-->
+                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
+                                    Ya lo viste
+                                    </button>
+                                    @include('posts.ventana_modal_info_general')
                                 @else
                                   <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','{{$ad->costo_clic}}','info')">
                                     Ver info
                                     </button>
-                                    <a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>
+                                    <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>-->
+                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
+                                    Ya lo viste
+                                    </button>
                                   <!--AQUI INCLUYO LA VENTANA MODAL DE INFORMACION GENERAL-->
                                   @include('posts.ventana_modal_info_general')
                                 @endif

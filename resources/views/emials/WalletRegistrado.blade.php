@@ -3,12 +3,12 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en METALBIT
+Estimad@ {{$user->name}}, hemos registrado el código wallet de una de tus ventas
 
 ##Datos Comprador##
 Usuario : {{$ad[0]->name}}
 Teléfono: {{$ad[0]->phone}},
-Email: {{$ad[0]->email}},
+Email: {{$ad[0]->email}}
 
 
 ## Resumen Oferta ##
@@ -18,20 +18,18 @@ Email: {{$ad[0]->email}},
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
-    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
+    | {{$ad[1]->tipo_anuncio}} | {{$ad[1]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[1]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
-@if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
-	## Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos ##
-@else
-	@if($ad[2]->code_wallet!="")
+
+	@if($ad[1]->code_wallet!="")
 		#[Ver código wallet][1]	
-		[1]:{{ config('app.url').'/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId }}#
-	@elseif($ad[2]->image_wallet!="")
+		[1]:{{ config('app.url').'/ver_mis_ventas/'.$user->id.'?='.$ad[1]->transactionId }}#
+	@elseif($ad[1]->image_wallet!="")
 		#[DESCARGA EL QR][1]
-		[1]:{{ config('app.url').'/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId }}#
+		[1]:{{ config('app.url').'/ver_mis_ventas/'.$user->id.'?='.$ad[1]->transactionId }}#
 	@endif
-@endif
+
 
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.

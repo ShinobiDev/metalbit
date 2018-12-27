@@ -253,4 +253,26 @@
           },{"datos":wallet,"valor_moneda":document.getElementById("num_cantidad_moneda_"+id_ad).value,"cantidad_moneda_comprada":t});
           //"datos":document.getElementById("ad_form_"+id).elements.codigo_wallet
         }
+
+        function registrar_wallet_transaccion_realizada(e,id_ad){ 
+           mostrar_cargando("msnEspera_"+id_ad,10,"Estamos registrando el wallet, una vez finalizado el proceso habilitaremos el botón de compra ...");
+          peticion_ajax("post","registrar_wallet_transaccion_realizada/"+id_ad,function(rs){
+            console.log(rs);
+            document.getElementById("msnEspera_"+id_ad).innerHTML=rs.mensaje;
+            if(rs.respuesta){
+              document.getElementById("btn_comprar_"+id_ad).disabled=false;
+            }
+          },{"datos":wallet});
+
+        }
+        /**
+         * Funcion para el obj data table desde url
+         * @return {[type]} [description]
+         */
+        function filtro_url (obj) {
+            $(obj).DataTable().search(
+                window.location.search.split("=")[1],
+                true,                    
+            ).draw();
+        }
 </script>

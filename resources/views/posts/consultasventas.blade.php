@@ -72,14 +72,22 @@
                             @if($ad->btn_info) 
                               @if($ad->visto!="") 
                              
-                                <a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary">Ya lo Viste</a>
-                                                    
+                                <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary">Ya lo Viste</a>-->
+                                <button id="anc_{{$ad->id}}" type="button" class="btn btn-primary" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','0','info')">
+                                Ya lo viste
+                                </button>     
+
+                                @include('posts.ventana_modal_info_general')
+
                                 
                               @else
                                 <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','{{$ad->costo_clic}}','info')">
                                 Ver info
                                 </button>
-                                <a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>
+                                <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>-->
+                                <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','0','info')" style="display: none">
+                                Ya lo viste
+                                </button> 
                                                     
                                 @include('posts.ventana_modal_info_general')
 
@@ -89,9 +97,16 @@
                             @endif                                
 
                             @if($ad->btn_payu)  
-                              <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
-                                Comprar
-                              </button>
+                              @if($ad->transaccion_pendiente['respuesta']==true)
+                                <a class="btn btn-default" href="{{route('mis_compras',[auth()->user()->id.'?='.$ad->transaccion_pendiente['pago']])}}">Compra pendiente</a>
+                                  
+                                
+                              @else
+                                <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
+                                  Comprar
+                                </button>
+                              @endif
+                              
                             
                              @include('posts.ventana_modal_info_venta')
                             @endif

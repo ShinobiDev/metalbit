@@ -19,6 +19,12 @@ Correo electrónico: {{$ad[0]->email}}
     | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
+
+@if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
+	## Esta pendiente el registro del código wallet, por parte del comprador una vez este realice el debido registro, te informaremos para que puedas hacer la transacción ##
+@endif
+
+
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 

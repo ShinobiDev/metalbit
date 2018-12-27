@@ -24,16 +24,16 @@ class Anuncios extends Model
    * @return [type]                       [description]
    */
   public function ver_anuncios($anuncios_consultados){
-       
-       
-                                     
-                                    
-  		 $tipo="PRODUCTION";
+                                           
+  		   $tipo="PRODUCTION";
+         
+         
          if(config('app.debug')){
               $tipo='TEST';  
          }   
-  		 $pu = Payu::where("type",$tipo)->get();
-  		 $guzzle=new GuzzleModel();
+  		   
+         $pu = Payu::where("type",$tipo)->get();
+  		   $guzzle=new GuzzleModel();
          $coinmarketcap=$guzzle->get_response_listings();
          //dd($anuncios_consultados);
          $v=0;
@@ -67,6 +67,11 @@ class Anuncios extends Model
                * @var [type]
                */
               $visto="";//=Carbon::now('America/Bogota')->format('M d, Y h:i A');
+              /**
+               * [Variable para identificar si el usuario tiene una transaccion pendiente]
+               * @var boolean
+               */
+              $transaccion_pendiente=false;
 
               
             //dd($value);
@@ -147,7 +152,11 @@ class Anuncios extends Model
                                             }
                                             
                                          	}		
-                                     }                                    
+                                     }                                 
+                                     if(auth()->user()!=null){
+                                      $transaccion_pendiente=$u->compra_pendiente($value->id,auth()->user()->id); 
+                                     }   
+                                     
 
                                      //obtener los comentarios
                                      //dd([$precio_moneda,number_format($value->limite_min,0,'','')]);
@@ -198,9 +207,8 @@ class Anuncios extends Model
                                                         "id_detalle_clic"=>$id_detalle_clic,
                                                         "comentarios"=>$comentarios,
                                                         "estado_anuncio"=>$value->estado_anuncio,
-                                                        "horario"=>$horarios['horario']
-
-
+                                                        "horario"=>$horarios['horario'],
+                                                        "transaccion_pendiente"=>$transaccion_pendiente
                                                     ];
 
                                 }
@@ -210,6 +218,9 @@ class Anuncios extends Model
                               //dd($value);
                               //AlertAnuncio::dispatch($email[0], $value,$limite_clic[0]->valor);
                               NotificacionAnuncio::dispatch($email[0], $value,$limite_clic[0]->valor,"CriptoMonedaInhabilitada");
+                              Anuncios::where('id',$value->id)->update([
+                                                    "estado_anuncio",'0'
+                                                ]);
                         }
 
 
@@ -415,7 +426,7 @@ class Anuncios extends Model
           $pg=pagos::where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      //['transactionId' , $req['reference_pol']]
+                      ['transactionId' , $req['reference_pol']]
                     ])->get();
           //dd( [$comprador[0],$anunciante[0],$anuncio[0],$pg]);
           //aqui debo enviar los datos de confirmación a la cuenta de correo

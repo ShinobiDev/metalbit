@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Events\UserWasCreated;
 use App\Events\ActualizacionDatos;
+use App\Events\NotificacionAnuncio;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
@@ -539,6 +540,82 @@ class UsersController extends Controller
     public function registrar_codigo_wallet_email($id_transaccion){
         dd($id_transaccion);
     }
+    public function registrar_wallet_transaccion_realizada(Request $request,$id_transaccion){
+        //dd($id_transaccion);
+        //dd($request['codigo_wallet']);
+        $request->validate([
+            'codigo_wallet'=>'required'
+        ]);
+        pagos::where('id',$id_transaccion)->update([
+                                            'code_wallet'=>$request['codigo_wallet']
+
+                                            ]);
+        $pg=pagos::where('pagos.id',$id_transaccion)
+               ->join('anuncios','anuncios.id','pagos.id_anuncio')
+               ->join('users','users.id','anuncios.user_id')
+               ->get();
+
+
+
+        //dd($db);
+        //esta linea esta fallando y no me esta dejando retornar a la vista
+        //NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0]],0,"WalletRegistrado");
+
+        $pag=pagos::select('pagos.id as id_pago',
+                           'pagos.transactionId',
+                           'pagos.transactionStatePayU',
+                           'pagos.transactionState',
+                           'pagos.transactionQuantity',
+                           'pagos.transation_value',
+                           'pagos.id_anuncio',
+                           'pagos.id_user_compra',
+                           'pagos.metodo_pago',
+                           'pagos.estado_pago',
+                           'pagos.calificacion',
+                           'pagos.opinion',
+                           'pagos.created_at',
+                           'pagos.updated_at',
+                           'pagos.code_wallet',
+                           'pagos.image_wallet',
+                           'pagos.hash_txid',
+                           'anuncios.cod_anuncio',
+                           'anuncios.tipo_anuncio',
+                           'anuncios.ubicacion',
+                           'anuncios.cod_postal',
+                           'anuncios.moneda',
+                           'anuncios.nombre_moneda',
+                           'anuncios.criptomoneda',
+                           'anuncios.nombre_cripto_moneda',
+                           'users.id as id_anunciante ',
+                           'users.name',
+                           'users.email',
+                           'users.phone')
+                    ->join('anuncios','anuncios.id','pagos.id_anuncio')
+                    ->join('users','users.id','anuncios.user_id')
+                    ->where('id_user_compra',auth()->user()->id)
+                    ->get();
+
+        return redirect()->route('mis_compras',[auth()->user()->id.'?='.$pg[0]->transactionId])
+                    ->with('success','código wallet ha sido registrado');
+        //return response()->json(["respuesta"=>true]);            
+    }
+    public function registrar_hash_transaccion_realizada(Request $request,$id_transaccion){
+        
+        $request->validate([
+            'hash_txid'=>'required|unique:pagos'
+        ]);
+        
+        pagos::where('id',$id_transaccion)->update([
+                                                    'hash_txid'=>$request['hash_txid'],
+                                                    'transactionState'=>'Moneda Envíada'
+                                                    ]);
+        
+        //EVENTO PARA ENVIAR CORREO DE ENVIO DE MONEDA
+        
+        
+        return back()->with('success','código hash / txid ha sido registrado');
+    }
+    
     /**
      * Funcion para consultar las compras que ha realizado un usuario
      * @param  [type] $id [description]
@@ -546,11 +623,40 @@ class UsersController extends Controller
      */
     public function ver_mis_compras($id){
         
-        $pag=pagos::join('anuncios','anuncios.id','pagos.id_anuncio')
+        $pag=pagos::select('pagos.id as id_pago',
+                           'pagos.transactionId',
+                           'pagos.transactionStatePayU',
+                           'pagos.transactionState',
+                           'pagos.transactionQuantity',
+                           'pagos.transation_value',
+                           'pagos.id_anuncio',
+                           'pagos.id_user_compra',
+                           'pagos.metodo_pago',
+                           'pagos.estado_pago',
+                           'pagos.calificacion',
+                           'pagos.opinion',
+                           'pagos.created_at',
+                           'pagos.updated_at',
+                           'pagos.code_wallet',
+                           'pagos.image_wallet',
+                           'pagos.hash_txid',
+                           'anuncios.cod_anuncio',
+                           'anuncios.tipo_anuncio',
+                           'anuncios.ubicacion',
+                           'anuncios.cod_postal',
+                           'anuncios.moneda',
+                           'anuncios.nombre_moneda',
+                           'anuncios.criptomoneda',
+                           'anuncios.nombre_cripto_moneda',
+                           'users.id as id_anunciante ',
+                           'users.name',
+                           'users.email',
+                           'users.phone')
+                    ->join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','anuncios.user_id')
                     ->where('id_user_compra',$id)
                     ->get();
-        //dd($pag);
+        //dd([$pag,auth()->user()->name]);
         return view('posts.mis_compras')
                 ->with('mis_compras',$pag);
                    
@@ -562,8 +668,37 @@ class UsersController extends Controller
      * @return [type]     [description]
      */
     public function ver_mis_ventas($id){
-        $pag=pagos::join('anuncios','anuncios.id','pagos.id_anuncio')
-                    ->join('users','users.id','anuncios.user_id')
+        $pag=pagos::select('pagos.id as id_pago',
+                           'pagos.transactionId',
+                           'pagos.transactionStatePayU',
+                           'pagos.transactionState',
+                           'pagos.transactionQuantity',
+                           'pagos.transation_value',
+                           'pagos.id_anuncio',
+                           'pagos.id_user_compra',
+                           'pagos.metodo_pago',
+                           'pagos.estado_pago',
+                           'pagos.calificacion',
+                           'pagos.opinion',
+                           'pagos.created_at',
+                           'pagos.updated_at',
+                           'pagos.code_wallet',
+                           'pagos.image_wallet',
+                           'pagos.hash_txid',
+                           'anuncios.cod_anuncio',
+                           'anuncios.tipo_anuncio',
+                           'anuncios.ubicacion',
+                           'anuncios.cod_postal',
+                           'anuncios.moneda',
+                           'anuncios.nombre_moneda',
+                           'anuncios.criptomoneda',
+                           'anuncios.nombre_cripto_moneda',
+                           'users.id as id_anunciante ',
+                           'users.name',
+                           'users.email',
+                           'users.phone')
+                    ->join('anuncios','anuncios.id','pagos.id_anuncio')
+                    ->join('users','users.id','pagos.id_user_compra')
                     ->where('anuncios.user_id',$id)
                     ->get();
         //dd($pag);                    
@@ -575,6 +710,16 @@ class UsersController extends Controller
                     ->join('users','users.id','anuncios.user_id')
                     ->get();
         dd($pag);        
+    }
+
+    public function confirmar_transaccion($id){
+        //dd($id);
+         pagos::where('id',$id)->update([
+                                         'transactionState'=>'Transacción Finalizada'
+                                        ]);
+         $pg=pagos::where('id',$id)->get();
+         return redirect()->route('mis_compras',[auth()->user()->id.'?='.$pg[0]->transactionId])
+                    ->with('success','transacción confirmada, gracias por confiar en '.config('app.name'));
     }
 }
 
