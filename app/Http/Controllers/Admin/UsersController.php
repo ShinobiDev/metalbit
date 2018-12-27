@@ -17,6 +17,7 @@ use App\Payu;
 use App\Anuncios;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Hash;
 use App\pagos;
 
@@ -219,11 +220,12 @@ class UsersController extends Controller
         
 
         $this->authorize('Update', $user);
-        //dd($request->validated());
         
+        //consulto el uusario para validar si el email es igual
         $uo=User::where("id",$user->id)->get();
-        //dd([$request["email"],$uo[0]->email]);
+        
         if($uo[0]->email!=$request["email"]){
+
             $msn="Hemos enviado un correo electrónico, a tu cuenta ".$request["email"].", por favor confirmalo para realizar los cambios de tu correo";
             $data=$request->validated();
             if(strlen($data['phone']) < 7 ||  strlen($data['phone']) > 13){
@@ -231,19 +233,23 @@ class UsersController extends Controller
                 return back()->with('error',$msn);                
             }   
             $arr["name"]=$data["name"];
-            $arr["phone"]=$data["phone"];;
+            $arr["phone"]=$data["phone"];
+            $arr["cuenta_bancaria"]=$data["cuenta_bancaria"];
+            //valido si el usuario envio una nueva contrasela y en caso de esto la cambio
             if(array_key_exists("password", $data)){
                 $arr["password"]=bcrypt($data["password"]);    
-                //$arr["password"]=Hash::make($data["password"]);    
+        
+
                 User::where("id",$user->id)->update([
                                                   'password'=>bcrypt($data['password'])
                                                     ]);
             }
-            //dd($arr);
+            //valido que la cuenta de correo electronico sea valida
             if(filter_var($request["email"], FILTER_VALIDATE_EMAIL)){
+                //consulto que no exista esta cuenta de correo registrada
                 $uu=User::where("email",$request["email"])->get();
                 if(count($uu)==0){
-                    //dd($request["email"]);
+                    
                     ActualizacionDatos::dispatch($user,$request["email"]);    
                 }else{
                     $msn="No se ha podido registrar la cuenta de correo ".$request["email"].", está cuenta de correo, ya se encuentra registrada en nuestro sistema ";    
@@ -253,30 +259,34 @@ class UsersController extends Controller
                 $msn="Ingresa una cuenta de correo valida";
             }
             
-
+            //realizo la actualizacion
             User::where("id",$user->id)->update([
                                                   'name'=>$data['name'],   
-                                                  'phone'=>$data['phone']  
+                                                  'phone'=>$data['phone'],
+                                                  'cuenta_bancaria'=>$data['cuenta_bancaria']  
                                                 ]);
-            //$user->update($arr);
             
         }else{
+
             $dt=$request->validated();
+            //valido que el tamaño del telefono sea valido
             if(strlen($dt['phone']) < 7 ||  strlen($dt['phone']) > 13){
-                $msn="Ingresa un número de télefono valido";
+                $msn="Ingresa un número de télefono valido este debe contar con mínimo 7  y máximo caracteres ";
                 return back()->with('error',$msn);                
             }else{
                 User::where("id",$user->id)->update([
                                                   'name'=>$dt['name'],     
-                                                  'phone'=>$dt['phone']  
+                                                  'phone'=>$dt['phone'],
+                                                  'cuenta_bancaria'=>$dt['cuenta_bancaria']  
                                                 ]);
             }    
+
+            //aqui cambio la contraseña si el usuario envia los datos 
             if(array_key_exists("password", $dt)){
                 $dt["password"]=bcrypt($dt["password"]);    
                 User::where("id",$user->id)->update([
-                                                  'name'=>$dt['name'],     
                                                   'password'=>$dt['password']
-                                                  
+                                                    
                                                 ]);   
             }    
             $msn='Se han actualizado los datos correctamente';
@@ -299,7 +309,7 @@ class UsersController extends Controller
         $this->authorize('delete',$user);
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'Usuario Eliminado correctamente');
+        return redirect()->route('users.index')->with('success', 'Usuario ha sido eliminado correctamente');
     }
     /**
      * Funcion para hacer cambio del correo
@@ -481,7 +491,7 @@ class UsersController extends Controller
 
         $PG=DB::table('pagos')->where([
                                     ["id_anuncio",$id],
-                                    ["transactionState","=","Sin compra"],
+                                    ["transactionState","=","Pendiente"],
                                     //["code_wallet","=",null],
                                     ["id_user_compra",auth()->user()->id]
                                 ])
@@ -503,11 +513,11 @@ class UsersController extends Controller
                             "transation_value"=>$request["valor_moneda"],
                          ]);            
                          
-               return response()->json(["mensaje"=>"Wallet actualizado, ya puedes realizar la compra","respuesta"=>true]);                                     
+               return response()->json(["mensaje"=>"Wallet actualizado, ya puedes realizar la compra","respuesta"=>true]);
            
          }else{
             
-            DB::table('pagos')->insert(["transactionId"=>"-",
+            DB::table('pagos')->insert([
                             "transactionQuantity"=>0,
                             "transactionStatePayu"=>0,
                             "transation_value"=>0,
@@ -654,7 +664,10 @@ class UsersController extends Controller
                            'users.phone')
                     ->join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','anuncios.user_id')
-                    ->where('id_user_compra',$id)
+                    ->where([
+                                ['id_user_compra',$id],
+                                ['pagos.transactionId','!=',null]
+                            ])
                     ->get();
         //dd([$pag,auth()->user()->name]);
         return view('posts.mis_compras')
@@ -699,19 +712,27 @@ class UsersController extends Controller
                            'users.phone')
                     ->join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','pagos.id_user_compra')
-                    ->where('anuncios.user_id',$id)
+                    ->where([
+                                ['anuncios.user_id',$id],
+                                ['pagos.transactionId','!=',null]
+                            ])
                     ->get();
         //dd($pag);                    
         return view('posts.mis_ventas')
                 ->with('mis_ventas',$pag);
     }
+
     public function ver_todas_las_transacciones(){
         $pag=pagos::join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','anuncios.user_id')
                     ->get();
         dd($pag);        
     }
-
+    /**
+     * Funcion para confirmar transaccion
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function confirmar_transaccion($id){
         //dd($id);
          pagos::where('id',$id)->update([
@@ -720,6 +741,23 @@ class UsersController extends Controller
          $pg=pagos::where('id',$id)->get();
          return redirect()->route('mis_compras',[auth()->user()->id.'?='.$pg[0]->transactionId])
                     ->with('success','transacción confirmada, gracias por confiar en '.config('app.name'));
+    }
+    /**
+     * Funcion paraaregistrar la certificacion bancaria
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function actualizar_certificacion_bancaria(Request $request,$id){
+        
+  
+        User::where('id',$id)
+                ->update([
+                        'certificacion_bancaria'=>Storage::url($request->file('file')->store('public'))
+                    ]);
+        return  response()->json(['respuesta'=>true,'mensaje'=>'Se ha registrado tu certificación bancaria']);                       
+        
+
+
     }
 }
 

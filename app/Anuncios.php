@@ -71,7 +71,7 @@ class Anuncios extends Model
                * [Variable para identificar si el usuario tiene una transaccion pendiente]
                * @var boolean
                */
-              $transaccion_pendiente=false;
+              $transaccion_pendiente=[];
 
               
             //dd($value);
@@ -139,10 +139,12 @@ class Anuncios extends Model
                                        	  $dtc=DB::table('detalle_clic_anuncios')
                                        					->where([
   	                                     							['id_anuncio',$value->id],
-  	                                     							['id_usuario',Auth()->user()->id]
+  	                                     							['id_usuario',auth()->user()->id],
+                                                      ['tipo','<>','compra']
                                        							])->get();
                                           //valido si no existe comentario del usuario  logueado        
                                           if(count($dtc)>0){
+                                             
                                            		$f=new Carbon($dtc[0]->updated_at);
                                            		$visto=$f->format('M d, Y h:i A');
                                               $id_detalle_clic=$dtc[0]->id;

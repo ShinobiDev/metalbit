@@ -32,11 +32,14 @@ Registrar Código Wallet
 
 @else
 	@if($ad[2]->code_wallet!="")
-		#[Ver código wallet][1]	
-		[1]:{{ config('app.url') }}.'/ver_mis_compras/'.$user->id.'?='.$ad[2]->transactionId#
+		@component('mail::button', ['url' => url('/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId)])
+		Ver código wallet
+		@endcomponent
 	@elseif($ad[2]->image_wallet!="")
-		#[DESCARGA EL QR][1]
-		[1]:{{ config('app.url') }}.'/ver_mis_compras/'.$user->id'?='.$ad[2]->transactionId#
+		
+		@component('mail::button', ['url' => url('/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId)])
+		Ver código wallet QR
+		@endcomponent
 	@endif
 @endif
 

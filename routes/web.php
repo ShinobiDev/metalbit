@@ -56,7 +56,25 @@ Route::group([
 
   Route::middleware('role:Admin')->put('users/{user}/roles', 'UserRolesController@update')->name('users.roles.update');
   Route::middleware('role:Admin')->put('users/{user}/permissions', 'UserPermissionsController@update')->name('users.permissions.update');
+/**/
 
+
+Route::post('registrar_wallet_transaccion_realizada/{id}','UsersController@registrar_wallet_transaccion_realizada')->name('registrar_wallet_transaccion_realizada');
+Route::post('registrar_hash_transaccion_realizada/{id}','UsersController@registrar_hash_transaccion_realizada')->name('registrar_hash_transaccion_realizada');
+Route::post('confirmar_transaccion/{id}','UsersController@confirmar_transaccion')->name('confirmar_transaccion');
+Route::get('ver_mis_compras/{id}',"UsersController@ver_mis_compras")->name('mis_compras');
+Route::get('ver_mis_ventas/{id}',"UsersController@ver_mis_ventas")->name('mis_ventas');
+Route::get('ver_todas_las_transacciones',"UsersController@ver_todas_las_transacciones")->name('ver_todas_las_transacciones');
+Route::get("cambiar_horario/{id}/{hor}","UsersController@cambiar_horario");
+Route::get("cambiar_estado_dia/{id}/{estado}","UsersController@cambiar_estado_dia");
+Route::post("registrar_wallet/{id}","UsersController@registrar_wallet");
+Route::post("registrar_wallet_qr/{id}","UsersController@registrar_wallet_qr");
+Route::get('registrar_codigo_wallet/{id}',"UsersController@registrar_codigo_wallet_email");
+Route::get("mis_bonificaciones","UsersController@mis_bonificaciones");
+Route::get("anuncios_vistos","UsersController@anuncios_vistos_por_mi")->name('anuncios_vistos');
+
+
+Route::post('actualizar_certificacion_bancaria/{id}','UsersController@actualizar_certificacion_bancaria');
 
 });
 Route::get("cambiar_estado_anuncio/{id_ad}/{estado}","AnunciosController@cambiar_estado_anuncio");
@@ -65,25 +83,16 @@ Route::get("cambiar_valor_clic/{id_user}/{costo}","RecargasController@cambiar_va
 Route::get("ver_recargas_mis_recargas/{id}","RecargasController@ver_recargas_mis_recargas");
 Route::post("calificar","AnunciosController@calificar");
 Route::post("calificar_venta","AnunciosController@calificar_venta");
-Route::get("mis_bonificaciones","Admin\UsersController@mis_bonificaciones");
-Route::get("validar_codigo/{cod}","Admin\UsersController@validar_codigo");
+
+
 Route::get("registrar_recarga/{id}/{val_recarga}/{ref_pago}","RecargasController@registrar_recarga");
-Route::post("cambio_pass","Admin\UsersController@cambio_clave");
-Route::get("anuncios_vistos","Admin\UsersController@anuncios_vistos_por_mi")->name('anuncios_vistos');
+
 Route::get("ver_mas_comentarios/{id}/{min}/{max}","AnunciosController@ver_mas_comentarios");
-Route::get("cambiar_horario/{id}/{hor}","Admin\UsersController@cambiar_horario");
-Route::get("cambiar_estado_dia/{id}/{estado}","Admin\UsersController@cambiar_estado_dia");
-Route::post("registrar_wallet/{id}","Admin\UsersController@registrar_wallet");
-Route::post("registrar_wallet_qr/{id}","Admin\UsersController@registrar_wallet_qr");
-Route::get('registrar_codigo_wallet/{id}',"Admin\UsersController@registrar_codigo_wallet_email");
-Route::get('ver_mis_compras/{id}',"Admin\UsersController@ver_mis_compras")->name('mis_compras');
-Route::get('ver_mis_ventas/{id}',"Admin\UsersController@ver_mis_ventas")->name('mis_ventas');
-Route::get('ver_todas_las_transacciones',"Admin\UsersController@ver_todas_las_transacciones")->name('ver_todas_las_transacciones');
-Route::post('registrar_wallet_transaccion_realizada/{id}','Admin\UsersController@registrar_wallet_transaccion_realizada')->name('registrar_wallet_transaccion_realizada');
-Route::post('registrar_hash_transaccion_realizada/{id}','Admin\UsersController@registrar_hash_transaccion_realizada')->name('registrar_hash_transaccion_realizada');
-Route::post('confirmar_transaccion/{id}','Admin\UsersController@confirmar_transaccion')->name('confirmar_transaccion');
-
-
+/**
+ * Debe ir por fuera del middleware
+ */
+Route::post("cambio_pass","Admin\UsersController@cambio_clave");
+Route::get("validar_codigo/{cod}","Admin\UsersController@validar_codigo");
 
 /*respuesta de payu para compras*/
 Route::get('response',function(){

@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
 <script type="text/javascript">
   @if(auth()->user()!=null)
     var id_usuario= '{{auth()->user()->id}}';
@@ -8,27 +6,7 @@
   @endif  
     var _id_anuncio=0;
 </script>
- <!--
- * Aqui gestiono dropzone 
- * @type {String}
- -->
-<script type="text/javascript">
-  new Dropzone('.dropzone',{
-    //url:"/",
-    url:"{{config('app.url')}}"+"/registrar_wallet_qr/"+_id_anuncio,
-    dictDefaultMessage:"Sube aquí tu código QR (solo se permiten imagenes con formato PNG,JPEG o JPG)",
-    maxFiles:1,
-    maxFilesize:10,//MB
-    acceptedFiles: "image/*",
-    dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
-    dictInvalidFileType:"Solo esta permitido subir imagenes",
-    headers:{
-      'X-CSRF-TOKEN':'{{csrf_token()}}'
-    }
-  });
-  Dropzone.autoDiscover=false;
 
-</script>
 
 
 <script type="text/javascript">

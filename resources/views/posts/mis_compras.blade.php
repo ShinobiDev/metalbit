@@ -44,7 +44,13 @@
                   <tr>      
                     <td>compra</td>          
                     <td>{{$compra->name}}</td>          
-                    <td>{{$compra->transactionState}}</td>                                   
+                    <td>
+                      @if($compra->transactionState=="Pendiente")
+                        Pendiente por pago
+                      @else
+                        {{$compra->transactionState}}
+                      @endif
+                    </td>                                   
                     <td>{{number_format($compra->transactionQuantity,2,',','.')}}</td>                                   
                     <td>{{$compra->nombre_cripto_moneda}}</td>                                  
                     <td>$ {{number_format($compra->transation_value,2,',','.')}}</td>                                    
@@ -106,10 +112,11 @@
                                             <h5>¿Estás seguro de que quieres confirmar esta transacción?</h5>
                                     </div>
                                     <div class="modal-footer">
-                                      <a class="btn btn-secondary" data-dismiss="modal">Salir</a>  
+                                      
 
                                       <form method="POST" action="{{route('confirmar_transaccion',[$compra->id_pago])}}">
                                         {{csrf_field()}}
+                                        <a class="btn btn-secondary" data-dismiss="modal">Salir</a>  
                                         <button type="submit" class="btn btn-success" data-toggle="modal" >
                                           Confirmar transacción
                                         </button>                        

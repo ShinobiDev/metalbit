@@ -404,15 +404,16 @@ class AnunciosController extends Controller
          $id_a=explode("-",$a)[1];
          $PG=DB::table('pagos')->where([
                                     ["id_anuncio",$id_a],
-                                    ["metodo_pago","PENDIENTE"],
+                                    ["transactionState","Pendiente"],
                                     ["id_user_compra",$id_u]
                                 ])->get();
+
          if(count($PG)>0){
+            //dd($PG);
             DB::table('pagos')
                          ->where("id",$PG[0]->id)  
-                         ->update(["transactionId"=>"-",
+                         ->update([
                             "transactionQuantity"=>$cantidad,
-                            "transactionStatePayu"=>0,
                             "transation_value"=>$p,
                             "id_anuncio"=>$id_a,
                             "metodo_pago"=>'PENDIENTE',
@@ -420,9 +421,8 @@ class AnunciosController extends Controller
             
             
          }else{
-            DB::table('pagos')->insert(["transactionId"=>"-",
+            DB::table('pagos')->insert([
                             "transactionQuantity"=>$cantidad,
-                            "transactionStatePayu"=>0,
                             "transation_value"=>$p,
                             "id_anuncio"=>$id_a,
                             "metodo_pago"=>'PENDIENTE',

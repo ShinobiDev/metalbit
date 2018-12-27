@@ -154,7 +154,7 @@ class RecargasController extends Controller
             if(count($PG)>0){
                 DB::table('pagos')
                              ->where("id",$PG[0]->id)  
-                             ->update(["transactionId"=>"-",
+                             ->update([
                                 "transactionQuantity"=>$cantidad,
                                 "transactionState"=>'Pendiente',
                                 "transation_value"=>$precio,
@@ -164,7 +164,7 @@ class RecargasController extends Controller
                 
                 
             }else{
-                DB::table('pagos')->insert(["transactionId"=>"-",
+                DB::table('pagos')->insert([
                                 "transactionQuantity"=>$cantidad,
                                 "transactionState"=>'Pendiente',
                                 "transation_value"=>$precio,

@@ -41,7 +41,13 @@
                   <tr>                   
                     <td>venta</td>   
                     <td>{{$venta->name}}</td>
-                    <td>{{$venta->transactionState}}</td>
+                    <td>
+                      @if($venta->transactionState=="Pendiente")
+                        Pendiente por pago
+                      @else
+                        {{$venta->transactionState}}
+                      @endif
+                    </td>
                     <td>{{number_format($venta->transactionQuantity,2,',','.')}}</td>                                   
                     <td>{{$venta->nombre_cripto_moneda}}</td>                                  
                     <td>{{number_format($venta->transation_value,2,',','.')}}</td>                                    
@@ -49,9 +55,9 @@
                     <td>{{$venta->code_wallet}}</td>                                   
                     <td>{{$venta->hash_txid}}</td>   
                     <td>
-                      @if($venta->hash_txid=="")
+                      @if($venta->hash_txid=="" && $venta->transactionState != "Pendiente")
                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$venta->id_pago}}">
-                            Registrar Hash/txid {{$venta->id_pago}}
+                            Registrar Hash/txid 
                          </button>
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$venta->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

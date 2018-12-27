@@ -31,22 +31,35 @@
                                 <label for="phone">Teléfono:</label>
                                 <input type="text" name="phone" value="{{old('phone', $user->phone)}}" class="form-control" minlength=6 maxlength=13>
                             </div>
+                            <div class="form-group">
+                                <label for="phone">Cuenta bancaria:</label>
+                                <input type="text" name="cuenta_bancaria" value="{{old('cuenta_bancaria', $user->cuenta_bancaria)}}" class="form-control" minlength=6 maxlength=13>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Certificación bancaria:</label>
+                                
+                                {{--dd($user->certificacion_bancaria)--}}
+                                @if($user->certificacion_bancaria != null)
+                                  <a href="{{config('app.url').$user->certificacion_bancaria}}" target="_blank" >DESCARGAR</a>
+                                @endif
+                                <div class="dropzone"></div>
+
+                                
+                            </div>
 
                             <div class="form-group">
-                              <span class="help-block">Dejar en blanco si no
-
-                                quiere cambiar la contraseña</span>
+                              <span class="help-block">Dejar en blanco si no quiere cambiar la contraseña</span>
                                 <label for="password">Contraseña</label>
                                 <input type="password" name="password"  class="form-control" placeholder="Nueva Contraseña">
 
                             </div>
 
                             <div class="form-group">
-                                <label for="password_confirmation">Confirmar la Contraseña</label>
+                                <label for="password_confirmation">Confirmar la contraseña</label>
                                 <input type="password" name="password_confirmation"  class="form-control" placeholder="Confirmar contraseña">
                             </div>
 
-                            <button class="btn btn-primary btn-block"> <i class="fa fa-refresh"></i> Actualizar Usuario</button>
+                            <button class="btn btn-primary btn-block"> <i class="fa fa-refresh"></i> Actualizar usuario</button>
 
                   </form>
               </div>
@@ -176,5 +189,32 @@
             document.getElementById("dia_estado_"+id).innerHTML=rs.estado;
           });
       }
+    </script>
+
+    
+@endsection
+@section('scripts')
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+     <!--
+     * Aqui gestiono dropzone 
+     * @type {String}
+     -->
+    <script type="text/javascript">
+      new Dropzone('.dropzone',{
+        //url:"/",
+        url:"{{config('app.url')}}"+"/actualizar_certificacion_bancaria/{{$user->id}}",
+        dictDefaultMessage:"Sube aquí tu código QR (solo se permiten imagenes con formato PNG,JPEG o JPG)",
+        maxFiles:1,
+        maxFilesize:10,//MB
+        acceptedFiles: "image/*",
+        dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
+        dictInvalidFileType:"Solo esta permitido subir imagenes",
+        headers:{
+          'X-CSRF-TOKEN':'{{csrf_token()}}'
+        }
+      });
+      Dropzone.autoDiscover=false;
+
     </script>
 @endsection

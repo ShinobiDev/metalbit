@@ -23,6 +23,12 @@
               <li class="list-group-item" style="margin-left:  10px;">
                 <b style="margin-left:  10px;">Código referido</b> <a class="pull-right" style="margin-right:  10px;">{{$user->codigo_referido}}</a>
               </li>
+              <li class="list-group-item" style="margin-left:  10px;">
+                <b style="margin-left:  10px;">Cuenta bancaria</b> <a class="pull-right" style="margin-right:  10px;">{{$user->cuenta_bancaria or "SIN REGISTRAR"}}</a>
+              </li>
+              <li class="list-group-item" style="margin-left:  10px;">
+                <b style="margin-left:  10px;">Certificación bancaria</b> <a class="pull-right" style="margin-right:  10px;" href="{{config('app.url').$user->certificacion_bancaria}}" target="{{$user->certificacion_bancaria ? '_blank' : '' }}">{{$user->certificacion_bancaria ? 'descargar' : 'Sin registrar' }}</a>
+              </li>
               <li class="list-group-item" style="margin-left:  10px;text-align: center;">
                 <b>Horario de atención</b>
               </li>  
