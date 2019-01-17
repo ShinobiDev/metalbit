@@ -131,26 +131,27 @@ class User extends Authenticatable
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
                 ['transactionState','Pendiente'],
-                //['pagos.transactionId','!=',null]
+                ['pagos.transactionId','!=',null]
             ])
             ->orwhere([
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
                 ['code_wallet','<>',null],
                 ['transactionState','Pendiente'],
-                //['pagos.transactionId','!=',null]
+                ['pagos.transactionId','!=',null]
             ])
             ->orwhere([
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
                 ['image_wallet','<>',null],
                 ['transactionState','Pendiente'],
-                //['pagos.transactionId','!=',null]
+                ['pagos.transactionId','!=',null]
             ])
             ->get();
-        //dd($pg);   
+        
         if(count($pg)>0){
           //dd($pg[0]->code_wallet);   
+          dd($pg);   
           return array("respuesta"=>true,"pago"=>$pg[0]->transactionId,"wallet"=>$pg[0]->code_wallet);
         }else{
           return array("respuesta"=>false,"pago"=>"0","wallet"=>"");
