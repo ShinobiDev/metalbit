@@ -48,7 +48,7 @@
                          <div class="modal-body">
                           <i class="fa fa-info-circle"></i>
                           <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
-                          {{var_dump($ad->transaccion_pendiente['wallet'])}}
+                          
                           <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')" value="{{$ad->transaccion_pendiente['wallet']}}">
                           <div class="dropzone"></div>            
                           <label id="msnEspera_{{$ad->id}}"></label>
