@@ -82,3 +82,25 @@
           </div>
         </div>
 </div>
+
+     <!--
+     * Aqui gestiono dropzone 
+     * @type {String}
+     -->
+<script type="text/javascript">
+  new Dropzone('.dropzone',{
+    //url:"/",
+    url:"{{config('app.url')}}"+"/registrar_wallet_qr/{{auth()->user()->id}}",
+    dictDefaultMessage:"Sube aquí tu código QR (solo se permiten imagenes con formato PNG,JPEG o JPG)",
+    maxFiles:1,
+    maxFilesize:10,//MB
+    acceptedFiles: "image/*",
+    dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
+    dictInvalidFileType:"Solo esta permitido subir imagenes",
+    headers:{
+      'X-CSRF-TOKEN':'{{csrf_token()}}'
+    }
+  });
+  Dropzone.autoDiscover=false;
+
+</script>

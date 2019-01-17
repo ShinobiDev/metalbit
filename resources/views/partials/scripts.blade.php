@@ -6,9 +6,6 @@
   @endif  
     var _id_anuncio=0;
 </script>
-
-
-
 <script type="text/javascript">
       var url_global= "{{config('app.url')}}";
 
