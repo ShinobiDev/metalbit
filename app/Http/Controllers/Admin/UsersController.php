@@ -550,6 +550,12 @@ class UsersController extends Controller
     public function registrar_codigo_wallet_email($id_transaccion){
         dd($id_transaccion);
     }
+    /**
+     * Funcion para realizar el registro de codigo wallet de una transaccion realizada
+     * @param  Request $request        [description]
+     * @param  [type]  $id_transaccion [description]
+     * @return [type]                  [description]
+     */
     public function registrar_wallet_transaccion_realizada(Request $request,$id_transaccion){
         //dd($id_transaccion);
         //dd($request['codigo_wallet']);
@@ -609,6 +615,12 @@ class UsersController extends Controller
                     ->with('success','código wallet ha sido registrado');
         //return response()->json(["respuesta"=>true]);            
     }
+    /**
+     * Funcion para realizar el registro del hash de una transaccion realizada
+     * @param  Request $request        [description]
+     * @param  [type]  $id_transaccion [description]
+     * @return [type]                  [description]
+     */
     public function registrar_hash_transaccion_realizada(Request $request,$id_transaccion){
         
         $request->validate([
