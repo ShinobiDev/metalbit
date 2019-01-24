@@ -98,8 +98,11 @@
                         @guest
                             <li><a href="{{ route('login') }}">Iniciar</a></li>
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
-                            <input type="hidden" value="0" id="user_id">
                             
+
+
+                            <input type="hidden" value="0" id="user_id">
+
                         @else
 
                             <li class="dropdown">
