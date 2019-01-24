@@ -1,14 +1,16 @@
  <div class="modal fade" id="{{'ventana_login'.$ad->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        
+
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Debes registrarte o inicar sesión para conocer mas información de este anuncio</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'ventana_login'.$ad->id}}')">
             <span aria-hidden="true" >&times;</span>
           </button>
         </div>
-        
+
         <div class="modal-body">
           <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}
@@ -17,7 +19,7 @@
                     <label for="email" class="col-md-4 control-label">E-Mail </label>
 
                     <div class="col-md-6">
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                        <input id="email{{$ad->id}}" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
 
                         @if ($errors->has('email'))
                             <span class="help-block">
@@ -31,7 +33,7 @@
                     <label for="password" class="col-md-4 control-label">Clave</label>
 
                     <div class="col-md-6">
-                        <input id="password" type="password" class="form-control" name="password" required>
+                        <input id="password{{$ad->id}}" type="password" class="form-control" name="password" required>
 
                         @if ($errors->has('password'))
                             <span class="help-block">
@@ -75,3 +77,4 @@
       </div>
     </div>
 </div>
+

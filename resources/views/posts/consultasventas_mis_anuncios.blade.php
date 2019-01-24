@@ -7,11 +7,11 @@
               <a href="{{route('login')}}" class="btn btn-primary pull-right btn-lg" >
                   <i class="fa fa-user-plus"> Crear Anuncio</i>
               </a>
-              @else 
+              @else
                <a href="{{route('anuncios.create')}}" class="btn btn-primary pull-right btn-lg" >
                   <i class="fa fa-user-plus"> Crear Anuncio</i>
               </a>
-              @endguest 
+              @endguest
 
       </div>
      <div class="box-body">
@@ -29,9 +29,9 @@
                 <th>Acciones</th>
               </tr>
             </thead>
-           
+
             <tbody>
-              {{--se crean las tablas de ventas--}} 
+              {{--se crean las tablas de ventas--}}
               @foreach ($anuncios as $ad)
                   @if($ad->tipo_anuncio =="venta")
                    <tr>
@@ -47,7 +47,7 @@
                     <td>{{$ad->ubicacion}}</td>
                     <td>
                        <span class="text-blue"><h4> {{$ad->precio_moneda}} </h4></span> <span class="text-red">{{$ad->moneda}}</span>
-                      
+
                    </td>
                     <td>{{$ad->cripto_moneda}}</td>
                     <td>{{ number_format($ad->limite_min,2, ',', '.') }} / {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
@@ -58,39 +58,39 @@
                       @else
                         <input id="rng_{{$ad->id}}" type="range" min="0" max="1" value="0" onchange="cambiar_estado('{{$ad->id}}')">
                       @endif
-                      
+
                     </td>
                     <td>
                       @guest
                               <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->cod_anuncio}}','0','info')">
                                 Ver info
                                 </button>
-                                                      
+
                               <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-default" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->cod_anuncio}}','0',false)">
                                 Comprar
                               </button>
 
-                          
+
                            @include('posts.ventana_modal_login')
                       @else
-                        
+
                             <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','0',false)">
                             Ver info
                             </button>
-                          
+
                           @include('posts.ventana_modal_info_general')
 
                       @endguest
-                        
-                        
+
+
                     </td>
                    </tr>
                   @endif
               @endforeach
-              {{--se crean las tablas de ventas--}} 
+              {{--se crean las tablas de ventas--}}
             </tbody>
           </table>
-          
+
      </div>
 
 

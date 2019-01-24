@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link rel="stylesheet" href="{{asset('font-awesome/css/font-awesome.css')}}">
     <link rel="stylesheet" href="{{asset('admin-lte/plugins/datatables/datatables.min.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
 
   <!-- Styles -->
   <style>
@@ -52,42 +54,42 @@
                            <a href="{{route('anuncios.create')}}">Crear anuncios</a>
                         </li>
                         <input type="hidden" value="{{Auth::user()->id}}" id="user_id">
-                        <li>                          
-                           <a href="{{route('recargas.index')}}">Estadistica Recargas</a>                           
+                        <li>
+                           <a href="{{route('recargas.index')}}">Estadistica Recargas</a>
                         </li>
                         <li>
                           <a href="{{route('anuncios.all',['id'=>Auth::user()->id])}}">Todos los anuncios</a>
                         </li>
-                        <li>                          
-                           <a href="{{route('ver_todas_las_transacciones')}}">Estadistica de transacciones</a>                           
+                        <li>
+                           <a href="{{route('ver_todas_las_transacciones')}}">Estadistica de transacciones</a>
                         </li>
-                        <li>                          
-                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>                                 
+                        <li>
+                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>
                         </li>
-                        
-                        
+
+
                       @endrole
                       @role('Comerciante')
                         <li>
                            <a href="{{route('anuncios.create')}}">Crear anuncios</a>
                         </li>
-                        <li>                         
+                        <li>
                            <a href="{{route('anuncios.show',['id'=>Auth::user()->id])}}">Mis anuncios</a>
                         </li>
                         <input type="hidden" value="{{Auth::user()->id}}" id="user_id">
-                        <li>                          
-                           <a href="{{route('mis_compras',['id'=>auth()->user()->id])}}">Mis compras</a>                           
+                        <li>
+                           <a href="{{route('mis_compras',['id'=>auth()->user()->id])}}">Mis compras</a>
                         </li>
                         <li>
-                          <a href="{{route('mis_ventas',['id'=>auth()->user()->id])}}">Mis ventas</a>                           
+                          <a href="{{route('mis_ventas',['id'=>auth()->user()->id])}}">Mis ventas</a>
                         </li>
-                        <li>                          
-                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>                                 
-                        </li>                        
+                        <li>
+                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>
+                        </li>
                       @endrole
 
                     </ul>
-                    
+
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
@@ -96,6 +98,8 @@
                         @guest
                             <li><a href="{{ route('login') }}">Iniciar</a></li>
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
+                            <input type="hidden" value="0" id="user_id">
+                            
                         @else
 
                             <li class="dropdown">
@@ -155,10 +159,13 @@
     <!-- Scripts -->
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/notas.css')}}">
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>/
     <script src="{{ asset('js/recargas.js') }}"></script>
     {{-- <script src="{{asset('admin-lte/plugins/datatables/datatables.min.js')}}">  </script> --}}
     <script src="{{asset('admin-lte/plugins/datatables/jquery.dataTables.min.js')}}">  </script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
     <script src="{{asset('admin-lte/plugins/datatables/dataTables.buttons.min.js')}}">  </script>
     <script src="{{asset('admin-lte/plugins/datatables/buttons.flash.min.js')}}">  </script>
     <script src="{{asset('admin-lte/plugins/datatables/jszip.min.js')}}">  </script>
@@ -167,6 +174,7 @@
     <script src="{{asset('admin-lte/plugins/datatables/buttons.html5.min.js')}}">  </script>
     <script src="{{asset('admin-lte/plugins/datatables/buttons.print.min.js')}}">  </script>
     <script src="{{asset('admin-lte/plugins/datepicker/bootstrap-datepicker.js')}}"></script>
+
 
     {{-- <script src="{{asset('admin-lte/plugins/datatables/dataTables.bootstrap4.min.js')}}">  </script> --}}
 
