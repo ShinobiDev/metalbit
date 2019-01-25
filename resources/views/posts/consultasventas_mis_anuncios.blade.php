@@ -1,5 +1,5 @@
 <!--ventas-->
- <div class="col-md-10 col-lg-offset-1">
+ <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
           <h3 class="box-title">Listado de mis anuncios de venta</h3>
@@ -50,7 +50,7 @@
 
                    </td>
                     <td>{{$ad->cripto_moneda}}</td>
-                    <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} / $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
+                    <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} / </br>$ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
                     <td>
                       <h5 id="h5_estado_{{$ad->id}}">{{$ad->estado_anuncio}}</h5>
                       @if($ad->estado_anuncio=="activo")
@@ -71,14 +71,14 @@
                               </button>
 
 
-                           @include('posts.ventana_modal_login')
+                          
                       @else
 
                             <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','0',false)">
                             Ver info
                             </button>
 
-                          @include('posts.ventana_modal_info_general')
+                         
 
                       @endguest
 
@@ -90,7 +90,28 @@
               {{--se crean las tablas de ventas--}}
             </tbody>
           </table>
+          {{--ventanas--}}
+           @foreach ($anuncios as $ad)
+                  @if($ad->tipo_anuncio =="venta")
+                  
+                      @guest
+                              
 
+
+                           @include('posts.ventana_modal_login')
+                      @else
+
+                          
+
+                          @include('posts.ventana_modal_info_general')
+
+                      @endguest
+
+
+                    </td>
+                   </tr>
+                  @endif
+              @endforeach
      </div>
 
 

@@ -2,7 +2,7 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
       
-      <div class="modal-header">
+      <div class="modal-header bg-primary">
         <h3 style="text-align: center;" class="modal-title" id="exampleModalLabel"><b>Califica al anunciante</b></h3>
         <h4 class="modal-title" id="exampleModalLabel">{{config('app.name','') }}, te sirve de intermediario para garantizar que la transacción se exitosa para ambas partes, por favor dejanos conocer comentarios sobre este anunciante</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'infocalificar'.$ad->id}}')">
@@ -33,10 +33,10 @@
                         <label for="rd2">2</label>
                         <input id="rd3" class="" type="radio" name="nota" value="3">
                         <label for="rd3">3</label>
-                        <!--<input id="rd4" class="" type="radio" name="nota" value="4">
+                        <input id="rd4" class="" type="radio" name="nota" value="4">
                         <label for="rd4">4</label>
                         <input id="rd5" class="" type="radio" name="nota" value="5">
-                        <label for="rd5">5</label>-->
+                        <label for="rd5">5</label>
                         
                     </section>  
                     <section style="text-align: center;" >
@@ -60,7 +60,7 @@
                     <h6 ><span id="lb_limit_txt">0</span> de 110 caracteres permitidos</h6>                 
                     
                     </div>  
-                    <button id="btn_recarga" type="submit" class="btn btn-primary">Calificar</button>
+                    <button id="btn_recarga" type="submit" class="btn btn-success">Calificar</button>
             </form>
            
             

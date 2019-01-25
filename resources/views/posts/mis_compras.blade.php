@@ -62,6 +62,34 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
                             Registrar código wallet
                         </button>
+                          
+                      
+                      @else
+
+                        @if($compra->transactionState=="Moneda Envíada")
+                          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                              Confirmar transacción
+                            </button>
+                           
+                        @endif
+                            
+                        
+                        {{--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                            Ver info
+                        </button>
+                          <!--VENTANA MODAL-->
+                         --}}
+                      @endif  
+                    </td>                                   
+                  </tr>
+              @endforeach
+            </tbody>
+          </table>
+          {{--ventanas--}}
+          @foreach ($mis_compras as $compra)
+                  
+                      @if($compra->code_wallet=="")
+                       
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <form id="ad_form_{{$compra->id_anuncio}}" method="POST" action="{{route('registrar_wallet_transaccion_realizada',[$compra->id_pago])}}">
@@ -94,9 +122,7 @@
                       @else
 
                         @if($compra->transactionState=="Moneda Envíada")
-                          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
-                              Confirmar transacción
-                            </button>
+                         <!--VENTANA MODAL-->
                             <div class="modal fade" id="code_wallet_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
                                 <div class="modal-dialog" role="document">
@@ -126,12 +152,11 @@
                                 </div>
                             
                           </div>
+                           <!--FIN VENTA MODAL-->
                         @endif
                             
                         
-                        {{--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
-                            Ver info
-                        </button>
+                        {{--
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
@@ -157,12 +182,8 @@
                             
                           </div>--}}
                       @endif  
-                    </td>                                   
-                  </tr>
-              @endforeach
-            </tbody>
-          </table>
- 
+                  
+          @endforeach  
       </div>
       
         
@@ -181,6 +202,7 @@
                 console.log("5");
                 $('#compras-table').DataTable( {
                     dom: 'Bfrtip',
+                    responsive: true,
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                     language:
                       {

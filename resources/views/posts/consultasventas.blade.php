@@ -1,16 +1,16 @@
 <!--ventas-->
 
- <div class="col-md-10 col-lg-offset-1">
+ <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Listado de anuncios de venta</h3>
+          <h3 class="box-title">Venta de criptomonedas</h3>
             @guest
               <a href="{{route('login')}}" class="btn btn-primary pull-right btn-lg" >
-                  <i class="fa fa-user-plus"> Crear Anuncio</i>
+                  <i class="fa fa-user-plus"> Crea un anuncio</i>
               </a>
               @else 
                <a href="{{route('anuncios.create')}}" class="btn btn-primary pull-right btn-lg" >
-                  <i class="fa fa-user-plus"> Crear Anuncio</i>
+                  <i class="fa fa-user-plus"> Crea un anuncio</i>
               </a>
               @endguest 
 
@@ -25,7 +25,7 @@
                 <th>Ubicación</th>
                 <th>Precio/Moneda</th>
                 <th>Criptomoneda</th>
-                <th>Limites</th>
+                <th>Limites (min./max.)</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -64,7 +64,6 @@
                               </button>
                              
                           
-                          @include('posts.ventana_modal_login')  
                       @else
                         
                          
@@ -77,7 +76,7 @@
                                 Ya lo viste
                                 </button>     
 
-                                @include('posts.ventana_modal_info_general')
+                              
 
                                 
                               @else
@@ -89,7 +88,7 @@
                                 Ya lo viste
                                 </button> 
                                                     
-                                @include('posts.ventana_modal_info_general')
+                                
 
 
                               @endif
@@ -107,8 +106,7 @@
                                 </button>
                               @endif
                               
-                            
-                             @include('posts.ventana_modal_info_venta')
+                          
                             @endif
                           
                           
@@ -124,7 +122,54 @@
               {{--/se crean las tablas de ventas--}} 
             </tbody>
           </table>
-         
+          {{--ventanas--}}
+           @foreach ($anuncios as $ad)
+                  @if($ad->tipo_anuncio =="venta")
+                   
+                      @guest
+                             <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
+
+                            
+                             
+                          
+                          @include('posts.ventana_modal_login')  
+                      @else
+                        
+                         
+                          
+                            @if($ad->btn_info) 
+                              @if($ad->visto!="") 
+                             
+                               
+
+                                @include('posts.ventana_modal_info_general')
+
+                                
+                              @else
+                                
+                                                    
+                                @include('posts.ventana_modal_info_general')
+
+
+                              @endif
+                              
+                            @endif                                
+
+                            @if($ad->btn_payu)  
+                             
+                            
+                             @include('posts.ventana_modal_info_venta')
+                            @endif
+                          
+                          
+
+                      @endguest
+                        
+                        
+                  
+                  @endif
+                  {{--fin if donde valido tipo de anuncio--}}
+              @endforeach
 
      </div>
 

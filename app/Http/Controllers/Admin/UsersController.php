@@ -736,11 +736,25 @@ class UsersController extends Controller
     }
 
     public function ver_todas_las_transacciones(){
-        $pag=pagos::join('anuncios','anuncios.id','pagos.id_anuncio')
+        $pag=pagos::select('pagos.id as id_pago',
+                           'pagos.estado_pago',
+                           'pagos.transactionQuantity',
+                           'pagos.transation_value',
+                           'pagos.transactionId',
+                           'pagos.code_wallet',
+                           'pagos.hash_txid',
+                           'anuncios.tipo_anuncio',
+                           'anuncios.nombre_cripto_moneda',
+                           'anuncios.tipo_anuncio',
+                           'users.name',
+                           'users.email'
+                        )
+                    ->join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','anuncios.user_id')
                     ->get();
                     
          $variables = DB::table('variables')->select('valor')->get();
+
          return view('posts.ver_todas_las_transacciones',compact('pag','variables'));
     }
     /**

@@ -97,6 +97,41 @@
               @endforeach
             </tbody>
           </table>
+          {{--ventanas--}}
+          @foreach ($mis_ventas as $venta)
+                 
+                      @if($venta->hash_txid=="" && $venta->transactionState != "Pendiente")
+                         
+                          <!--VENTANA MODAL-->
+                          <div class="modal fade" id="code_wallet_{{$venta->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <form id="ad_form_{{$venta->id_anuncio}}" method="POST" action="{{route('registrar_hash_transaccion_realizada',$venta->id_pago)}}">
+                              {{csrf_field()}}
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Registra el Hash/txid</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                            <i class="fa fa-info-circle"></i>
+                                             <h5>Ingresa el código HASH TXID de tu transacción </h5>
+                                            <input type="text" name="hash_txid" class="textinput textInput form-control"+ required>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a class="btn btn-secondary" data-dismiss="modal">Salir</a>
+                                      <button type="submit" class="btn btn-primary">Registrar Hash/txid</button>
+                                    </div>
+                                  </div>
+                                </div>
+                            </form>
+                          </div>
+                        <!--FIN VENTA MODAL-->
+                      @endif
+
+              @endforeach
       </div>
     </div>
   </div>

@@ -2,7 +2,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
 
-            <div class="modal-header">
+            <div class="modal-header bg-primary text-center">
                <h3 style="text-align: center;" class="modal-title" id="exampleModalLabel"><b>Compra garantizada</b></h3>
               <h4 class="modal-title" id="exampleModalLabel">{{config('app.name','') }}, te sirve de intermediario para garantizar que la transacción se exitosa para ambas partes</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'infoventa'.$ad->id}}')">
@@ -62,7 +62,7 @@
             </div>
             <div class="modal-body">
               <b>Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}
-              <b>Estado: </b> {{$ad->horario->estado_dia}}
+             
             </div>
            <div class="modal-body">
                 <h4>Calificación del anunciante: </h4>

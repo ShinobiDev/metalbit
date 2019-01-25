@@ -83,6 +83,8 @@ class RegisterController extends Controller
             'phone'=>$data['phone'],
             'costo_clic'=>"50",
             'codigo_referido'=>((int)$cod[0]->codigo_referido+1),
+            'calificacion'=>'3',
+            'num_calificaciones'=>'1'
         ]);
          $u->assignRole('Comerciante');
          DB::table('detalle_horario_usuario')->insert([

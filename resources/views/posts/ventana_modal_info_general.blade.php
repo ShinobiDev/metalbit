@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document" >
       <div class="modal-content">
         
-        <div class="modal-header">
+        <div class="modal-header bg-primary text-center">
           <h4 style="text-align: center;" class="modal-title" id="exampleModalLabel"><b>Información del ofertante</b></h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'infogen'.$ad->id}}')">
             <span aria-hidden="true" >&times;</span>
@@ -27,7 +27,7 @@
         </div>
         <div class="modal-body">
           <b>Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}
-          <b>Estado: </b> {{$ad->horario->estado_dia}}
+        
         </div>
         <div class="modal-body">
             <h4>Calificación del anunciante: </h4>

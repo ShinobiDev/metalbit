@@ -17,7 +17,7 @@
 
 @section('content')
 
-  <div class="col-md-12">
+  <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
           <h3 class="box-title">Listado de compras realizadas</h3>
@@ -43,6 +43,7 @@
             <tbody>
               {{--dd(ver_todas_las_transacciones)--}}
               @foreach ($pag as $transaccion)
+              
                   <tr>
                     <td>{{$transaccion->tipo_anuncio}}</td>
                     <td>{{$transaccion->name}}</td>
@@ -185,7 +186,8 @@
               @endforeach
             </tbody>
           </table>
-
+         
+         
       </div>
 
 
@@ -203,6 +205,7 @@
             $(document).ready(function() {
                 console.log("5");
                 $('#compras-table').DataTable( {
+                    responsive: true,
                     dom: 'Bfrtip',
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                     language:

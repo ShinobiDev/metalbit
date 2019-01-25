@@ -41,48 +41,19 @@
             <a href="{{route('users.edit', $user)}}" class="btn btn-primary btn-block"><b>Editar</b></a>
           </div>
         </div>
-        <!--DIVISION RECARGAS Y CALIFICACIONES-->
+
         <div class="col-md-3">
-          <!--DIVISION RECARAGS-->
+          <!--DIVISION MIS BONIFICACIONES-->  
           <div class="box box-primary">
               <div class="box-header with-border">
-                  <h3 class="box-title">Realizar Recarga</h3>
+                  <h3 class="box-title">Mis bonificaciones</h3>
               </div>
-              <div class="box-body">
+              <div class="box-body"><h4 class="box-title"></h4>
+                        <a class="btn btn-primary" href="{{config('app.url').'/mis_bonificaciones'}}">VER</a>
+              </div> 
 
-                  @foreach ($recargas as $recarga)
-
-                      @if ($recarga->valor <= '0')
-                          <h4>Actualmente no tienes saldo</h4>
-                      @else
-                        <h4>Su saldo actual es: $ {{number_format($recarga->valor,2,',','.')}} <small> {{$recarga->status}}</small></h4>
-                      @endif
-
-                  @endforeach
-
-
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-                      Recargar
-                    </button>
-
-                    <!-- Modal -->
-                   <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Realizar Recargas</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            @include('payu.recargas_payu')
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-              </div>
           </div>
+        
           <!--DIVISION MIS TRANSACIIONES-->
 
            <div class="box box-primary">
@@ -132,7 +103,7 @@
               </div> 
 
           </div>
-          @role('Admin')
+        @role('Admin')
           <!--DIVISION PARA PORCENTAJE-->
           
               <div class="box box-primary">
@@ -176,29 +147,49 @@
         @endrole
 
         </div>
-        <!--DIVISION MAS VISTOS-->
-        {{--<div class="col-md-3">
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Top de los más vistos</h3>
-                    @include('posts.mas_vistos')
-                </div>
-
-            </div>
-        </div>--}}
         
         
-        <!--DIVISION MIS BONIFICACIONES-->
           
         <div class="col-md-3">
-         <div class="box box-primary">
+           <!--DIVISION RECARAGS-->
+          <div class="box box-primary">
               <div class="box-header with-border">
-                  <h3 class="box-title">Mis bonificaciones</h3>
+                  <h3 class="box-title">Realizar Recarga</h3>
               </div>
-              <div class="box-body"><h4 class="box-title"></h4>
-                        <a class="btn btn-primary" href="{{config('app.url').'/mis_bonificaciones'}}">VER</a>
-              </div> 
+              <div class="box-body">
 
+                  @foreach ($recargas as $recarga)
+
+                      @if ($recarga->valor <= '0')
+                          <h4>Actualmente no tienes saldo</h4>
+                      @else
+                        <h4>Su saldo actual es: $ {{number_format($recarga->valor,2,',','.')}} <small> {{$recarga->status}}</small></h4>
+                      @endif
+
+                  @endforeach
+
+
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                      Recargar
+                    </button>
+
+                    <!-- Modal -->
+                   <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Realizar Recargas</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            @include('payu.recargas_payu')
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              </div>
           </div>
         </div>
         <!--DIVISION ANUCIOS VISTOS POR MI-->  
@@ -214,20 +205,8 @@
           </div>
         </div>
 
-        <!--DIVISION MIS TRANSACCIONES-->
         
-        {{--<div class="col-md-3">
-          
-          <div class="box box-primary">
-              <div class="box-header with-border">
-                  <h3 class="box-title">Mis transacciones</h3>
-              </div>
-              <div class="box-body">
-                
-                 @include('posts.mis_transacciones')
-              </div>
-          </div>
-        </div>--}}
+        
         
         
 </div>

@@ -22,6 +22,6 @@
   <input name="buyerEmail"    type="hidden"   value="{{trim(Auth::user()->email)}}" >
   <input name="responseUrl"    type="hidden"   value="{{config('app.url').trim($ad->resp)}}" >
   <input name="confirmationUrl"    type="hidden"   value="{{config('app.url').trim($ad->conf)}}" >
-  <input id="btn_comprar_{{$ad->id}}" type="submit" name="submit" value="COMPRAR" class="btn btn-default">
+  <input id="btn_comprar_{{$ad->id}}" type="submit" name="submit" value="COMPRAR" class="btn btn-success">
 </div>
                                                                 

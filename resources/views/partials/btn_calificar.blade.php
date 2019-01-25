@@ -8,10 +8,10 @@
         <label for="rd2">2</label>
         <input id="rd3" class="" type="radio" name="nota" value="3">
         <label for="rd3">3</label>
-        <!--<input id="rd4" class="" type="radio" name="nota" value="4">
+        <input id="rd4" class="" type="radio" name="nota" value="4">
         <label for="rd4">4</label>
         <input id="rd5" class="" type="radio" name="nota" value="5">
-        <label for="rd5">5</label>-->
+        <label for="rd5">5</label>
         
     </section>  
     <section style="text-align: center;" >

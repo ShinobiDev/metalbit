@@ -30,7 +30,7 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
+            <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
                 <div class="navbar-header">
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
@@ -48,20 +48,24 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-
+                      <li>
+                           <a href="{{route('anuncios.index')}}">Ver anuncios</a>
+                      </li>
                       @role('Admin')
                         <li>
-                           <a href="{{route('anuncios.create')}}">Crear anuncios</a>
+                           <a href="{{route('anuncios.create')}}">Crear anuncios
+                            <input type="hidden" value="{{auth::user()->id}}" id="user_id">
+                           </a>
                         </li>
-                        <input type="hidden" value="{{Auth::user()->id}}" id="user_id">
+                        
                         <li>
-                           <a href="{{route('recargas.index')}}">Estadistica Recargas</a>
+                           <a href="{{route('recargas.index')}}">Todas las Recargas</a>
                         </li>
                         <li>
-                          <a href="{{route('anuncios.all',['id'=>Auth::user()->id])}}">Todos los anuncios</a>
+                          <a href="{{route('anuncios.all',['id'=>auth::user()->id])}}">Todos los anuncios</a>
                         </li>
                         <li>
-                           <a href="{{route('ver_todas_las_transacciones')}}">Estadistica de transacciones</a>
+                           <a href="{{route('ver_todas_las_transacciones')}}">Todas las transacciones</a>
                         </li>
                         <li>
                             <a href="{{route('users.show', auth()->user())}}">Recargar</a>
@@ -74,9 +78,9 @@
                            <a href="{{route('anuncios.create')}}">Crear anuncios</a>
                         </li>
                         <li>
-                           <a href="{{route('anuncios.show',['id'=>Auth::user()->id])}}">Mis anuncios</a>
+                           <a href="{{route('anuncios.show',['id'=>auth::user()->id])}}">Mis anuncios</a>
                         </li>
-                        <input type="hidden" value="{{Auth::user()->id}}" id="user_id">
+                        <input type="hidden" value="{{auth::user()->id}}" id="user_id">
                         <li>
                            <a href="{{route('mis_compras',['id'=>auth()->user()->id])}}">Mis compras</a>
                         </li>
@@ -93,17 +97,20 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
+                        <!-- authentication Links -->
                              <li>
                         @guest
-                            <li><a href="{{ route('login') }}">Iniciar</a></li>
+                            <li>
+                              <a href="{{ route('login') }}">Ingresar</a>
+                              <input type="hidden" value="0" id="user_id">
+                            </li>
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
-                            <input type="hidden" value="0" id="user_id">
+                            
                         @else
 
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu">
@@ -139,14 +146,12 @@
         </nav>
 
 
-        {{-- @include('errors.404') --}}
-        {{-- @include('errors.403') --}}
         @include('partials.error')
         @include('partials.success')
         @yield('content')
 
     </div>
-    <footer class="">
+    <footer class="col-12 col-md-12 col-sm-12 col-xs-12">
         <div class="container">
           <center style="height:50px;">
               <a href="http://prismaweb.co/diseno-a-la-medida/" target="_blank" >Desarollado por: </a>
@@ -158,9 +163,8 @@
     <!-- Scripts -->
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/notas.css')}}">
-    <script src="{{ asset('js/app.js') }}"></script>/
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/recargas.js') }}"></script>
-    {{-- <script src="{{asset('admin-lte/plugins/datatables/datatables.min.js')}}">  </script> --}}
     <script src="{{asset('admin-lte/plugins/datatables/jquery.dataTables.min.js')}}">  </script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>

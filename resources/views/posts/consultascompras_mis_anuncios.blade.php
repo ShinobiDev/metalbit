@@ -1,5 +1,5 @@
 <!--compras-->
-<div class="col-md-10 col-lg-offset-1">
+<div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
   <div class="box box-primary">
     <div class="box-header">
         <h3 class="box-title">Listados de mis anuncios de dompra</h3>
@@ -69,7 +69,7 @@
                               </button>
 
                         
-                      @include('posts.ventana_modal_login')
+                      
 
                     @else
                         <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
@@ -77,7 +77,7 @@
                         </button>
 
                         <!--AQUI INCLUYO LA VENTANA MODAL DE INFORMACION GENERAL-->
-                        @include('posts.ventana_modal_info_general')
+                   
                     @endguest
 
                   </td>
@@ -87,7 +87,29 @@
             {{--se crear anuncio de compra--}}
           </tbody>
         </table>
-                                 
+          {{--ventanas--}}
+          @foreach ($anuncios as $ad)
+
+                @if($ad->tipo_anuncio=="compra")
+              
+
+                  
+                    @guest
+                      <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
+
+                     
+
+                        
+                      @include('posts.ventana_modal_login')
+
+                    @else
+                       
+                        @include('posts.ventana_modal_info_general')
+                    @endguest
+
+                 
+                @endif
+            @endforeach                        
     </div>
 
 
