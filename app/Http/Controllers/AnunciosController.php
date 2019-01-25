@@ -11,6 +11,7 @@ use App\GuzzleModel;
 use App\Payu;
 use App\User;
 use App\pagos;
+use App\Variable;
 use DB;
 use Carbon\Carbon;
 
@@ -125,7 +126,8 @@ class AnunciosController extends Controller
                             ->with('coins',$coins->quotes->COP->price)
                             ->with('listacriptos', (object)json_decode($listacriptos))
                             ->with("listamonedas",$listamonedas)
-                            ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first());
+                            ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
+                            ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get());
             }
            
         /*}else{

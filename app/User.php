@@ -151,7 +151,7 @@ class User extends Authenticatable
         
         if(count($pg)>0){
           //dd($pg[0]->code_wallet);   
-          dd($pg);   
+          //dd($pg);   
           return array("respuesta"=>true,"pago"=>$pg[0]->transactionId,"wallet"=>$pg[0]->code_wallet);
         }else{
           return array("respuesta"=>false,"pago"=>"0","wallet"=>"");

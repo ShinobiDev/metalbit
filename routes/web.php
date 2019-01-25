@@ -44,6 +44,8 @@ Route::get('descontar_recargas/{id_anuncio}/{costo}/{id_user}/{tipo}/{cant}/{pre
 
 
 Route::get('/home', 'AnunciosController@index')->name('welcome');
+Route::post("editar_variables","Admin\UsersController@editar_variables");
+
 
 Route::group([
     // 'prefix' => 'admin',
@@ -56,6 +58,8 @@ Route::group([
 
   Route::middleware('role:Admin')->put('users/{user}/roles', 'UserRolesController@update')->name('users.roles.update');
   Route::middleware('role:Admin')->put('users/{user}/permissions', 'UserPermissionsController@update')->name('users.permissions.update');
+
+
 /**/
 
 

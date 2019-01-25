@@ -46,11 +46,11 @@
                   </td><td>{{$ad->banco }}</td>
                   <td>{{$ad->ubicacion}}</td>
                   <td>
-                     <span class="text-blue"><h4> {{$ad->precio_moneda}} </h4></span> <span class="text-red">{{$ad->moneda}}</span>
+                     <span class="text-blue"><h5> $ {{$ad->precio_moneda}} </h5></span> <span class="text-red">{{$ad->moneda}}</span>
 
                  </td>
                   <td>{{$ad->cripto_moneda}}</td>
-                  <td>{{ number_format($ad->limite_min,2, ',', '.') }} / {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
+                  <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} / $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
                   <td>
                     <h5 id="h5_estado_{{$ad->id}}">{{$ad->estado_anuncio}}</h5>
                     @if($ad->estado_anuncio=="activo")

@@ -20,51 +20,52 @@
 
         @if($mis_anuncios==true)
             @section('content')
-             
-              
-               
+
+
+
                <!--se incluye seccion de tabla con anuncios de ventas-->
                @include('posts.consultasventas_mis_anuncios')
                <!--FIN se incluye seccion de tabla con anuncios de ventas-->
-               
+
 
                <!--se incluye seccion de tabla con anuncios de compras-->
                @include('posts.consultascompras_mis_anuncios')
                <!--fin se incluye seccion de tabla con anuncios de compras-->
-              
-             
+
+
             @endsection
         @else
           @section('content')
-             
-             @include('partials.confirmar_correo')  
-             
+
+             @include('partials.confirmar_correo')
+
              <!--se incluye seccion de tabla con anuncios de ventas-->
              @include('posts.consultasventas')
              <!--FIN se incluye seccion de tabla con anuncios de ventas-->
-             
+
 
              <!--se incluye seccion de tabla con anuncios de compras-->
              @include('posts.consultascompras')
              <!--fin se incluye seccion de tabla con anuncios de compras-->
-              
-             
+
+
           @endsection
         @endif
 
-        
 
-        
 
-        <!--FINSECCION DE CONSULTA DE ANUNCIOS-->
-        
-              
-          
+
+
+          <!--FINSECCION DE CONSULTA DE ANUNCIOS-->
+
+
+
         @section('scripts')
 
              <script>
                   $(function (){
                       $('#users-table').DataTable({
+                        'responsive': true,
                         'language':
                           {
                             "responsive":       true,
@@ -98,8 +99,9 @@
              <script>
                   $(function (){
                       $('#comprar-table').DataTable({
+                        'responsive': true,
                         'language':
-                          { 
+                          {
                             "responsive":       true,
                             "sProcessing":     "Procesando...",
                             "sLengthMenu":     "Mostrar _MENU_ registros",
@@ -127,7 +129,8 @@
                       });
                   });
              </script>
-
              
+
+
 
         @endsection

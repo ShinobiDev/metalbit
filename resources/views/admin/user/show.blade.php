@@ -132,6 +132,48 @@
               </div> 
 
           </div>
+          @role('Admin')
+          <!--DIVISION PARA PORCENTAJE-->
+          
+              <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Editar porcentaje ganacia </h3>
+                </div>
+                <div class="box-body">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLongEditar">
+                        Editar
+                      </button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="exampleModalLongEditar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLongTitle">Editar variable de ganancia porcentaje</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form method="POST" action="{{url('editar_variables')}}">
+                                    {{ csrf_field() }}
+                                      <input name="valor" value="{{$variables[0]->valor}}"  type="text" class="form-control" required>
+                                      <input name="nombre" value="{{$variables[0]->nombre}}"  type="hidden" >
+                                      <h5>Escriba aqui el valor que quieres asignar a tu porcentaje de ganancia por transacción</h5>
+                                      <input type="submit" class="btn btn-primary" value="Editar  ">
+
+                               </form>
+
+
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                </div>
+
+              </div>
+          
+        @endrole
 
         </div>
         <!--DIVISION MAS VISTOS-->
