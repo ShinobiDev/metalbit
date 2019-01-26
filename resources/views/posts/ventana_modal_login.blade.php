@@ -2,10 +2,17 @@
 
 
     <div class="modal-dialog" role="document">
+<<<<<<< HEAD
       <div class="modal-content ">
 
         <div class="modal-header bg-primary text-center">
           <h4 class="modal-title" id="exampleModalLabel">Debes registrarte o inicar sesión para conocer mas información de este anuncio</h4>
+=======
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Debes registrarte o inicar sesión para conocer mas información de este anuncio</h5>
+>>>>>>> 1393d6176142e1db9e3c935d8a793e8a2d5eadde
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'ventana_login'.$ad->id}}')">
             <span aria-hidden="true" >&times;</span>
           </button>

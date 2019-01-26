@@ -2,7 +2,11 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
 
+<<<<<<< HEAD
             <div class="modal-header bg-primary text-center">
+=======
+            <div class="modal-header">
+>>>>>>> 1393d6176142e1db9e3c935d8a793e8a2d5eadde
                <h3 style="text-align: center;" class="modal-title" id="exampleModalLabel"><b>Compra garantizada</b></h3>
               <h4 class="modal-title" id="exampleModalLabel">{{config('app.name','') }}, te sirve de intermediario para garantizar que la transacción se exitosa para ambas partes</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'infoventa'.$ad->id}}')">

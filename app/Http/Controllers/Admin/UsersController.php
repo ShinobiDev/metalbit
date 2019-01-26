@@ -752,10 +752,10 @@ class UsersController extends Controller
                     ->join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','anuncios.user_id')
                     ->get();
-                    
          $variables = DB::table('variables')->select('valor')->get();
 
          return view('posts.ver_todas_las_transacciones',compact('pag','variables'));
+
     }
     /**
      * Funcion para confirmar transaccion

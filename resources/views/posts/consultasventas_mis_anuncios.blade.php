@@ -48,6 +48,7 @@
                     <td>
                        <span class="text-blue"><h5>$ {{$ad->precio_moneda}} </h5></span> <span class="text-red">{{$ad->moneda}}</span>
 
+
                    </td>
                     <td>{{$ad->cripto_moneda}}</td>
                     <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} / </br>$ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
@@ -71,14 +72,22 @@
                               </button>
 
 
+<<<<<<< HEAD
                           
+=======
+                           @include('posts.ventana_modal_login')
+>>>>>>> 1393d6176142e1db9e3c935d8a793e8a2d5eadde
                       @else
 
                             <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','0',false)">
                             Ver info
                             </button>
 
+<<<<<<< HEAD
                          
+=======
+                          @include('posts.ventana_modal_info_general')
+>>>>>>> 1393d6176142e1db9e3c935d8a793e8a2d5eadde
 
                       @endguest
 
@@ -90,6 +99,7 @@
               {{--se crean las tablas de ventas--}}
             </tbody>
           </table>
+<<<<<<< HEAD
           {{--ventanas--}}
            @foreach ($anuncios as $ad)
                   @if($ad->tipo_anuncio =="venta")
@@ -112,6 +122,9 @@
                    </tr>
                   @endif
               @endforeach
+=======
+
+>>>>>>> 1393d6176142e1db9e3c935d8a793e8a2d5eadde
      </div>
 
 

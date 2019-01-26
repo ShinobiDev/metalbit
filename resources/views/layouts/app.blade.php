@@ -57,15 +57,18 @@
                             <input type="hidden" value="{{auth::user()->id}}" id="user_id">
                            </a>
                         </li>
-                        
+                       
                         <li>
                            <a href="{{route('recargas.index')}}">Todas las Recargas</a>
+
                         </li>
                         <li>
                           <a href="{{route('anuncios.all',['id'=>auth::user()->id])}}">Todos los anuncios</a>
                         </li>
                         <li>
+
                            <a href="{{route('ver_todas_las_transacciones')}}">Todas las transacciones</a>
+
                         </li>
                         <li>
                             <a href="{{route('users.show', auth()->user())}}">Recargar</a>
@@ -88,6 +91,7 @@
                           <a href="{{route('mis_ventas',['id'=>auth()->user()->id])}}">Mis ventas</a>
                         </li>
                         <li>
+
                             <a href="{{route('users.show', auth()->user())}}">Recargar</a>
                         </li>
                       @endrole
@@ -105,7 +109,7 @@
                               <input type="hidden" value="0" id="user_id">
                             </li>
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
-                            
+
                         @else
 
                             <li class="dropdown">
@@ -163,7 +167,7 @@
     <!-- Scripts -->
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/notas.css')}}">
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>/
     <script src="{{ asset('js/recargas.js') }}"></script>
     <script src="{{asset('admin-lte/plugins/datatables/jquery.dataTables.min.js')}}">  </script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>

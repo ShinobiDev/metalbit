@@ -33,6 +33,7 @@ Registrar Código Wallet
 
 @endif
 	
+	
 
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}

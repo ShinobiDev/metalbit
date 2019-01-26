@@ -144,7 +144,6 @@
           <script>
               $(document).ready(function() {
               $('#ventas-table').DataTable( {
-
                   dom: 'Bfrtip',
                   buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                   'responsive': true,
