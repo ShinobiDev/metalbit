@@ -56,11 +56,11 @@
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
 
 
-                            <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','info')">
+                            <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','info')">
                               Ver info
                               </button>
 
-                            {{-- <button id="{{'btn_'.$ad->id}}" type="button" class="btn btn-default" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','venta')">
+                            {{-- <button id="{{'btn_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','venta')">
                               Vender
                             </button> --}}
 
@@ -75,14 +75,14 @@
 
                                 @if($ad->visto!="")
                                    <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary">Ya lo Viste</a>-->
-                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
+                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
                                     Ya lo viste
                                     </button>
                                    
                                 @else
                                   
                                     <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>-->
-                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
+                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
                                     Ya lo viste
                                     </button>
                                   
@@ -110,9 +110,6 @@
                     @guest
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
 
-
-
-
                         @include('posts.ventana_modal_login')
 
                     @else
@@ -129,8 +126,6 @@
                                   <!--AQUI INCLUYO LA VENTANA MODAL DE INFORMACION GENERAL-->
                                   @include('posts.ventana_modal_info_general')
                                 @endif
-
-                                  
                        
                              @endif 
 

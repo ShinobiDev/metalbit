@@ -6,9 +6,12 @@
 Estimad@ {{$user->name}}, hemos registrado el código wallet de una de tus ventas
 
 ##Datos Comprador##
-Usuario : {{$ad[0]->name}}
-Teléfono: {{$ad[0]->phone}},
-Email: {{$ad[0]->email}}
+# Usuario :
+  {{$ad[0]->name}}
+# Teléfono: 
+  {{$ad[0]->phone}},
+# Email: 
+  {{$ad[0]->email}}
 
 
 ## Resumen Oferta ##
@@ -34,8 +37,8 @@ Email: {{$ad[0]->email}}
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 
-## BALANCE DE COMPRA {{$recarga}} ##
 
+## BALANCE DE COMPRA $ {{format_number($recarga,0,',','.')}} ##
 
 #[Sitio Web][1]
 [1]:{{$url}}#

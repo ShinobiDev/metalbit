@@ -124,13 +124,13 @@ class Anuncios extends Model
                                     $horarios=$u->ver_horarios($value->user_id,date('w'));
 
                                     if(( (float)$value->valor < (float)$value->costo_clic) || (float)$value->valor == 0 ){
-                                            $mostrar_info=false;
+                                            //$mostrar_info=false;
                                     }
                                    
                                     //var_dump($mostrar_info);
                                     //dd($horarios);
                                     if($horarios['respuesta']==false){
-                                      $mostrar_info=false;                                      
+                                      //$mostrar_info=false;                                      
                                     }
 
                                      if(Auth()->user()!=null){

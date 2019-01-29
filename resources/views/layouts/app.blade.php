@@ -167,7 +167,7 @@
     <!-- Scripts -->
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="{{asset('css/notas.css')}}">
-    <script src="{{ asset('js/app.js') }}"></script>/
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/recargas.js') }}"></script>
     <script src="{{asset('admin-lte/plugins/datatables/jquery.dataTables.min.js')}}">  </script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>

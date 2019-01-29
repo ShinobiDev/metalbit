@@ -56,7 +56,7 @@
                     <td>{{$venta->hash_txid}}</td>
                     <td>
                       @if($venta->hash_txid=="" && $venta->transactionState != "Pendiente")
-                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$venta->id_pago}}">
+                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$venta->id_pago}}">
                             Registrar Hash/txid
                          </button>
                           <!--VENTANA MODAL-->

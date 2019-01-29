@@ -15,7 +15,7 @@ Recuerda comunicarte con nosotros para bridarte más información, visita nuesto
 Anuncio:
 
 @component('mail::table')
-    | tipo | cripto moneda | divisa |
+    | tipo | criptomoneda | divisa |
     |:--------|:----------|
     | {{$ad->tipo_anuncio}} | {{$ad->nombre_cripto_moneda}} | {{$ad->nombre_moneda}} |
 @endcomponent
@@ -25,9 +25,9 @@ Estado: INACTIVO
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 
-## BALANCE DE RECARGA {{$recarga}} ##
+## BALANCE DE RECARGA $ {{format_number($recarga,0,',','.')}} ##
 
-#[Recarga][1]
+#[Recargar][1]
 [1]:{{$url}}#
 
 

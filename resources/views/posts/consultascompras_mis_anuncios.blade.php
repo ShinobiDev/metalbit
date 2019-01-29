@@ -24,7 +24,7 @@
               <th>Ubicación</th>
               <th>Precio/Moneda</th>
               <th>Cripto</th>
-              <th>Limites</th>
+              <th>Limites (min./max.)</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
@@ -50,7 +50,7 @@
 
                  </td>
                   <td>{{$ad->cripto_moneda}}</td>
-                  <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} / $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
+                  <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} / </br>$ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
                   <td>
                     <h5 id="h5_estado_{{$ad->id}}">{{$ad->estado_anuncio}}</h5>
                     @if($ad->estado_anuncio=="activo")
@@ -64,7 +64,7 @@
                     @guest
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
 
-                     <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0',false)">
+                     <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0',false)">
                               Ver info
                               </button>
 
@@ -72,7 +72,7 @@
                       
 
                     @else
-                        <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
+                        <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
                               Ver info
                         </button>
 

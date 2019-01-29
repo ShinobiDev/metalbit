@@ -14,7 +14,7 @@
           {{$ad->lugar}}
           <br>
           <b>Términos:</b>
-          <p>{{$ad->terminos}}</p>
+          <p class="text-justify">{{$ad->terminos}}</p>
         </div>
         <div class="modal-body">
           <b>Nombre del ofertante:</b> {{$ad->name}}

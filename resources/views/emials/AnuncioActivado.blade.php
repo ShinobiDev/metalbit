@@ -20,9 +20,10 @@ Estado: ACTIVADO
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 
-## BALANCE DE RECARGA {{$recarga}} ##
 
-#[Recarga][1]
+## BALANCE DE RECARGA $ {{format_number($recarga,0,',','.')}} ##
+
+#[Recargar][1]
 [1]:{{$url}}#
 
 
