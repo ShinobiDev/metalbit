@@ -5,7 +5,7 @@
 
 <div class="row">
         <!--DIVISION USUARIO-->
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div class="box-body box-profile">
             <img class="profile-user-img img-responsive img-circle" src="{{asset('admin-lte/dist/img/user4-128x128.jpg')}}" alt="{{$user->name}}">
 
@@ -21,7 +21,7 @@
                 <b style="margin-left:  10px;">Teléfono</b> <a class="pull-right" style="margin-right: 10px;">{{$user->phone}}</a>
               </li>
               <li class="list-group-item" style="margin-left:  10px;">
-                <b style="margin-left:  10px;">Código referido</b> <a class="pull-right" style="margin-right:  10px;">{{$user->codigo_referido}}</a>
+                <b style="margin-left:  10px;">Código para referir</b> <a class="pull-right" style="margin-right:  10px;">{{$user->codigo_referido}}</a>
               </li>
               <li class="list-group-item" style="margin-left:  10px;">
                 <b style="margin-left:  10px;">Cuenta bancaria</b> <a class="pull-right" style="margin-right:  10px;">{{$user->cuenta_bancaria or "SIN REGISTRAR"}}</a>
@@ -90,7 +90,7 @@
                             <form method="POST" action="{{url('compartir_mail')}}">
                                   {{ csrf_field() }}
                                     <input id="txt_mis_correos" name="correos"  type="text" class="form-control" required>
-                                    <h5>Escriba separado de ',' cada uno de los correos con los que quiere compartir su código de referido.</h5>
+                                    <h5>Escribe los correos separados por una coma ',' de tus amigos a los que quieres sugerir {{config('app.name')}}. </h5>
                                     <input type="submit" class="btn btn-primary" value="Enviar correo">
                                     
                              </form> 

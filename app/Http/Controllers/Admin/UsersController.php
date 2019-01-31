@@ -15,6 +15,7 @@ use Illuminate\Routing\Redirector;
 use App\Recargas;
 use App\Payu;
 use App\Anuncios;
+use App\Variable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -171,6 +172,7 @@ class UsersController extends Controller
                     ->with("hash",$pp->hashear("rec_".$ref,20000,"COP"))
                     ->with("ad",$ad)
                     ->with("transacciones",$transacciones)
+                    ->with("variables",Variable::where('nombre','porcentaje_tramite')->get())
                     ->with('horarios',$horarios);
     }
 
@@ -366,19 +368,18 @@ class UsersController extends Controller
 
     }
     /**
-     * Funcion para validar el codigo de referido de un usuario
-     * @param  [type] $cod [description]
-     * @return [type]      [description]
+     * Funcion para validar el código
+     * @param  Request $request [description]
+     * @return [type]           [description]
      */
     public function validar_codigo($cod){
-        if($cod=="-"){
-             return response()->json(["respuesta"=>true]);
-        }
+        
+        
         $us=User::where("codigo_referido",$cod)->get();
         if(count($us)>0){
             return response()->json(["respuesta"=>true]);
         }
-        return response()->json(["respuesta"=>false]);
+        return response()->json(["respuesta"=>false,"mensaje"=>"Error Código referido: El Código de la persona que te refirio no existe. Deja el espacio vacío o pregúntaselo nuevamente."]);
     }
     /**
      * FUncion para cambiar la clave
@@ -663,6 +664,7 @@ class UsersController extends Controller
                            'pagos.code_wallet',
                            'pagos.image_wallet',
                            'pagos.hash_txid',
+                           'pagos.moneda_pago',
                            'anuncios.cod_anuncio',
                            'anuncios.tipo_anuncio',
                            'anuncios.ubicacion',
@@ -681,6 +683,7 @@ class UsersController extends Controller
                                 ['id_user_compra',$id],
                                 ['pagos.transactionId','!=',null]
                             ])
+                    ->orderBy('pagos.updated_at','DESC')
                     ->get();
         //dd([$pag,auth()->user()->name]);
         return view('posts.mis_compras')
@@ -711,6 +714,7 @@ class UsersController extends Controller
                            'pagos.code_wallet',
                            'pagos.image_wallet',
                            'pagos.hash_txid',
+                           'pagos.moneda_pago',
                            'anuncios.cod_anuncio',
                            'anuncios.tipo_anuncio',
                            'anuncios.ubicacion',
@@ -729,6 +733,7 @@ class UsersController extends Controller
                                 ['anuncios.user_id',$id],
                                 ['pagos.transactionId','!=',null]
                             ])
+                    ->orderBy('pagos.updated_at','DESC')
                     ->get();
         //dd($pag);
         return view('posts.mis_ventas')
@@ -743,6 +748,7 @@ class UsersController extends Controller
                            'pagos.transactionId',
                            'pagos.code_wallet',
                            'pagos.hash_txid',
+                           'pagos.moneda_pago',
                            'anuncios.tipo_anuncio',
                            'anuncios.nombre_cripto_moneda',
                            'anuncios.tipo_anuncio',
@@ -787,5 +793,17 @@ class UsersController extends Controller
 
 
 
+    }
+     /*
+      Funcion para editar variables generales
+     */
+    public function editar_variables(Request $request){
+        //dd($request);
+        Variable::where('nombre',$request['nombre'])
+                 ->update([
+                            'valor'=>$request['valor']
+                          ]);
+
+        return back()->with('success', 'Se ha cambiado el valor de la variable correctamente');
     }
 }

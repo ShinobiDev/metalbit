@@ -34,9 +34,9 @@
                   <th>Nombre usuario</th>
                   <th>Forma de Pago</th>
                   <th>Ubicación</th>
-                  <th>Precio/Moneda</th>
+                  <th style="width: 200px;">Precio/Moneda</th>
                   <th>Criptomoneda</th>
-                  <th>Limites (min./max.)</th>
+                  <th style="width: 150px;">Limites (min./max.)</th>
                   <th>Visto última vez</th>
                   <th>Acciones</th>
 
@@ -47,32 +47,32 @@
                 {{--se crear anuncio de compra--}}
                 @foreach ($anuncios_vistos as $ad)
                     <tr>
-                      <td class="text-green text-center"><strong><h3>{{strtoupper($ad->tipo_anuncio)}}</h3></strong></td>
+                      <td class="text-green text-center"><strong><h4>{{strtoupper($ad->tipo_anuncio)}}</h4></strong></td>
                       <td>{{$ad->name}}</td>
                       <td>{{$ad->banco }}</td>
                       <td>{{$ad->ubicacion}}</td>
-                      <td>
-                         <span class="text-blue"><h4>$  {{$ad->precio_moneda}} </h4></span> <span class="text-red">{{$ad->moneda}}</span>
+                      <td style="width: 200px;">
+                         <span class="text-blue"><h4>$  {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></h4></span> 
 
                      </td>
-                      <td>{{$ad->cripto_moneda}}</td>
-                      <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} /</br> $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
+                      <td><strong>{{$ad->cripto_moneda}}</strong></td>
+                      <td style="width: 150px;">$ {{ number_format($ad->limite_min,2, ',', '.') }} /</br> $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
                       <td><h6>{{$ad->visto}}</h6></td>
                       <td>
                         
-                                      <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','{{0}}','info')">
+                                      <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','{{0}}','info')">
                                         Ver info
                                         </button>
                                     
                                       @if($ad->tipo_anuncio=="venta")
-                                        <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-default" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
+                                        <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
                                           Comprar
                                         </button>
                                        
                                       @endif
                                       
                                       @if($ad->btn_calificar)
-                                         <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-primary" data-toggle="modal" onclick="descontar_recargar('{{ 'infocalificar'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
+                                         <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infocalificar'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
                                           Calificar
                                         </button>
                                          

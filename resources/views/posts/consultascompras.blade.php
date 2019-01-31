@@ -22,9 +22,9 @@
               <th>Calificación</th>
               <th>Forma de Pago</th>
               <th>Ubicación</th>
-              <th>Precio/Moneda</th>
-              <th>Cripto</th>
-              <th>Limites (min./max.)</th>
+              <th style=" width: 150px;">Precio/Moneda</th>
+              <th>Criptomoneda</th>
+              <th style=" width: 200px;">Limites (min./max.)</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -34,8 +34,8 @@
             @foreach ($anuncios as $ad)
 
                 @if($ad->tipo_anuncio=="compra" )
-                <tr>
-                  <td class="text-green text-center"><strong><h3>Compra</h3></strong></td>
+                <tr id="row_{{$ad->id}}">
+                  <td class="text-green text-center"><strong><h4>Compra</h4></strong></td>
                   <td>
                     @for($i=1;$i<=$ad->calificacion;$i++)
                       @if($i<=3)
@@ -46,11 +46,11 @@
                   <td>{{$ad->banco }}</td>
                   <td>{{$ad->ubicacion}}</td>
                   <td>
-                     <span class="text-blue"><h5>$ {{$ad->precio_moneda}} </h5></span> <span class="text-red">{{$ad->moneda}}</span>
+                     <span class="text-blue"><h5>$ {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></h5></span> 
 
                  </td>
-                  <td>{{$ad->cripto_moneda}}</td>
-                  <td> $ {{ number_format($ad->limite_min,2, ',', '.') }} / <br/>$ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
+                  <td><strong>{{$ad->cripto_moneda}}</strong></td>
+                  <td style="width: 200px;"> $ {{ number_format($ad->limite_min,2, ',', '.') }} / <br/>$ {{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
                   <td>
                     @guest
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->

@@ -13,7 +13,7 @@
             <div class="box box-primary">
 
               <div class="box-header with-border">
-                <h3><i class="fa fa-pencil"></i>  Costo de clic por anuncios</h3>
+                <h3><i class="fa fa-pencil"></i>Costo de clic por anuncio</h3>
               </div>
 
               <div class="box-body">
@@ -26,7 +26,7 @@
                             <input type="number" name="valor" value="{{old('valor')}}" class="form-control">
                         </div>
                          <div class="form-group">
-                            <label for="valor">Ingresa el costo del cli que tendran todos los clientes</label>
+                            <label for="valor">Ingresa el costo del clic que tendran todos los clientes</label>
                             
                         </div>  
                         <div class="form-group">

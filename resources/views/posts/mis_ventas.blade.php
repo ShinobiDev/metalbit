@@ -25,11 +25,12 @@
             <thead>
               <tr>
                 <th>Tipo</th>
-                <th>Comprador</th>
                 <th>Estado venta</th>
+                <th>Comprador</th>                
                 <th>Cantidad vendida</th>
                 <th>Criptomoneda</th>
-                <th>Valor vendido</th>
+                <th style="width: 300px">Valor moneda vendido</th>
+                <th>Moneda local</th>
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
@@ -40,18 +41,19 @@
               @foreach ($mis_ventas as $venta)
                   <tr>
                     <td>venta</td>
-                    <td>{{$venta->name}}</td>
                     <td>
                       @if($venta->transactionState=="Pendiente")
-                        Pendiente por pago
+                        <span class="text-danger">Pendiente por pago</span>
                       @else
-                        {{$venta->transactionState}}
+                        <span class="text-success">{{$venta->transactionState}}</span>
                       @endif
                     </td>
+                    <td>{{$venta->name}}</td>
                     <td>{{number_format($venta->transactionQuantity,2,',','.')}}</td>
-                    <td>{{$venta->nombre_cripto_moneda}}</td>
-                    <td>{{number_format($venta->transation_value,2,',','.')}}</td>
-                    <td>{{$venta->transactionId}}</td>
+                    <td><strong>{{$venta->nombre_cripto_moneda}}</strong></td>
+                    <td style="width: 300px">$ {{number_format($venta->transation_value,2,',','.')}}</td>
+                    <td>{{$venta->moneda_pago}}</td>                                    
+                    <td><strong>{{$venta->transactionId}}</strong></td>
                     <td>{{$venta->code_wallet}}</td>
                     <td>{{$venta->hash_txid}}</td>
                     <td>
@@ -206,7 +208,7 @@
 
 
           var td=document.createElement("td");
-          td.innerHTML=rs.datos[f].valor_bonificacion;
+          td.innerHTML="$"+ number_format(rs.datos[f].valor_bonificacion,0,',','.');
           tr.appendChild(td);
 
 

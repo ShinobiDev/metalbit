@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
 
+
   <!-- Styles -->
   <style>
       html, body {
@@ -30,7 +31,7 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
-            <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
+            <div class="col-md-11 col-md-offset-0 col-lg-11 col-lg-offset-0 col-sm-11 col-sm-offset-0">
                 <div class="navbar-header">
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
@@ -89,6 +90,9 @@
                         </li>
                         <li>
                           <a href="{{route('mis_ventas',['id'=>auth()->user()->id])}}">Mis ventas</a>
+                        </li>
+                        <li>
+                          <a href="{{route('anuncios_vistos')}}">Anuncios vistos</a>
                         </li>
                         <li>
 
@@ -182,9 +186,10 @@
     <script src="{{asset('admin-lte/plugins/datatables/buttons.print.min.js')}}">  </script>
     <script src="{{asset('admin-lte/plugins/datepicker/bootstrap-datepicker.js')}}"></script>
 
-
-    {{-- <script src="{{asset('admin-lte/plugins/datatables/dataTables.bootstrap4.min.js')}}">  </script> --}}
-
+    <!--SELECT 2-->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <!--SELECT 2-->
     @include('partials.scripts')
     @yield('scripts')
 </body>

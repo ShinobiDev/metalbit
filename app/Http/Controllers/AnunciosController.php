@@ -38,7 +38,7 @@ class AnunciosController extends Controller
             $i=0;
             //dd($uc);
             foreach ($uc as $key => $value) {
-                if(Auth()->user()->id!=$value->id){
+                if(auth()->user()->id!=$value->id){
                          $arr[$i++]=$value->id;
                 }
             }
@@ -89,6 +89,7 @@ class AnunciosController extends Controller
                         ->join("recargas","recargas.user_id","users.id")
                         ->whereIn("anuncios.user_id",$arr)
                         ->where("anuncios.estado_anuncio","activo")
+                        ->orderBy("anuncios.id","DESC")
                         ->orderBy("recargas.valor","DESC")
                         ->get();
         }   
@@ -197,14 +198,21 @@ class AnunciosController extends Controller
               'localidad'=>$data['localidad'],
               'departamento'=>$data['departamento'],
               'ciudad'=>$data['ciudad'],
-              'estado_anuncio'=>"activo"
+              'estado_anuncio'=>"sin publicar"
               ]
          );
                 //dd($posts);
         $recarga=Recargas::where("user_id",$data['user_id'])->get();
-        //dd(Auth()->user()->id);
-        //AnuncioWasCreated::dispatch(Auth()->user(), $posts,$recarga[0]->valor);
-        NotificacionAnuncio::dispatch(Auth()->user(), $posts,$recarga[0]->valor,"AnuncioCreado");
+        
+        //NOTIFICACION AL ANUNCIANTE
+        NotificacionAnuncio::dispatch(auth()->user(), $posts,$recarga[0]->valor,"AnuncioCreado");
+        $uadmin=User::role('admin')->get();
+        //dd($uadmin);
+        foreach ($uadmin as $key => $value) {
+            NotificacionAnuncio::dispatch($value, [$posts,auth()->user(),['url'=>config("app.url").'/all/'.$value->id]],$recarga[0]->valor,"AnuncioCreadoAdmin");
+        }
+        
+
         $coinmarketcap = new GuzzleModel();
         $listacriptos = $coinmarketcap->get_response_listings();
         $listamonedas = $coinmarketcap->get_fiat_currency();
@@ -215,9 +223,9 @@ class AnunciosController extends Controller
                             ->with('listacriptos', (object)json_decode($listacriptos))
                             ->with("listamonedas",$listamonedas)
                             ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
-                            ->with('success', 'Su anuncio se ha ingresado correctamente');
+                            ->with('success', 'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado');
         }else{
-            return redirect()->route('posts.index')->with('error', 'El valor de venta o compra minimo no debe ser menor al valor máximo');
+            return back()->with('error', 'El valor de venta o compra mínimo no debe ser menor al valor máximo');
             
         }
     }
@@ -237,7 +245,7 @@ class AnunciosController extends Controller
         $arr=[];
         $i=0;
         foreach ($uc as $key => $value) {
-            if(Auth()->user()->id!=$value->id){
+            if(auth()->user()->id!=$value->id){
                 $arr[$i++]=$value->id;
             }
         }
@@ -271,6 +279,7 @@ class AnunciosController extends Controller
                         ->join("users","users.id","anuncios.user_id")
                         ->join("recargas","recargas.user_id","users.id")
                         ->where("anuncios.user_id",auth()->user()->id)
+                        ->orderBy('estado_anuncio','DESC')
                         ->get();
         }   
         $ad_arr=new Anuncios();
@@ -300,7 +309,7 @@ class AnunciosController extends Controller
         $arr=[];
         $i=0;
         foreach ($uc as $key => $value) {
-            if(Auth()->user()->id!=$value->id){
+            if(auth()->user()->id!=$value->id){
                 $arr[$i++]=$value->id;
             }
         }
@@ -333,7 +342,7 @@ class AnunciosController extends Controller
                              DB::Raw("FORMAT(users.calificacion/users.num_calificaciones,1) as calificacion")   )
                         ->join("users","users.id","anuncios.user_id")
                         ->join("recargas","recargas.user_id","users.id")
-                        ->orderBy("recargas.valor","DESC")
+                        ->orderBy("anuncios.estado_anuncio","DESC")
                         ->get();
         }   
         $ad_arr=new Anuncios();
@@ -441,13 +450,13 @@ class AnunciosController extends Controller
     }
     public function cambiar_estado_anuncio($id,$estado){
         $ad=Anuncios::where('id',$id)->get();
-        $re=Recargas::where("user_id",Auth()->user()->id)->get();
+        $re=Recargas::where("user_id",auth()->user()->id)->get();
         if($estado==1){
             $est="activo";
-            NotificacionAnuncio::dispatch(Auth()->user(), $ad[0],$re[0]->valor,"AnuncioHabilitado");
+            NotificacionAnuncio::dispatch(auth()->user(), $ad[0],$re[0]->valor,"AnuncioHabilitado");
         }else{
             $est="inactivo";
-            NotificacionAnuncio::dispatch(Auth()->user(), $ad[0],$re[0]->valor,"AnuncioDeshabilitado");
+            NotificacionAnuncio::dispatch(auth()->user(), $ad[0],$re[0]->valor,"AnuncioDeshabilitado");
         }
         Anuncios::where("id",$id)->update(["estado_anuncio"=>$est]);
         return response()->json(["respuesta"=>Anuncios::where("id",$id)->select("estado_anuncio")->get()]);
@@ -519,7 +528,7 @@ class AnunciosController extends Controller
      * Funcion para enviar los correos necesarios
      */
     public function compartir_mail(Request $re){
-            CompartirCodigo::dispatch(Auth()->user(),$re["correos"]);
+            CompartirCodigo::dispatch(auth()->user(),$re["correos"]);
             return redirect()->route('users.show', auth()->user())->with('success', 'Se ha enviado tu invitación');    
     }
 

@@ -5,7 +5,7 @@
 
 Estimad@ {{$user->name}}, Se ha realizado una nueva recarga Pendiente.
 
-Recarga pendiente por valor: {{$recarga[1]['valor']}}  {{$recarga[1]['fecha']}}, solo falta que realices el pago
+Recarga pendiente por valor: $ {{number_format($recarga[1]['valor'],'0',',','.')}} , solo falta que realices el pago
 
 
 ## Resumen Oferta ##
@@ -16,7 +16,7 @@ Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios pu
 ver tus datos de contacto.
 
 
-## BALANCE DE RECARGA $ {{format_number($recarga[0]->valor,0,',','.')}} ##
+## BALANCE DE RECARGA $ {{number_format($recarga[0]->valor,0,',','.')}} ##
 
 #[Recargar][1]
 [1]:{{$url}}#

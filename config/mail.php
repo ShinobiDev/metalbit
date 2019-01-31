@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'notificaciones@metalbit.co'),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-responder@metalbit.co'),
         'name' => env('MAIL_FROM_NAME', 'METALBIT'),
     ],
 

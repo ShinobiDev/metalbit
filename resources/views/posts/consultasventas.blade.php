@@ -23,9 +23,9 @@
                 <th>Calificación</th>
                 <th>Forma de Pago</th>
                 <th>Ubicación</th>
-                <th>Precio/Moneda</th>
+                <th style=" width: 150px;">Precio/Moneda</th>
                 <th>Criptomoneda</th>
-                <th>Limites (min./max.)</th>
+                <th style=" width: 200px;">Limites (min./max.)</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -34,8 +34,8 @@
               {{--se crean las tablas de ventas--}} 
               @foreach ($anuncios as $ad)
                   @if($ad->tipo_anuncio =="venta")
-                   <tr>
-                    <td class="text-green text-center"><strong><h3>Venta</h3></strong></td>
+                   <tr id="row_{{$ad->id}}">
+                    <td class="text-green text-center"><strong><h4>Venta</h4></strong></td>
                     <td>
                       @for($i=1;$i<=$ad->calificacion;$i++)
                           @if($i<=3)
@@ -46,20 +46,20 @@
                     <td>{{$ad->banco }}</td>
                     <td>{{$ad->ubicacion}}</td>
                     <td>
-                       <span class="text-blue"><h5>$ {{$ad->precio_moneda}} </h5></span> <span class="text-red">{{$ad->moneda}}</span>
+                       <span class="text-blue"><h5>$ {{$ad->precio_moneda}}  <span class="text-red">{{$ad->moneda}}</span></h5></span>
                       
                    </td>
-                    <td>{{$ad->cripto_moneda}}</td>
-                    <td>$ {{ number_format($ad->limite_min,2, ',', '.') }} /<br/> $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
+                    <td><strong>{{$ad->cripto_moneda}}</strong></td>
+                    <td style="width: 200px;">$ {{ number_format($ad->limite_min,2, ',', '.') }} /<br/> $ {{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
                     <td>
                       @guest
                              <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
 
-                              <button id="{{'btn_info_'.$ad->cod_anuncio}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->cod_anuncio}}','0','info')">
+                              <button id="{{'btn_info_'.$ad->cod_anuncio}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','info')">
                                 Ver info
                                 </button>
                                                       
-                              <button id="{{'btn_compra_'.$ad->cod_anuncio}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->cod_anuncio}}','0','venta')">
+                              <button id="{{'btn_compra_'.$ad->cod_anuncio}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','venta')">
                                 Comprar
                               </button>
                              

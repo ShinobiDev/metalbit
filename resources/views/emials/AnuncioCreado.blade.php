@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, Has creado un nuevo anuncio en METALBIT
+Estimad@ {{$user->name}}, has creado un nuevo anuncio en {{config('app.name')}}, tu anuncio sera verificado para garantizar que cumplas nuestras politicas de uso, una vez termine este proceso se publicara dicho anuncio.
 
 
 ## Resumen Oferta ##
@@ -18,7 +18,7 @@ Anuncio:
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 
-## BALANCE DE RECARGA $ {{format_number($recarga,0,',','.')}} ##
+## BALANCE DE RECARGA $ {{number_format($recarga,0,',','.')}} ##
 
 
 #[Recargar][1]

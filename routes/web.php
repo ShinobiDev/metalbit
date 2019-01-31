@@ -27,7 +27,7 @@ Route::get('/','AnunciosController@index' )->name('posts.index');
 Route::resource('anuncios', 'AnunciosController');
 //Route::get('mis_anuncios/{id}', 'AnunciosController')->name('posts.show');
 
-Route::get('all/{id}', 'AnunciosController@all')->name('anuncios.all');
+
 
 Route::get("hash/{cod_ad}/{monto}/{moneda}","AnunciosController@hash");
 Route::get("hash_anuncio/{cod_ad}/{monto}/{moneda}/{id_usuario}/{cantidad}","AnunciosController@hash_anuncio");
@@ -46,7 +46,27 @@ Route::get('descontar_recargas/{id_anuncio}/{costo}/{id_user}/{tipo}/{cant}/{pre
 Route::get('/home', 'AnunciosController@index')->name('welcome');
 Route::post("editar_variables","Admin\UsersController@editar_variables");
 
+Route::group([
+    // 'prefix' => 'admin',
+    'middleware' => 'auth',
+], function(){
+    Route::get('all/{id}', 'AnunciosController@all')->name('anuncios.all');
 
+
+    Route::get("cambiar_estado_anuncio/{id_ad}/{estado}","AnunciosController@cambiar_estado_anuncio");
+    Route::get("obtener_valor_moneda_valida/{id_cripto}/{moneda}","AnunciosController@obtener_valor_moneda_valida");
+    Route::get("cambiar_valor_clic/{id_user}/{costo}","RecargasController@cambiar_valor_clic");
+    Route::get("ver_recargas_mis_recargas/{id}","RecargasController@ver_recargas_mis_recargas");
+    Route::post("calificar","AnunciosController@calificar");
+    Route::post("calificar_venta","AnunciosController@calificar_venta");
+
+Route::get("ver_mas_comentarios/{id}/{min}/{max}","AnunciosController@ver_mas_comentarios");
+
+
+
+
+});
+//middlware admin
 Route::group([
     // 'prefix' => 'admin',
     'namespace' => 'Admin',
@@ -59,6 +79,8 @@ Route::group([
   Route::middleware('role:Admin')->put('users/{user}/roles', 'UserRolesController@update')->name('users.roles.update');
   Route::middleware('role:Admin')->put('users/{user}/permissions', 'UserPermissionsController@update')->name('users.permissions.update');
 
+  
+  
 
 /**/
 
@@ -81,17 +103,8 @@ Route::get("anuncios_vistos","UsersController@anuncios_vistos_por_mi")->name('an
 Route::post('actualizar_certificacion_bancaria/{id}','UsersController@actualizar_certificacion_bancaria');
 
 });
-Route::get("cambiar_estado_anuncio/{id_ad}/{estado}","AnunciosController@cambiar_estado_anuncio");
-Route::get("obtener_valor_moneda_valida/{id_cripto}/{moneda}","AnunciosController@obtener_valor_moneda_valida");
-Route::get("cambiar_valor_clic/{id_user}/{costo}","RecargasController@cambiar_valor_clic");
-Route::get("ver_recargas_mis_recargas/{id}","RecargasController@ver_recargas_mis_recargas");
-Route::post("calificar","AnunciosController@calificar");
-Route::post("calificar_venta","AnunciosController@calificar_venta");
-
-
 Route::get("registrar_recarga/{id}/{val_recarga}/{ref_pago}","RecargasController@registrar_recarga");
 
-Route::get("ver_mas_comentarios/{id}/{min}/{max}","AnunciosController@ver_mas_comentarios");
 /**
  * Debe ir por fuera del middleware
  */

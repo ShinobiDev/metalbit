@@ -143,7 +143,8 @@ class RecargasController extends Controller
     public function registro_consulta_ad($anuncio,$costo,$user_id,$tipo,$cantidad,$precio)
     {
 
-        if($tipo=="compra"){
+       if($user_id != 0){
+           if($tipo=="compra"){
             $id_a=$anuncio;
             $id_u=$user_id;
             $PG=DB::table('pagos')->where([
@@ -231,6 +232,7 @@ class RecargasController extends Controller
             
             //dd($ad);
             NotificacionAnuncio::dispatch($uu[0], [$ad[0],$uc[0]],$rc[0]->valor,"AnuncioClickeado");
+            NotificacionAnuncio::dispatch($uc[0], [$ad[0],$uu[0]],$rc[0]->valor,"AnuncioClickeadoCliente");
         }
         //valido valor de recarga
 
@@ -259,6 +261,11 @@ class RecargasController extends Controller
                                     "ad_visible"=>$vi,
                                     "limite_clic"=>$rc[0]->valor]);
         }
+       }else{
+        return response()->json(["respuesta"=>true,
+                                    "ad_visible"=>true,
+                                    "limite_clic"=>0]);
+       }
 
 
     }

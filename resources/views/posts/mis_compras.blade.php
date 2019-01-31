@@ -23,15 +23,16 @@
           <h3 class="box-title">Listado de compras realizadas</h3>
       </div>
       <div class="box-body">
-          <table id="compras-table" class="table table-bordered table-striped">
+          <table id="mis-compras-table" class="table table-bordered table-striped">
             <thead>
               <tr>
                 <th>Tipo</th>
-                <th>Vendedor</th>
                 <th>Estado compra</th>
+                <th>Vendedor</th>                
                 <th>Cantidad comprada</th>
                 <th>Criptomoneda</th>
-                <th>Valor comprado</th>
+                <th style="width: 300px">Valor moneda comprado</th>
+                <th>Moneda local</th>
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
@@ -43,23 +44,25 @@
               @foreach ($mis_compras as $compra)
                   <tr>      
                     <td>compra</td>          
-                    <td>{{$compra->name}}</td>          
                     <td>
                       @if($compra->transactionState=="Pendiente")
-                        Pendiente por pago
+                        <span class="text-danger">Pendiente por pago</span>
                       @else
-                        {{$compra->transactionState}}
+                        <span class="text-success">{{$compra->transactionState}}</span>
                       @endif
-                    </td>                                   
+                    </td>       
+                    <td>{{$compra->name}}</td>          
+                                                
                     <td>{{number_format($compra->transactionQuantity,2,',','.')}}</td>                                   
-                    <td>{{$compra->nombre_cripto_moneda}}</td>                                  
-                    <td>$ {{number_format($compra->transation_value,2,',','.')}}</td>                                    
-                    <td>{{$compra->transactionId}}</td>                                   
+                    <td><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
+                    <td style="width: 300px">$ {{number_format($compra->transation_value,2,',','.')}}</td>
+                    <td>{{$compra->moneda_pago}}</td>                                    
+                    <td><strong>{{$compra->transactionId}}</strong></td>                                     
                     <td>{{$compra->code_wallet}}</td>                                   
                     <td>{{$compra->hash_txid}}</td>
                     <td>
                       @if($compra->code_wallet=="")
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
                             Registrar código wallet
                         </button>
                           
@@ -67,14 +70,14 @@
                       @else
 
                         @if($compra->transactionState=="Moneda Envíada")
-                          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                          <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
                               Confirmar transacción
                             </button>
                            
                         @endif
                             
                         
-                        {{--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                        {{--<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
                             Ver info
                         </button>
                           <!--VENTANA MODAL-->
@@ -200,7 +203,7 @@
           <script>
             $(document).ready(function() {
                 console.log("5");
-                $('#compras-table').DataTable( {
+                $('#mis-compras-table').DataTable( {
                     dom: 'Bfrtip',
                     responsive: true,
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
@@ -230,7 +233,7 @@
                         }
                     }
                 } );
-                filtro_url('#compras-table');
+                filtro_url('#mis-compras-table');
 
 
             });

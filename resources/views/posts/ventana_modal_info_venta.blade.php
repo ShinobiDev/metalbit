@@ -5,10 +5,10 @@
             <div class="modal-header bg-primary text-center">
 
                <h3 style="text-align: center;" class="modal-title" id="exampleModalLabel"><b>Compra garantizada</b></h3>
-              <h4 class="modal-title" id="exampleModalLabel">{{config('app.name','') }}, te sirve de intermediario para garantizar que la transacción se exitosa para ambas partes</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'infoventa'.$ad->id}}')">
-                <span aria-hidden="true" >&times;</span>
-              </button>
+                <h4 class="modal-title" id="exampleModalLabel">{{config('app.name','') }}, te sirve de intermediario para garantizar que la transacción se exitosa para ambas partes</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="salir_modal('{{'infoventa'.$ad->id}}')">
+                  <span aria-hidden="true" >&times;</span>
+                </button>
             </div>
             <div class="modal-header">
               <h4 style="text-align: center;" class="modal-title" id="exampleModalLabel"><b>Realiza tu compra</b></h4>
@@ -62,26 +62,29 @@
                 </form>
             </div>
             <div class="modal-body">
-              <b>Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}
-             
+                <b>Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}
+               
             </div>
-           <div class="modal-body">
-                <h4>Calificación del anunciante: </h4>
-                @for($i=1;$i<=$ad->calificacion;$i++)
-                    @if($i<=3)
-                      <img  class="star" src="{{asset('img/star.png')}}">
-                    @endif
-                @endfor
-           </div>
-      <div class="modal-body">
-        <h6>Visto por última vez {{$ad->visto}}</h6>
-      </div>
-          <div class="modal-footer">
-
-              <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="salir_modal('{{'infoventa'.$ad->id}}')">SEGUIR VIENDO ANUNCIOS</button>
+            <div class="modal-body">
+                  <h4>Calificación del anunciante: </h4>
+                  @for($i=1;$i<=$ad->calificacion;$i++)
+                      @if($i<=3)
+                        <img  class="star" src="{{asset('img/star.png')}}">
+                      @endif
+                  @endfor
+            </div>
+            <div class="modal-body">
+                <h6>Visto por última vez {{$ad->visto}}</h6>
+            </div>
+            <div class="modal-body" >
+                  <h4>Comentarios de otros usuarios: </h4>
+                  @include('partials.comentarios')
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="salir_modal('{{'infoventa'.$ad->id}}')">SEGUIR VIENDO ANUNCIOS</button>
             </div>
           </div>
-        </div>
+     </div>
 </div>
 
      <!--

@@ -14,7 +14,7 @@
 @endcomponent
 
 @component('mail::button', ['url' => url('login').'?id='.urlencode($user->email)])
-Login
+Iniciar sesión
 @endcomponent
 
 Gracias,<br>

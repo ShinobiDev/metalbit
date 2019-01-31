@@ -22,16 +22,7 @@
              </div>
            </div>
            <div class="row " id="row_id_ad-online_provider">
-              {{-- <div id="div_id_ad-online_provider" class="col-md-2 label-col form-group">
-                <label for="id_ad-online_provider" class="control-label requiredField"> Forma de pago </label>
-              </div>
-              <div class="col-md-3">
-                <div class="controls">
-                  <select class="select form-control" id="id_ad-online_provider" name="ad-online_provider">
-                     <option value="NATIONAL_BANK">Transferencia bancaria nacional</option>
-                  </select>
-                </div>
-              </div> --}}
+              
                 <div class="col-md-7 two-col-help-text">
                    <div id="online-payment-method-description" style="display: none">
                             <strong id="payment-method-name"></strong>
@@ -66,7 +57,7 @@
               </div>
               <div class="col-md-3">
                 <div class="controls">
-                  <select class="moneda select form-control" id="sel_moneda" name="moneda">
+                  <select class="moneda select form-control select2" id="sel_moneda" name="moneda">
                         @foreach ($listamonedas as $key => $listamoneda)
 
                           <option value="{{$listamoneda['Currency']}}">{{$listamoneda['Country']}}</option>                          
@@ -88,7 +79,7 @@
                 </div>
                 <div class="col-md-3">
                   <div class="controls">
-                    <select class="select form-control" id="sel_cripto" name="criptomoneda">
+                    <select class="select form-control select2" id="sel_cripto" name="criptomoneda">
                         @foreach ($listacriptos as $key => $listacripto)
                           <option value="{{$listacripto->id}}">{{$listacripto->name}}</option>
                         @endforeach
@@ -135,7 +126,7 @@
                       <!--CALCULO DEL VALOR DE VENTA-->
                       <div class="dynamic-info">
 
-                        <span class='price-info-text'>Precio del comercio con el valor actual de mercado
+                        <span class='price-info-text'>Precio del comercio con el valor actual de mercado $
                         <strong id="precio_mon" class='price-info alert-success'>{{number_format($coins, 2, ',', '.')}}</strong>
                         <input id="hdPrecioMon" type="hidden" value="{{number_format($coins, 2, '.', '')}}">
                       </span>  
@@ -172,7 +163,7 @@
                   </div>
                   <!--VALOR DE VENTA SUGERIDO DE ACUERDO A LA GANANCIA-->
                    <div class="dynamic-info">
-                    <span class='price-info-text'>Valor total 
+                    <span class='price-info-text'>Valor total $ 
                         <strong id="st_valor_total_venta" class='price-info alert-success'>{{number_format($coins, 2, ',', '.')}}</strong>
                         <input id="hd_valor_total_venta" type="hidden" value="{{number_format($coins, 2, '.', '')}}">
                     </span>

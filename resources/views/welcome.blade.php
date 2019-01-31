@@ -66,6 +66,7 @@
                   $(function (){
                       $('#users-table').DataTable({
                         'responsive': true,
+                        stateSave: true,
                         'language':
                           {
                             "responsive":       true,
@@ -94,12 +95,14 @@
                         }
                       });
                   });
+                  //filtro_url('#users-table');
              </script>
 
              <script>
                   $(function (){
                       $('#comprar-table').DataTable({
                         'responsive': true,
+                        stateSave: true,
                         'language':
                           {
                             "responsive":       true,
@@ -127,6 +130,7 @@
                             }
                         }
                       });
+                      //filtro_url('#comprar-table');
                   });
              </script>
              
@@ -135,3 +139,40 @@
 
         @endsection
 
+<script type="text/javascript">
+  window.onload=function(){
+    var ss=sessionStorage.getItem('fila');
+    if(ss!=null){
+      document.getElementById("row_"+ss).style.backgroundColor='#d9e3f1'; 
+      document.getElementById("row_"+ss).classList.add('fondo_fila');
+    }
+  }
+
+ function donde_estoy(id){
+
+   document.getElementById("row_"+id).classList.add('fondo_fila');
+    
+   sessionStorage.setItem('fila', id);
+   console.log(document.getElementById("row_"+id));
+   var ele=document.querySelectorAll(".fondo_fila");
+   console.log(ele.length);
+   if(ele.length>1){
+    for(var i = 0;i <= ele.length-1;i++){
+      ele[i].classList.remove('fondo_fila');
+      document.getElementById(ele[i].id).style.backgroundColor='#f9f9f9';
+      if(document.getElementById(ele[i].id) != null){          
+          document.getElementById("row_"+id).classList.add('fondo_fila');
+          document.getElementById("row_"+id).style.backgroundColor='#d9e3f1'; 
+      }
+    }
+      
+   
+   }else{
+    document.getElementById("row_"+id).style.backgroundColor='#d9e3f1'; 
+   }
+   
+
+
+ }      
+  
+</script>

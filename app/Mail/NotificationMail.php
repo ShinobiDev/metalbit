@@ -46,7 +46,13 @@ class NotificationMail extends Mailable
         switch ($this->tipo) {
             case 'AnuncioCreado':
                 return $this->markdown('emials.AnuncioCreado')
-                            ->subject('Has creado un nuevo anuncio '. config('app.name'));
+                            ->subject('Has creado un nuevo anuncio en '. config('app.name'));
+                # code...
+                break;
+            case 'AnuncioCreadoAdmin':
+                //dd($this->ad[0]->tipo_anuncio,$this->ad[0]->nombre_cripto_moneda,$this->ad[0]->nombre_moneda,$this->ad[0]->estado_anuncio);
+                return $this->markdown('emials.AnuncioCreadoAdministrador')
+                            ->subject('Se ha creado un nuevo anuncio en '. config('app.name'));
                 # code...
                 break;
             case 'AnuncioClickeado':
@@ -54,6 +60,11 @@ class NotificationMail extends Mailable
                             ->subject( 'Tu anuncio ha sido clickeado '. config('app.name'));
                 # code...
                 break;
+             case 'AnuncioClickeadoCliente':
+                return $this->markdown('emials.ClicAnuncioCliente')
+                            ->subject( 'Información del  anuncio que haz visto en '. config('app.name'));
+                # code...
+                break;    
             case 'AnuncioHabilitado':
                 return $this->markdown('emials.AnuncioActivado')
                             ->subject('Tu anuncio ha sido activado '. config('app.name'));
@@ -97,7 +108,7 @@ class NotificationMail extends Mailable
             case 'CompraExitosaAnunciante':
                //dd($this->tipo);
                 return $this->markdown('emials.CompraExitosaAnunciante')
-                            ->subject('Hemos registrado una nueva compra para tu anuncio'. config('app.name'));
+                            ->subject('Hemos registrado una nueva compra para tu anuncio  '. config('app.name'));
                 # code...
                 break;    
             case 'CompraPendiente':
@@ -112,18 +123,18 @@ class NotificationMail extends Mailable
                 break;    
             case 'CompraPendienteAnunciante':
                 return $this->markdown('emials.CompraPendienteAnunciante')
-                            ->subject('Hemos registrado una nueva compra en uno de tus anuncios'. config('app.name'));
+                            ->subject('Hemos registrado una nueva compra en uno de tus anuncios '. config('app.name'));
                 # code...
                 break;    
             case 'CriptoMonedaInhabilitada':
                 return $this->markdown('emials.AlertAdNoHabilitada')
-                            ->subject('Uno de tus anuncios ha presentado una falla'. config('app.name'));
+                            ->subject('Uno de tus anuncios ha presentado una falla '. config('app.name'));
                 # code...
                 break;
             case 'WalletRegistrado':
 
                 return $this->markdown('emials.WalletRegistrado')
-                            ->subject('Un reciente comprador a registrado un wallet'. config('app.name'));
+                            ->subject('Un reciente comprador a registrado un wallet '. config('app.name'));
                 # code...
                 break;
             default:

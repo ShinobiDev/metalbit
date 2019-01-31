@@ -28,7 +28,7 @@ Correo electrónico: {{$ad[0]->email}}
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 
-## BALANCE DE COMPRA $ {{format_number($recarga,0,',','.')}} ##
+## BALANCE DE COMPRA $ {{number_format($recarga,0,',','.')}} ##
 
 
 #[Sitio web][1]

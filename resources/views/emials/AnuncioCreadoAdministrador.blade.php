@@ -3,30 +3,29 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, han visto tu anuncio en METALBIT
+Estimad@ {{$user->name}}, se ha creado un nuevo anuncio en {{config('app.name')}}
 
-# Usuario : 
- {{$ad[1]->name}}
-# Teléfono: 
- {{$ad[1]->phone}},
-# Email: 
- {{$ad[1]->email}},
-
+## Anunciante ##
+# Nombre:
+	{{$ad[1]->name}}
+# Correo:
+	{{$ad[1]->email}}
+# Teléfono:
+	{{$ad[1]->phone}}
 ## Resumen Oferta ##
-Anuncio:
+	
+#Anuncio:
 
 @component('mail::table')
-    | tipo | criptomoneda | divisa | estado |
+    | tipo | cripto moneda | divisa | estado |
     |:--------|:----------|
     | {{$ad[0]->tipo_anuncio}} | {{$ad[0]->nombre_cripto_moneda}} | {{$ad[0]->nombre_moneda}} | {{$ad[0]->estado_anuncio}} |
 @endcomponent
 
-## BALANCE DE RECARGA $ {{number_format($recarga,0,',','.')}} ##
 
-#[Recargar][1]
-[1]:{{$url}}#
+#[Ver anuncios sin publicar][1]
+[1]:{{$ad[2]['url']}}
 
-  No dejes agotar tu recarga, para que puedan seguir viendo tu anuncio.
 
 
 Gracias, por seguir confiando en nosotros<br>

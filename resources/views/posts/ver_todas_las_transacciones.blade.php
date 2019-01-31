@@ -27,11 +27,12 @@
             <thead>
               <tr>
                 <th>Tipo</th>
-                <th>Vendedor</th>
                 <th>Estado compra</th>
+                <th>Vendedor</th>                
                 <th>Cantidad comprada</th>
                 <th>Criptomoneda</th>
-                <th>Valor comprado</th>
+                <th style="width: 300px">Valor comprado</th>
+                <th>Moneda local</th>
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
@@ -43,33 +44,36 @@
             <tbody>
               {{--dd(ver_todas_las_transacciones)--}}
               @foreach ($pag as $transaccion)
-              
+                   
                   <tr>
                     <td>{{$transaccion->tipo_anuncio}}</td>
-                    <td>{{$transaccion->name}}</td>
-                    <td>
-                      @if($transaccion->transactionState=="Pendiente")
-                        Pendiente por pago
+                     <td>
+                      @if($transaccion->estado_pago=="Pendiente")
+                        <span class="text-danger">Pendiente por pago</span>
                       @else
-                        {{$transaccion->transactionState}}
+                        <span class="text-success">{{$transaccion->estado_pago}}</span>
+
                       @endif
                     </td>
-                    <td>{{number_format($transaccion->transactionQuantity,0,',','.')}}</td>
-                    <td>{{$transaccion->nombre_cripto_moneda}}</td>
-                    <td>$ {{number_format($transaccion->transation_value,0,',','.')}}</td>
-                    <td>{{$transaccion->transactionId}}</td>
-                    <td>{{$transaccion->code_wallet}}</td>
-                    <td>{{$transaccion->hash_txid}}</td>
+                    <td>{{$transaccion->name}}</td>
+                   
+                    <td>{{$transaccion->transactionQuantity}}</td>
+                    <td><strong>{{$transaccion->nombre_cripto_moneda}}</strong></td>
+                    <td style="width: 300px;">$ {{number_format($transaccion->transation_value,0,',','.')}}</td>
+                    <td>{{$transaccion->moneda_pago}}</td>
+                    <td><strong>{{$transaccion->transactionId}}</strong></td>
+                    <td><span class="text-red">{{$transaccion->code_wallet}}</span></td>
+                    <td><span class="text-success">{{$transaccion->hash_txid}}</span></td>
                     <td>
                       @foreach ($variables as $var)
                         {{$var->valor}} %
 
                     </td>
-                      <td>${{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</td>
+                      <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</td>
                     <td>
                       @if($transaccion->code_wallet=="")
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#code_wallet_{{$transaccion->id_pago}}">
-                            confirmar pago al usario
+                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$transaccion->id_pago}}">
+                            confirmar pago al usuario
                         </button>
                     </td>      <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$transaccion->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -206,6 +210,7 @@
                 console.log("5");
                 $('#compras-table').DataTable( {
                     responsive: true,
+                    stateSave: true,
                     dom: 'Bfrtip',
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                     language:

@@ -48,7 +48,7 @@
                     <td>{{ $recarga->id }}</td>
                     <td>{{ $recarga->name }}</td>
                     <td>{{ $recarga->status }}</td>
-                    <td>{{ number_format($recarga->valor,2,',','.')}}</td>
+                    <td>$ {{ number_format($recarga->valor,0,',','.')}}</td>
                     <td>{{ $recarga->updated_at }}</td>
                     <td><input id="rec_{{$recarga->id}}" type="number" value="{{ $recarga->costo_clic }}" onchange='cambiar_valor_clic({{$recarga->id}})  ' /></td>
                     <td><input id="ver_{{$recarga->id}}" type="button" value="Ver recargas" onclick='ver_recargas({{$recarga->id}})' class="btn btn-primary pull-right" /></td>
@@ -64,7 +64,7 @@
       
         <div class="box-body">
           <h3 class="box-title">Recargas</h3>
-          <table id="mis_recargas-table"class="table table-bordered table-striped">
+          <table id="mis_recargas-table" class="table table-bordered table-striped">
                <thead>
                 <tr>
                   <th>Items</th>
@@ -83,7 +83,7 @@
                     <td>{{ $mi_recarga->id }}</td>
                     <td>{{ $mi_recarga->name }}</td>
                     <td>{{ $mi_recarga->tipo_recarga }}</td>
-                    <td>{{ $mi_recarga->valor_recarga }}</td>
+                    <td>$ {{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
                     <td>{{ $mi_recarga->estado_detalle_recarga }}</td>
                     <td>{{ $mi_recarga->referencia_pago_pay_u }}</td>
                     <td>{{ $mi_recarga->created_at }}</td>
@@ -106,6 +106,7 @@
               $(document).ready(function() {
               $('#recargas-table').DataTable( {
                   dom: 'Bfrtip',
+                  responsive:true,
                   buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                   language:
                     {
@@ -140,6 +141,7 @@
               $(document).ready(function() {
               $('#mis_recargas-table').DataTable( {
                   dom: 'Bfrtip',
+                  responsive:true,  
                   buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                   language:
                     {
@@ -183,6 +185,7 @@
 <script type="text/javascript">
   function ver_recargas(id){
      peticion_ajax("get","ver_recargas_mis_recargas/"+id,function(rs){
+      location.href="#mis_recargas-table";
         console.log(rs);
         var ls=document.getElementById("tbl_mis_lista");
         ls.innerHTML="";
@@ -203,7 +206,7 @@
 
           
           var td=document.createElement("td");
-          td.innerHTML=rs.datos[f].valor_recarga;
+          td.innerHTML="$ "+ number_format(rs.datos[f].valor_recarga,'0',',','.');
           tr.appendChild(td);
 
           

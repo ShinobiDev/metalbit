@@ -33,7 +33,7 @@ class Recargas extends Model
 
 				
 					if(count($cliente)==0){
-							$msn="Los datos de este usuario no corresponde a ninguno que este registrado en MetalBit ";
+							$msn="Los datos de este usuario no corresponde a ninguno que este registrado en ".config('app.name');
 
 							return view('payu.error_payu')->with("mensaje",$msn);
 					}else{
@@ -71,7 +71,7 @@ class Recargas extends Model
 									 */
 									if(count($id_ref)>0){
 										$tot_recargas=detalle_recargas::where("id_user",$cliente[0]->id)->get();
-
+										//dd($tot_recargas);
 										if(count($tot_recargas)==0){
 											//aunentoo el 10% de la recarga 
 											$val_rec=(float)$req['TX_VALUE']*0.10;
@@ -100,7 +100,7 @@ class Recargas extends Model
 											//var_dump($req['TX_VALUE']*0.01);
 											//
 											$val_rec=(float)$req['TX_VALUE']*0.01;	
-											
+											//dd($val_rec);
 											DB::table("detalle_recargas")->insert([
 												    'id_user' => $id_ref[0]->id_referido,
 												    'valor_recarga'=>$val_rec,

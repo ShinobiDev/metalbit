@@ -9,7 +9,7 @@
         
       <body class="server-prod session-anonymous">
         <div class="container">
-          <h1>Cree un anuncio para vender o comprar criptomonedas</h1>
+          <h1>Crea un anuncio para vender o comprar criptomonedas</h1>
 
 
           <h3>Normas y requisitos de anuncios</h2>
@@ -20,7 +20,7 @@
                 Para que se muestren sus anuncios, debe tener ciptomonedas en su cartera MetalBit. Necesita al menos 0,04 BTC para publicar anuncios con métodos de pago online o al menos 0,04 BTC para anuncios locales (operaciones en efectivo).
               </li> --}}
               <li>Determinados métodos de pago requieren tener la identificación verificada antes de hacer visibles los anuncios.</li>
-              <li>Cada operación completada cuesta a los anunciantes un {{$porcentaje[0]->valor}}% del importe total de la operación.
+              <li>Cada operación completada cuesta a los anunciantes un <strong>{{$porcentaje[0]->valor}} %</strong> del importe total de la operación.
                 <!--<a href="/fees">Vea la lista de todas las comisiones en la página Comisiones</a>.-->
               </li>
               <li>

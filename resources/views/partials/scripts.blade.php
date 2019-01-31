@@ -89,7 +89,7 @@
 
         /*funcion para cambil campo signature de el campo signature*/
         function cambiar_valor_form_payu_moneda_valida(id,cod_anuncio){
-          
+            
            var val =document.getElementById("num_val_crip_moneda_"+id).value;
            var cant=document.getElementById("num_cantidad_moneda_"+id).value;
            var marg=document.getElementById("hd_margen_gananacia_"+id).value;
@@ -121,7 +121,7 @@
                 var hs=cod_anuncio+"/"+document.getElementById("hd_pre_mon_valido"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
                 //peticion para el hash
                 peticion_ajax("get","hash_anuncio/"+hs,function(rs){
-
+                        document.getElementById('msnEspera_'+id).innerHTML="";
                        
                         document.getElementById("hd_signature_"+id).value=rs.valor;
                         document.getElementById("currency_"+id).value=document.getElementById("hd_mon_valido_"+id).value;
@@ -142,6 +142,7 @@
         /*funcion que se genera cuando se hace un cambio en el campo de moneda para los anuncios que nos son permitidos para comprar en la moneda ofertada por el anunciante*/
         function cambiar_moneda_valida(id,cod_anuncio,moneda){
           document.getElementById("hd_mon_valido_"+id).value=moneda;
+          mostrar_cargando("msnEspera_"+id,10,"Cargando ...");
           cambiar_valor_form_payu_moneda_valida(id,cod_anuncio);
         }
         /**
@@ -250,4 +251,88 @@
                 true,                    
             ).draw();
         }
+        /*
+        Funcion para realizar login
+         */
+        function login(id,event){
+            //se ejecurta solo si es enter
+            if(event != undefined && event.which == 13 || event.keyCode == 13){
+              var data=$('#formLogin_'+id).serializarFormulario();  
+              enviar_peticion_login(id,data);
+            }else if(event==false){
+              var data=$('#formLogin_'+id).serializarFormulario();
+              enviar_peticion_login(id,data);
+            }        
+        }
+        /**
+         * FUNCION PARA ENVIAR PETICION DE LOGIN
+         * @param  {[type]} id   [description]
+         * @param  {[type]} data [description]
+         * @return {[type]}      [description]
+         */
+        function enviar_peticion_login(id,data){
+          mostrar_cargando("error_login_"+id,10,"Estamos validando un momento, por favor...");
+          $.ajax({
+              type: "POST",
+              url: "{{route('login')}}",
+              data: data,
+              success: function(rs){
+                
+                location.reload();
+              },
+              error:function(rs){
+                console.log(rs);
+                console.log(rs.responseText);
+                console.log(JSON.parse(rs.responseText).errors.email);
+                //alert(JSON.parse(rs.responseText).errors.email);
+                document.getElementById('error_login_'+id).innerHTML=JSON.parse(rs.responseText).errors.email;
+              },
+              dataType: 'html'
+            });
+        }
+        //funcion que extiende Js y serializa un formulario
+  $.fn.serializarFormulario = function()
+      {
+      var o = {};
+      console.log(this);
+
+      if(this[0]!=undefined){
+        var elementos=this[0].elements;
+        for(var e in elementos){
+          console.log(elementos[e].required);
+          if(elementos[e].required==true && elementos[e].value ==""){
+            elementos[e].style.borderColor="blue";
+            return false;
+          }else if(elementos[e].required!=undefined){
+            elementos[e].style.borderColor="";
+          }
+        }
+
+        var a = this.serializeArray();
+
+        $.each(a, function() {
+
+
+           if (o[this.name]) {
+
+
+               if (!o[this.name].push) {
+                   o[this.name] = [o[this.name]];
+               }
+                console.log(this.name);
+
+               o[this.name].push(this.value || '');
+           } else {
+
+                o[this.name] = this.value || '';
+
+           }
+
+
+        });
+        return o;
+      }else{
+        return false;
+      }
+    };
 </script>

@@ -294,6 +294,7 @@ class Anuncios extends Model
                           ->update(["estado_pago"=>"APROBADA",
                                     'transactionState'=>'Pago aceptado',
                                     'transactionStatePayu'=>$req['transactionState'],
+                                    'moneda_pago'=>$req['currency']
                                   ]);
 
                 $anuncio=Anuncios::where("id",$id_ad)->get();
@@ -343,6 +344,7 @@ class Anuncios extends Model
                      'transactionId' => $req['reference_pol'],
                      'transactionStatePayu'=>$req['transactionState'],
                      'transactionState'=>'Pago aceptado',
+                     'moneda_pago'=>$req['currency'],
                      'transation_value' => $req['TX_VALUE'],
                       "metodo_pago"=>$req['lapPaymentMethod'],
                       "estado_pago"=>"APROBADA",
@@ -392,7 +394,7 @@ class Anuncios extends Model
               
         }else{
           if(count($comprador)==0){
-            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en MetalBit ";
+            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en ".config('app.name');
 
             return view('payu.error_payu')->with("mensaje",$msn);
           }else{
@@ -418,6 +420,7 @@ class Anuncios extends Model
                  'transation_value' => $req['TX_VALUE'],
                   "metodo_pago"=>$req['lapPaymentMethod'],
                   "estado_pago"=>"PENDIENTE",
+                  'moneda_pago'=>$req['currency'],
                   "updated_at"=>Carbon::now('America/Bogota')
                ]);
 
@@ -468,6 +471,7 @@ class Anuncios extends Model
                   'transactionStatePayu'=>$req['transactionState'],              
                   'transation_value' => $req['TX_VALUE'],
                   'metodo_pago'=>$req['lapPaymentMethod'],
+                  'moneda_pago'=>$req['currency'],
                   'estado_pago'=>"RECHAZADA" ]);        
             NotificacionAnuncio::dispatch($comprador[0], [$pg[0]],[],"CompraRechazada");
               
