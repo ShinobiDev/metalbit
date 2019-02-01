@@ -1,1 +1,0 @@
-ALTER TABLE `users` ADD `codigo_referido` INT NOT NULL AFTER `confirmado`;
