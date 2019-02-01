@@ -3,9 +3,9 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, hemos registrado el código wallet de una de tus ventas
+Estimad@ {{$user->name}}, hemos registrado el hash/id de una de tus compras
 
-##Datos Comprador##
+##Datos Vendedor##
 # Usuario :
   {{$ad[0]->name}}
 # Teléfono: 
@@ -38,10 +38,8 @@ Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios pu
 ver tus datos de contacto.
 
 
-## BALANCE DE COMPRA $ {{number_format($recarga,0,',','.')}} ##
-
-#[Ver venta][1]
-[1]:{{$ad[2]['url']}}#
+#[Ver compra][1]
+[1]:{{$ad[2]['url']}}
 
 
 

@@ -6,8 +6,6 @@
 Estimad@ {{$user->name}}, hemos registrado una compra exitosa en METALBIT.
 
 
-Por favor comunicate con tu comprador, para que se complete la transacción.
-
 ## Datos vendedor##
 
 Nombre: {{$ad[0]->name}}
@@ -19,7 +17,7 @@ Correo electrónico: {{$ad[0]->email}}
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
-    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
+    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{number_format($ad[2]->transation_value,0,',','.')}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
 @if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
@@ -48,7 +46,7 @@ Anuncio:
 Estado: APROBADA
 
 #[Ver compra][1]
-[1]:{{$ad[3]['url']}}#
+[1]:{{$ad[3]['url']}}
 
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}

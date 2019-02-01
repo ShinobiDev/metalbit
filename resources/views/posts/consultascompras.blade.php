@@ -50,7 +50,7 @@
 
                  </td>
                   <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                  <td style="width: 200px;"> $ {{ number_format($ad->limite_min,2, ',', '.') }} / <br/>$ {{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
+                  <td style="width: 200px;">${{ number_format($ad->limite_min,2, ',', '.') }} / ${{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
                   <td>
                     @guest
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->

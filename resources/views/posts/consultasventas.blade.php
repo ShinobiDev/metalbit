@@ -50,7 +50,7 @@
                       
                    </td>
                     <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                    <td style="width: 200px;">$ {{ number_format($ad->limite_min,2, ',', '.') }} /<br/> $ {{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
+                    <td style="width: 200px;">${{ number_format($ad->limite_min,2, ',', '.') }} / ${{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
                     <td>
                       @guest
                              <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
@@ -97,7 +97,9 @@
 
                             @if($ad->btn_payu)  
                               @if($ad->transaccion_pendiente['respuesta']==true)
-                                <a class="btn btn-default btn-block" href="{{route('mis_compras',[auth()->user()->id.'?='.$ad->transaccion_pendiente['pago']])}}">Compra pendiente</a>
+                                <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
+                                  Comprar pendiente
+                                </button>
                                   
                                 
                               @else

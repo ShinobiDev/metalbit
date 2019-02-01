@@ -16,7 +16,7 @@ Correo electrónico: {{$ad[0]->email}}
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
-    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | {{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
+    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{$ad[2]->transation_value}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
 
@@ -32,7 +32,7 @@ ver tus datos de contacto.
 
 
 #[Sitio web][1]
-[1]:{{$url}}#
+[1]:{{$url}}
 
 
 

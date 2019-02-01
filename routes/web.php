@@ -98,7 +98,8 @@ Route::post("registrar_wallet_qr/{id}","UsersController@registrar_wallet_qr");
 Route::get('registrar_codigo_wallet/{id}',"UsersController@registrar_codigo_wallet_email");
 Route::get("mis_bonificaciones","UsersController@mis_bonificaciones");
 Route::get("anuncios_vistos","UsersController@anuncios_vistos_por_mi")->name('anuncios_vistos');
-
+Route::post('confirmar_pago_vendedor/{id}',"UsersController@confirmar_pago_vendedor")->name('confirmar_pago_vendedor');
+Route::post('confirmar_pago_por_vendedor/{id}',"UsersController@confirmar_pago_por_vendedor")->name('confirmar_pago_por_vendedor');
 
 Route::post('actualizar_certificacion_bancaria/{id}','UsersController@actualizar_certificacion_bancaria');
 

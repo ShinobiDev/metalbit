@@ -28,7 +28,7 @@ ver tus datos de contacto.
 ## BALANCE DE RECARGA $ {{number_format($recarga,0,',','.')}} ##
 
 #[Recargar][1]
-[1]:{{$url}}#
+[1]:{{$url}}
 
 
 Gracias, por seguir confiando en nosotros<br>

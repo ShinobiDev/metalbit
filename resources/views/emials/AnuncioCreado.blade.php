@@ -22,7 +22,7 @@ ver tus datos de contacto.
 
 
 #[Recargar][1]
-[1]:{{$url}}#
+[1]:{{$url}}
 
 
 

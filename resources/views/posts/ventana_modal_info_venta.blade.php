@@ -51,7 +51,19 @@
                           <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
 
                           <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')" value="{{$ad->transaccion_pendiente['wallet']}}">
-                          <div class="dropzone"></div>
+                          
+
+                          @if($ad->transaccion_pendiente['wallet_qr']!='')
+                            <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
+                          @endif
+                           <input type="file" id="flWallet_{{$ad->id}}" name="wallet" onchange="subir_archivo('{{$ad->id}}',this)">    
+                         
+
+
+
+
+
+
                           <label id="msnEspera_{{$ad->id}}"></label>
                         </div>
                         <div class="modal-body">
@@ -87,25 +99,39 @@
      </div>
 </div>
 
-     <!--
-     * Aqui gestiono dropzone
-     * @type {String}
-     -->
 <script type="text/javascript">
-  new Dropzone('.dropzone',{
-    //url:"/",
-    url:"{{config('app.url')}}"+"/registrar_wallet_qr/{{auth()->user()->id}}",
-    dictDefaultMessage:"Sube aquí tu código QR (solo se permiten imagenes con formato PNG,JPEG o JPG)",
-    maxFiles:1,
-    maxFilesize:10,//MB
-    acceptedFiles: "image/*",
-    dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
-    dictInvalidFileType:"Solo esta permitido subir imagenes",
-    headers:{
-      'X-CSRF-TOKEN':'{{csrf_token()}}'
-    }
-  });
+  function subir_archivo(id,e){
+        //e.preventDefault();
+          mostrar_cargando("msnEspera_"+id,10,"Cargando ...");
+          var Token =  '{{csrf_token()}}';
+          var formData = new FormData();
+          formData.append("file", $('#'+e.id).get(0).files[0]);
+          formData.append("Token", Token);
 
-  Dropzone.autoDiscover = false;
+          // Send the token every ajax request
+          $.ajaxSetup({
+              headers: { 'X-CSRF-Token' : Token }
+          });
 
+              $.ajax({        
+                      url: "{{config('app.url')}}"+"/registrar_wallet_qr/"+id,
+                      method: 'POST',
+                      data: formData,
+                      processData: false,
+                      contentType: false,
+                      cache: false,
+                      success: function(data) {
+                          document.getElementById("msnEspera_"+id).innerHTML=data.mensaje;
+                      },
+                      error:function(data){
+                        console.log(data);
+                        if(data.responseJSON.message=="The given data was invalid."){
+                          document.getElementById("msnEspera_"+id).innerHTML="El formato del archivo debe ser .pdf";  
+                        }else{
+                          document.getElementById("msnEspera_"+id).innerHTML=data.responseJSON.message;
+                        }
+                        
+                      }
+              });
+      }
 </script>

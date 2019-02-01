@@ -19,7 +19,7 @@ ver tus datos de contacto.
 ##NUEVO BALANCE DE RECARGA $ {{number_format($recarga[0]->valor,0,',','.')}} ##
 
 #[Recargar][1]
-[1]:{{$url}}#
+[1]:{{$url}}
 
 
 

@@ -130,31 +130,38 @@ class User extends Authenticatable
         $pg=pagos::where([
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
+                ['code_wallet','!=','SIN REGISTRAR'],
                 ['transactionState','Pendiente'],
-                ['pagos.transactionId','!=',null]
+                //['pagos.transactionId','!=',null]
             ])
-            ->orwhere([
+            /*->orwhere([
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
                 ['code_wallet','<>',null],
                 ['transactionState','Pendiente'],
-                ['pagos.transactionId','!=',null]
-            ])
+                //['pagos.transactionId','!=',null]
+            ])*/
             ->orwhere([
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
-                ['image_wallet','<>',null],
-                ['transactionState','Pendiente'],
-                ['pagos.transactionId','!=',null]
+                ['image_wallet','!=','SIN REGISTRAR'],
+                ['transactionState','Visto'],
+                //['pagos.transactionId','!=',null]
             ])
             ->get();
-        
+        //var_dump($id_anuncio,$id_usuario);
         if(count($pg)>0){
-          //dd($pg[0]->code_wallet);   
+          //dd($pg[0]);   
           //dd($pg);   
-          return array("respuesta"=>true,"pago"=>$pg[0]->transactionId,"wallet"=>$pg[0]->code_wallet);
+          return array("respuesta"=>true,
+                        "pago"=>$pg[0]->transactionId,
+                        "wallet"=>$pg[0]->code_wallet,
+                        'wallet_qr'=>$pg[0]->image_wallet);
         }else{
-          return array("respuesta"=>false,"pago"=>"0","wallet"=>"");
+          return array("respuesta"=>false,
+                      "pago"=>"0",
+                      "wallet"=>"",
+                      'wallet_qr'=>'');
         }
     }
 }

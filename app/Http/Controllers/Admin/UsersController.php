@@ -496,19 +496,27 @@ class UsersController extends Controller
 
         $PG=DB::table('pagos')->where([
                                     ["id_anuncio",$id],
-                                    ["transactionState","=","Pendiente"],
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Pendiente"]
                                     //["code_wallet","=",null],
-                                    ["id_user_compra",auth()->user()->id]
+                                    
                                 ])
                                 ->orwhere([
                                     ["id_anuncio",$id],
-                                    ["transactionState","=","Pago Aceptado"],
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Pago Aceptado"]
                                     //["code_wallet","=",null],
-                                    ["id_user_compra",auth()->user()->id]
+                                    
+                                ])
+                                ->orwhere([
+                                    ["id_anuncio",$id],
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Visto"]
+                                    //["code_wallet","=",null],
+                                    
                                 ])
                                 ->get();
-         //dd($PG);
-         if(count($PG)>0){
+        if(count($PG)>0){
 
                 DB::table('pagos')
                          ->where("id",$PG[0]->id)
@@ -520,7 +528,7 @@ class UsersController extends Controller
 
                return response()->json(["mensaje"=>"Wallet actualizado, ya puedes realizar la compra","respuesta"=>true]);
 
-         }else{
+        }/*else{
 
             DB::table('pagos')->insert([
                             "transactionQuantity"=>0,
@@ -534,7 +542,7 @@ class UsersController extends Controller
                             "transation_value"=>$request["valor_moneda"],
                             ]);
             return response()->json(["mensaje"=>"Wallet registrado, ya puedes realizar la compra","respuesta"=>true]);
-         }
+        }*/
 
 
     }
@@ -545,7 +553,66 @@ class UsersController extends Controller
      * @return [type]           [description]
      */
     public function registrar_wallet_qr(Request $request,$id){
-        dd($request->file('file'));
+         //dd($id);
+         $this->validate(request(),[
+            'file'=>'required|max:10240|mimetypes:application/pdf'
+        ]);
+
+         $PG=DB::table('pagos')->where([
+                                    ["id_anuncio",$id],
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Pendiente"],
+                                    ["image_wallet","=",'SIN REGISTRAR'],
+                                    
+                                ])
+                                ->orwhere([
+                                    ["id_anuncio",$id],
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Pago Aceptado"],
+                                    ["image_wallet","=",'SIN REGISTRAR'],
+                                    
+                                ])
+                                ->orwhere([
+                                    ["id_anuncio",$id],
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Visto"],
+                                    ["image_wallet","=",'SIN REGISTRAR'],
+                                    
+                                ])
+                                ->get();
+         //dd($PG);                       
+         /*
+        PROBAR EN EL SERVIDOR
+         
+        $filename = $request->file('file')->move('archivos/'.$id);
+          $newname="/wallet.".explode(".",$_FILES['file']['name'])[1];
+        rename($filename,realpath(dirname($filename)).$newname);
+
+        User::where('id',$id)
+                ->update([
+                        'codigo_wallet'=>'/archivos/transacciones/'.$id."".$newname
+                    ]);*/
+        //elimar etsa linea es solo modo pruebas
+        $ruta="blalalalal.pdf";                                            
+
+        if(count($PG)>0){
+
+                DB::table('pagos')
+                         ->where("id",$PG[0]->id)
+                         ->update([
+                            "image_wallet"=>$ruta                            
+                         ]);
+
+               return response()->json(["mensaje"=>"Wallet actualizado, ya puedes realizar la compra","respuesta"=>true]);
+
+        }                        
+
+
+       
+      
+                
+        
+        return  response()->json(['respuesta'=>true,'mensaje'=>'Se ha registrado tu wallet correctamente']);
     }
     /**
      * Funcion para registar el codigo wallet desde el email
@@ -581,7 +648,7 @@ class UsersController extends Controller
 
         
         //esta linea esta fallando y no me esta dejando retornar a la vista
-        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$pg[0]->user_id]],0,"WalletRegistrado");
+        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_ventas/'.$pg[0]->user_id]],0,"WalletRegistrado");
 
         $pag=DB::table('pagos')->select('pagos.id as id_pago',
                            'pagos.transactionId',
@@ -638,10 +705,15 @@ class UsersController extends Controller
                                                     'transactionState'=>'Moneda Envíada'
                                                     ]);
 
+        $pg=DB::table('pagos')
+                ->where('pagos.id',$id_transaccion)
+               ->join('anuncios','anuncios.id','pagos.id_anuncio')
+               ->join('users','users.id','pagos.id_user_compra')
+               ->get();
         //EVENTO PARA ENVIAR CORREO DE ENVIO DE MONEDA
+        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$pg[0]->id_user_compra]],0,"HashRegistrado");
 
-
-        return back()->with('success','código hash / txid ha sido registrado');
+        return back()->with('success','El código hash / txid ha sido registrado.');
     }
 
     /**
@@ -677,6 +749,7 @@ class UsersController extends Controller
                            'anuncios.nombre_moneda',
                            'anuncios.criptomoneda',
                            'anuncios.nombre_cripto_moneda',
+                           'anuncios.limite_min',
                            'users.id as id_anunciante ',
                            'users.name',
                            'users.email',
@@ -687,6 +760,12 @@ class UsersController extends Controller
                                 ['id_user_compra',$id],
                                 ['pagos.transactionId','!=',null]
                             ])
+                    /*->orwhere([
+                                ['id_user_compra',$id],
+                                ['pagos.code_wallet','!=','SIN REGISTRAR'],
+                                ['pagos.image_wallet','!=','SIN REGISTRAR']
+                                //['pagos.transactionId','!=',null]
+                            ])*/
                     ->orderBy('pagos.updated_at','DESC')
                     ->get();
         //dd([$pag,auth()->user()->name]);
@@ -747,6 +826,7 @@ class UsersController extends Controller
     public function ver_todas_las_transacciones(){
         $pag=pagos::select('pagos.id as id_pago',
                            'pagos.estado_pago',
+                           'pagos.transactionState',
                            'pagos.transactionQuantity',
                            'pagos.transation_value',
                            'pagos.transactionId',
@@ -756,8 +836,12 @@ class UsersController extends Controller
                            'anuncios.tipo_anuncio',
                            'anuncios.nombre_cripto_moneda',
                            'anuncios.tipo_anuncio',
+                           'users.id',
                            'users.name',
-                           'users.email'
+                           'users.email',
+                           'users.phone',
+                           'users.cuenta_bancaria',
+                           'users.certificacion_bancaria'
                         )
                     ->join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','anuncios.user_id')
@@ -772,12 +856,39 @@ class UsersController extends Controller
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
-    public function confirmar_transaccion($id){
+    public function confirmar_transaccion($id_transaccion){
         //dd($id);
-         pagos::where('id',$id)->update([
+         pagos::where('id',$id_transaccion)->update([
                                          'transactionState'=>'Transacción Finalizada'
                                         ]);
-         $pg=pagos::where('id',$id)->get();
+         
+         //NOTIFICACION AL ADMINISTRADOR Y AL VENDEDOR
+         $pg=DB::table('pagos')
+                ->where('pagos.id',$id_transaccion)
+               ->join('anuncios','anuncios.id','pagos.id_anuncio')
+               ->join('users','users.id','anuncios.user_id')
+               ->get();
+           $comprador=DB::table('pagos')
+                ->where('pagos.id',$id_transaccion)
+               ->join('anuncios','anuncios.id','pagos.id_anuncio')
+               ->join('users','users.id','pagos.id_user_compra')
+               ->get();    
+          //dd($pg[0]);     
+          $ad=DB::table('pagos')
+                ->where('pagos.id',$id_transaccion)
+               ->join('anuncios','anuncios.id','pagos.id_anuncio')
+               ->get();    
+        $uadmin=User::role('admin')->get();
+        //dd($uadmin);
+        foreach ($uadmin as $key => $value) {      
+         NotificacionAnuncio::dispatch($value, [$pg[0],auth()->user(),$ad[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"TransaccionConfirmadaAdmin");
+        }
+        //esta mal los datos no corresponden 
+        //
+        //PILAS XFKHSD
+        //
+         NotificacionAnuncio::dispatch($pg[0], [$comprador[0],$ad[0],['url'=>config('app.url').'/ver_mis_ventas/'.$pg[0]->id_user_compra.'?id='.$pg[0]->transactionId]],0,"TransaccionConfirmadaVendedor");
+         
          return redirect()->route('mis_compras',[auth()->user()->id.'?='.$pg[0]->transactionId])
                     ->with('success','transacción confirmada, gracias por confiar en '.config('app.name'));
     }
@@ -809,5 +920,81 @@ class UsersController extends Controller
                           ]);
 
         return back()->with('success', 'Se ha cambiado el valor de la variable correctamente');
+    }
+    /**
+     * [confirmar_pago_vendedor description]
+     * Funcion para notificar al vendedor que su pago ya se realizo
+     * @return [type] [description]
+     */
+    function confirmar_pago_vendedor(Request $request,$id){
+      $vendedor=User::where('id',$request['id_usuario'])->first();
+      $porcentaje=Variable::where('nombre','porcentaje_tramite')->first();
+       $pago=DB::table('pagos')            
+                    ->where('pagos.id',$id)
+                    ->update([
+                        "transactionState"=>"Pago hecho al anunciante",
+                        "porcentaje_pago"=>$porcentaje->valor,
+                        ]);
+
+      $pago=DB::table('pagos')
+            ->select('anuncios.tipo_anuncio',
+                    'anuncios.criptomoneda',
+                    'anuncios.nombre_cripto_moneda',
+                    'anuncios.nombre_moneda',
+                    'pagos.transactionQuantity',
+                    'pagos.transation_value',
+                    'pagos.transactionId')
+            ->join('anuncios','anuncios.id','pagos.id_anuncio')
+            ->where('pagos.id',$id)->first();
+      
+      //dd($request);
+      NotificacionAnuncio::dispatch($vendedor,
+                            [   $pago,
+                                ['url'=>config('app.url').'/ver_mis_ventas/'.$vendedor->id.'?id='.$pago->transactionId],
+                                ['mensaje'=>$request['mensaje']]
+                            ],
+                            0,
+                            "NotificarPagoAnunciante");
+      return back()->with('success','Notificación enviada al vendedor correctamente');
+    }
+    /**
+     * [confirmar_pago_vendedor description]
+     * Funcion donde el vendedor confirma que si recibio el pago
+     * @return [type] [description]
+     */
+    function confirmar_pago_por_vendedor(Request $request,$id){
+      $vendedor=User::where('id',$request['id_usuario'])->first();
+       $pago=DB::table('pagos')            
+                    ->where('pagos.id',$id)
+                    ->update([
+                        "transactionState"=>"Pago confirmado por el anunciante",
+                        ]);
+
+      $pago=DB::table('pagos')
+            ->select('anuncios.tipo_anuncio',
+                    'anuncios.criptomoneda',
+                    'anuncios.nombre_cripto_moneda',
+                    'anuncios.nombre_moneda',
+                    'pagos.transactionQuantity',
+                    'pagos.transation_value',
+                    'pagos.porcentaje_pago',
+                    'pagos.transactionId')
+            ->join('anuncios','anuncios.id','pagos.id_anuncio')
+            ->where('pagos.id',$id)->first();
+      $pg=(($pago->transation_value) - ($pago->transation_value*((float)$pago->porcentaje_pago/100)));
+        //dd($pg);
+        $uadmin=User::role('admin')->get();
+        //dd($uadmin);
+        foreach ($uadmin as $key => $value) {    
+            NotificacionAnuncio::dispatch($value,
+                            [   $pago,
+                                ['url'=>config('app.url').'/ver_todas_las_transacciones/?id='.$pago->transactionId],
+                                ['mensaje'=>$request['mensaje']],
+                                ['pago'=>$pg]
+                            ],
+                            0,
+                            "NotificarPagoAdministrador");
+        }
+      return back()->with('success','Notificación enviada al administrador correctamente');
     }
 }

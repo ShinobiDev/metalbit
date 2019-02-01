@@ -143,6 +143,36 @@ class NotificationMail extends Mailable
                             ->subject('Un reciente comprador a registrado un wallet '. config('app.name'));
                 # code...
                 break;
+            case 'HashRegistrado':
+                //dd($this);
+                return $this->markdown('emials.HashRegistrado')
+                            ->subject('Un comprador ha registrado el hash de la transacción de criptomonedas  '. config('app.name'));
+                # code...
+                break;   
+            case 'TransaccionConfirmadaAdmin':
+                //dd($this->ad[0]->email,$this->ad[1]->email);
+                return $this->markdown('emials.TransaccionConfirmadaAdmin')
+                            ->subject('Se ha confirmado una venta de criptomonedas  en '. config('app.name'));
+                # code...
+                break;     
+            case 'TransaccionConfirmadaVendedor':
+                //dd($this->ad[2]);
+                return $this->markdown('emials.TransaccionConfirmadaVendedor')
+                            ->subject('Un comprador ha confirmado una transacción en  '. config('app.name'));
+                # code...
+                break;    
+            case 'NotificarPagoAnunciante':
+                //dd($this->ad[2]);
+                return $this->markdown('emials.NotificarPagoAnunciante')
+                            ->subject('Tu pago esta listo en '. config('app.name'));
+                
+                break;
+            case 'NotificarPagoAdministrador':
+                //dd($this);
+                    return $this->markdown('emials.NotificarPagoAdministrador')
+                            ->subject('Un anunciante ha confirmado un pago hecho por '.config('app.name'));
+                    break;    
+                
             default:
                 //dd($this->tipo);
                 # code...

@@ -5,7 +5,7 @@
 
 Estimad@ {{$user->name}}, han visto tu anuncio en {{config('app.name')}}
 
-# Usuario : 
+# Cliente : 
  {{$ad[1]->name}}
 # Teléfono: 
  {{$ad[1]->phone}},
@@ -24,7 +24,7 @@ Anuncio:
 ## BALANCE DE RECARGA $ {{number_format($recarga,0,',','.')}} ##
 
 #[Recargar][1]
-[1]:{{$url}}#
+[1]:{{$url}}
 
   No dejes agotar tu recarga, para que puedan seguir viendo tu anuncio.
 

@@ -384,6 +384,7 @@ class Anuncios extends Model
         //pendiente de confirmacion efecty
         $comprador=User::where("email",$req['buyerEmail'])->get();
         $p=DB::table("pagos")->where("transactionId",$req['reference_pol'])->get();
+        //dd($p,$comprador);
         $id_ad=explode("-",$req['referenceCode'])[1];  
         
         if(count($p)>0){
@@ -412,10 +413,16 @@ class Anuncios extends Model
                   ->where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ["estado_pago","PENDIENTE"]
+                      ['transactionState','Visto'],
+                    ])
+                  ->orwhere([
+                      ["id_anuncio",$id_ad],
+                      ['id_user_compra',$comprador[0]->id],
+                      ['transactionState','Visto'],
                     ])
                   ->update([
                  'transactionId' => $req['reference_pol'],
+                 'transactionState'=>'Pendiente',
                  'transactionStatePayu'=>$req['transactionState'],
                  'transation_value' => $req['TX_VALUE'],
                   "metodo_pago"=>$req['lapPaymentMethod'],
@@ -431,7 +438,7 @@ class Anuncios extends Model
           $pg=pagos::where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ['transactionId' , $req['reference_pol']]
+                      //['transactionId' , $req['reference_pol']]
                     ])->get();
           //dd( [$comprador[0],$anunciante[0],$anuncio[0],$pg]);
           //aqui debo enviar los datos de confirmación a la cuenta de correo

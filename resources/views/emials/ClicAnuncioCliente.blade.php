@@ -3,9 +3,9 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, información del anuncio que haz visto en {{config('app.name')}}
+Estimad@ {{$user->name}}, información del anuncio que has visto en {{config('app.name')}}
 
-# Usuario : 
+# Vendedor : 
  {{$ad[1]->name}}
 # Teléfono: 
  {{$ad[1]->phone}}
@@ -22,7 +22,7 @@ Anuncio:
 @endcomponent
 
 #[Ver anuncios][1]
-[1]:{{$ad[2]['url']}}#
+[1]:{{$ad[2]['url']}}
 
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}

@@ -417,7 +417,13 @@ class AnunciosController extends Controller
                                     ["id_anuncio",$id_a],
                                     ["transactionState","Pendiente"],
                                     ["id_user_compra",$id_u]
-                                ])->get();
+                                ])
+                                ->orwhere([
+                                    ["id_anuncio",$id_a],
+                                    ["transactionState","Visto"],
+                                    ["id_user_compra",$id_u]
+                                ])
+                                ->get();
 
          if(count($PG)>0){
             //dd($PG);
@@ -426,18 +432,11 @@ class AnunciosController extends Controller
                          ->update([
                             "transactionQuantity"=>$cantidad,
                             "transation_value"=>$p,
-                            "id_anuncio"=>$id_a,
                             "metodo_pago"=>'PENDIENTE',
-                            "id_user_compra"=>$id_u]);
+                            'updated_at'=>Carbon::now('America/Bogota')
+                            ]);
             
             
-         }else{
-            DB::table('pagos')->insert([
-                            "transactionQuantity"=>$cantidad,
-                            "transation_value"=>$p,
-                            "id_anuncio"=>$id_a,
-                            "metodo_pago"=>'PENDIENTE',
-                            "id_user_compra"=>$id_u]);
          }
 
          return response()->json(["valor"=>$pu[0]->hashear($a,$p,$m)]);

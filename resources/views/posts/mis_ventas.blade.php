@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('head')
+
 @endsection
 @section('header')
     <h1>
@@ -8,73 +9,97 @@
     <small>Listado</small>
 
     <ol class="breadcrumb">
-      <li><a href="{{route('welcome')}}"><i class="fa fa-dashboard">Inicio</i></a></li>
+      <li><a href="{{route('welcome')}}"><i class="fa fa-dashboard">  Inicio</i></a></li>
       <li class="active">Ingresos</li>
-    </ol>
+    </0l>
+
 @endsection
 
 @section('content')
 
-  <div class=" container-fluid ">
-
+  <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
           <h3 class="box-title">Listado de ventas realizadas</h3>
       </div>
       <div class="box-body">
-          <table id="ventas-table" class="table table-bordered table-striped">
+          <table id="mis-ventas-table" class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Tipo</th>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Estado venta</th>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Comprador</th>                
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Cantidad vendida</th>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Criptomoneda</th>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Valor vendido</th>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Moneda local</th>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Referecia de pago</th>
-                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Wallet</th>
-                <th class="col-lg-2 col-2 col-md-2 col-sm-2">Hash/id</th>
-                <td class="col-lg-1 col-1 col-md-1 col-sm-1">Acción</td>
+                <th>Tipo</th>
+                <th>Estado venta</th>
+                <th>Comprador</th>                
+                <th>Cantidad vendida</th>
+                <th>Criptomoneda</th>
+                <th style="width: 300px">Valor vendido</th>
+                <th>Moneda local</th>
+                <th>Referecia de pago</th>
+                <th>Código wallet</th>
+                <th>Hash transacción</th>
+                <th>Fecha pago</th>
+                <th>Acción</th>
               </tr>
             </thead>
             <tbody>
+              {{--dd($mis_ventas)--}}            
               @foreach ($mis_ventas as $venta)
-                  <tr id="row_{{$venta->id_pago}}">
-                    <td>venta</td>
+                  <tr id="row_{{$venta->id_pago}}">      
+                    <td>venta</td>          
                     <td>
                       @if($venta->transactionState=="Pendiente")
                         <span class="text-danger">Pendiente por pago</span>
                       @else
                         <span class="text-success">{{$venta->transactionState}}</span>
                       @endif
-                    </td>
-                    <td>{{$venta->name}}</td>
-                    <td>{{number_format($venta->transactionQuantity,2,',','.')}}</td>
-                    <td><strong>{{$venta->nombre_cripto_moneda}}</strong></td>
-                    <td style="width: 200px">$ {{number_format($venta->transation_value,2,',','.')}}</td>
+                    </td>       
+                    <td>{{$venta->name}}</td>          
+                                                
+                    <td>{{number_format($venta->transactionQuantity,2,',','.')}}</td>                                   
+                    <td><strong>{{$venta->nombre_cripto_moneda}}</strong></td>                                  
+                    <td style="width: 300px">${{number_format($venta->transation_value,2,',','.')}}</td>
                     <td>{{$venta->moneda_pago}}</td>                                    
-                    <td><strong>{{$venta->transactionId}}</strong></td>
-                    <td>{{$venta->code_wallet}}</td>
-                    <td>{{$venta->hash_txid}}</td>
+                    <td><strong class="text-success">{{$venta->transactionId or 'Pendiente de venta'}}</strong></td>                                     
                     <td>
-                      @if($venta->hash_txid=="" && $venta->transactionState != "Pendiente")
+                      @if($venta->code_wallet!='SIN REGISTRAR')
+                        <span class="text-red">{{$venta->code_wallet}}</span>
+                      @else
+                        Sin registrar
+                      @endif
+
+                      @if($venta->image_wallet!='SIN REGISTRAR')
+                        <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$venta->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
+                      @endif
+
+                        
+
+                    </td>                                   
+                    <td><span class="text-success">{{$venta->hash_txid}}</span></td>
+                    <td><span>{{$venta->updated_at}}</span></td>
+                    <td>
+                      
+
+                      @if($venta->hash_txid=="SIN REGISTRAR" && $venta->transactionState != "Pendiente")
                          <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$venta->id_pago}}">
                             Registrar Hash/txid
+                         </button>
+                      @endif
+                       @if( $venta->transactionState == "Pago hecho al anunciante")
+                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago{{$venta->id_pago}}">
+                           Confirmar pago hecho por {{config('app.name')}}
                          </button>
                       @endif
 
 
 
-                    </td>
+                    </td>                                   
                   </tr>
               @endforeach
             </tbody>
           </table>
           {{--ventanas--}}
-          @foreach ($mis_ventas as $venta)
+         @foreach ($mis_ventas as $venta)
                  
-                      @if($venta->hash_txid=="" && $venta->transactionState != "Pendiente")
+                      @if($venta->hash_txid=="SIN REGISTRAR" && $venta->transactionState != "Pendiente")
                          
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$venta->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -105,103 +130,129 @@
                         <!--FIN VENTA MODAL-->
                       @endif
 
-              @endforeach
+                      @if($venta->transactionState == "Pago hecho al anunciante")
+                         
+                          <!--VENTANA MODAL-->
+                          <div class="modal fade" id="confirmar_pago{{$venta->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <form id="ad_form_{{$venta->id_anuncio}}" method="POST" action="{{route('confirmar_pago_por_vendedor',$venta->id_pago)}}">
+                              {{csrf_field()}}
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Confirma el pago recibido por las transacciones hechas a través de {{config('app.name')}}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                            <i class="fa fa-info-circle"></i>
+                                            <input type="hidden" name="id_usuario" value="{{auth()->user()->id}}">
+                                             <h5>¿Quieres confirmar el pago hecho por {{config('app.name')}}?</h5>
+                                            
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a class="btn btn-secondary" data-dismiss="modal">Salir</a>
+                                      <button type="submit" class="btn btn-success">Confirmar pago</button>
+                                    </div>
+                                  </div>
+                                </div>
+                            </form>
+                          </div>
+                        <!--FIN VENTA MODAL-->
+                      @endif
+
+      @endforeach
       </div>
+      
+        
+ 
     </div>
   </div>
+
 
 
 @endsection
 
 @section('scripts')
+          <script type="text/javascript">
+              function subir_archivo(id,e){
+                    //e.preventDefault();
+                      mostrar_cargando("msnEspera_"+id,10,"Cargando ...");
+                      var Token =  '{{csrf_token()}}';
+                      var formData = new FormData();
+                      formData.append("file", $('#'+e.id).get(0).files[0]);
+                      formData.append("Token", Token);
 
-          <script>
-              $(document).ready(function() {
-              $('#ventas-table').DataTable( {
-                  dom: 'Bfrtip',
-                  buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-                  'responsive': true,
-                  language:
-                    {
-                      "sProcessing":     "Procesando...",
-                      "sLengthMenu":     "Mostrar _MENU_ registros",
-                      "sZeroRecords":    "No se encontraron resultados",
-                      "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                      "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                      "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                      "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                      "sInfoPostFix":    "",
-                      "sSearch":         "Buscar:",
-                      "sUrl":            "",
-                      "sInfoThousands":  ",",
-                      "sLoadingRecords": "Cargando...",
-                      "oPaginate": {
-                          "sFirst":    "Primero",
-                          "sLast":     "Último",
-                          "sNext":     "Siguiente",
-                          "sPrevious": "Anterior"
-                      },
-                      "oAria": {
-                          "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                          "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                      }
+                      // Send the token every ajax request
+                      $.ajaxSetup({
+                          headers: { 'X-CSRF-Token' : Token }
+                      });
+
+                          $.ajax({        
+                                  url: "{{config('app.url')}}"+"/registrar_wallet_qr/"+id,
+                                  method: 'POST',
+                                  data: formData,
+                                  processData: false,
+                                  contentType: false,
+                                  cache: false,
+                                  success: function(data) {
+                                      document.getElementById("msnEspera_"+id).innerHTML=data.mensaje;
+                                  },
+                                  error:function(data){
+                                    console.log(data);
+                                    if(data.responseJSON.message=="The given data was invalid."){
+                                      document.getElementById("msnEspera_"+id).innerHTML="El formato del archivo debe ser .pdf";  
+                                    }else{
+                                      document.getElementById("msnEspera_"+id).innerHTML=data.responseJSON.message;
+                                    }
+                                    
+                                  }
+                          });
                   }
-              } );
-              filtro_url('#mis-ventas-table');
+          </script>
+          <script>
+            $(document).ready(function() {
+                console.log("5");
+                $('#mis-ventas-table').DataTable( {
+                    dom: 'Bfrtip',
+                    responsive: true,
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                    language:
+                      {
+                        "sProcessing":     "Procesando...",
+                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix":    "",
+                        "sSearch":         "Buscar:",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst":    "Primero",
+                            "sLast":     "Último",
+                            "sNext":     "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                } );
+                filtro_url('#mis-ventas-table');
+
 
             });
           </script>
-
+       
+            
 @endsection
-@include('partials.scripts')
-<script type="text/javascript">
-  function cambiar_valor_clic(id){
-     peticion_ajax("get","cambiar_valor_clic/"+id+"/"+document.getElementById("rec_"+id).value,function(rs){
-        console.log(rs);
-     });
-  }
-</script>
-
-<script type="text/javascript">
-  function ver_bonificaciones(id){
-     peticion_ajax("get","ver_bonificaciones_mis_bonificaciones/"+id,function(rs){
-        console.log(rs);
-        var ls=document.getElementById("tbl_mis_lista");
-        ls.innerHTML="";
-        for(var f in rs.datos){
-          var tr=document.createElement("tr");
-          var td=document.createElement("td");
-          td.innerHTML=rs.datos[f].id;
-          tr.appendChild(td);
 
 
-          var td=document.createElement("td");
-          td.innerHTML=rs.datos[f].name;
-          tr.appendChild(td);
 
 
-          var td=document.createElement("td");
-          td.innerHTML="$"+ number_format(rs.datos[f].valor_bonificacion,0,',','.');
-          tr.appendChild(td);
-
-
-          var td=document.createElement("td");
-          td.innerHTML=rs.datos[f].estado_detalle_bonificacion;
-          tr.appendChild(td);
-
-
-          var td=document.createElement("td");
-          td.innerHTML=rs.datos[f].referencia_pago;
-          tr.appendChild(td);
-
-
-          var td=document.createElement("td");
-          td.innerHTML=rs.datos[f].created_at;
-          tr.appendChild(td);
-          ls.appendChild(tr);
-        }
-
-     });
-  }
-
-</script>

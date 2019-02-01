@@ -261,15 +261,15 @@
           //"datos":document.getElementById("ad_form_"+id).elements.codigo_wallet
         }
 
-        function registrar_wallet_transaccion_realizada(e,id_ad){ 
+        function registrar_wallet_transaccion_realizada(e,id_ad,id){ 
           //alert(id_ad);
-           mostrar_cargando("msnEspera_"+id_ad,10,"Estamos registrando el wallet.");
+           mostrar_cargando("msnEspera_"+id,10,"Estamos registrando el wallet.");
            wallet=document.getElementById("ad_form_"+id_ad).elements.codigo_wallet.value;
           peticion_ajax("post","registrar_wallet_transaccion_realizada/"+id_ad,function(rs){
             console.log(rs);
-            document.getElementById("msnEspera_"+id_ad).innerHTML=rs.mensaje;
+            document.getElementById("msnEspera_"+id).innerHTML=rs.mensaje;
             if(rs.respuesta){
-              document.getElementById("btn_registro_wallet_"+id_ad).disabled=true;
+              //document.getElementById("btn_registro_wallet_"+id_ad).disabled=true;
             }
           },{"codigo_wallet":wallet});
 

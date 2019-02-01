@@ -29,7 +29,7 @@ ver tus datos de contacto.
 
 
 #[Recarga][1]
-[1]:{{$url}}#
+[1]:{{$url}}
 
 
 
