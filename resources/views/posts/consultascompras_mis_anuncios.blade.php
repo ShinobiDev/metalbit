@@ -36,7 +36,7 @@
             @foreach ($anuncios as $ad)
 
                 @if($ad->tipo_anuncio=="compra")
-                <tr id="{{$ad->id}}">
+                <tr id="row_{{$ad->id}}">
                   {{--<td class="text-center"><strong><h6>C-{{$ad->id}}</h6></strong></td>--}}
                   <td class="text-green text-center"><strong><h4>Compra</h4></strong></td>
                   <td>

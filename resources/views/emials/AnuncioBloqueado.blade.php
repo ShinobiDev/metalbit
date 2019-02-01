@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, se ha desactivado este anuncio en {{config('app.name')}}
+Estimad@ {{$user->name}}, se ha bloqueado este anuncio en {{config('app.name')}}
 
 
 ## Resumen Oferta ##
@@ -15,7 +15,7 @@ Anuncio:
     | {{$ad->tipo_anuncio}} | {{$ad->nombre_cripto_moneda}} | {{$ad->nombre_moneda}} |
 @endcomponent
 
-Estado: INACTIVO
+Estado: BLOQUEADO
 
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.

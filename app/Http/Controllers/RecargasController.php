@@ -232,7 +232,7 @@ class RecargasController extends Controller
             
             //dd($ad);
             NotificacionAnuncio::dispatch($uu[0], [$ad[0],$uc[0]],$rc[0]->valor,"AnuncioClickeado");
-            NotificacionAnuncio::dispatch($uc[0], [$ad[0],$uu[0]],$rc[0]->valor,"AnuncioClickeadoCliente");
+            NotificacionAnuncio::dispatch($uc[0], [$ad[0],$uu[0],['url'=>route('anuncios_vistos')]],$rc[0]->valor,"AnuncioClickeadoCliente");
         }
         //valido valor de recarga
 

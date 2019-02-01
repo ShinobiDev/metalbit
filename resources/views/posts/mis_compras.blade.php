@@ -17,7 +17,7 @@
 
 @section('content')
 
-  <div class="container">
+  <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
           <h3 class="box-title">Listado de compras realizadas</h3>
@@ -36,13 +36,14 @@
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
+                <th>Fecha pago</th>
                 <th>Acción</th>
               </tr>
             </thead>
             <tbody>
               {{--dd($mis_compras)--}}            
               @foreach ($mis_compras as $compra)
-                  <tr>      
+                  <tr id="row_{{$compra->id_pago}}">      
                     <td>compra</td>          
                     <td>
                       @if($compra->transactionState=="Pendiente")
@@ -58,8 +59,8 @@
                     <td style="width: 300px">$ {{number_format($compra->transation_value,2,',','.')}}</td>
                     <td>{{$compra->moneda_pago}}</td>                                    
                     <td><strong>{{$compra->transactionId}}</strong></td>                                     
-                    <td>{{$compra->code_wallet}}</td>                                   
-                    <td>{{$compra->hash_txid}}</td>
+                    <td><span class="text-red">{{$compra->code_wallet}}</span></td>                                   
+                    <td><span class="text-success">{{$compra->hash_txid}}</span></td>
                     <td>
                       @if($compra->code_wallet=="")
                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
@@ -95,8 +96,7 @@
                        
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <form id="ad_form_{{$compra->id_anuncio}}" method="POST" action="{{route('registrar_wallet_transaccion_realizada',[$compra->id_pago])}}">
-                              {{csrf_field()}}
+                            <form id="ad_form_{{$compra->id_pago}}" >
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -108,13 +108,13 @@
                                     <div class="modal-body">
                                             <i class="fa fa-info-circle"></i>
                                             <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
-                                            <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet_transaccion_realizada(this,'{{$compra->id_anuncio}}')" required >
+                                            <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" {{--onchange="registrar_wallet_transaccion_realizada(this,'{{$compra->id_pago}}')"--}} required >
                                             <div class="dropzone"></div>            
                                             <label id="msnEspera_{{$compra->id_pago}}"></label>
                                     </div>
                                     <div class="modal-footer">
                                       <a class="btn btn-secondary" data-dismiss="modal">Salir</a>
-                                      <button type="submit" class="btn btn-primary">Registrar código</button>
+                                      <button type="button" id="btn_registro_wallet_{{$compra->id_pago}}" class="btn btn-primary" onclick="registrar_wallet_transaccion_realizada(this,'{{$compra->id_pago}}')">Registrar código</button>
                                     </div>
                                   </div>
                                 </div>

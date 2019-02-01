@@ -304,8 +304,8 @@ class Anuncios extends Model
                       'transactionId' => $req['reference_pol']
                     ])->get();
                           //aqui debo enviar los datos de confirmación a la cuenta de correo
-                NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0]],[],"CompraExitosa");
-                NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0],$pg[0]],$p[0]->transation_value,"CompraExitosaAnunciante");
+                NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],[],"CompraExitosa");
+                NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],$p[0]->transation_value,"CompraExitosaAnunciante");
                 return view('payu.confirmar_payu')->with("respuesta",$req)
                     ->with("empresa",$empresa)
                     ->with("cliente",$comprador)

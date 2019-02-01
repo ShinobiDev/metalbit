@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, Has Activado este anuncio en METALBIT.
+Estimad@ {{$user->name}}, has activado este anuncio en {{config('app.name')}}.
 
 
 ## Resumen Oferta ##

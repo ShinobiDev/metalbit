@@ -34,6 +34,11 @@
        /*funcion que hace la peticion ajax */ 
       function peticion_ajax(metodo,url,func,datos){
               //debe ir como core y no public la url en producccion
+             $.ajaxSetup({
+                headers: {
+                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+             });
              $.ajax({
                    type: metodo,
                    url: url_global+"/"+url,
@@ -182,12 +187,38 @@
          
         }
         /*funcion para cambiar el es estado de un anuncio*/
-        function cambiar_estado(id){
-          var rng=document.getElementById("rng_"+id).value;
+        function cambiar_estado(id,e){
+                   
           mostrar_cargando("h5_estado_"+id,10,"Un momento, por favor...");
-           peticion_ajax("get","cambiar_estado_anuncio/"+id+"/"+rng,function(rs){
+           peticion_ajax("get","cambiar_estado_anuncio/"+id+"/"+e.value,function(rs){
               console.log(rs);
-              document.getElementById("h5_estado_"+id).innerHTML=rs.respuesta[0].estado_anuncio;
+              switch(rs.respuesta){
+                case "sin publicar":                    
+                    document.getElementById("sp_1_"+id).classList.add('text-red');
+                    document.getElementById("sp_2_"+id).classList.remove('text-red');
+                    document.getElementById("sp_3_"+id).classList.remove('text-red');
+                    document.getElementById("sp_4_"+id).classList.remove('text-red');
+                  break;
+                case "bloqueado":
+                    document.getElementById("sp_1_"+id).classList.remove('text-red');
+                    document.getElementById("sp_2_"+id).classList.add('text-red');                    
+                    document.getElementById("sp_3_"+id).classList.remove('text-red');
+                    document.getElementById("sp_4_"+id).classList.remove('text-red');
+                  break;
+                case "activo":
+                    document.getElementById("sp_1_"+id).classList.remove('text-red');
+                    document.getElementById("sp_2_"+id).classList.remove('text-red');
+                    document.getElementById("sp_3_"+id).classList.add('text-red');                    
+                    document.getElementById("sp_4_"+id).classList.remove('text-red');
+                  break;                
+                case "inactivo":
+                    document.getElementById("sp_1_"+id).classList.remove('text-red');
+                    document.getElementById("sp_2_"+id).classList.remove('text-red');                    
+                    document.getElementById("sp_3_"+id).classList.remove('text-red');
+                    document.getElementById("sp_4_"+id).classList.add('text-red');
+                  break;
+              }
+              document.getElementById("h5_estado_"+id).innerHTML=rs.respuesta;
            });
         }
         /**
@@ -231,14 +262,16 @@
         }
 
         function registrar_wallet_transaccion_realizada(e,id_ad){ 
-           mostrar_cargando("msnEspera_"+id_ad,10,"Estamos registrando el wallet, una vez finalizado el proceso habilitaremos el botón de compra ...");
+          //alert(id_ad);
+           mostrar_cargando("msnEspera_"+id_ad,10,"Estamos registrando el wallet.");
+           wallet=document.getElementById("ad_form_"+id_ad).elements.codigo_wallet.value;
           peticion_ajax("post","registrar_wallet_transaccion_realizada/"+id_ad,function(rs){
             console.log(rs);
             document.getElementById("msnEspera_"+id_ad).innerHTML=rs.mensaje;
             if(rs.respuesta){
-              document.getElementById("btn_comprar_"+id_ad).disabled=false;
+              document.getElementById("btn_registro_wallet_"+id_ad).disabled=true;
             }
-          },{"datos":wallet});
+          },{"codigo_wallet":wallet});
 
         }
         /**

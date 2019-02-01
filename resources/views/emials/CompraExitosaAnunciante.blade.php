@@ -27,15 +27,17 @@ Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en META
 @if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
 	## Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos ##
 @else
-	@if($ad[2]->code_wallet!="")
-		@component('mail::button', ['url' => url('/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId)])
-		Ver código wallet 
-		@endcomponent
+	{{--@if($ad[2]->code_wallet!="")
+		
+		#[Ver código wallet][1]
+		[1]:{{$ad[3]['url']}}
+		
 	@elseif($ad[2]->image_wallet!="")
-		@component('mail::button', ['url' => url('/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId)])
-		Ver código wallet QR
-		@endcomponent
-	@endif
+		
+		#[Ver código wallet QR][1]
+		[1]:{{$ad[3]['url']}}
+
+	@endif--}}
 @endif
 
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
@@ -44,8 +46,8 @@ ver tus datos de contacto.
 
 ## BALANCE DE RECARGA $ {{number_format($recarga,0,',','.')}} ##
 
-#[Sitio Web][1]
-[1]:{{$url}}#
+#[Ver venta][1]
+[1]:{{$ad[3]['url']}}#
 
 
 

@@ -450,16 +450,29 @@ class AnunciosController extends Controller
     }
     public function cambiar_estado_anuncio($id,$estado){
         $ad=Anuncios::where('id',$id)->get();
+        $user=User::where('id',$ad[0]->user_id)->get();
         $re=Recargas::where("user_id",auth()->user()->id)->get();
-        if($estado==1){
-            $est="activo";
-            NotificacionAnuncio::dispatch(auth()->user(), $ad[0],$re[0]->valor,"AnuncioHabilitado");
-        }else{
-            $est="inactivo";
-            NotificacionAnuncio::dispatch(auth()->user(), $ad[0],$re[0]->valor,"AnuncioDeshabilitado");
+        switch ($estado) {
+            case '1':
+                $est="sin publicar";
+                break;
+            case '2':
+                $est="bloqueado";
+                NotificacionAnuncio::dispatch($user[0], $ad[0],$re[0]->valor,"AnuncioBloqueado");
+                break;        
+            case '3':
+                $est="activo";
+                NotificacionAnuncio::dispatch($user[0], $ad[0],$re[0]->valor,"AnuncioHabilitado");
+                break;
+            case '4':
+                NotificacionAnuncio::dispatch($user[0], $ad[0],$re[0]->valor,"AnuncioDeshabilitado");
+                $est="inactivo";
+                break;    
+                      
         }
+        
         Anuncios::where("id",$id)->update(["estado_anuncio"=>$est]);
-        return response()->json(["respuesta"=>Anuncios::where("id",$id)->select("estado_anuncio")->get()]);
+        return response()->json(["respuesta"=>$est]);
     }
     /**
      * Funcion para calificar al anunciante

@@ -25,6 +25,7 @@ use App\pagos;
 
 
 
+
 class UsersController extends Controller
 {
     /**
@@ -433,17 +434,19 @@ class UsersController extends Controller
                              "users.email",
                              "users.costo_clic",
                              "recargas.valor",
-                             DB::Raw("FORMAT(users.calificacion/users.num_calificaciones,1) as calificacion") )
+                             DB::Raw("FORMAT(users.calificacion/users.num_calificaciones,1) as calificacion"),
+                             'detalle_clic_anuncios.updated_at' )
                 ->join('anuncios','anuncios.id','detalle_clic_anuncios.id_anuncio')
                 ->join('users','users.id','anuncios.user_id')
                 ->join("recargas","recargas.user_id","users.id")
                 ->where('detalle_clic_anuncios.id_usuario',Auth()->user()->id)
+                ->orderBy('detalle_clic_anuncios.updated_at','DESC')
                 ->get();
 
        $ad_arr=new Anuncios();
        $arr_anuncios = $ad_arr->ver_anuncios($ad_saw);
 
-      //dd($ad_saw);
+      //dd($ad_saw,$arr_anuncios);
       return view('posts.mis_anuncios_vistos')
                 ->with('anuncios_vistos',$arr_anuncios)
                 ->with('success', 'Aqui esta el listado de los clic que haz visto');
@@ -483,7 +486,7 @@ class UsersController extends Controller
         return response()->json(["respuesta"=>true,"estado"=>$estado2]);
     }
     /**
-     * Funcion para realizar el registro del codigo wallet
+     * Funcion para realizar el registro del código wallet
      * @param  Request $request [description]
      * @param  [type]  $id      [description]
      * @return [type]           [description]
@@ -559,27 +562,28 @@ class UsersController extends Controller
      * @return [type]                  [description]
      */
     public function registrar_wallet_transaccion_realizada(Request $request,$id_transaccion){
-        //dd($id_transaccion);
-        //dd($request['codigo_wallet']);
+        //dd($id_transaccion,$request['codigo_wallet']);
+        
         $request->validate([
             'codigo_wallet'=>'required'
         ]);
-        pagos::where('id',$id_transaccion)->update([
+
+        DB::table('pagos')->where('id',$id_transaccion)->update([
                                             'code_wallet'=>$request['codigo_wallet']
 
                                             ]);
-        $pg=pagos::where('pagos.id',$id_transaccion)
+        $pg=DB::table('pagos')->where('pagos.id',$id_transaccion)
                ->join('anuncios','anuncios.id','pagos.id_anuncio')
                ->join('users','users.id','anuncios.user_id')
                ->get();
 
 
 
-        //dd($db);
+        
         //esta linea esta fallando y no me esta dejando retornar a la vista
-        //NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0]],0,"WalletRegistrado");
+        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$pg[0]->user_id]],0,"WalletRegistrado");
 
-        $pag=pagos::select('pagos.id as id_pago',
+        $pag=DB::table('pagos')->select('pagos.id as id_pago',
                            'pagos.transactionId',
                            'pagos.transactionStatePayU',
                            'pagos.transactionState',
@@ -612,10 +616,10 @@ class UsersController extends Controller
                     ->join('users','users.id','anuncios.user_id')
                     ->where('id_user_compra',auth()->user()->id)
                     ->get();
-
-        return redirect()->route('mis_compras',[auth()->user()->id.'?='.$pg[0]->transactionId])
-                    ->with('success','código wallet ha sido registrado');
-        //return response()->json(["respuesta"=>true]);
+        //dd(auth()->user()->id.'?='.$pg[0]->transactionId);            
+        //return redirect()->route('mis_compras',[auth()->user()->id.'?='.$pg[0]->transactionId])
+                    //->with('success','Código wallet ha sido registrado');
+        return response()->json(["respuesta"=>true,'mensaje'=>'Código wallet ha sido registrado'    ]);
     }
     /**
      * Funcion para realizar el registro del hash de una transaccion realizada

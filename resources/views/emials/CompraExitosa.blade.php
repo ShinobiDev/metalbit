@@ -31,7 +31,7 @@ Registrar Código Wallet
 
 
 @else
-	@if($ad[2]->code_wallet!="")
+	{{--@if($ad[2]->code_wallet!="")
 		@component('mail::button', ['url' => url('/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId)])
 		Ver código wallet
 		@endcomponent
@@ -40,14 +40,15 @@ Registrar Código Wallet
 		@component('mail::button', ['url' => url('/ver_mis_ventas/'.$user->id.'?='.$ad[2]->transactionId)])
 		Ver código wallet QR
 		@endcomponent
-	@endif
+	@endif--}}
 @endif
 
 ## Resumen Oferta ##
 Anuncio:
 Estado: APROBADA
 
-
+#[Ver compra][1]
+[1]:{{$ad[3]['url']}}#
 
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}

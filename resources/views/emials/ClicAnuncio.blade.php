@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, han visto tu anuncio en METALBIT
+Estimad@ {{$user->name}}, han visto tu anuncio en {{config('app.name')}}
 
 # Usuario : 
  {{$ad[1]->name}}

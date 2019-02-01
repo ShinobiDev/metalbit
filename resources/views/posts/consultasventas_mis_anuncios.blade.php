@@ -19,14 +19,14 @@
             <thead>
               <tr>
                 {{--<th>Código anuncio</th> --}}
-                <th>Tipo transacción</th>
-                <th>Calificación</th>
+                <th class="col-6 col-lg-6">Tipo transacción</th>
+                <th class="col-6 col-lg-6">Calificación</th>
                 <th>Forma de Pago</th>
                 <th>Ubicación</th>
-                <th style=" width: 150px;">Precio/Moneda</th>
+                <th >Precio/Moneda</th>
                 <th>Criptomoneda</th>
-                <th style=" width: 200px;">Limites (min./max.)</th>
-                <th>Estado</th>
+                <th >Limites (min./max.)</th>
+                <th >Estado del anuncio</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -35,7 +35,7 @@
               {{--se crean las tablas de ventas--}}
               @foreach ($anuncios as $ad)
                   @if($ad->tipo_anuncio =="venta")
-                   <tr id="{{$ad->id}}">
+                   <tr id="row_{{$ad->id}}">
                     {{--<td class="text-center"><strong><h3>{{$ad->cod_anuncio}}</h3></strong></td>--}}
                     <td class="text-green text-center"><strong><h4>Venta</h4></strong></td>
                     <td>
@@ -56,24 +56,85 @@
                     <td style="width: 200px;">$ {{ number_format($ad->limite_min,2, ',', '.') }} / </br>$ {{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
                     <td>
                       @role('Admin')
-                        <h5 id="h5_estado_{{$ad->id}}" class="text-red">{{$ad->estado_anuncio}}</h5>
-                        @if($ad->estado_anuncio=="sin publicar")
-                          <input id="rng_{{$ad->id}}" type="range" min="0" max="3" value="0" onchange="cambiar_estado('{{$ad->id}}')">
-                        @elseif($ad->estado_anuncio=="bloqueado")
-                          <input id="rng_{{$ad->id}}" type="range" min="0" max="" value="0" onchange="cambiar_estado('{{$ad->id}}')">
-                        @endif
-                      @endrole
+                        
+                        <div >
+                          <h5 id="h5_estado_{{$ad->id}}" class="text-red">{{$ad->estado_anuncio}}</h5>
+                          @if($ad->estado_anuncio=="sin publicar")
+
+                            <div>                              
+                              <input id="rng_{{$ad->id}}" type="range" min="1" max="4" value="1" onchange="cambiar_estado('{{$ad->id}}',this)">
+                              <h6><strong>
+                                  <span class="text-red" id="sp_1_{{$ad->id}}">1-Sin publicar</span>
+                                  <span id="sp_2_{{$ad->id}}">2-Bloqueado</span>
+                                  <span id="sp_3_{{$ad->id}}">3-Activo</span>
+                                  <span id="sp_4_{{$ad->id}}">4-Inactivo</span></strong>
+                                </h6>
+                            </div>
+
+                            
+                          @elseif($ad->estado_anuncio=="activo")
+                          <div>                              
+                              <input id="rng_{{$ad->id}}" type="range" min="1" max="4" value="3" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                <h6><strong>
+                                  <span id="sp_1_{{$ad->id}}">1-Sin publicar</span>
+                                  <span id="sp_2_{{$ad->id}}">2-Bloqueado</span>
+                                  <span class="text-red" id="sp_3_{{$ad->id}}">3-Activo</span>
+                                  <span id="sp_4_{{$ad->id}}">4-Inactivo</span></strong>
+                                </h6>
+                          </div>
+                          @elseif($ad->estado_anuncio=="bloqueado")
+                            <div>                              
+                                <input id="rng_{{$ad->id}}" type="range" min="1" max="4" value="2" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                <h6><strong>
+                                  <span id="sp_1_{{$ad->id}}">1-Sin publicar</span>
+                                  <span class="text-red" id="sp_2_{{$ad->id}}">2-Bloqueado</span>
+                                  <span id="sp_3_{{$ad->id}}">3-Activo</span>
+                                  <span id="sp_4_{{$ad->id}}">4-Inactivo</span></strong>
+                                </h6>
+                            </div>
+                          @elseif($ad->estado_anuncio=="inactivo")
+                              <div>                              
+                                  <input id="rng_{{$ad->id}}" type="range" min="1" max="4" value="4" onchange="cambiar_estado('{{$ad->id}}',this)">  
+                                  <h6><strong>
+                                  <span id="sp_1_{{$ad->id}}">1-Sin publicar</span>
+                                  <span id="sp_2_{{$ad->id}}">2-Bloqueado</span>
+                                  <span  id="sp_3_{{$ad->id}}">3-Activo</span>
+                                  <span class="text-red" id="sp_4_{{$ad->id}}">4-Inactivo</span></strong>
+                                </h6>
+                              </div>
+                          @endif
+                          
+
+                        </div>
+                      @endrole<span></span>
 
 
                       @role('Comerciante')
 
                         <h5 id="h5_estado_{{$ad->id}}" class="text-red">{{$ad->estado_anuncio}}</h5>
                         @if($ad->estado_anuncio=="activo")
-                          <input id="rng_{{$ad->id}}" type="range" min="0" max="1" value="1" onchange="cambiar_estado('{{$ad->id}}')">
+                            <div>                              
+                                <input id="rng_{{$ad->id}}" type="range" min="3" max="4" value="3" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                <h6><strong>
+                                  <span id="sp_1_{{$ad->id}}" style="display:none">1-Sin publicar</span>
+                                  <span id="sp_2_{{$ad->id}}" style="display:none">2-Bloqueado</span>
+                                  <span class="text-red"  id="sp_3_{{$ad->id}}">3-Activo</span>
+                                  <span id="sp_4_{{$ad->id}}">4-Inactivo</span></strong>
+                                </h6>
+                            </div>
                         
                         @elseif($ad->estado_anuncio=="inactivo")
-
-                          <input id="rng_{{$ad->id}}" type="range" min="0" max="1" value="0" onchange="cambiar_estado('{{$ad->id}}')">
+                              <div>                              
+                                   <input id="rng_{{$ad->id}}" type="range" min="3" max="4" value="4" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                <h6><strong>
+                                  <span id="sp_1_{{$ad->id}}" style="display:none">1-Sin publicar</span>
+                                  <span id="sp_2_{{$ad->id}}" style="display:none">2-Bloqueado</span>
+                                  <span id="sp_3_{{$ad->id}}">3-Activo</span>
+                                  <span class="text-red" id="sp_4_{{$ad->id}}">4-Inactivo</span></strong>
+                                </h6>
+                                </h6>
+                              </div>
+                          
                         @endif
                       
                       @endrole

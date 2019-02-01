@@ -34,9 +34,9 @@
                   <th>Nombre usuario</th>
                   <th>Forma de Pago</th>
                   <th>Ubicación</th>
-                  <th style="width: 200px;">Precio/Moneda</th>
+                  <th style="width: 300px;">Precio/Moneda</th>
                   <th>Criptomoneda</th>
-                  <th style="width: 150px;">Limites (min./max.)</th>
+                  <th style="width: 300px;">Limites (min./max.)</th>
                   <th>Visto última vez</th>
                   <th>Acciones</th>
 
@@ -51,12 +51,12 @@
                       <td>{{$ad->name}}</td>
                       <td>{{$ad->banco }}</td>
                       <td>{{$ad->ubicacion}}</td>
-                      <td style="width: 200px;">
+                      <td style="width: 300px;">
                          <span class="text-blue"><h4>$  {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></h4></span> 
 
                      </td>
                       <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                      <td style="width: 150px;">$ {{ number_format($ad->limite_min,2, ',', '.') }} /</br> $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
+                      <td style="width: 300px;">$ {{ number_format($ad->limite_min,2, ',', '.') }} /</br> $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
                       <td><h6>{{$ad->visto}}</h6></td>
                       <td>
                         

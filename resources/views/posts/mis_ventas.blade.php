@@ -15,7 +15,8 @@
 
 @section('content')
 
-  <div class="container">
+  <div class=" container-fluid ">
+
     <div class="box box-primary">
       <div class="box-header">
           <h3 class="box-title">Listado de ventas realizadas</h3>
@@ -24,22 +25,22 @@
           <table id="ventas-table" class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th>Tipo</th>
-                <th>Estado venta</th>
-                <th>Comprador</th>                
-                <th>Cantidad vendida</th>
-                <th>Criptomoneda</th>
-                <th style="width: 300px">Valor moneda vendido</th>
-                <th>Moneda local</th>
-                <th>Referecia de pago</th>
-                <th>Código wallet</th>
-                <th>Hash transacción</th>
-                <td>Acción</td>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Tipo</th>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Estado venta</th>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Comprador</th>                
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Cantidad vendida</th>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Criptomoneda</th>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Valor vendido</th>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Moneda local</th>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Referecia de pago</th>
+                <th class="col-lg-1 col-1 col-md-1 col-sm-1">Wallet</th>
+                <th class="col-lg-2 col-2 col-md-2 col-sm-2">Hash/id</th>
+                <td class="col-lg-1 col-1 col-md-1 col-sm-1">Acción</td>
               </tr>
             </thead>
             <tbody>
               @foreach ($mis_ventas as $venta)
-                  <tr>
+                  <tr id="row_{{$venta->id_pago}}">
                     <td>venta</td>
                     <td>
                       @if($venta->transactionState=="Pendiente")
@@ -51,7 +52,7 @@
                     <td>{{$venta->name}}</td>
                     <td>{{number_format($venta->transactionQuantity,2,',','.')}}</td>
                     <td><strong>{{$venta->nombre_cripto_moneda}}</strong></td>
-                    <td style="width: 300px">$ {{number_format($venta->transation_value,2,',','.')}}</td>
+                    <td style="width: 200px">$ {{number_format($venta->transation_value,2,',','.')}}</td>
                     <td>{{$venta->moneda_pago}}</td>                                    
                     <td><strong>{{$venta->transactionId}}</strong></td>
                     <td>{{$venta->code_wallet}}</td>
@@ -61,35 +62,6 @@
                          <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$venta->id_pago}}">
                             Registrar Hash/txid
                          </button>
-                          <!--VENTANA MODAL-->
-                          <div class="modal fade" id="code_wallet_{{$venta->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <form id="ad_form_{{$venta->id_anuncio}}" method="POST" action="{{route('registrar_hash_transaccion_realizada',$venta->id_pago)}}">
-                              {{csrf_field()}}
-                                <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Registra el Hash/txid</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                    <div class="modal-body">
-                                            <i class="fa fa-info-circle"></i>
-                                             <h5>Ingresa el código HASH TXID de tu transacción </h5>
-                                            <input type="text" name="hash_txid" class="textinput textInput form-control"+ required>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                      <a class="btn btn-secondary" data-dismiss="modal">Salir</a>
-                                      <button type="submit" class="btn btn-primary">Registrar Hash/txid</button>
-                                    </div>
-                                  </div>
-                                </div>
-                            </form>
-                          </div>
-                        <!--FIN VENTA MODAL-->
-                      @else
-
                       @endif
 
 
@@ -175,6 +147,7 @@
                       }
                   }
               } );
+              filtro_url('#mis-ventas-table');
 
             });
           </script>

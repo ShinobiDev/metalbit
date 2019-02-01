@@ -62,37 +62,43 @@ class NotificationMail extends Mailable
                 break;
              case 'AnuncioClickeadoCliente':
                 return $this->markdown('emials.ClicAnuncioCliente')
-                            ->subject( 'Información del  anuncio que haz visto en '. config('app.name'));
+                            ->subject( 'Información del  anuncio que has visto en '. config('app.name'));
                 # code...
                 break;    
             case 'AnuncioHabilitado':
                 return $this->markdown('emials.AnuncioActivado')
-                            ->subject('Tu anuncio ha sido activado '. config('app.name'));
+                            ->subject('Tu anuncio ha sido activado en '. config('app.name'));
                 # code...
                 break;
             case 'AnuncioDeshabilitado':
                 return $this->markdown('emials.AnuncioDesactivado')
-                            ->subject('Tu anuncio ha sido desactivado '. config('app.name'));
+                            ->subject('Tu anuncio ha sido desactivado en '. config('app.name'));
+                # code...
+                break;
+            case 'AnuncioBloqueado':
+                //dd($this);
+                return $this->markdown('emials.AnuncioDesactivado')
+                            ->subject('Tu anuncio ha sido bloqueado en '. config('app.name'));
                 # code...
                 break;
             case 'RecargaAgotada':
                 return $this->markdown('emials.RecargaAgotada')
-                            ->subject('Tu recarga se esta agotando '. config('app.name'));
+                            ->subject('Tu recarga se esta agotando en '. config('app.name'));
                 # code...
                 break;
             case 'RecargaCasiAgotada':
                 return $this->markdown('emials.RecargaAgotada')
-                            ->subject('Tu recarga ya casi se  agota '. config('app.name'));
+                            ->subject('Tu recarga ya casi se  agota en '. config('app.name'));
                 # code...
                 break;
             case 'RecargaExitosa':
                 return $this->markdown('emials.RecargaExitosa')
-                            ->subject($this->user->name.', hemos registrado una nueva recarga '. config('app.name'));
+                            ->subject($this->user->name.', hemos registrado una nueva recarga en '. config('app.name'));
                 # code...
                 break;
             case 'RecargaPendiente':
                 return $this->markdown('emials.RecargaPendiente')
-                            ->subject('Hemos registrado una nueva recarga, solo falta que la confirmes '. config('app.name'));
+                            ->subject('Hemos registrado una nueva recarga, solo falta que la confirmes  '. config('app.name'));
                 # code...
                 break;
             case 'RecargaRechazada':
@@ -102,13 +108,13 @@ class NotificationMail extends Mailable
                 break;
             case 'CompraExitosa':
                 return $this->markdown('emials.CompraExitosa')
-                            ->subject('Hemos registrado una nueva compra '. config('app.name'));
+                            ->subject('Hemos registrado una nueva compra en '. config('app.name'));
                 # code...
                 break;
             case 'CompraExitosaAnunciante':
                //dd($this->tipo);
                 return $this->markdown('emials.CompraExitosaAnunciante')
-                            ->subject('Hemos registrado una nueva compra para tu anuncio  '. config('app.name'));
+                            ->subject('Hemos registrado una nueva compra para tu anuncio  en '. config('app.name'));
                 # code...
                 break;    
             case 'CompraPendiente':
@@ -118,7 +124,7 @@ class NotificationMail extends Mailable
                 break;
             case 'CompraRechazada':
                 return $this->markdown('emials.CompraRechazada')
-                            ->subject('Hemos registrado una nueva compra, solo falta que la confirmes '. config('app.name'));
+                            ->subject('Hemos registrado una nueva compra, pero esta ha sido rechazada '. config('app.name'));
                 # code...
                 break;    
             case 'CompraPendienteAnunciante':

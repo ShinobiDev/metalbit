@@ -21,6 +21,8 @@ Anuncio:
     | {{$ad[0]->tipo_anuncio}} | {{$ad[0]->nombre_cripto_moneda}} | {{$ad[0]->nombre_moneda}} | {{$ad[0]->estado_anuncio}} |
 @endcomponent
 
+#[Ver anuncios][1]
+[1]:{{$ad[2]['url']}}#
 
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}

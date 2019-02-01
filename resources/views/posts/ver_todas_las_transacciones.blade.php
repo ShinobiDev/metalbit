@@ -45,7 +45,7 @@
               {{--dd(ver_todas_las_transacciones)--}}
               @foreach ($pag as $transaccion)
                    
-                  <tr>
+                  <tr id="row_{{$transaccion->id_pago}}">
                     <td>{{$transaccion->tipo_anuncio}}</td>
                      <td>
                       @if($transaccion->estado_pago=="Pendiente")
