@@ -5,13 +5,21 @@
 
 Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{config('app.name')}}
 
-##Datos Comprador##
+##Datos Vendedor##
 # Usuario : 
 	{{$ad[0]->name}}
 # Teléfono: 
-	{{$ad[0]->phone}},
+	{{$ad[0]->phone}}
 # Email: 
-	{{$ad[0]->email}},
+	{{$ad[0]->email}}
+
+##Datos Comprador##
+# Usuario : 
+	{{$ad[1]->name}}
+# Teléfono: 
+	{{$ad[1]->phone}},
+# Email: 
+	{{$ad[1]->email}},
 
 ## Resumen Oferta ##
 
@@ -20,14 +28,14 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{co
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
-    | {{$ad[1]->tipo_anuncio}} | {{$ad[1]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{number_format($ad[0]->transation_value,0,',','.')}} | {{$ad[1]->nombre_moneda}} | 
+    | {{$ad[2]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[2]->nombre_cripto_moneda}} | ${{number_format($ad[2]->transation_value,0,',','.')}} | {{$ad[2]->nombre_moneda}} | 
 @endcomponent
 
 
 
-
 #[Ver transacciones][1]
-[1]:{{$ad[2]['url']}}
+[1]:{{$ad[3]['url']}}
+
 
 
 Gracias, por seguir confiando en nosotros<br>

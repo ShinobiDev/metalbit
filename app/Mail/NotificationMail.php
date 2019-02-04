@@ -172,7 +172,20 @@ class NotificationMail extends Mailable
                     return $this->markdown('emials.NotificarPagoAdministrador')
                             ->subject('Un anunciante ha confirmado un pago hecho por '.config('app.name'));
                     break;    
-                
+            case "TransaccionFinalizadaAutomaticamenteAdministrador":
+
+                    return $this->markdown('emials.TransaccionConfirmadaAutomaticamenteAdministrador')
+                            ->subject('Se ha cerrado una transacción automaticamente '.config('app.name'));
+
+
+                    break;       
+            case "TransaccionFinalizadaAutomaticamenteComerciante":
+                    //dd($this->ad);
+                    return $this->markdown('emials.TransaccionConfirmadaAutomaticamenteVendedor')
+                            ->subject('Se ha cerrado una transacción automaticamente '.config('app.name'));
+
+
+                    break;           
             default:
                 //dd($this->tipo);
                 # code...
