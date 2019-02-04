@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use DB;
 use Carbon\Carbon;
 
-class ValidarTransaccion:ValidarTransaccion extends Command
+class ValidarTransaccion extends Command
 {
     /**
      * The name and signature of the console command.
@@ -41,7 +41,7 @@ class ValidarTransaccion:ValidarTransaccion extends Command
     {
         //
         $pagos=DB::table('pagos')
-                ->where('transactionState','Pago a Comprador')    
+                ->where('transactionState','Pago hecho al anunciante')    
                 ->whereDate('updated_at',Carbon::now()->subDays('3')->format('Y-m-d'))
                 ->get();
         //dd($pagos);        
@@ -51,7 +51,7 @@ class ValidarTransaccion:ValidarTransaccion extends Command
               DB::table('pagos')
                 ->where('id',$value->id)
                 ->update([
-                        "transactionState"=>'Pago anunciante confirmado'
+                        "transactionState"=>'Pago confirmado por el anunciante'
                     ]);    
         }       
     }
