@@ -80,9 +80,12 @@ class User extends Authenticatable
             case '6':
                 $dia_n="SABADO";
                 break;
-            case '7':
+            case '0':
                 $dia_n="DOMINGO";
                 break;
+            default:
+                $dia_n="LUNES";
+                break;        
         }
 
 
