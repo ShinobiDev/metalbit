@@ -50,18 +50,18 @@
 
                  </td>
                   <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                  <td style="width: 200px;">${{ number_format($ad->limite_min,2, ',', '.') }} / ${{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
+                  <td style="width: 200px;">${{ number_format($ad->limite_min,2, ',', '.') }} / ${{ number_format($ad->limite_max,2, ',', '.')}} </br><strong>{{$ad->moneda}}</strong></td>
                   <td>
                     @guest
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
 
 
                             <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','info')">
-                              Ver info
+                              <i class="fa fa-info-circle"> Ver info</i>
                               </button>
 
                             {{-- <button id="{{'btn_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','venta')">
-                              Vender
+                              <i class="fa fa-money"> Vender</i>
                             </button> --}}
 
 
@@ -76,14 +76,14 @@
                                 @if($ad->visto!="")
                                    <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary">Ya lo Viste</a>-->
                                     <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
-                                    Ya lo viste
+                                    <i class="fa fa fa-eye"> Ya lo viste</i>
                                     </button>
                                    
                                 @else
                                   
                                     <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>-->
                                     <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
-                                    Ya lo viste
+                                    <i class="fa fa fa-eye"> Ya lo viste</i>
                                     </button>
                                   
                                 @endif

@@ -167,4 +167,40 @@ class User extends Authenticatable
                       'wallet_qr'=>'');
         }
     }
+    public function registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado){
+        $dt=detalle_recargas::where([
+                                      ["id_user",$id],
+                                      ["estado_detalle_recarga","REGISTRADA"]
+                                    ])
+                                 ->get();
+
+
+        $pp=new Payu;
+        $hs=$pp->hashear($referencia_pago,$valor_pagado,"COP");                                 
+        if(count($dt)==0){
+            detalle_recargas::insert([
+                    'tipo_recarga' => "PAGO",
+                    'valor_recarga'=>$valor_recarga,
+                    'valor_pagado'=>$valor_pagado,
+                    'referencia_pago'=>$referencia_pago,
+                    'id_user'=>$id
+                ]);
+    
+        }else{
+          detalle_recargas::where([
+                                      ["id_user",$id],
+                                      ["estado_detalle_recarga","REGISTRADA"]
+                                      
+                                    ])
+                                  ->update([
+                                        "referencia_pago"=>$referencia_pago,
+                                        "valor_pagado"=>$valor_pagado,
+                                        'valor_recarga'=>$valor_recarga,
+
+                                      ]);
+        }
+        
+        return response()->json(["respuesta"=>true,'hash'=>$hs]);
+        
+    }
 }

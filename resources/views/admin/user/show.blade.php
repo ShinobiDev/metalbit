@@ -163,7 +163,7 @@
                       @if ($recarga->valor <= '0')
                           <h4>Actualmente no tienes saldo</h4>
                       @else
-                        <h4>Su saldo actual es: $ {{number_format($recarga->valor,2,',','.')}} <small> {{$recarga->status}}</small></h4>
+                        <h4>Su saldo actual es: $ <span id="sp_valor_recarga">{{number_format($recarga->valor,2,',','.')}}</span> <small> {{$recarga->status}}</small></h4>
                       @endif
 
                   @endforeach

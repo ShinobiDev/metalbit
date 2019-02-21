@@ -32,7 +32,7 @@
           });  
         }
        /*funcion que hace la peticion ajax */ 
-      function peticion_ajax(metodo,url,func,datos){
+      function peticion_ajax(metodo,url,func,datos,funerro){
               //debe ir como core y no public la url en producccion
              $.ajaxSetup({
                 headers: {
@@ -49,10 +49,14 @@
                          func(result);
                    },
                error: function(err){
-                   console.log(err);
-               }
+                  if(funerro!=undefined){
+                     funerro(err);
+                  }
+                  
+                  
+                  }
                });
-          }
+      }
           /*Funcion tomada del sitio 
          * http://www.antisacsor.com/articulo/10_98_dar-formato-a-numeros-en-javascript
          * Para dar formato a los numeros*/
@@ -110,7 +114,8 @@
           peticion_ajax("get","obtener_valor_moneda_valida/"+document.getElementById("id_crip_moneda_"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value,function(rs){
                
                 //Calculo d eel valor por la moneda seleccionada pero no autorizada
-              
+                document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(cant,2,",",".");
+
                                
                 
                 //cambio el valor de la moneda permitida
@@ -165,11 +170,13 @@
           
           
           var hs="hash_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+t;
-          
+          hd_valor_venta_131
           document.getElementById("hd_valor_venta_"+id).value=cant;
           document.getElementById("btn_comprar_"+id).style.display='none'; 
           mostrar_cargando("h5Total_"+id,10,"Calculando valor ...");
           peticion_ajax("get",hs,function(rs){
+            document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(cant,2,",",".");
+
             document.getElementById("hd_signature_"+id).value=rs.valor;
             //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +number_format(t,2,",",".");
             document.getElementById("h5Total_"+id).value=t;
@@ -368,4 +375,84 @@
         return false;
       }
     };
+    /**
+   * [Funcion para canjear los cupones de compra]
+   * @param  {[type]} e  [description]
+   * @param  {[type]} id [description]
+   * @return {[type]}    [description]
+   */
+  function canjear_cupon_compra(e,id){  
+    
+    if('{{auth()->user()}}'!=null){
+      if(e.value!=""){
+          mostrar_cargando("sp_espera_cupon"+id,5,"Verificando cupón ...");
+          document.getElementById('btn_comprar_'+id).disabled=true;
+          peticion_ajax('POST','admin/canjear_cupon_compra',
+                        {"cupon":e.value,
+                         'usuario_que_redime':document.getElementById('user_id').value,
+                         'ref_pago':document.getElementById("referenceCode"+id).value,
+                         'valor_pago':document.getElementById('hd_valor_venta_'+id).value,
+                         'id_anuncio':id,
+                         'codigo_anuncio':document.getElementById("referenceCode"+id).value,
+                         'validar':document.getElementById("validar_"+id).value
+                       },function(e){
+              //success
+            if(e.respuesta){
+              document.getElementById('div_cupon_menor_'+id).style.display='none';
+              document.getElementById('sp_espera_cupon'+id).innerHTML=e.mensaje;
+              document.getElementById('sp_espera_cupon'+id).classList.remove('text-red'); 
+              document.getElementById('sp_espera_cupon'+id).classList.add('text-success');  
+              
+              
+              document.getElementById('hd_cupon'+id).value=e.nuevo_valor;
+              document.getElementById('hd_valor_venta_'+id).value=number_format(e.nuevo_valor,0,'','');
+              
+              document.getElementById('spTotalPagoTramite_'+id).innerHTML=number_format(e.nuevo_valor,0,',','.');
+
+              if(e.hash_payu!=false){
+                document.getElementById('hd_signature_'+id).value=e.hash_payu; 
+                document.getElementById('btn_comprar_'+id).disabled=false;
+              }         
+              
+              
+
+              if(e.recarga_gratis){
+                document.getElementById('btn_comprar_'+id).disabled=true;
+                document.getElementById('spTotalPagoTramite_'+id).innerHTML=number_format(0,0,',','.');
+              }
+
+              if(e.acumulable=='0'){
+                document.getElementById('txt_cupon_'+id).disabled=true;
+                document.getElementById('sp_espera_cupon'+id).innerHTML+=" Este cupón no es acumulable  con otras promociones"
+              }
+            }else{
+              if(e.mensaje=='valor_tramite_es_mayor'){
+                document.getElementById('div_cupon_menor_'+id).style.display='';
+                document.getElementById('sp_espera_cupon'+id).innerHTML="";
+              }else{
+                document.getElementById('sp_espera_cupon'+id).innerHTML=e.mensaje;
+                document.getElementById('sp_espera_cupon'+id).classList.remove('text-success'); 
+                document.getElementById('sp_espera_cupon'+id).classList.add('text-red');  
+              }
+              
+              
+            }
+            
+
+            },function(e){
+              //error
+            document.getElementById('sp_espera_cupon'+id).innerHTML="Este cuṕón no es válido";
+            document.getElementById('sp_espera_cupon'+id).classList.remove('text-success'); 
+            document.getElementById('sp_espera_cupon'+id).classList.add('text-red');
+            
+            console.log(e)
+          }); 
+        }else{
+          document.getElementById('sp_espera_cupon'+id).innerHTML="";
+          document.getElementById('btn_comprar_'+id).disabled=false;
+          
+        }
+    }
+    
+  }
 </script>

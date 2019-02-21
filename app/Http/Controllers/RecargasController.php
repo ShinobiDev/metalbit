@@ -9,6 +9,7 @@ use App\Recargas;
 use App\detalle_recargas;
 use App\User;
 use App\Anuncios;
+use App\Payu;
 use DB;
 use Carbon\Carbon;
 
@@ -300,29 +301,10 @@ class RecargasController extends Controller
      * @param  [type] $referencia_pago [description]
      * @return [type]                  [description]
      */
-    public function registrar_recarga($id,$valor_recarga,$referencia_pago){
-        $dt=detalle_recargas::where([
-                                      ["id_user",$id],
-                                      ["estado_detalle_recarga","REGISTRADA"]
-                                    ])
-                                 ->get();
-        if(count($dt)==0){
-            detalle_recargas::insert([
-                    'tipo_recarga' => "PAGO",
-                    'valor_recarga'=>$valor_recarga,
-                    'referencia_pago'=>$referencia_pago,
-                    'id_user'=>$id
-                ]);
-    
-        }else{
-          detalle_recargas::where([
-                                      ["id_user",$id],
-                                      ["estado_detalle_recarga","REGISTRADA"]
-                                    ])
-                                  ->update(["referencia_pago"=>$referencia_pago]);
-        }
-        
-        return response()->json(["respuesta"=>true]);
+    public function registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado){
+        $u = new User();
+
+        return $u->registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado);
         
     }
 }

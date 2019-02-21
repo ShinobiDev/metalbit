@@ -50,17 +50,17 @@
                       
                    </td>
                     <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                    <td style="width: 200px;">${{ number_format($ad->limite_min,2, ',', '.') }} / ${{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
+                    <td style="width: 200px;">${{ number_format($ad->limite_min,2, ',', '.') }} / ${{ number_format($ad->limite_max,2, ',', '.')}} </br><strong>{{$ad->moneda}}</strong></td>
                     <td>
                       @guest
                              <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
 
                               <button id="{{'btn_info_'.$ad->cod_anuncio}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','info')">
-                                Ver info
+                                <i class="fa fa-info-circle"> Ver info</i>
                                 </button>
                                                       
                               <button id="{{'btn_compra_'.$ad->cod_anuncio}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','venta')">
-                                Comprar
+                                <i class="fa fa-money"> Compra</i>
                               </button>
                              
                           
@@ -73,7 +73,7 @@
                              
                                 <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary">Ya lo Viste</a>-->
                                 <button id="anc_{{$ad->id}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','0','info')">
-                                Ya lo viste
+                                <i class="fa fa fa-eye"> Ya lo viste</i>
                                 </button>     
 
                               
@@ -81,11 +81,11 @@
                                 
                               @else
                                 <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','{{$ad->costo_clic}}','info')">
-                                Ver info
+                                <i class="fa fa-info-circle"> Ver info</i>
                                 </button>
                                 <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>-->
                                 <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','0','info')" style="display: none">
-                                Ya lo viste
+                                <i class="fa fa fa-eye"> Ya lo viste</i>
                                 </button> 
                                                     
                                 
@@ -98,13 +98,14 @@
                             @if($ad->btn_payu)  
                               @if($ad->transaccion_pendiente['respuesta']==true)
                                 <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
-                                  Comprar pendiente
+                                  <i class="fa fa-money"> Compra pendiente</i>
+                                  
                                 </button>
                                   
                                 
                               @else
                                 <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
-                                  Comprar
+                                 <i class="fa fa-money"> Comprar</i>
                                 </button>
                               @endif
                               

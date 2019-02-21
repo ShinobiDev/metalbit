@@ -104,7 +104,20 @@ Route::post('confirmar_pago_por_vendedor/{id}',"UsersController@confirmar_pago_p
 Route::post('actualizar_certificacion_bancaria/{id}','UsersController@actualizar_certificacion_bancaria');
 
 });
-Route::get("registrar_recarga/{id}/{val_recarga}/{ref_pago}","RecargasController@registrar_recarga");
+Route::get('campanias','CampaniasController@index')->name('campanias.index');
+Route::get('ver_campanias','CampaniasController@show')->name('campanias.show');
+Route::post('crear_campanias','CampaniasController@store')->name('campanias.store');
+Route::get('ver_cupones/{id}','CampaniasController@ver_cupones');
+Route::get('eliminar_cupon/{id}/{id_campana}',"CampaniasController@eliminar_cupones");
+Route::post('canjear_cupon_recarga',"CampaniasController@canjear_cupones_recargas");
+Route::post('canjear_cupon_compra',"CampaniasController@canjear_cupones_compras");
+
+
+
+
+
+
+Route::get("registrar_recarga/{id}/{val_recarga}/{ref_pago}/{val_pagado}","RecargasController@registrar_recarga");
 
 /**
  * Debe ir por fuera del middleware

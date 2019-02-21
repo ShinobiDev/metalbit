@@ -8,6 +8,7 @@ use App\User;
 use App\Payu;
 use App\DetalleReferido;
 use App\detalle_recargas;
+use App\CuponesCampania;
 use Carbon\Carbon;
 use DB;
 
@@ -18,7 +19,7 @@ class Recargas extends Model
   ];
 
   public function registro_recargas($req){
-  	//dd($req['transactionState']);
+  	//dd($req);
   	switch ($req['transactionState']) {
 		case 4:
 			//aprovada
@@ -57,7 +58,7 @@ class Recargas extends Model
 									/*
 									  incremento la recarga al usuario que hace el pago
 									 */
-									Recargas::where("user_id",$cliente[0]->id)->increment("valor",$req['TX_VALUE']);
+									Recargas::where("user_id",$cliente[0]->id)->increment("valor",$rp[0]->valor_recarga);
 
 									Recargas::where("user_id",$cliente[0]->id)->update(["status"=>"ACTIVA"]);
 									
@@ -74,7 +75,7 @@ class Recargas extends Model
 										//dd($tot_recargas);
 										if(count($tot_recargas)==0){
 											//aunentoo el 10% de la recarga 
-											$val_rec=(float)$req['TX_VALUE']*0.10;
+											$val_rec=(float)$rp[0]->valor_recarga*0.10;
 											DB::table("detalle_recargas")->insert([
 												    'id_user' => $id_ref[0]->id_referido,
 												    'valor_recarga'=>$val_rec,
@@ -99,7 +100,7 @@ class Recargas extends Model
 											//var_dump($id_ref[0]->id_referido);
 											//var_dump($req['TX_VALUE']*0.01);
 											//
-											$val_rec=(float)$req['TX_VALUE']*0.01;	
+											$val_rec=(float)$rp[0]->valor_recarga*0.01;	
 											//dd($val_rec);
 											DB::table("detalle_recargas")->insert([
 												    'id_user' => $id_ref[0]->id_referido,
@@ -146,10 +147,12 @@ class Recargas extends Model
 					
 			}
 
-			NotificacionAnuncio::dispatch($cliente[0], [],[$recarga[0],["valor"=>$req['TX_VALUE'],"fecha"=>date('Y-m-d')]],"RecargaExitosa");
+			NotificacionAnuncio::dispatch($cliente[0], [],[$recarga[0],["valor"=>$rp[0]->valor_recarga,"fecha"=>date('Y-m-d')]],"RecargaExitosa");
 
 
 			return view('payu.confirmar_recarga_payu')->with("respuesta",$req)
+									->with("campania",CuponesCampania::where('transaccion_donde_se_aplico',$req['referenceCode'])->first())
+									->with("recarga",$rp[0]->valor_recarga)
 									->with("empresa",$empresa)
 									->with("cliente",$cliente)
 									->with("estado","Aprobada")
@@ -169,7 +172,7 @@ class Recargas extends Model
 						}
 					
 						if(count($cliente)==0){
-								$msn="Los datos de este usuario no corresponde a ninguno que este registrado en MetalBit ";
+								$msn="Los datos de este usuario no corresponde a ninguno que este registrado en ".config('app.name');
 
 								return view('payu.error_payu')->with("mensaje",$msn);
 						}else{
@@ -199,6 +202,8 @@ class Recargas extends Model
 				NotificacionAnuncio::dispatch($cliente[0], [],[$recarga[0],["valor"=>$req['TX_VALUE'],"fecha"=>date('Y-m-d')]],"RecargaPendiente");
 
 				return view('payu.confirmar_recarga_payu')->with("respuesta",$req)
+									->with("campania",CuponesCampania::where('transaccion_donde_se_aplico',$req['referenceCode'])->first())
+									->with("recarga",$rp[0]->valor_recarga)
 									->with("empresa",$empresa)
 									->with("cliente",$cliente)
 									->with("estado","Pendiente aprobación")

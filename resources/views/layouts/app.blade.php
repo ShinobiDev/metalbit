@@ -31,8 +31,8 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
-            <div class="col-md-11 col-md-offset-0 col-lg-11 col-lg-offset-0 col-sm-11 col-sm-offset-0">
-                <div class="navbar-header">
+            <div class="col-md-12 col-md-offset-0 col-lg-12 col-lg-offset-0 col-sm-12 col-sm-offset-0">
+                <div class="col-2 col-md-2 navbar-header">
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
                         <span class="sr-only">Toggle Navigation</span>
@@ -44,111 +44,116 @@
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <img class="logo" src="{{asset('img/AzulMetalicoHor_logo.png')}}">
                     </a>
-                </div>
+               </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                      <li>
-                           <a href="{{route('anuncios.index')}}">Ver anuncios</a>
-                      </li>
-                      @role('Admin')
-                        <li>
-                           <a href="{{route('anuncios.create')}}">Crear anuncios
-                            <input type="hidden" value="{{auth::user()->id}}" id="user_id">
-                           </a>
-                        </li>
-                       
-                        <li>
-                           <a href="{{route('recargas.index')}}">Todas las Recargas</a>
+                    <div class="col-10 col-md-10">
 
-                        </li>
-                        <li>
-                          <a href="{{route('anuncios.all',['id'=>auth::user()->id])}}">Todos los anuncios</a>
-                        </li>
-                        <li>
-
-                           <a href="{{route('ver_todas_las_transacciones')}}">Todas las transacciones</a>
-
-                        </li>
-                        <li>
-                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>
-                        </li>
-
-
-                      @endrole
-                      @role('Comerciante')
-                        <li>
-                           <a href="{{route('anuncios.create')}}">Crear anuncios</a>
-                        </li>
-                        <li>
-                           <a href="{{route('anuncios.show',['id'=>auth::user()->id])}}">Mis anuncios</a>
-                        </li>
-                        <input type="hidden" value="{{auth::user()->id}}" id="user_id">
-                        <li>
-                           <a href="{{route('mis_compras',['id'=>auth()->user()->id])}}">Mis compras</a>
-                        </li>
-                        <li>
-                          <a href="{{route('mis_ventas',['id'=>auth()->user()->id])}}">Mis ventas</a>
-                        </li>
-                        <li>
-                          <a href="{{route('anuncios_vistos')}}">Anuncios vistos</a>
-                        </li>
-                        <li>
-
-                            <a href="{{route('users.show', auth()->user())}}">Recargar</a>
-                        </li>
-                      @endrole
-
-                    </ul>
-
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- authentication Links -->
-                             <li>
-                        @guest
+                        <!-- Left Side Of Navbar -->
+                        <ul class="nav navbar-nav">
+                          <li>
+                               <a href="{{route('anuncios.index')}}">Ver anuncios</a>
+                          </li>
+                          @role('Admin')
                             <li>
-                              <a href="{{ route('login') }}">Ingresar</a>
-                              <input type="hidden" value="0" id="user_id">
+                               <a href="{{route('anuncios.create')}}">Crear anuncios
+                                <input type="hidden" value="{{auth::user()->id}}" id="user_id">
+                               </a>
                             </li>
-                            <li><a href="{{ route('register') }}">Registrarse</a></li>
+                           
+                            <li>
+                               <a href="{{route('recargas.index')}}">Recargas</a>
 
-                        @else
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
-                                    {{ auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu">
-
-
-
-                                      <li class="dropdown">
-                                        @role('Admin') {{-- Laravel-permission blade helper --}}
-                                         <a href="{{route('users.index')}}">Usuarios</a>
-                                         <a href="{{route('permissions.index')}}">Permisos</a>
-                                         <a href="{{route('roles.index')}}">Roles</a>
-                                        @endrole
-                                        <a href="{{route('users.show', auth()->user())}}">Perfil</a>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            <strong>Salir</strong>
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                      </li>
-
-
-
-                                </ul>
                             </li>
-                        @endguest
-                    </ul>
+                            <li>
+                              <a href="{{route('anuncios.all',['id'=>auth::user()->id])}}">Anuncios</a>
+                            </li>
+                            <li>
+
+                               <a href="{{route('ver_todas_las_transacciones')}}">Transacciones</a>
+
+                            </li>
+                            <li>
+
+                               <a href="{{route('campanias.show')}}">Campañas</a>
+
+                            </li>
+                            
+
+
+                          @endrole
+                          @role('Comerciante')
+                            <li>
+                               <a href="{{route('anuncios.create')}}">Crear anuncios</a>
+                            </li>
+                            <li>
+                               <a href="{{route('anuncios.show',['id'=>auth::user()->id])}}">Mis anuncios</a>
+                            </li>
+                            <input type="hidden" value="{{auth::user()->id}}" id="user_id">
+                            <li>
+                               <a href="{{route('mis_compras',['id'=>auth()->user()->id])}}">Mis compras</a>
+                            </li>
+                            <li>
+                              <a href="{{route('mis_ventas',['id'=>auth()->user()->id])}}">Mis ventas</a>
+                            </li>
+                            <li>
+                              <a href="{{route('anuncios_vistos')}}">Anuncios vistos</a>
+                            </li>
+                            <li>
+
+                                <a href="{{route('users.show', auth()->user())}}">Recargar</a>
+                            </li>
+                          @endrole
+
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                          <!-- authentication Links -->
+                               <li>
+                          @guest
+                              <li>
+                                <a href="{{ route('login') }}">Ingresar</a>
+                                <input type="hidden" value="0" id="user_id">
+                              </li>
+                              <li><a href="{{ route('register') }}">Registrarse</a></li>
+
+                          @else
+
+                              <li class="dropdown">
+                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
+                                      {{ auth::user()->name }} <span class="caret"></span>
+                                  </a>
+
+                                  <ul class="dropdown-menu">
+
+
+
+                                        <li class="dropdown">
+                                          @role('Admin') {{-- Laravel-permission blade helper --}}
+                                           <a href="{{route('users.index')}}">Usuarios</a>
+                                           <a href="{{route('permissions.index')}}">Permisos</a>
+                                           <a href="{{route('roles.index')}}">Roles</a>
+                                          @endrole
+                                          <a href="{{route('users.show', auth()->user())}}">Perfil</a>
+                                          <a href="{{ route('logout') }}"
+                                              onclick="event.preventDefault();
+                                                       document.getElementById('logout-form').submit();">
+                                              <strong>Salir</strong>
+                                          </a>
+
+                                          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                              {{ csrf_field() }}
+                                          </form>
+                                        </li>
+
+
+
+                                  </ul>
+                              </li>
+                          @endguest
+                      </ul>
+                    </div>
+                   
+                    
                 </div>
             </div>
         </nav>

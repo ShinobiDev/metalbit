@@ -66,6 +66,7 @@
 
                           <label id="msnEspera_{{$ad->id}}"></label>
                         </div>
+                        @include('partials.redimir_cupon_venta',['c'=>$ad->id])
                         <div class="modal-body">
                           @if(auth::user()->id!=$ad->id_anunciante)
                             @include('payu.botonpayu')
