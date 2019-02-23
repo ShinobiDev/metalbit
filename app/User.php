@@ -203,4 +203,26 @@ class User extends Authenticatable
         return response()->json(["respuesta"=>true,'hash'=>$hs]);
         
     }
+    public function registrar_venta($id,$valor_comprado,$referencia_pago,$valor_pagado){
+        pagos::where([
+                                      ["id_user_compra",$id],
+                                      ["transactionState","Pendiente"]
+                                    ])
+                                 ->update([
+                                        "referencia_pago"=>$referencia_pago,
+                                        "valor_pagado"=>$valor_pagado,
+                                        'valor_recarga'=>$valor_recarga,
+
+                                      ]);
+
+
+        $pp=new Payu;
+        $hs=$pp->hashear($referencia_pago,$valor_pagado,"COP");
+          
+                                  
+        
+        
+        return response()->json(["respuesta"=>true,'hash'=>$hs]);
+        
+    }
 }

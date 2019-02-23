@@ -410,36 +410,8 @@ class AnunciosController extends Controller
      */
     public function hash_anuncio($a,$p,$m,$id_u,$cantidad){
 
-         $pu = Payu::all();
-         //dd(explode("-",$a)[1]);
-         $id_a=explode("-",$a)[1];
-         $PG=DB::table('pagos')->where([
-                                    ["id_anuncio",$id_a],
-                                    ["transactionState","Pendiente"],
-                                    ["id_user_compra",$id_u]
-                                ])
-                                ->orwhere([
-                                    ["id_anuncio",$id_a],
-                                    ["transactionState","Visto"],
-                                    ["id_user_compra",$id_u]
-                                ])
-                                ->get();
-
-         if(count($PG)>0){
-            //dd($PG);
-            DB::table('pagos')
-                         ->where("id",$PG[0]->id)  
-                         ->update([
-                            "transactionQuantity"=>$cantidad,
-                            "transation_value"=>$p,
-                            "metodo_pago"=>'PENDIENTE',
-                            'updated_at'=>Carbon::now('America/Bogota')
-                            ]);
-            
-            
-         }
-
-         return response()->json(["valor"=>$pu[0]->hashear($a,$p,$m)]);
+         $u=new User;
+         return $u->registrar_venta($a,$p,$m,$id_u,$cantidad);
     }
 
     public function obtener_valor_moneda_valida($id_cripto,$moneda){

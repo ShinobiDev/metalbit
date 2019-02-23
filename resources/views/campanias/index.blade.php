@@ -130,6 +130,13 @@
                   <div class="form-group col-6 col-md-6">
                     <label for="exampleInputPassword1">Cantidad de cupones permitidos por usuario</label>
                     <input type="text" name="limite_por_usuario" class="form-control" id="exampleInputPassword1" placeholder="Si deseas que se genere automáticamente, por favor deja este campo en blanco" value="{{old('codigo_cupon') or 1}}" min="1" >
+                    <select class="form-control" name="moneda_descuento">
+                      <option value="COP">PESO COLOMBIANO</option>
+                      <option value="USD">DOLARES AMERICANOS</option>                      
+                      <option value="CLP">PESO CHILENO</option>
+                      <option value="BRL">REAL BRASILEÑO</option>
+                      <option value="MXN">PESO MEXICANO</option>
+                    </select>
                   </div>  
                   <div class="form-group col-6 col-md-6">
                     <br>

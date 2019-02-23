@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use App\Campania;
-use App\Anuncio;
+use App\Anuncios;
 use App\Recargas;
 use Carbon\Carbon;
 
@@ -226,7 +226,7 @@ class CuponesCampania extends Model
      * @param  [type] $saltar_validacion     [variable que permite saltar la validacion en caso de que el monto del tramite sea menor al del cupon]
      * @return [type]                        [description]
      */
-    public static function redimir_cupon_compra($cupon,$fecha_canje,$id_usuario_canje,$transaccion_canje,$tipo_de_campania,$monto_valor_a_redimir,$id_anuncio,$saltar_validacion){
+    public static function  redimir_cupon_compra($cupon,$fecha_canje,$id_usuario_canje,$transaccion_canje,$tipo_de_campania,$monto_valor_a_redimir,$id_anuncio,$saltar_validacion,$moneda_pago){
       
         $camp=CuponesCampania::where([
                                     ['estado','sin canjear'],
@@ -245,16 +245,22 @@ class CuponesCampania extends Model
           //valido estado de la campañas
           if($camp[0]->campania->estado_campania=='ABIERTA' ){
                  //dd($saltar_validacion); 
-                if('false'==$saltar_validacion){
-                   if((float)$monto_valor_a_redimir < (float)$camp[0]->campania->costo_minimo ){
-                        return array(['respuesta'=>false,'mensaje'=>'Error de valor mínimo: Este cupón es válido solo para '.$camp[0]->campania->tipo_canje.'s, iguales o superiores a $'.number_format($camp[0]->campania->costo_minimo,0,',','.'),'id_campania'=>$camp[0]->campania->id]);
+                if($moneda_pago != $camp[0]->campania->moneda_descuento){
+                        return array(['respuesta'=>false,'mensaje'=>'Error de autorización: Este cupón no es válido para este tipo de moneda. Deja el espacio vacío o verifícalo con quien te lo suministro.','id_campania'=>$camp[0]->campania->id]);
                 }
+                if((float)$camp[0]->campania->costo_minimo  > (float)$monto_valor_a_redimir  ){
+                        return array(['respuesta'=>false,'mensaje'=>'Error de valor mínimo: Este cupón es válido solo para '.$camp[0]->campania->tipo_canje.'s, iguales o superiores a $'.number_format($camp[0]->campania->costo_minimo,0,',','.'),'id_campania'=>$camp[0]->campania->id]);
+                
+                  
 
-                  $ad=Anuncio::where('id',$id_anuncio)->first();
+                  $ad=Anuncios::where('id',$id_anuncio)->first();
                   //dd((float)$camp[0]->campania->valor_de_descuento, (float)$ad->valor_tramite);
-                  if((float)$camp[0]->campania->valor_de_descuento > (float)$ad->valor_tramite){
+                  //dd((float)$camp[0]->campania->valor_de_descuento,$ad);
+                  if((float)$camp[0]->campania->valor_de_descuento > (float)$ad->limite_max){
                         return array(['respuesta'=>false,'mensaje'=>'Error de valor mínimo: El valor del bono que deseas redimir es mayor al valor del trámite, y no es posible realizar el canje del cupón, por favor ingresa otro cupon, o redimelo en otro trámite','id_campania'=>$camp[0]->campania->id]);
                   }  
+
+                  
                 } 
                 if($camp[0]->campania->fecha_inicial_vigencia != '0000-00-00 00:00:00' and $camp[0]->campania->fecha_final_vigencia != '0000-00-00 00:00:00'){
 
@@ -272,9 +278,14 @@ class CuponesCampania extends Model
                 if($tipo_de_campania!=$camp[0]->campania->tipo_canje){
                         return array(['respuesta'=>false,'mensaje'=>'Error de autorización: Este cupón no es válido para este tipo de transacciones. Deja el espacio vacío o verifícalo con quien te lo suministro.','id_campania'=>$camp[0]->campania->id]);
                 }
+
+
+               
+
+
                 //dd((float)$monto_valor_a_redimir,(float)$camp[0]->campania->costo_minimo);
                
-                $ad=Anuncio::where('id',$id_anuncio)->first();
+                $ad=Anuncios::where('id',$id_anuncio)->first();
                 //dd((float)$camp[0]->campania->valor_de_descuento, (float)$monto_valor_a_redimir);
                 if((float)$camp[0]->campania->valor_de_descuento > (float)$monto_valor_a_redimir){
                         return array(['respuesta'=>false,'mensaje'=>'Error de valor mínimo: El valor de descuento es menor al valor del bono, y no es posible realizar el canje del cupón, por favor ingresa otro cupon, o redimelo en otro trámite','id_campania'=>$camp[0]->campania->id]);
@@ -305,7 +316,7 @@ class CuponesCampania extends Model
                           // aqui hago el dto por un valor neto
                             if($saltar_validacion){
                               $gratis=true;  
-                              $ad=Anuncio::where('id',$id_anuncio)->first();
+                              $ad=Anuncios::where('id',$id_anuncio)->first();
                               $val_dto=$ad->valor_tramite;
                               $monto_valor_a_redimir=$ad->valor_tramite;
                             }else{
@@ -357,7 +368,7 @@ class CuponesCampania extends Model
                           //dd((float)$monto_valor_a_redimir , (float)$camp[0]->campania->valor_de_descuento);
                           if($saltar_validacion){
                               $gratis=true;  
-                              $ad=Anuncio::where('id',$id_anuncio)->first();
+                              $ad=Anuncios::where('id',$id_anuncio)->first();
                               $val_dto=$ad->valor_tramite;
                               $monto_valor_a_redimir=$ad->valor_tramite;
                           }else{

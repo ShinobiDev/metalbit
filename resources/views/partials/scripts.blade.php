@@ -387,15 +387,8 @@
       if(e.value!=""){
           mostrar_cargando("sp_espera_cupon"+id,5,"Verificando cupón ...");
           document.getElementById('btn_comprar_'+id).disabled=true;
-          peticion_ajax('POST','admin/canjear_cupon_compra',
-                        {"cupon":e.value,
-                         'usuario_que_redime':document.getElementById('user_id').value,
-                         'ref_pago':document.getElementById("referenceCode"+id).value,
-                         'valor_pago':document.getElementById('hd_valor_venta_'+id).value,
-                         'id_anuncio':id,
-                         'codigo_anuncio':document.getElementById("referenceCode"+id).value,
-                         'validar':document.getElementById("validar_"+id).value
-                       },function(e){
+          peticion_ajax('POST','canjear_cupon_compra',
+                        function(e){
               //success
             if(e.respuesta){
               document.getElementById('div_cupon_menor_'+id).style.display='none';
@@ -407,7 +400,7 @@
               document.getElementById('hd_cupon'+id).value=e.nuevo_valor;
               document.getElementById('hd_valor_venta_'+id).value=number_format(e.nuevo_valor,0,'','');
               
-              document.getElementById('spTotalPagoTramite_'+id).innerHTML=number_format(e.nuevo_valor,0,',','.');
+              document.getElementById('span_total_a_pagar_'+id).innerHTML=number_format(e.nuevo_valor,0,',','.');
 
               if(e.hash_payu!=false){
                 document.getElementById('hd_signature_'+id).value=e.hash_payu; 
@@ -439,7 +432,17 @@
             }
             
 
-            },function(e){
+            },{"cupon":e.value,
+               'usuario_que_redime':document.getElementById('user_id').value,
+               'ref_pago':document.getElementById("referenceCode_"+id).value,
+               'valor_pago':document.getElementById('hd_valor_venta_'+id).value,
+               'valor_comprado':document.getElementById('num_cantidad_moneda_'+id).value,
+               'moneda_pago':document.getElementById('currency_'+id).value,
+               'id_anuncio':id,
+               'codigo_anuncio':document.getElementById("referenceCode_"+id).value,
+               'validar':document.getElementById("validar_"+id).value
+                       },
+            function(e){
               //error
             document.getElementById('sp_espera_cupon'+id).innerHTML="Este cuṕón no es válido";
             document.getElementById('sp_espera_cupon'+id).classList.remove('text-success'); 

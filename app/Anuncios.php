@@ -267,13 +267,13 @@ class Anuncios extends Model
   }
 
   public function registro_venta_anuncio($req){
-    //dd($req['transactionState']);
+    //dd($req);
     switch ($req['transactionState']) {
     case 4:
       //aprobada
 
         $comprador=User::where("email",$req['buyerEmail'])->get();
-        
+        $cupon=CuponesCampania::where('transaccion_donde_se_aplico',$req['referenceCode'])->first();   
         $p=DB::table("pagos")->where("transactionId",$req['reference_pol'])->get();
         $empresa=Payu::all();
         //dd([$p,$comprador[0]->id]);
@@ -282,11 +282,25 @@ class Anuncios extends Model
             if($p[0]->transactionId==$req['reference_pol']){
               //el pago ya se habia registrado con otro estado
               if($p[0]->estado_pago=="APROBADA"){
-                $msn="Ya habías registrado esta referencia de pago";
+                $msn="Ya habías registrado esta referencia de pago.";
 
                 return view('payu.error_payu')->with("mensaje",$msn); 
                 
-              }else{    
+              }else{   
+              if(!empty($cupon)){
+                  $bono=$cupon->campania->valor_de_descuento;
+                  $valor_pagado=$rp[0]->valor_recarga;
+
+                  //actualizo el estado del cupon a canjeado pagado
+                  CuponesCampania::where('id',$cupon->id)
+                                   ->update([
+                                      'estado'=>'canjeado_pagado'
+                                   ]);   
+              }else{
+                $bono=0;
+                $valor_pagado=$req['TX_VALUE'];
+              }
+
                 $msn="Hemos registrado tu compra";
 
                 DB::table("pagos")
@@ -306,7 +320,10 @@ class Anuncios extends Model
                           //aqui debo enviar los datos de confirmación a la cuenta de correo
                 NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],[],"CompraExitosa");
                 NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],$p[0]->transation_value,"CompraExitosaAnunciante");
-                return view('payu.confirmar_payu')->with("respuesta",$req)
+                return view('payu.confirmar_payu')
+                    ->with("campania",CuponesCampania::where('transaccion_donde_se_aplico',$req['referenceCode'])->first())
+                    ->with("respuesta",$req)
+                    ->with("pago",$valor_pagado)
                     ->with("empresa",$empresa)
                     ->with("cliente",$comprador)
                     ->with("estado","Aprobada")
@@ -318,7 +335,7 @@ class Anuncios extends Model
         }else{
 
           if(count($comprador)==0){
-            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en MetalBit ";
+            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en ".config('app.name');
 
             return view('payu.error_payu')->with("mensaje",$msn);
           }else{
