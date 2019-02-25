@@ -26,12 +26,12 @@
         </div>
         <div class="contenedor">
             <div class="descripcion">
-                <h5>{{($respuesta["description"])}}</h5>
-                @if(!empty($campania))
+                <h5>{{($respuesta["description"])}} </h5>
+                {{--@if(!empty($campania))
                     <h5>{{($respuesta["description"])}} paga ${{number_format($respuesta["TX_VALUE"],0,',','.')}} y recibe ${{ number_format($pago,0,',','.')}}</h5>
                 @else
                     <h5>{{($respuesta["description"])}}</h5>
-                @endif 
+                @endif--}} 
 
                 <label>$ {{number_format($respuesta["TX_VALUE"],'0',',','.')}} {{$respuesta['currency']}}</label>
                 <br>

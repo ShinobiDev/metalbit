@@ -116,19 +116,19 @@
                 //Calculo d eel valor por la moneda seleccionada pero no autorizada
                 document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(cant,2,",",".");
 
-                               
-                
+                console.log(rs);                                
+                console.log(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price));
+                console.log(number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "));
                 //cambio el valor de la moneda permitida
-                var tt=number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price),2,".","")*number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," ");
-                document.getElementById("stValorMonedaValida_"+id).innerHTML=number_format(tt,2,".",",")+" "+
-                document.getElementById("hd_mon_valido_"+id).value;
-
+                var tt=number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price*number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "),10,"."," "));
+                document.getElementById("stValorMonedaValida_"+id).innerHTML=number_format(tt,2,".",",")+" "+document.getElementById("hd_mon_valido_"+id).value;
+                
                 document.getElementById("hd_pre_mon_valido"+id).value=number_format(tt,2,".","");
 
 
 
 
-                var hs=cod_anuncio+"/"+document.getElementById("hd_pre_mon_valido"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
+                var hs=cod_anuncio+"/"+number_format(tt,2,".","")+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
                 //peticion para el hash
                 peticion_ajax("get","hash_anuncio/"+hs,function(rs){
                         document.getElementById('msnEspera_'+id).innerHTML="";
@@ -170,7 +170,7 @@
           
           
           var hs="hash_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+t;
-          hd_valor_venta_131
+          
           document.getElementById("hd_valor_venta_"+id).value=cant;
           document.getElementById("btn_comprar_"+id).style.display='none'; 
           mostrar_cargando("h5Total_"+id,10,"Calculando valor ...");
@@ -180,6 +180,7 @@
             document.getElementById("hd_signature_"+id).value=rs.valor;
             //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +number_format(t,2,",",".");
             document.getElementById("h5Total_"+id).value=t;
+            document.getElementById("hdh5_total_"+id).value=t;
             document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".")+" ";
             document.getElementById("btn_comprar_"+id).style.display=''; 
           });
@@ -191,7 +192,7 @@
           var t=parseFloat(val)*parseFloat(cant);
           document.getElementById("h5Total_"+id).value=t;
           document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".")+" "+moneda;
-         
+          document.getElementById("hdh5_total_"+id).value=t;
         }
         /*funcion para cambiar el es estado de un anuncio*/
         function cambiar_estado(id,e){
@@ -407,8 +408,6 @@
                 document.getElementById('btn_comprar_'+id).disabled=false;
               }         
               
-              
-
               if(e.recarga_gratis){
                 document.getElementById('btn_comprar_'+id).disabled=true;
                 document.getElementById('spTotalPagoTramite_'+id).innerHTML=number_format(0,0,',','.');
@@ -440,7 +439,8 @@
                'moneda_pago':document.getElementById('currency_'+id).value,
                'id_anuncio':id,
                'codigo_anuncio':document.getElementById("referenceCode_"+id).value,
-               'validar':document.getElementById("validar_"+id).value
+               'validar':document.getElementById("validar_"+id).value,
+               'moneda_comprada':document.getElementById('hdh5_total_'+id).value
                        },
             function(e){
               //error

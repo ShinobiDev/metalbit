@@ -388,7 +388,7 @@ class CuponesCampania extends Model
                         //dd($registro[0]);
                         if($registro[0]['respuesta']){
                           if($camp[0]->campania->tipo_de_descuento=='porcentaje'){
-                            $descuento=$monto_valor_a_redimir;
+                            $descuento=$camp[0]->campania->valor_de_descuento;
 
                           }else{
                             $descuento=$camp[0]->campania->valor_de_descuento; 
@@ -415,7 +415,7 @@ class CuponesCampania extends Model
       
     }
 
-    public static function registro_canje($id_campania,$cupon,$transaccion_canje,$id_usuario_canje,$monto_valor_redimido,$free){
+    public static function  registro_canje($id_campania,$cupon,$transaccion_canje,$id_usuario_canje,$monto_valor_redimido,$free){
           
           $c=Campania::where('id',$id_campania)->first();
           $redimidos=CuponesCampania::join('campanias','campanias.id','cupones_campanias.id_campania')

@@ -36,6 +36,8 @@
                           </div>
                            <div class="modal-body">
                                 <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> {{ number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",",".")}} </span> {{$ad->cripto_moneda}}</h5>
+                                <input type="hidden" id="hdTotal_{{$ad->id}}" value="{{ number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",","")}} " >
+
                         </div>
 
                        <input type="hidden" id="hd_moneda_original" value="{{$ad->moneda}}">

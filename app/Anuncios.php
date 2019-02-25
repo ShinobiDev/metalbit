@@ -278,6 +278,7 @@ class Anuncios extends Model
         $empresa=Payu::all();
         //dd([$p,$comprador[0]->id]);
         $id_ad=explode("-",$req['referenceCode'])[1];  
+        $rp=recargas::where('user_id',$comprador[0]->id)->get();
         if(count($p)>0){
             if($p[0]->transactionId==$req['reference_pol']){
               //el pago ya se habia registrado con otro estado
@@ -375,8 +376,8 @@ class Anuncios extends Model
                       'transactionId' => $req['reference_pol']
                     ])->get();
                           //aqui debo enviar los datos de confirmación a la cuenta de correo
-                    NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0]],[],"CompraExitosa");
-                    NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0],$pg[0]],$req['TX_VALUE'],"CompraExitosaAnunciante");   
+                    NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],[],"CompraExitosa");
+                    NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0],$pg[0],['url'=>config('app.url')]  ],$req['TX_VALUE'],"CompraExitosaAnunciante");   
             }else{
 
                 $msn="Esta referencia de pago no corresponde a ningna registrada en nuestro sistema, por favor verifica con tu plataforma de pagos ";  
@@ -403,7 +404,7 @@ class Anuncios extends Model
         $p=DB::table("pagos")->where("transactionId",$req['reference_pol'])->get();
         //dd($p,$comprador);
         $id_ad=explode("-",$req['referenceCode'])[1];  
-        
+        //dd(explode("-",$req['referenceCode']),$id_ad);
         if(count($p)>0){
             if($p[0]->transactionId==$req['reference_pol']){
               $msn="Ya habías registrado esta referencia de pago, su estado actual es: ".$p[0]->estado_pago;
@@ -451,6 +452,7 @@ class Anuncios extends Model
           }
           //dd($req['reference_pol']);
           $anuncio=Anuncios::where("id",$id_ad)->get();
+          //dd($anuncio,$id_ad);
           $anunciante=User::where(".id",$anuncio[0]->user_id)->get();
           $pg=pagos::where([
                       ["id_anuncio",$id_ad],

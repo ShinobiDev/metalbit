@@ -112,7 +112,7 @@ class NotificationMail extends Mailable
                 # code...
                 break;
             case 'CompraExitosaAnunciante':
-               //dd($this->tipo);
+               //dd($this);
                 return $this->markdown('emials.CompraExitosaAnunciante')
                             ->subject('Hemos registrado una nueva compra para tu anuncio  en '. config('app.name'));
                 # code...

@@ -48,7 +48,7 @@
                     <td>
                       @if($compra->transactionState=="Pendiente")
                         <span class="text-danger">Pendiente por pago</span>
-                      @elseif($transaccion->transactionState == 'Pago confirmado por el anunciante' || $transaccion->transactionState == ''Pago hecho al anunciante')  
+                      @elseif($compra->transactionState == 'Pago confirmado por el anunciante' || $compra->transactionState == 'Pago hecho al anunciante')  
                         <span class="text-success">Transacción finalizada</span>
                       @else
                         <span class="text-success">{{$compra->transactionState}}</span>

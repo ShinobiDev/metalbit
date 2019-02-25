@@ -203,26 +203,51 @@ class User extends Authenticatable
         return response()->json(["respuesta"=>true,'hash'=>$hs]);
         
     }
-    public function registrar_venta($id,$valor_comprado,$referencia_pago,$valor_pagado){
-        pagos::where([
-                                      ["id_user_compra",$id],
-                                      ["transactionState","Pendiente"]
-                                    ])
-                                 ->update([
-                                        "referencia_pago"=>$referencia_pago,
-                                        "valor_pagado"=>$valor_pagado,
-                                        'valor_recarga'=>$valor_recarga,
+    /**
+     * Funcion para crear hash del pago en payu para anuncios
+      * @param  [type] $a [codigo anuncio]
+     * @param  [type] $p [valor de la venta]
+     * @param  [type] $m [moneda para hacer el pago]
+     * @param  [type] $id_u [id_usuario]
+     * @param  [type] $cantidad [cantidad de monedas]
+     * @return [type]       [description]
+     */
+    public function registrar_venta($a,$p,$m,$id_u,$cantidad){
+        $pu = Payu::all();
+         //dd(explode("-",$a)[1]);
+         $id_a=explode("-",$a);
+         if(count($id_a)>1){
+          $id_a=explode("-",$a)[1];
+         }else{
+          $id_a=$a;
+         }
+         $PG=DB::table('pagos')->where([
+                                    ["id_anuncio",$id_a],
+                                    ["transactionState","Pendiente"],
+                                    ["id_user_compra",$id_u]
+                                ])
+                                ->orwhere([
+                                    ["id_anuncio",$id_a],
+                                    ["transactionState","Visto"],
+                                    ["id_user_compra",$id_u]
+                                ])
+                                ->get();
 
-                                      ]);
-
-
-        $pp=new Payu;
-        $hs=$pp->hashear($referencia_pago,$valor_pagado,"COP");
-          
-                                  
-        
-        
-        return response()->json(["respuesta"=>true,'hash'=>$hs]);
+         if(count($PG)>0){
+            //dd($PG);
+            DB::table('pagos')
+                         ->where("id",$PG[0]->id)  
+                         ->update([
+                            "transactionQuantity"=>$cantidad,
+                            "transation_value"=>$p,
+                            "metodo_pago"=>'PENDIENTE',
+                            'updated_at'=>Carbon::now('America/Bogota')
+                            ]);
+            
+            
+         }
+         //dd($a,$p,$m);
+         return response()->json(["valor"=>$pu[0]->hashear($a,$p,$m)]);
         
     }
 }

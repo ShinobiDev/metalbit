@@ -39,7 +39,7 @@ class Payu extends Model
   			}
   		 	
   			//echo $da[0]->type_encrypt."<BR>";
-  		  //echo $DATA."<BR>";
+  		  //echo $DATA."</br>";
         //echo $val."<BR>";
         //echo $tipo."<BR>";
 
