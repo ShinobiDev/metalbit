@@ -12,9 +12,12 @@ Anuncio:
 Estado de la compra: PENDIENTE
 
 #Datos del vendedor
-Nombre: {{$ad[0]->name}}
-Teléfono: {{$ad[0]->phone}}
-Correo electrónico: {{$ad[0]->email}}
+
+#Nombre: {{$ad[0]->name}}
+
+#Teléfono: {{$ad[0]->phone}}
+
+#Correo electrónico: {{$ad[0]->email}}
 
 ## Resumen Oferta ##
 

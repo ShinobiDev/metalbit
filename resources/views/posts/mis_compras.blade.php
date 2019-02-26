@@ -94,7 +94,7 @@
                             </button>
                            
                         @endif
-                        
+
 
                         {{--<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
                             Ver info
@@ -103,6 +103,18 @@
                          --}}
                       @endif  
 
+                      @if($compra->transactionState=="Pendiente")
+                          <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#info_medio_pago_{{$compra->id_pago}}">
+                            Información medio de pago
+                        </button>
+                        
+                        @if($compra->metodo_pago=="Transferencia bancaria")
+
+                          <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_{{$compra->id_pago}}">
+                            Confirmar pago de transacción
+                        </button>
+                        @endif
+                      @endif
 
 
                     </td>                                   
@@ -220,6 +232,77 @@
                             
                           </div>--}}
                       @endif  
+
+                      @if($compra->transactionState=="Pendiente")
+                        <div class="modal fade" id="info_medio_pago_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Información del medio de pago</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                            <i class="fa fa-info-circle"></i>
+                                            @if($compra->medio_pago=='Pago en efectivo')
+                                              <h5>METALBIT S.A.S.</h5>
+                                            <h5>Calle 114 #53 - 96 Bogotá D.C. - Colombia </h5>
+                                            <h5>Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m. </h5>
+
+                                            @else
+                                            <h5>Realiza la transferencia bancaria </h5>
+                                              <a href="{{config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf'}}" >
+                                                <h5>Ver certificación bancaria
+                                              </h5></a>
+                                            @endif
+
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a class="btn btn-secondary" data-dismiss="modal">Salir</a>                                      
+                                    </div>
+                                  </div>
+                                </div>
+                            
+                          </div>
+                          <div class="modal fade" id="confirmar_pago_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Confirma tu pago</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                            
+                                      <form id="formConfirmarPago{{$compra->id_pago}}">
+                                          <div class="form-group">
+                                            <label for="exampleInputEmail1">#Transacción</label>
+                                            <input name="numero_transaccion" type="text" class="form-control" placeholder="Ingresa el número de transacción">
+                                            <input type="hidden" value="{{$compra->id_pago}}" name="id_pago">           
+                                          </div>                                          
+                                         <span id="lblMsn{{$compra->id_pago}}"></span>
+                                          <input type="button" value="Confirmar" onclick="confirmar_pago_comprador('{{$compra->id_pago}}')" type="submit" class="btn btn-primary" />
+                                      </form>
+
+
+
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a class="btn btn-secondary" data-dismiss="modal">Salir</a>                                      
+                                    </div>
+                                  </div>
+                                </div>
+                            
+                          </div>
+                      @endif
                   
           @endforeach  
       </div>

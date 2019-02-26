@@ -21,7 +21,19 @@
                        <input  type="hidden" id="id_crip_moneda_{{$ad->id}}" value="{{$ad->id_cripto_moneda}}">
                        <input type="hidden" id="hd_margen_gananacia_{{$ad->id}}" value="{{$ad->margen_gananacia}}">
 
-                       @if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
+                       @if($ad->transaccion_pendiente['value']!=0)
+                       
+                        <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
+                             value="{{$ad->transaccion_pendiente['value']}}"
+                             onchange="registro_compra('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
+                       @else
+                        <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
+                             value="{{$ad->limite_min}}"
+                             onchange="registro_compra('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
+                       @endif
+                       
+
+                       {{--@if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
 
                             <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
                            value="{{$ad->limite_min}}"
@@ -30,24 +42,46 @@
                             <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
                              value="{{$ad->limite_min}}"
                              onchange="cambiar_valor_form_payu('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
-                        @endif
+                        @endif--}}
                        <div class="modal-body">
                             <h5 class="modal-title" id="exampleModalLabel">Precio de venta  {{$ad->cripto_moneda}} $ {{ $ad->precio_moneda}} en {{$ad->moneda}}</h5>
                           </div>
                            <div class="modal-body">
-                                <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> {{ number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",",".")}} </span> {{$ad->cripto_moneda}}</h5>
+                                <h5 id="msnEspera_compra_{{$ad->id}}" style="display: none"></h5>
+                                
+                                @if($ad->transaccion_pendiente['value']!=0)
+                                  <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> 
+                                    {{$ad->transaccion_pendiente['quantity']}}
+
+                                 </span> {{$ad->cripto_moneda}}</h5>
+                                @else
+                                  <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> 
+                                    {{$ad->limite_min / (float)$ad->precio_moneda_sf}}
+
+                                 </span> {{$ad->cripto_moneda}}</h5>
+                                @endif
+
+                                
+
+
+                                  {{-- number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",",".")--}}
+                                  
+                                  
                                 <input type="hidden" id="hdTotal_{{$ad->id}}" value="{{ number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",","")}} " >
 
                         </div>
 
                        <input type="hidden" id="hd_moneda_original" value="{{$ad->moneda}}">
-                        @if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
+                        
+                        <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
+
+                        {{--@if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
                             @include("posts.no_permitidos")
                             <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{ number_format(((float)number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.',''),2,'.',''))*number_format($ad->precio_moneda_usd_sf,2,'.','') ,2,'.','')
                           }}" >
                         @else
                             <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
-                        @endif
+                        @endif--}}
                          <div class="modal-body">
                           <i class="fa fa-info-circle"></i>
                           <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
@@ -55,23 +89,22 @@
                           <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')" value="{{$ad->transaccion_pendiente['wallet']}}">
                           
 
-                          @if($ad->transaccion_pendiente['wallet_qr']!='')
+                          @if($ad->transaccion_pendiente['wallet_qr']!='SIN REGISTRAR')
                             <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
                           @endif
+
                            <input type="file" id="flWallet_{{$ad->id}}" name="wallet" onchange="subir_archivo('{{$ad->id}}',this)">    
                          
-
-
-
-
-
 
                           <label id="msnEspera_{{$ad->id}}"></label>
                         </div>
                         @include('partials.redimir_cupon_venta',['c'=>$ad->id])
+
+
                         <div class="modal-body">
                           @if(auth::user()->id!=$ad->id_anunciante)
                             @include('payu.botonpayu')
+                            @include('partials.btn_comprar')
                           @endif
                         </div>
                 </form>

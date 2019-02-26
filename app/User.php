@@ -133,38 +133,37 @@ class User extends Authenticatable
         $pg=pagos::where([
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
-                ['code_wallet','!=','SIN REGISTRAR'],
+                //['code_wallet','!=','SIN REGISTRAR'],
                 ['transactionState','Pendiente'],
                 //['pagos.transactionId','!=',null]
             ])
-            /*->orwhere([
-                ['id_anuncio',$id_anuncio],
-                ['id_user_compra',$id_usuario],
-                ['code_wallet','<>',null],
-                ['transactionState','Pendiente'],
-                //['pagos.transactionId','!=',null]
-            ])*/
             ->orwhere([
                 ['id_anuncio',$id_anuncio],
                 ['id_user_compra',$id_usuario],
-                ['image_wallet','!=','SIN REGISTRAR'],
+                //['image_wallet','!=','SIN REGISTRAR'],
                 ['transactionState','Visto'],
                 //['pagos.transactionId','!=',null]
             ])
             ->get();
-        //var_dump($id_anuncio,$id_usuario);
+        //dd($pg);
         if(count($pg)>0){
           //dd($pg[0]);   
           //dd($pg);   
           return array("respuesta"=>true,
                         "pago"=>$pg[0]->transactionId,
                         "wallet"=>$pg[0]->code_wallet,
-                        'wallet_qr'=>$pg[0]->image_wallet);
+                        'wallet_qr'=>$pg[0]->image_wallet,
+                        'quantity'=>$pg[0]->transactionQuantity,
+                        'value'=>$pg[0]->transation_value,
+                        'state'=>$pg[0]->transactionState);
         }else{
           return array("respuesta"=>false,
                       "pago"=>"0",
                       "wallet"=>"",
-                      'wallet_qr'=>'');
+                      'wallet_qr'=>'0',
+                      'quantity'=>'0',
+                      'value'=>'0',                      
+                      'state'=>0);
         }
     }
     public function registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado){
@@ -232,7 +231,7 @@ class User extends Authenticatable
                                     ["id_user_compra",$id_u]
                                 ])
                                 ->get();
-
+          //dd($PG);                                
          if(count($PG)>0){
             //dd($PG);
             DB::table('pagos')
@@ -246,8 +245,8 @@ class User extends Authenticatable
             
             
          }
-         //dd($a,$p,$m);
-         return response()->json(["valor"=>$pu[0]->hashear($a,$p,$m)]);
+         //dd($a,$p,$m,$id_u,$cantidad);
+         return response()->json(['respuesta'=>true,"valor"=>$pu[0]->hashear($a,$p,$m)]);
         
     }
 }

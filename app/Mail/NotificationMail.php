@@ -185,7 +185,45 @@ class NotificationMail extends Mailable
                             ->subject('Se ha cerrado una transacción automaticamente '.config('app.name'));
 
 
-                    break;           
+                    break; 
+            case "PagoTransaccion":
+                    //dd($this->ad[3]['medio_pago']);
+                    return $this->markdown('emials.PagoTransferencia')
+                            ->subject('Información de tu medio de pago para compra en '.config('app.name'));
+
+
+                    break;
+            case "PagoEfectivo":
+                    //dd($this);
+                    return $this->markdown('emials.PagoEnOficina')
+                            ->subject('Información de tu medio de pago para compra en '.config('app.name'));
+
+
+                    break;     
+            case "ConfirmarTransferenciaBancaria":
+                    //dd($this);
+                    return $this->markdown('emials.PagoTransferenciaAdmin')
+                            ->subject('Un comprador ha confirmado una transacción bancaria en '.config('app.name'));
+
+
+                    break;  
+            case "ConfirmarPagoExitosoTransferenciaBancaria":
+                    //dd($this);
+                    return $this->markdown('emials.PagoExitosoTransaferenciaAdmin')
+                            ->subject('Se ha confirmado una transacción bancaria en '.config('app.name'));
+
+
+                    break;  
+            case "ConfirmarPagoExitosoPagoEnOficina":
+                    //dd($this);
+                    return $this->markdown('emials.PagoExitosoEnOficina')
+                            ->subject('Se ha confirmado un pago en efectivo en '.config('app.name'));
+
+
+                    break;          
+
+            
+                                             
             default:
                 //dd($this->tipo);
                 # code...

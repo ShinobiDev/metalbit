@@ -7,9 +7,11 @@ Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en META
 
 ##Datos del comprador 
 
-Nombre: {{$ad[0]->name}}
-Teléfono: {{$ad[0]->phone}}
-Correo electrónico: {{$ad[0]->email}}
+#Nombre: {{$ad[0]->name}}
+
+#Teléfono: {{$ad[0]->phone}}
+
+#Correo electrónico: {{$ad[0]->email}}
 
 ## Resumen Oferta ##
 

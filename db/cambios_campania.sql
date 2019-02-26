@@ -106,3 +106,4 @@ ALTER TABLE `detalle_recargas` ADD `valor_pagado` DECIMAL(10,2) NULL DEFAULT NUL
 ALTER TABLE `campanias` ADD `moneda_descuento` VARCHAR(256) NOT NULL AFTER `valor_de_descuento`; 
 ALTER TABLE `pagos` ADD `pay_value` DECIMAL(10,2) NOT NULL AFTER `transation_value`; 
 ALTER TABLE `pagos` CHANGE `pay_value` `pay_value` DECIMAL(10,2) NULL DEFAULT NULL; 
+ALTER TABLE `pagos` ADD `numero_transaccion` VARCHAR(256) NULL AFTER `porcentaje_pago`; 

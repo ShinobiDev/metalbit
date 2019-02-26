@@ -38,6 +38,7 @@
                 <th>Moneda local</th>
                 <th>Referecia de pago</th>
                 <th>Fecha transacción</th>
+                <th># transacción</th>
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
                 <th>% Metalbit</th>
@@ -52,10 +53,13 @@
                   <tr id="row_{{$transaccion->id_pago}}">
                     <td>{{$transaccion->tipo_anuncio}}</td>
                      <td>
+                      
                       @if($transaccion->transactionState=="Pendiente")
                         <span class="text-danger">Pendiente por pago</span>
                       @elseif($transaccion->transactionState == 'Pago confirmado por el anunciante')  
                         <span class="text-success">{{$transaccion->transactionState}}</span>
+                      @elseif($transaccion->transactionState == 'Pago Aceptado' && $transaccion->estado_pago =='PENDIENTE')
+                        <span class="text-danger">Pago aceptado, pendiente confirmacion entidad bancaria</span>
                       @else
                         <span class="text-success">{{$transaccion->transactionState}}</span>                      
                       @endif
@@ -84,6 +88,12 @@
                     <td>{{$transaccion->moneda_pago}}</td>
                     <td><strong>{{$transaccion->transactionId}}</strong></td>
                     <td><strong>{{$transaccion->updated_at}}</strong></td>
+                    @if($transaccion->metodo_pago=='Transferencia bancaria')
+                      <td><strong>{{$transaccion->numero_transaccion}}</strong></td>
+                    @else
+                      <td>$transaccion->metodo_pago</td>
+                    @endif
+                    
                     <td><span class="text-red">{{$transaccion->code_wallet}}</span></td>
                     <td><span class="text-success">{{$transaccion->hash_txid}}</span></td>
                     <td>
@@ -93,6 +103,21 @@
                     </td>
                       <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</td>
                     <td>
+
+                      @if($transaccion->metodo_pago=="Pago en efectivo")
+                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_cliente{{$transaccion->id_pago}}">
+                            confirmar pago del comprador
+                        </button>
+
+
+
+                        
+
+
+
+
+
+                      @endif
                       @if($transaccion->transactionState=="Pago confirmado por el anunciante")
                         Pago confirmado por el anunciante
                       @endif
@@ -148,7 +173,12 @@
                         <!--FIN VENTA MODAL-->
 
                       @endif
+                      @if($transaccion->transactionState == 'Pago Aceptado' && $transaccion->estado_pago =='PENDIENTE')
+                       <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_entidad_bancaria_{{$transaccion->id_pago}}">
+                            confirmar pago en la entidad bancaria
+                        </button>
 
+                      @endif  
                         
                     </td>
                   </tr>
@@ -156,8 +186,78 @@
               @endforeach
             </tbody>
           </table>
-         
-         
+        @foreach ($pag as $transaccion) 
+           <div class="modal fade" id="confirmar_pago_cliente{{$transaccion->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                            <form id="ad_form_{{$transaccion->id_pago}}" method="POST" action="{{route('confirmar_pago_comprador_pago_efectivo')}}">
+                              {{csrf_field()}}
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header bg-primary text-center">
+                                      <h4 class="modal-title" id="exampleModalLabel">Confirmar Pago del comprador</h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                          <label for="">Valor a pagar:</label>
+                                          <input class="form-control" type="text" name="valor_a_pagar" value="${{number_format($transaccion->transation_value,2,',','.')}}" readonly>
+                                          <input type="hidden"value="{{$transaccion->id_pago}}" name="id_pago">
+                                        </div>
+                                      
+                                        <div class="form-group">
+
+                                        <button type="submit" class="btn btn-primary ">Registrar pago</button>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a class="btn btn-danger" data-dismiss="modal">Salir</a>
+
+                                    </div>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+           <div class="modal fade" id="confirmar_pago_entidad_bancaria_{{$transaccion->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                            <form id="ad_form_{{$transaccion->id_pago}}" method="POST" action="{{route('confirmar_pago_comprador_entidad_bancaria')}}">
+                              {{csrf_field()}}
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header bg-primary text-center">
+                                      <h4 class="modal-title" id="exampleModalLabel">Confirmar Pago del comprador en entidad bancaria</h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                          <label for="">el valor pagado debe ser de:</label>
+                                          <input class="form-control" type="text" name="valor_a_pagar" value="${{number_format($transaccion->transation_value,2,',','.')}}" readonly>
+                                          <input type="hidden"value="{{$transaccion->id_pago}}" name="id_pago">
+                                        </div>
+                                      
+                                        <div class="form-group">
+
+                                        <button type="submit" class="btn btn-primary ">Registrar pago</button>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a class="btn btn-danger" data-dismiss="modal">Salir</a>
+
+                                    </div>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>             
+
+        @endforeach
+
       </div>
 
 

@@ -3,14 +3,16 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, hemos registrado una compra exitosa en METALBIT.
+Estimad@ {{$user->name}}, hemos registrado una compra exitosa en {{config('app.name')}}.
 
 
 ## Datos vendedor##
 
-Nombre: {{$ad[0]->name}}
-Teléfono: {{$ad[0]->phone}}
-Correo electrónico: {{$ad[0]->email}}
+#Nombre: {{$ad[0]->name}}
+
+#Teléfono: {{$ad[0]->phone}}
+
+#Correo electrónico: {{$ad[0]->email}}
 
 ## Resumen Oferta ##
 

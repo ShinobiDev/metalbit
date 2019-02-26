@@ -413,6 +413,21 @@ class AnunciosController extends Controller
          $u=new User;
          return $u->registrar_venta($a,$p,$m,$id_u,$cantidad);
     }
+    /**
+     * Funcion para registrar la compra de criptomonedas
+      * @param  [type] $a [codigo anuncio]
+     * @param  [type] $p [valor de la venta]
+     * @param  [type] $m [modena para hacer el pago]
+     * @param  [type] $id_u [id_usuario]
+     * @param  [type] $cantidad [cantidad de monedas]
+     * @return [type]       [description]
+     */
+    public function registrar_compra_anuncio($a,$p,$m,$id_u,$cantidad){
+
+         $u=new User;
+         return $u->registrar_venta($a,$p,$m,$id_u,$cantidad);
+    }
+    
 
     public function obtener_valor_moneda_valida($id_cripto,$moneda){
         $guzzle=new GuzzleModel();
@@ -533,6 +548,220 @@ class AnunciosController extends Controller
         }else{
             return response()->json(["respuesta"=>false,"datos"=>$comentarios]);
         }                    
-    }   
+    }
+    /**
+     * Funcion para registrar medios de pagos y enviar notificaciones al cliente con la información para realizar el pago
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function registrar_medio_de_pago(Request $request){
+        //dd($request);
+        //
+        if($request['tipo_pago']==1){
+            $metodo_pago='Transferencia bancaria';
+        }else{
+            $metodo_pago='Pago en efectivo';
+        }
+        //dd($metodo_pago);
+        pagos::where([
+                        ['id_anuncio',$request['id_anuncio']],
+                        ['id_user_compra',$request['usuario']],
+                        ['transactionState','Pendiente']
+                    ])
+                ->orwhere([
+                        ['id_anuncio',$request['id_anuncio']],
+                        ['id_user_compra',$request['usuario']],
+                        ['transactionState','Visto']
+                    ])
+                ->take(1)
+                ->update([
+                        'transactionId'=>$request['ref_pago'],
+                        'transation_value'=>$request['total_a_pagar'],
+                        'transactionState'=>'Pendiente',
+                        'metodo_pago'=>$metodo_pago
 
+                    ]);
+          $comprador=User::where(".id",$request['usuario'])->get();          
+          $anuncio=Anuncios::where("id",$request['id_anuncio'])->get();
+          //dd($anuncio,$id_ad);
+          $anunciante=User::where(".id",$anuncio[0]->user_id)->get();
+          $pg=pagos::where([
+                      ["id_anuncio",$request['id_anuncio']],
+                      ['id_user_compra',$request['usuario']],
+                      ['transactionId' , $request['ref_pago']]
+                    ])->get();
+          //dd( [$comprador[0],$anunciante[0],$anuncio[0],$pg]);
+          //aqui debo enviar los datos de confirmación a la cuenta de correo}
+          //dd($pg);
+          if($request['tipo_pago']==1){
+            NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$request['ref_pago'],'medio_pago'=>config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf']],[],"PagoTransaccion");
+          }else{
+            NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$request['ref_pago']]],[],"PagoEfectivo");
+          }
+          
+          
+          //dd($anunciante[0]);
+          NotificacionAnuncio::dispatch($anunciante[0],[$comprador[0],$anuncio[0],$pg[0]],$request['total_a_pagar'],"CompraPendienteAnunciante");
+
+        
+        
+        return response()->json(['mensaje'=>"Hemos registrado tu compra y enviado información acerca del medio de pago seleccionado, a tu correo electrónico ".$comprador[0]->email,'respuesta'=>true]);
+        
+    }
+
+    /**
+     * Funcion para confirmar el pago por parte de el cliente
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_pago_comprador(Request $request){
+        //registrar cambio de estado del pago
+
+
+        
+                DB::table("pagos")
+                          ->where("id",$request['id_pago'])
+                          ->update([
+                                    'transactionState'=>'Pago aceptado',
+                                    'transactionStatePayu'=>4,
+                                    'moneda_pago'=>'COP',
+                                    'updated_at'=>Carbon::now('America/Bogota'),
+                                    'numero_transaccion'=>$request['numero_transaccion']
+                                  ]);
+                //enviar email notificacion del pago realizado al anunciante
+                //enviar mensaje de confirmacion al comprador            
+                $pg=pagos::where([
+                      'id' => $request['id_pago']
+                    ])->get();
+
+                $anuncio=Anuncios::where("id",$pg[0]->id_anuncio)->get();
+                
+                //dd($anuncio);
+                $comprador=User::where("id",$pg[0]->id_user_compra)->get();
+
+                $anunciante=User::where("id",$anuncio[0]->user_id)->get();
+                
+                $uadmin=User::role('admin')->get();
+                
+                foreach ($uadmin as $key => $admin) {
+
+                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$pg[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"ConfirmarTransferenciaBancaria");  
+
+                       
+                }
+
+
+
+                
+
+
+        return response()->json(['mensaje'=>"Hemos confirmado tu compra, gracias por confiar en ".config('app.name'),'respuesta'=>true]);
+    }
+
+    /**
+     * Funcion para confirmar el pago por parte de el cliente
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_pago_comprador_pago_efectivo(Request $request){
+        //registrar cambio de estado del pago
+
+
+        
+                DB::table("pagos")
+                          ->where("id",$request['id_pago'])
+                          ->update(["estado_pago"=>"APROBADA",
+                                    'transactionState'=>'Pago aceptado',
+                                    'transactionStatePayu'=>4,
+                                    'moneda_pago'=>'COP',
+                                    'updated_at'=>Carbon::now('America/Bogota')
+                                    
+                                  ]);
+                //enviar email notificacion del pago realizado al anunciante
+                //enviar mensaje de confirmacion al comprador            
+                $pg=pagos::where([
+                      'id' => $request['id_pago']
+                    ])->get();
+
+                $anuncio=Anuncios::where("id",$pg[0]->id_anuncio)->get();
+                
+                //dd($anuncio);
+                $comprador=User::where("id",$pg[0]->id_user_compra)->get();
+
+                $anunciante=User::where("id",$anuncio[0]->user_id)->get();
+
+                $uadmin=User::role('admin')->get();
+                
+                foreach ($uadmin as $key => $admin) {
+
+                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$pg[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"ConfirmarPagoExitosoPagoEnOficina");  
+
+                       
+                }
+
+                
+                          //aqui debo enviar los datos de confirmación a la cuenta de correo
+                NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$pg[0]->transactionId]],[],"CompraExitosa");
+                NotificacionAnuncio::dispatch(
+                                        $anunciante[0], 
+                                        [
+                                            $comprador[0],
+                                            $anuncio[0],
+                                            $pg[0],
+                                            ['url'=>config('app.url').'/ver_mis_ventas/'.$anunciante[0]->id.'?id='.$pg[0]->transactionId]],
+                                            $pg[0]->transation_value,
+                                            "CompraExitosaAnunciante");
+
+
+        return back()->with('success',"Hemos confirmado la compra del usuario ".$comprador[0]->name.", gracias por confiar en ".config('app.name').', recuerdale al usuario que hemos enviado la información al correo electrónico '.$comprador[0]->email);
+    }   
+    
+    /**
+     * Funcion para confirmar el pago hecho en la entidad bancaria
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_pago_comprador_entidad_bancaria(Request $request){
+        DB::table("pagos")
+                          ->where("id",$request['id_pago'])
+                          ->update([
+                            'estado_pago'=>'APROBADA'             
+                                  ]);
+                //enviar email notificacion del pago realizado al anunciante
+                //enviar mensaje de confirmacion al comprador            
+                $pg=pagos::where([
+                      'id' => $request['id_pago']
+                    ])->get();
+
+                $anuncio=Anuncios::where("id",$pg[0]->id_anuncio)->get();
+                
+                //dd($anuncio);
+                $comprador=User::where("id",$pg[0]->id_user_compra)->get();
+
+                $anunciante=User::where("id",$anuncio[0]->user_id)->get();
+
+                 $uadmin=User::role('admin')->get();
+                
+                foreach ($uadmin as $key => $admin) {
+
+                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$pg[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"ConfirmarPagoExitosoTransferenciaBancaria");  
+
+                       
+                }
+                NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$pg[0]->transactionId]],[],"CompraExitosa");
+
+
+                NotificacionAnuncio::dispatch(
+                                        $anunciante[0], 
+                                        [
+                                            $comprador[0],
+                                            $anuncio[0],
+                                            $pg[0],
+                                            ['url'=>config('app.url').'/ver_mis_ventas/'.$anunciante[0]->id.'?id='.$pg[0]->transactionId]],
+                                            $pg[0]->transation_value,
+                                            "CompraExitosaAnunciante");
+
+
+        return back()->with('success',"Hemos confirmado la compra del usuario ".$comprador[0]->name.", gracias por confiar en ".config('app.name').', recuerdale al usuario que hemos enviado la información al correo electrónico '.$comprador[0]->email);
+    }
 }

@@ -184,7 +184,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            @include('payu.recargas_payu')
+                            {{--@include('payu.recargas_payu')--}}
                           </div>
                         </div>
                       </div>

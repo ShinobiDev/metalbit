@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en METALBIT
+Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en {{config('app.name')}}
 
 ##Datos Comprador##
 # Usuario : 

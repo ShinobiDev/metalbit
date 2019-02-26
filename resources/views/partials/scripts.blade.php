@@ -167,8 +167,6 @@
           var cant=document.getElementById("num_cantidad_moneda_"+id).value;
           var t=parseFloat(cant)/parseFloat(val);
           
-          
-          
           var hs="hash_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+t;
           
           document.getElementById("hd_valor_venta_"+id).value=cant;
@@ -183,6 +181,34 @@
             document.getElementById("hdh5_total_"+id).value=t;
             document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".")+" ";
             document.getElementById("btn_comprar_"+id).style.display=''; 
+          });
+        }
+        /**
+         * Funcion para registrar la compra de monedas
+         * @param  {[type]} id          [description]
+         * @param  {[type]} cod_anuncio [description]
+         * @param  {[type]} moneda      [description]
+         * @return {[type]}             [description]
+         */
+        function registro_compra(id,cod_anuncio,moneda){
+          var val =document.getElementById("num_val_crip_moneda_"+id).value;
+          var cant=document.getElementById("num_cantidad_moneda_"+id).value;
+          var t=number_format(parseFloat(cant)/parseFloat(val),2,',','.')
+          
+          
+          var hs="registrar_compra_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+t;
+          
+          mostrar_cargando("msnEspera_compra_"+id,10,"Calculando valor ...");
+          peticion_ajax("get",hs,function(rs){
+            
+            console.log(rs);
+            document.getElementById("msnEspera_compra_"+id).innerHTML='';
+            document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(document.getElementById('num_cantidad_moneda_'+id).value,2,',','.');
+            
+            document.getElementById("h5Total_"+id).innerHTML=t;
+            document.getElementById("msnEspera_compra_"+id).style.display='none';
+            
+            
           });
         }
         /*funcion para cambiar el total de compra*/
@@ -387,7 +413,7 @@
     if('{{auth()->user()}}'!=null){
       if(e.value!=""){
           mostrar_cargando("sp_espera_cupon"+id,5,"Verificando cupón ...");
-          document.getElementById('btn_comprar_'+id).disabled=true;
+          //document.getElementById('btn_comprar_'+id).disabled=true;
           peticion_ajax('POST','canjear_cupon_compra',
                         function(e){
               //success
@@ -404,12 +430,12 @@
               document.getElementById('span_total_a_pagar_'+id).innerHTML=number_format(e.nuevo_valor,0,',','.');
 
               if(e.hash_payu!=false){
-                document.getElementById('hd_signature_'+id).value=e.hash_payu; 
-                document.getElementById('btn_comprar_'+id).disabled=false;
+                //document.getElementById('hd_signature_'+id).value=e.hash_payu; 
+                //document.getElementById('btn_comprar_'+id).disabled=false;
               }         
               
               if(e.recarga_gratis){
-                document.getElementById('btn_comprar_'+id).disabled=true;
+                //document.getElementById('btn_comprar_'+id).disabled=true;
                 document.getElementById('spTotalPagoTramite_'+id).innerHTML=number_format(0,0,',','.');
               }
 
@@ -457,5 +483,174 @@
         }
     }
     
+  }
+  var nuevo_valor_recarga=50;
+
+  function descontar_recargar(id_ventana,id_anuncio,costo,tipo){
+    
+   
+    
+       $("#"+id_ventana).addClass( "in" );
+     
+       $("#"+id_ventana).css({"display": "block", "padding-right": "21px"});
+
+         donde_estoy(id_anuncio); 
+         $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+         
+         if(tipo!=false){
+              
+              valor=document.getElementById("num_cantidad_moneda_"+id_anuncio)
+              if(valor!=null){
+                  valor=valor.value;    
+              }else{
+                  valor=0;
+              }
+              var tot=document.getElementById('hdh5_total_'+id_anuncio);
+              if(tot!=null){
+                  tot=tot.value;
+              }else{
+                  tor=0;
+              }
+            $.ajax({
+               type: "GET",
+               url: url_global+"/descontar_recargas/"+id_anuncio+"/"+costo+"/"+user_id.value+"/"+tipo+"/"+tot+"/"+valor,
+               dataType: "json",
+               success: function(result){           
+                 _id_anuncio=id_anuncio;
+                 if(result.ad_visible==false){
+                  $("#btn_info_"+id_anuncio).css({"display":"none"}); 
+                  $("#btn_compra_"+id_anuncio).css({"display":"none"}); 
+                  
+                 }else{
+                  if(tipo=="info"){
+                    //$("#btn_info_"+id_anuncio).css({"display":"none"}); 
+                    //$("#anc_"+id_anuncio).css({"display":""});
+                    //
+                    document.getElementById("anc_"+id_anuncio).style.display='block';
+                   document.getElementById("btn_info_"+id_anuncio).style.display='none';
+                    console.log(document.getElementById("anc_"+id_anuncio));
+                    console.log(document.getElementById("btn_info_"+id_anuncio));    
+                  }
+                  
+                 }               
+               },
+             error: function(err){
+                 console.log(err);
+             }
+           });
+         }
+            
+  }
+
+  function mostrar_ventana_login(id_ventana,id_anuncio,costo){
+    $("#"+id_ventana).css({"display": "block", "padding-right": "21px"});
+  }
+
+  function salir_modal(id){
+    $("#"+id).removeClass( "in" );
+      $("#"+id).css({"display": "none"}); 
+  }
+  $( "#btn_sin_recarga, #sp_salir_sin_recarga" ).click(function(){
+    // Holds the product ID of the clicked element
+    
+    
+  });
+  /**
+   * Funcion para enviar email con informacion de tipo de pago seleccionado
+   * @param  {[type]} e  [description]
+   * @param  {[type]} id [description]
+   * @return {[type]}    [description]
+   */
+  function validar_tipo_pago(e,id){
+    
+    document.getElementById('btn_comprar_'+id).disabled=false;
+    document.getElementById('hd_tipo_pago'+id).value=e.value;
+
+  }
+  function enviar_registro_compra(id){
+     mostrar_cargando("msnMensajeCompra_"+id,5,"Registrando medio de pago ...");
+    peticion_ajax('POST',
+                  'registrar_medio_de_pago',
+                  function(e){
+                    //success
+                    if(e.respuesta){
+                      
+                      document.getElementById('msnMensajeCompra_'+id).classList.remove('text-red');
+                      document.getElementById('msnMensajeCompra_'+id).  classList.add('text-success');    
+                      document.getElementById('msnMensajeCompra_'+id).innerHTML=e.mensaje;
+                    }else{
+                      document.getElementById('msnMensajeCompra_'+id).classList.remove('text-success');  
+                      document.getElementById('msnMensajeCompra_'+id).classList.add('text-red');  
+                      document.getElementById('msnMensajeCompra_'+id).innerHTML=e.mensaje;
+                    }
+                    
+                  }
+                  ,{ 
+                     //datos
+                     'ref_pago':document.getElementById('referenceCode_'+id).value,
+                     'id_anuncio':id,
+                     'usuario':id_usuario,
+                     'total_a_pagar':document.getElementById('hd_cupon'+id).value,
+                     'tipo_pago':document.getElementById('hd_tipo_pago'+id).value
+                   },
+                  function(e){
+                  //error
+                  document.getElementById('msnMensajeCompra_'+id).innerHTML="";
+                  document.getElementById('msnMensajeCompra_'+id).classList.remove('text-success');  
+                  document.getElementById('msnMensajeCompra_'+id).classList.add('text-red');
+                  
+                  console.log(e)
+                }); 
+  }
+  /**
+   * Funcion para enviar peticion ajax para confirmar pago 
+   * @return {[type]} [description]
+   */
+  function confirmar_pago_comprador(id){
+      var datos=$('#formConfirmarPago'+id).serializarFormulario();
+
+      mostrar_cargando("lblMsn"+id,5,"Procesando solicitud ...");
+      
+      if(datos.numero_transaccion==""){
+
+        document.getElementById('lblMsn'+id).classList.add('text-red');
+        console.log(document.getElementById('lblMsn'+id).classList);
+        document.getElementById('lblMsn'+id).innerHTML="Por favor ingresa un numero de transacción";
+
+        return false;
+        
+      }else if(datos.fecha_pago==""){
+        
+        document.getElementById('lblMsn'+id).classList.add('text-red');
+        document.getElementById('lblMsn'+id).innerHTML="Por favor ingresa una fecha del pago";
+        return false;
+      }
+
+      peticion_ajax('POST',
+                  'confirmar_pago_comprador',
+                  function(e){
+                    //success
+                   
+                    if(e.respuesta){
+                      document.getElementById('lblMsn'+id).classList.remove('text-red');
+                      document.getElementById('lblMsn'+id).classList.add('text-success');
+                      document.getElementById('lblMsn'+id).innerHTML=e.mensaje;
+
+                    }else{
+                      document.getElementById('lblMsn'+id).classList.remove('text-success');
+                      document.getElementById('lblMsn'+id).classList.add('text-red');
+                      document.getElementById('lblMsn'+id).innerHTML=e.mensaje;
+                    }
+                  }
+                  ,datos,
+                  function(e){
+                  //error
+                  
+                }); 
+
   }
 </script>

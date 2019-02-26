@@ -827,6 +827,8 @@ class UsersController extends Controller
         $pag=pagos::select('pagos.id as id_pago',
                            'pagos.estado_pago',
                            'pagos.transactionState',
+                           'pagos.metodo_pago',
+                           'pagos.numero_transaccion',
                            'pagos.transactionQuantity',
                            'pagos.transation_value',
                            'pagos.transactionId',
@@ -845,6 +847,7 @@ class UsersController extends Controller
                         )
                     ->join('anuncios','anuncios.id','pagos.id_anuncio')
                     ->join('users','users.id','anuncios.user_id')
+                    ->where('transactionState','<>','Visto')
                     ->get();
          $variables = DB::table('variables')->select('valor')->get();
 

@@ -31,6 +31,8 @@ Route::resource('anuncios', 'AnunciosController');
 
 Route::get("hash/{cod_ad}/{monto}/{moneda}","AnunciosController@hash");
 Route::get("hash_anuncio/{cod_ad}/{monto}/{moneda}/{id_usuario}/{cantidad}","AnunciosController@hash_anuncio");
+Route::get("registrar_compra_anuncio/{cod_ad}/{monto}/{moneda}/{id_usuario}/{cantidad}","AnunciosController@registrar_compra_anuncio");
+
 
 Route::resource('recargas','RecargasController');
 
@@ -111,6 +113,11 @@ Route::get('ver_cupones/{id}','CampaniasController@ver_cupones');
 Route::get('eliminar_cupon/{id}/{id_campana}',"CampaniasController@eliminar_cupones");
 Route::post('canjear_cupon_recarga',"CampaniasController@canjear_cupones_recargas");
 Route::post('canjear_cupon_compra',"CampaniasController@canjear_cupones_compras");
+Route::post('registrar_medio_de_pago','AnunciosController@registrar_medio_de_pago');
+Route::post("confirmar_pago_comprador","AnunciosController@confirmar_pago_comprador")->name('confirmar_pago_comprador');
+Route::post("confirmar_pago_comprador_pago_efectivo","AnunciosController@confirmar_pago_comprador_pago_efectivo")->name('confirmar_pago_comprador_pago_efectivo');
+Route::post("confirmar_pago_comprador_entidad_bancaria","AnunciosController@confirmar_pago_comprador_entidad_bancaria")->name('confirmar_pago_comprador_entidad_bancaria');
+
 
 
 
