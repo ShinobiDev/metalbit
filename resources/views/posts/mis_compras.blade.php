@@ -58,7 +58,7 @@
                                                 
                     <td>{{number_format($compra->transactionQuantity,2,',','.')}}</td>                                   
                     <td><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
-                    <td style="width: 300px">${{number_format($compra->transation_value,2,',','.')}}</td>
+                    <td style="width: 300px">${{number_format($compra->transaction_value_pagado,2,',','.')}}</td>
                     <td>{{$compra->moneda_pago}}</td>                                    
                     <td><strong class="text-success">{{$compra->transactionId or 'Pendiente de compra'}}</strong></td>                                     
                     <td>
@@ -102,12 +102,12 @@
                           <!--VENTANA MODAL-->
                          --}}
                       @endif  
-
+                      
                       @if($compra->transactionState=="Pendiente")
                           <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#info_medio_pago_{{$compra->id_pago}}">
                             Información medio de pago
                         </button>
-                        
+                       
                         @if($compra->metodo_pago=="Transferencia bancaria")
 
                           <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_{{$compra->id_pago}}">
@@ -124,7 +124,7 @@
           </table>
           {{--ventanas--}}
           @foreach ($mis_compras as $compra)
-                  
+                    
                       @if($compra->code_wallet=="SIN REGISTRAR" || $compra->image_wallet=="SIN REGISTRAR")
                        
                           <!--VENTANA MODAL-->
@@ -233,7 +233,7 @@
                           </div>--}}
                       @endif  
 
-                      @if($compra->transactionState=="Pendiente")
+                      @if($compra->transactionState=="Pendiente" )
                         <div class="modal fade" id="info_medio_pago_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
                                 <div class="modal-dialog" role="document">
@@ -246,9 +246,10 @@
                                     </div>
                                     <div class="modal-body">
                                             <i class="fa fa-info-circle"></i>
-                                            @if($compra->medio_pago=='Pago en efectivo')
+                                            @if($compra->metodo_pago=='Pago en efectivo')
                                               <h5>METALBIT S.A.S.</h5>
                                             <h5>Calle 114 #53 - 96 Bogotá D.C. - Colombia </h5>
+                                            <a target="_blank" href="https://www.google.com/maps/place/Cl.+114+%2353-96,+Bogot%C3%A1/@4.6992389,-74.0641402,17z/data=!4m13!1m7!3m6!1s0x8e3f9ace4c6c14bd:0xb2d45afe3cfaa98a!2sCl.+114+%2353-96,+Bogot%C3%A1!3b1!8m2!3d4.699174!4d-74.0641315!3m4!1s0x8e3f9ace4c6c14bd:0xb2d45afe3cfaa98a!8m2!3d4.699174!4d-74.0641315?hl=es">Ver ubicación</a>
                                             <h5>Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m. </h5>
 
                                             @else
@@ -268,7 +269,11 @@
                                 </div>
                             
                           </div>
-                          <div class="modal fade" id="confirmar_pago_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                         
+                      @endif
+
+                      @if($compra->transactionState=="Pendiente" && $compra->metodo_pago == 'Transaccion bancaria')
+                         <div class="modal fade" id="confirmar_pago_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
@@ -301,7 +306,7 @@
                                   </div>
                                 </div>
                             
-                          </div>
+                          </div> 
                       @endif
                   
           @endforeach  

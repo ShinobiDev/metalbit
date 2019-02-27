@@ -154,7 +154,7 @@ class User extends Authenticatable
                         "wallet"=>$pg[0]->code_wallet,
                         'wallet_qr'=>$pg[0]->image_wallet,
                         'quantity'=>$pg[0]->transactionQuantity,
-                        'value'=>$pg[0]->transation_value,
+                        'value'=>$pg[0]->transaction_value_pagado,
                         'state'=>$pg[0]->transactionState);
         }else{
           return array("respuesta"=>false,

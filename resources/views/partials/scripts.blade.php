@@ -63,15 +63,15 @@
         /**
          * Da formato a un número para su visualización
          *
-         * @param {(number|string)} numero Número que se mostrará
-         * @param {number} [decimales=null] Nº de decimales (por defecto, auto); admite valores negativos
+         * @param {(Number|string)} numero Número que se mostrará
+         * @param {Number} [decimales=null] Nº de decimales (por defecto, auto); admite valores negativos
          * @param {string} [separadorDecimal=","] Separador decimal
          * @param {string} [separadorMiles=""] Separador de miles
          * @returns {string} Número formateado o cadena vacía si no es un número
          *
          * @version 2014-07-18
          */
-        function number_format(numero, decimales, separador_decimal, separador_miles){ // v2007-08-06
+        function Number_format(numero, decimales, separador_decimal, separador_miles){ // v2007-08-06
             numero=parseFloat(numero);
             if(isNaN(numero)){
                 return "";
@@ -105,7 +105,7 @@
            var t=parseFloat(cant)/parseFloat(val);
            document.getElementById("h5Total_"+id).value=t;
            document.getElementById("hdh5_total_"+id).value=t;
-           document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".");
+           document.getElementById("h5Total_"+id).innerHTML=Number_format(t,2,",",".");
            document.getElementById("hd_valor_venta_"+id).value=cant;
            document.getElementById("btn_comprar_"+id).style.display='none'; 
 
@@ -114,29 +114,29 @@
           peticion_ajax("get","obtener_valor_moneda_valida/"+document.getElementById("id_crip_moneda_"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value,function(rs){
                
                 //Calculo d eel valor por la moneda seleccionada pero no autorizada
-                document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(cant,2,",",".");
+                document.getElementById("span_total_a_pagar_"+id).innerHTML=Number_format(cant,2,",",".");
 
                 console.log(rs);                                
                 console.log(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price));
-                console.log(number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "));
+                console.log(Number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "));
                 //cambio el valor de la moneda permitida
-                var tt=number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price*number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "),10,"."," "));
-                document.getElementById("stValorMonedaValida_"+id).innerHTML=number_format(tt,2,".",",")+" "+document.getElementById("hd_mon_valido_"+id).value;
+                var tt=Number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price*Number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "),10,"."," "));
+                document.getElementById("stValorMonedaValida_"+id).innerHTML=Number_format(tt,2,".",",")+" "+document.getElementById("hd_mon_valido_"+id).value;
                 
-                document.getElementById("hd_pre_mon_valido"+id).value=number_format(tt,2,".","");
+                document.getElementById("hd_pre_mon_valido"+id).value=Number_format(tt,2,".","");
 
 
 
 
-                var hs=cod_anuncio+"/"+number_format(tt,2,".","")+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
+                var hs=cod_anuncio+"/"+Number_format(tt,2,".","")+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
                 //peticion para el hash
                 peticion_ajax("get","hash_anuncio/"+hs,function(rs){
                         document.getElementById('msnEspera_'+id).innerHTML="";
                        
                         document.getElementById("hd_signature_"+id).value=rs.valor;
                         document.getElementById("currency_"+id).value=document.getElementById("hd_mon_valido_"+id).value;
-                        document.getElementById("hd_valor_venta_"+id).value=number_format(tt,2,".","");
-                        //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +number_format(t,2,",",".");
+                        document.getElementById("hd_valor_venta_"+id).value=Number_format(tt,2,".","");
+                        //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +Number_format(t,2,",",".");
                         document.getElementById("btn_comprar_"+id).style.display=''; 
  
                       });  
@@ -173,13 +173,13 @@
           document.getElementById("btn_comprar_"+id).style.display='none'; 
           mostrar_cargando("h5Total_"+id,10,"Calculando valor ...");
           peticion_ajax("get",hs,function(rs){
-            document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(cant,2,",",".");
+            document.getElementById("span_total_a_pagar_"+id).innerHTML=Number_format(cant,2,",",".");
 
             document.getElementById("hd_signature_"+id).value=rs.valor;
-            //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +number_format(t,2,",",".");
+            //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +Number_format(t,2,",",".");
             document.getElementById("h5Total_"+id).value=t;
             document.getElementById("hdh5_total_"+id).value=t;
-            document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".")+" ";
+            document.getElementById("h5Total_"+id).innerHTML=Number_format(t,2,",",".")+" ";
             document.getElementById("btn_comprar_"+id).style.display=''; 
           });
         }
@@ -191,9 +191,22 @@
          * @return {[type]}             [description]
          */
         function registro_compra(id,cod_anuncio,moneda){
+          document.getElementById("msnEspera_compra_"+id).classList.remove('text-red');
+          document.getElementById("msnEspera_compra_"+id).style.display='none';
+         
+          
+          if(Number(document.getElementById("num_cantidad_moneda_"+id).value) > Number(document.getElementById("num_cantidad_moneda_"+id).max) 
+           ||
+            Number(document.getElementById("num_cantidad_moneda_"+id).value) < Number(document.getElementById("num_cantidad_moneda_"+id).min)){
+
+            document.getElementById("msnEspera_compra_"+id).classList.add('text-red');
+            document.getElementById("msnEspera_compra_"+id).style.display='';
+            document.getElementById("msnEspera_compra_"+id).innerHTML='Debes ingresar un valor entre $'+Number_format(Number(document.getElementById("num_cantidad_moneda_"+id).min),2,',','.')+' y $'+Number_format(Number(document.getElementById("num_cantidad_moneda_"+id).max),2,',','.');
+            return false;
+          }
           var val =document.getElementById("num_val_crip_moneda_"+id).value;
           var cant=document.getElementById("num_cantidad_moneda_"+id).value;
-          var t=number_format(parseFloat(cant)/parseFloat(val),2,',','.')
+          var t=Number_format(parseFloat(cant)/parseFloat(val),2,',','.')
           
           
           var hs="registrar_compra_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+t;
@@ -202,8 +215,11 @@
           peticion_ajax("get",hs,function(rs){
             
             console.log(rs);
+            
+            document.getElementById("hdh5_total_"+id).value=t;
+            document.getElementById("hd_valor_venta_"+id).value=document.getElementById('num_cantidad_moneda_'+id).value;
             document.getElementById("msnEspera_compra_"+id).innerHTML='';
-            document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(document.getElementById('num_cantidad_moneda_'+id).value,2,',','.');
+            document.getElementById("span_total_a_pagar_"+id).innerHTML=Number_format(document.getElementById('num_cantidad_moneda_'+id).value,2,',','.');
             
             document.getElementById("h5Total_"+id).innerHTML=t;
             document.getElementById("msnEspera_compra_"+id).style.display='none';
@@ -217,7 +233,7 @@
           var cant=document.getElementById("num_cantidad_moneda_"+id).value;
           var t=parseFloat(val)*parseFloat(cant);
           document.getElementById("h5Total_"+id).value=t;
-          document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".")+" "+moneda;
+          document.getElementById("h5Total_"+id).innerHTML=Number_format(t,2,",",".")+" "+moneda;
           document.getElementById("hdh5_total_"+id).value=t;
         }
         /*funcion para cambiar el es estado de un anuncio*/
@@ -277,7 +293,7 @@
            var t=parseFloat(cant)/parseFloat(val);
            document.getElementById("h5Total_"+id_ad).value=t;
            document.getElementById("hdh5_total_"+id_ad).value=t;
-           document.getElementById("h5Total_"+id_ad).innerHTML=number_format(t,2,",",".");
+           document.getElementById("h5Total_"+id_ad).innerHTML=Number_format(t,2,",",".");
            document.getElementById("hd_valor_venta_"+id_ad).value=cant;
            
           var wallet;
@@ -425,9 +441,9 @@
               
               
               document.getElementById('hd_cupon'+id).value=e.nuevo_valor;
-              document.getElementById('hd_valor_venta_'+id).value=number_format(e.nuevo_valor,0,'','');
+              document.getElementById('hd_valor_venta_'+id).value=Number_format(e.nuevo_valor,0,'','');
               
-              document.getElementById('span_total_a_pagar_'+id).innerHTML=number_format(e.nuevo_valor,0,',','.');
+              document.getElementById('span_total_a_pagar_'+id).innerHTML=Number_format(e.nuevo_valor,0,',','.');
 
               if(e.hash_payu!=false){
                 //document.getElementById('hd_signature_'+id).value=e.hash_payu; 
@@ -436,7 +452,7 @@
               
               if(e.recarga_gratis){
                 //document.getElementById('btn_comprar_'+id).disabled=true;
-                document.getElementById('spTotalPagoTramite_'+id).innerHTML=number_format(0,0,',','.');
+                document.getElementById('spTotalPagoTramite_'+id).innerHTML=Number_format(0,0,',','.');
               }
 
               if(e.acumulable=='0'){
@@ -573,6 +589,8 @@
   }
   function enviar_registro_compra(id){
      mostrar_cargando("msnMensajeCompra_"+id,5,"Registrando medio de pago ...");
+     document.getElementById('hd_valor_venta_'+id).value=document.getElementById("num_cantidad_moneda_"+id).value;
+     
     peticion_ajax('POST',
                   'registrar_medio_de_pago',
                   function(e){
@@ -591,6 +609,7 @@
                   }
                   ,{ 
                      //datos
+                     'valor_real':document.getElementById('num_cantidad_moneda_'+id).value,
                      'ref_pago':document.getElementById('referenceCode_'+id).value,
                      'id_anuncio':id,
                      'usuario':id_usuario,

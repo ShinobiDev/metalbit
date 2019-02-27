@@ -209,7 +209,7 @@ class NotificationMail extends Mailable
                     break;  
             case "ConfirmarPagoExitosoTransferenciaBancaria":
                     //dd($this);
-                    return $this->markdown('emials.PagoExitosoTransaferenciaAdmin')
+                    return $this->markdown('emials.PagoExitosoTransferenciaAdmin')
                             ->subject('Se ha confirmado una transacción bancaria en '.config('app.name'));
 
 

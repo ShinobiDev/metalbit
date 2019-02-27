@@ -526,6 +526,11 @@ class UsersController extends Controller
                             "transation_value"=>$request["valor_moneda"],
                          ]);
 
+                         
+
+
+
+
                return response()->json(["mensaje"=>"Wallet actualizado, ya puedes realizar la compra","respuesta"=>true]);
 
         }/*else{
@@ -645,10 +650,10 @@ class UsersController extends Controller
                ->get();
 
 
-
+        $recarga=Recargas::where('user_id',$pg->user_id)->get();       
         
         //esta linea esta fallando y no me esta dejando retornar a la vista
-        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_ventas/'.$pg[0]->user_id]],0,"WalletRegistrado");
+        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_ventas/'.$pg[0]->user_id.'?id='.$pg[0]->transactionId]],$recarga[0]->valor,"WalletRegistrado");
 
         $pag=DB::table('pagos')->select('pagos.id as id_pago',
                            'pagos.transactionId',
@@ -710,8 +715,9 @@ class UsersController extends Controller
                ->join('anuncios','anuncios.id','pagos.id_anuncio')
                ->join('users','users.id','pagos.id_user_compra')
                ->get();
+
         //EVENTO PARA ENVIAR CORREO DE ENVIO DE MONEDA
-        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$pg[0]->id_user_compra]],0,"HashRegistrado");
+        NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$pg[0]->id_user_compra.'?id='.$pg[0]->transactionId]],0,"HashRegistrado");
 
         return back()->with('success','El código hash / txid ha sido registrado.');
     }
@@ -729,6 +735,7 @@ class UsersController extends Controller
                            'pagos.transactionState',
                            'pagos.transactionQuantity',
                            'pagos.transation_value',
+                           'pagos.transaction_value_pagado',                          
                            'pagos.id_anuncio',
                            'pagos.id_user_compra',
                            'pagos.metodo_pago',
@@ -786,6 +793,7 @@ class UsersController extends Controller
                            'pagos.transactionState',
                            'pagos.transactionQuantity',
                            'pagos.transation_value',
+                           'pagos.transaction_value_pagado',                          
                            'pagos.id_anuncio',
                            'pagos.id_user_compra',
                            'pagos.metodo_pago',
@@ -831,10 +839,12 @@ class UsersController extends Controller
                            'pagos.numero_transaccion',
                            'pagos.transactionQuantity',
                            'pagos.transation_value',
+                           'pagos.transaction_value_pagado',
                            'pagos.transactionId',
                            'pagos.code_wallet',
                            'pagos.hash_txid',
                            'pagos.moneda_pago',
+                           'pagos.updated_at',
                            'anuncios.tipo_anuncio',
                            'anuncios.nombre_cripto_moneda',
                            'anuncios.tipo_anuncio',

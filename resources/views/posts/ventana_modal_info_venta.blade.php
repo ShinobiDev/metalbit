@@ -23,12 +23,12 @@
 
                        @if($ad->transaccion_pendiente['value']!=0)
                        
-                        <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
+                        <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{number_format($ad->limite_min,0,'','')}}" max="{{number_format($ad->limite_max,0,'','')}}"
                              value="{{$ad->transaccion_pendiente['value']}}"
                              onchange="registro_compra('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
                        @else
-                        <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{$ad->limite_min}}" max="{{$ad->limite_max}}"
-                             value="{{$ad->limite_min}}"
+                        <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{number_format($ad->limite_min,0,'','')}}" max="{{number_format($ad->limite_max,0,'','')}}"
+                             value="{{number_format($ad->limite_min,0,'','')}}"
                              onchange="registro_compra('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
                        @endif
                        
@@ -51,12 +51,12 @@
                                 
                                 @if($ad->transaccion_pendiente['value']!=0)
                                   <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> 
-                                    {{$ad->transaccion_pendiente['quantity']}}
+                                    {{number_format($ad->transaccion_pendiente['quantity'],2,',','.')}}
 
                                  </span> {{$ad->cripto_moneda}}</h5>
                                 @else
                                   <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> 
-                                    {{$ad->limite_min / (float)$ad->precio_moneda_sf}}
+                                    {{number_format($ad->limite_min / (float)$ad->precio_moneda_sf,2,',','.')}}
 
                                  </span> {{$ad->cripto_moneda}}</h5>
                                 @endif
@@ -72,9 +72,11 @@
                         </div>
 
                        <input type="hidden" id="hd_moneda_original" value="{{$ad->moneda}}">
-                        
-                        <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
-
+                        @if($ad->transaccion_pendiente['quantity']!=0)
+                          <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{$ad->transaccion_pendiente['quantity']}}" >
+                        @else
+                          <input type="text" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
+                        @endif
                         {{--@if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
                             @include("posts.no_permitidos")
                             <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{ number_format(((float)number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.',''),2,'.',''))*number_format($ad->precio_moneda_usd_sf,2,'.','') ,2,'.','')
@@ -88,8 +90,8 @@
 
                           <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')" value="{{$ad->transaccion_pendiente['wallet']}}">
                           
-
-                          @if($ad->transaccion_pendiente['wallet_qr']!='SIN REGISTRAR')
+                          
+                          @if($ad->transaccion_pendiente['wallet_qr']!='SIN REGISTRAR' && $ad->transaccion_pendiente['wallet_qr']!='0')
                             <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
                           @endif
 
@@ -98,8 +100,9 @@
 
                           <label id="msnEspera_{{$ad->id}}"></label>
                         </div>
-                        @include('partials.redimir_cupon_venta',['c'=>$ad->id])
-
+                        @if($ad->transaccion_pendiente['state']=='Visto')
+                          @include('partials.redimir_cupon_venta',['c'=>$ad->id])
+                        @endif
 
                         <div class="modal-body">
                           @if(auth::user()->id!=$ad->id_anunciante)

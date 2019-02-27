@@ -3,11 +3,19 @@
   <input name="accountId"     type="hidden"   value="{{trim($ad->accountId)}}" >
   <input id="hd_description_{{$ad->id}}" name="description"   type="hidden"   value="{{trim($ad->descripcion)}}"  >
   
-  @if($ad->transaccion_pendiente['pago']!='0' && $ad->transaccion_pendiente['pago']!= null) 
-
-    <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="text"   value="{{$ad->transaccion_pendiente['pago']}}" >    
+  @if($ad->transaccion_pendiente['value']!='0' && $ad->transaccion_pendiente['value']!= null) 
+    @if($ad->transaccion_pendiente['pago']!=0 && $ad->transaccion_pendiente['pago'])
+      <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="hidden"   value="{{$ad->transaccion_pendiente['pago']}}" > 
+    @else
+      <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="hidden"   value="{{$ad->cod_anuncio}}" >
+    @endif
+     
+    <input id="hd_valor_venta_{{$ad->id}}" name="amount"        type="hidden"   value="{{number_format($ad->transaccion_pendiente['value'] ,0,'.','')
+    }}"   >  
   @else
-    <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="text"   value="{{$ad->cod_anuncio}}" >
+    <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="hidden"   value="{{$ad->cod_anuncio}}" >
+    <input id="hd_valor_venta_{{$ad->id}}" name="amount"        type="hidden"   value="{{number_format($ad->limite_min ,0,'.','')
+    }}"   >
   @endif
   
 
@@ -22,8 +30,9 @@
     <input id="currency_{{$ad->id}}" name="currency"     type="hidden"   value="{{trim($ad->moneda)}}" >
   
   @endif--}}
-  <input id="hd_valor_venta_{{$ad->id}}" name="amount"        type="hidden"   value="{{number_format($ad->limite_min ,0,'.','')
-    }}"   >
+
+
+  
   <input id="currency_{{$ad->id}}" name="currency"     type="hidden"   value="{{trim($ad->moneda)}}" >
 
   

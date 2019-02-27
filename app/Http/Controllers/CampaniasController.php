@@ -417,7 +417,7 @@ class CampaniasController extends Controller
                     $usuario->registrar_venta($request['ref_pago'],number_format($resultado['valor_dto'],0,'',''),$request['moneda_pago'],$request['usuario_que_redime'],$request['moneda_comprada']);
 
 
-                    return response()->json(['respuesta'=>true,'mensaje'=>'Cupón canjeado, ahora paga $ '.number_format($dto,0,',','.').' en lugar de $ '.number_format($request['valor_pago'],0,',','.')." por tu trámite." ,'nuevo_valor'=>$dto,'compra_gratis'=>false,'hash_payu'=>$hash,'acumulable'=>$resultado['acumulable']]);    
+                    return response()->json(['respuesta'=>true,'mensaje'=>'Cupón canjeado, ahora paga $ '.number_format($dto,0,',','.').' en lugar de $ '.number_format($request['valor_comprado'],0,',','.')." por tu trámite." ,'nuevo_valor'=>$dto,'compra_gratis'=>false,'hash_payu'=>$hash,'acumulable'=>$resultado['acumulable']]);    
                   }
             }else{
                 //pendiente implementacion para valores netos 
@@ -525,7 +525,7 @@ class CampaniasController extends Controller
                       $usuario=new User;
                       $usuario->registrar_recarga($request['usuario_que_redime'],$dto,$request['valor_pago']+$dto,$request['ref_pago']);
                       
-                      return response()->json(['respuesta'=>true,'mensaje'=>'Cupón canjeado, ahora paga $ '.number_format($request['valor_pago']-$dto,0,',','.').' en lugar de $ '.number_format($request['valor_pago'],0,',','.')." por tu trámite." ,'nuevo_valor'=>$request['valor_pago']-$dto,'nuevo_valor_compra'=>$request['valor_pago'],'compra_gratis'=>false,'hash_payu'=>$hash,'acumulable'=>$resultado['acumulable']]); 
+                      return response()->json(['respuesta'=>true,'mensaje'=>'Cupón canjeado, ahora paga $ '.number_format($request['valor_pago']-$dto,0,',','.').' en lugar de $ '.number_format($request['valor_comprado'],0,',','.')." por tu trámite." ,'nuevo_valor'=>$request['valor_pago']-$dto,'nuevo_valor_compra'=>$request['valor_pago'],'compra_gratis'=>false,'hash_payu'=>$hash,'acumulable'=>$resultado['acumulable']]); 
                     }
 
                     

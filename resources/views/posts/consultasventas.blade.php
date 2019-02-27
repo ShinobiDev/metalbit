@@ -96,7 +96,7 @@
                             @endif                                
 
                             @if($ad->btn_payu)  
-                              @if($ad->transaccion_pendiente['respuesta']==true)
+                              @if($ad->transaccion_pendiente['respuesta']==true && $ad->transaccion_pendiente['state']!='Visto')
                                 <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
                                   <i class="fa fa-money"> Compra pendiente</i>
                                   
