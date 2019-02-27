@@ -21,6 +21,7 @@
     {{--se crean las tablas de campañas--}}
          
         @foreach($campanias as $c)
+
         <tr>
           <td>{{$c->nombre_campania}}</td>
           @if($c->id_user==NULL)
@@ -80,6 +81,7 @@
       <th>Código cupon</th>
       <th>Fecha de canje</th>
       <th>Usuario que canjeo</th>
+      <th>Transaccion donde se redimio</th>
       <th>Valor descuento</th>
       
       <th>Acciones</th>
@@ -90,7 +92,9 @@
       
         @foreach($campanias as $c)
           @foreach($c->cupones as $cupon)
+
            @if($cupon->estado!='sin canjear')
+           
                <tr>
                 <td>{{$c->nombre_campania}}</td>
                 <td>{{$cupon->codigo_cupon}}</td>
@@ -102,10 +106,12 @@
                   @endif  
                 <td>
                   @if($cupon->fecha_canje!="")
-                    {{$cupon->usuario->nombre}}</td>
+                    <span class="text-success">{{$cupon->usuario->name}}</span>
                   @else
                     <span class="text-red">SIN CANJER</span>
-                  @endif  
+                  @endif
+                </td>    
+                <td>{{$cupon->transaccion_donde_se_aplico}}</td>
                   @if($c->tipo_de_descuento=='valor_neto')
                     <td>$ {{number_format($c->valor_de_descuento,0,',','.')}}</td>
                   @else

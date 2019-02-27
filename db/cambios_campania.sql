@@ -108,3 +108,4 @@ ALTER TABLE `pagos` ADD `pay_value` DECIMAL(10,2) NOT NULL AFTER `transation_val
 ALTER TABLE `pagos` CHANGE `pay_value` `pay_value` DECIMAL(10,2) NULL DEFAULT NULL; 
 ALTER TABLE `pagos` ADD `numero_transaccion` VARCHAR(256) NULL AFTER `porcentaje_pago`; 
 ALTER TABLE `pagos` ADD `transaction_value_pagado` DECIMAL(10,2) NULL AFTER `transation_value`; 
+ALTER TABLE `pagos` CHANGE `transaction_value_pagado` `transaction_value_pagado` VARCHAR(191) NULL DEFAULT NULL; 

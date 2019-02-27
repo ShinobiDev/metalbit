@@ -24,8 +24,8 @@
                        @if($ad->transaccion_pendiente['value']!=0)
                        
                         <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{number_format($ad->limite_min,0,'','')}}" max="{{number_format($ad->limite_max,0,'','')}}"
-                             value="{{$ad->transaccion_pendiente['value']}}"
-                             onchange="registro_compra('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
+                             value="{{$ad->transaccion_pendiente['value_transaccion']}}"
+                             onchange="registro_compra('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" readonly>
                        @else
                         <input type="number" id="num_cantidad_moneda_{{$ad->id}}" class="textinput textInput form-control" min="{{number_format($ad->limite_min,0,'','')}}" max="{{number_format($ad->limite_max,0,'','')}}"
                              value="{{number_format($ad->limite_min,0,'','')}}"

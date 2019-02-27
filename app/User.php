@@ -52,6 +52,9 @@ class User extends Authenticatable
 
       return $this->roles->pluck('display_name')->implode(', ');
     }
+    public function cupones(){
+        return $this->belongsTo('App\CuponesCampania','id_usuario_canje');
+    }  
     /**
      * Funcion para consulatr el horario de un usuario
      * @param  [type] $id  [description]
@@ -155,6 +158,7 @@ class User extends Authenticatable
                         'wallet_qr'=>$pg[0]->image_wallet,
                         'quantity'=>$pg[0]->transactionQuantity,
                         'value'=>$pg[0]->transaction_value_pagado,
+                        'value_transaccion'=>$pg[0]->transation_value,
                         'state'=>$pg[0]->transactionState);
         }else{
           return array("respuesta"=>false,
@@ -163,6 +167,7 @@ class User extends Authenticatable
                       'wallet_qr'=>'0',
                       'quantity'=>'0',
                       'value'=>'0',                      
+                      'value_transaccion'=>'0',
                       'state'=>0);
         }
     }

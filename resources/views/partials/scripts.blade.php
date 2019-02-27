@@ -589,7 +589,7 @@
   }
   function enviar_registro_compra(id){
      mostrar_cargando("msnMensajeCompra_"+id,5,"Registrando medio de pago ...");
-     document.getElementById('hd_valor_venta_'+id).value=document.getElementById("num_cantidad_moneda_"+id).value;
+    // document.getElementById('hd_valor_venta_'+id).value=document.getElementById("num_cantidad_moneda_"+id).value;
      
     peticion_ajax('POST',
                   'registrar_medio_de_pago',
@@ -613,7 +613,7 @@
                      'ref_pago':document.getElementById('referenceCode_'+id).value,
                      'id_anuncio':id,
                      'usuario':id_usuario,
-                     'total_a_pagar':document.getElementById('hd_cupon'+id).value,
+                     'total_a_pagar':document.getElementById('hd_valor_venta_'+id).value,
                      'tipo_pago':document.getElementById('hd_tipo_pago'+id).value
                    },
                   function(e){

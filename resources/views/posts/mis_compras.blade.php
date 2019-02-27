@@ -271,8 +271,8 @@
                           </div>
                          
                       @endif
-
-                      @if($compra->transactionState=="Pendiente" && $compra->metodo_pago == 'Transaccion bancaria')
+                      
+                      @if($compra->transactionState=="Pendiente" && $compra->metodo_pago == 'Transferencia bancaria')
                          <div class="modal fade" id="confirmar_pago_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
                                 <div class="modal-dialog" role="document">

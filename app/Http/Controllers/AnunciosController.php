@@ -631,8 +631,8 @@ class AnunciosController extends Controller
                                   ]);
                 //enviar email notificacion del pago realizado al anunciante
                 //enviar mensaje de confirmacion al comprador            
-                $pg=pagos::where([
-                      'id' => $request['id_pago']
+                $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
+                      'pagos.id' => $request['id_pago']
                     ])->get();
 
                 $anuncio=Anuncios::where("id",$pg[0]->id_anuncio)->get();
@@ -641,7 +641,7 @@ class AnunciosController extends Controller
                 $comprador=User::where("id",$pg[0]->id_user_compra)->get();
 
                 $anunciante=User::where("id",$anuncio[0]->user_id)->get();
-                
+                //dd($comprador[0],$anunciante[0]);
                 $uadmin=User::role('admin')->get();
                 
                 foreach ($uadmin as $key => $admin) {
@@ -732,8 +732,8 @@ class AnunciosController extends Controller
                                   ]);
                 //enviar email notificacion del pago realizado al anunciante
                 //enviar mensaje de confirmacion al comprador            
-                $pg=pagos::where([
-                      'id' => $request['id_pago']
+                $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
+                      'pagos.id' => $request['id_pago']
                     ])->get();
 
                 $anuncio=Anuncios::where("id",$pg[0]->id_anuncio)->get();

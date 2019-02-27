@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{config('app.name')}}, por parte de el comprador, es importante que verifiques la transacción en la entidad de pago.
+Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{config('app.name')}}, por parte de el comprador, es importante que verifiques la transacción con la entidad de pago.
 
 
 ##Datos Vendedor##
@@ -42,3 +42,4 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{co
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}
 @endcomponent
+	
