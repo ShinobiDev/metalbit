@@ -90,8 +90,9 @@
                     <td>{{$transaccion->moneda_pago}}</td>
                     <td><strong>{{$transaccion->transactionId}}</strong></td>
                     <td><strong>{{$transaccion->updated_at}}</strong></td>
+                    
                     @if($transaccion->metodo_pago=='Transferencia bancaria')
-                      <td><strong class="text-success">{{$transaccion->numero_transaccion}}</strong></td>
+                      <td><strong class="text-success">{{$transaccion->numero_transaccion or 'Pendiente'}}</strong></td>
                     @else
                       <td>{{$transaccion->metodo_pago}}</td>
                     @endif
@@ -107,6 +108,7 @@
                     <td>
 
                       @if($transaccion->metodo_pago=="Pago en efectivo")
+
                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_cliente{{$transaccion->id_pago}}">
                             confirmar pago del comprador
                         </button>

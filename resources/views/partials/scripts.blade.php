@@ -209,19 +209,19 @@
           var t=Number_format(parseFloat(cant)/parseFloat(val),2,',','.')
           
           
-          var hs="registrar_compra_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+t;
+          var hs="registrar_compra_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+Number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
           
           mostrar_cargando("msnEspera_compra_"+id,10,"Calculando valor ...");
           peticion_ajax("get",hs,function(rs){
             
             console.log(rs);
             
-            document.getElementById("hdh5_total_"+id).value=t;
+            document.getElementById("hdh5_total_"+id).value=Number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
             document.getElementById("hd_valor_venta_"+id).value=document.getElementById('num_cantidad_moneda_'+id).value;
             document.getElementById("msnEspera_compra_"+id).innerHTML='';
             document.getElementById("span_total_a_pagar_"+id).innerHTML=Number_format(document.getElementById('num_cantidad_moneda_'+id).value,2,',','.');
             
-            document.getElementById("h5Total_"+id).innerHTML=t;
+            document.getElementById("h5Total_"+id).innerHTML=Number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
             document.getElementById("msnEspera_compra_"+id).style.display='none';
             
             
@@ -429,7 +429,7 @@
     if('{{auth()->user()}}'!=null){
       if(e.value!=""){
           mostrar_cargando("sp_espera_cupon"+id,5,"Verificando cupón ...");
-          //document.getElementById('btn_comprar_'+id).disabled=true;
+          
           peticion_ajax('POST','canjear_cupon_compra',
                         function(e){
               //success
@@ -494,7 +494,7 @@
           }); 
         }else{
           document.getElementById('sp_espera_cupon'+id).innerHTML="";
-          document.getElementById('btn_comprar_'+id).disabled=false;
+          
           
         }
     }

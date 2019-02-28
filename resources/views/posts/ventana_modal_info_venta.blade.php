@@ -72,6 +72,7 @@
                         </div>
 
                        <input type="hidden" id="hd_moneda_original" value="{{$ad->moneda}}">
+                        
                         @if($ad->transaccion_pendiente['quantity']!=0)
                           <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{$ad->transaccion_pendiente['quantity']}}" >
                         @else
@@ -100,7 +101,7 @@
 
                           <label id="msnEspera_{{$ad->id}}"></label>
                         </div>
-                        @if($ad->transaccion_pendiente['state']=='Visto')
+                        @if($ad->transaccion_pendiente['state']=='Visto' || $ad->transaccion_pendiente['state']=='0')
                           @include('partials.redimir_cupon_venta',['c'=>$ad->id])
                         @endif
 

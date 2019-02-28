@@ -16,6 +16,8 @@ Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en {{co
 
 ## Resumen Oferta ##
 
+# Número de transacción
+#{{$ad[2]->transactionId}}
 
 
 @component('mail::table')
@@ -24,7 +26,7 @@ Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en {{co
     | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{number_format($ad[2]->transation_value,'0',',','.')}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
-@if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
+@if($ad[2]->code_wallet=="SIN REGISTRAR" && $ad[2]->image_wallet=="SIN REGISTRAR")
 	## Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos ##
 @else
 	{{--@if($ad[2]->code_wallet!="")

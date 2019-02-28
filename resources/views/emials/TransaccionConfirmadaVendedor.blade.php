@@ -26,7 +26,7 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{co
 
 
 
-#[Ver transacciones][1]
+#[Ver venta][1]
 [1]:{{$ad[2]['url']}}
 
 

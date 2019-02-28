@@ -16,10 +16,14 @@ Estimad@ {{$user->name}}, hemos registrado un deseo de compra en {{config('app.n
 
 ## Resumen Oferta ##
 
+# Número de transacción
+#{{$ad[2]->transactionId}}
+
+
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
-    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{number_format($ad[2]->transation_value,0,',','.')}} | {{$ad[1]->nombre_moneda}} | 
+    | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{number_format($ad[2]->transaction_value_pagado,0,',','.')}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
 #Presiona este link para ver la certificación bancaria donde podrás realizar el pago de tu compra en {{config('app.name')}}

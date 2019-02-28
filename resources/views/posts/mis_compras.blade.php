@@ -50,6 +50,10 @@
                         <span class="text-danger">Pendiente por pago</span>
                       @elseif($compra->transactionState == 'Pago confirmado por el anunciante' || $compra->transactionState == 'Pago hecho al anunciante')  
                         <span class="text-success">Transacción finalizada</span>
+                      @elseif($compra->transactionState == 'Pago Aceptado')
+                          
+                            <span class="text-success">{{$compra->transactionState}}</span>
+
                       @else
                         <span class="text-success">{{$compra->transactionState}}</span>
                       @endif
@@ -80,7 +84,7 @@
                     <td>
                       
 
-                      @if($compra->code_wallet=="SIN REGISTRAR" || $compra->image_wallet=="SIN REGISTRAR")
+                      @if($compra->code_wallet=="SIN REGISTRAR" && $compra->image_wallet=="SIN REGISTRAR")
                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
                             Registrar código wallet
                         </button>
@@ -89,7 +93,7 @@
                       @else
 
                         @if($compra->transactionState=="Moneda Envíada")
-                          <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                          <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#confirmar_transaccion{{$compra->id_pago}}">
                               Confirmar transacción
                             </button>
                            
@@ -125,7 +129,7 @@
           {{--ventanas--}}
           @foreach ($mis_compras as $compra)
                     
-                      @if($compra->code_wallet=="SIN REGISTRAR" || $compra->image_wallet=="SIN REGISTRAR")
+                      @if($compra->code_wallet=="SIN REGISTRAR" && $compra->image_wallet=="SIN REGISTRAR")
                        
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -174,7 +178,8 @@
 
                         @if($compra->transactionState=="Moneda Envíada")
                          <!--VENTANA MODAL-->
-                            <div class="modal fade" id="code_wallet_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                            <div class="modal fade" id="confirmar_transaccion{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
@@ -201,6 +206,7 @@
                                     </div>
                                   </div>
                                 </div>
+                            }
                             
                           </div>
                            <!--FIN VENTA MODAL-->

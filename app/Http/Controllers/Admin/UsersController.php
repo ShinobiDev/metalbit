@@ -649,8 +649,8 @@ class UsersController extends Controller
                ->join('users','users.id','anuncios.user_id')
                ->get();
 
-
-        $recarga=Recargas::where('user_id',$pg->user_id)->get();       
+        //dd($pg[0]->user_id);       
+        $recarga=Recargas::where('user_id',$pg[0]->user_id)->get();       
         
         //esta linea esta fallando y no me esta dejando retornar a la vista
         NotificacionAnuncio::dispatch($pg[0], [auth()->user(),$pg[0],['url'=>config('app.url').'/ver_mis_ventas/'.$pg[0]->user_id.'?id='.$pg[0]->transactionId]],$recarga[0]->valor,"WalletRegistrado");

@@ -140,13 +140,13 @@ class NotificationMail extends Mailable
             case 'WalletRegistrado':
 
                 return $this->markdown('emials.WalletRegistrado')
-                            ->subject('Un reciente comprador a registrado un wallet '. config('app.name'));
+                            ->subject('Un reciente comprador ha registrado un wallet '. config('app.name'));
                 # code...
                 break;
             case 'HashRegistrado':
                 //dd($this);
                 return $this->markdown('emials.HashRegistrado')
-                            ->subject('Un comprador ha registrado el hash de la transacción de criptomonedas  '. config('app.name'));
+                            ->subject('Un vendedor ha registrado el hash de la transacción de criptomonedas  '. config('app.name'));
                 # code...
                 break;   
             case 'TransaccionConfirmadaAdmin':

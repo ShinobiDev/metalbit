@@ -332,9 +332,9 @@ class CampaniasController extends Controller
                        
                        $anunciante=User::where('id',$anuncio[0]->user_id)->first(); 
 
-                        $pg=pagos::where([
-                             'transactionId' => $request['codigo_anuncio']
-                          ])->get();
+                         $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
+                          'transactionId' => $request['codigo_anuncio']
+                        ])->get();
                 
                        NotificacionAnuncio::dispatch($comprador, [$anunciante,$anuncio[0],$pg[0],['url'=>config('app.url').'/admin/ver_mis_compras/'.$comprador->id.'?id='.$request['codigo_anuncio']]],[],"CompraExitosa");
                         $recar=Recargas::where("user_id",$anunciante->id)->first();
@@ -376,9 +376,9 @@ class CampaniasController extends Controller
                             ->get();
                        $anunciante=User::where('id',$anuncio[0]->user_id)->first(); 
 
-                       $pg=pagos::where([
-                             'transactionId' => $request['codigo_anuncio']
-                          ])->get();
+                       $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
+                          'transactionId' => $request['codigo_anuncio']
+                        ])->get();
                        
                        NotificacionAnuncio::dispatch($comprador, [$anunciante,$anuncio[0],$pg[0],['url'=>config('app.url').'/admin/ver_mis_compras/'.$comprador->id.'?id='.$request['codigo_anuncio']]],[],"CompraExitosa");
                         $recar=Recargas::where("user_id",$anunciante->id)->first();
@@ -423,13 +423,13 @@ class CampaniasController extends Controller
                 //pendiente implementacion para valores netos 
                     $dto=$resultado['dto'];
                     
-                    if($request['valor_pago']==$camp->valor_de_descuento){
-
+                    if((float)$request['valor_pago']==(float)$camp->valor_de_descuento){
+                      
                      
                       $cupon="100% de descuento en el valor del trámite";
                        DB::table('pagos')
                                 ->insert(['transactionId'=>$request['codigo_anuncio'],
-                                          'transactionState'=>4,
+                                          'transactionState'=>'Pago Aceptado',
                                           'transactionQuantity'=>$request['moneda_comprada'],
                                           'transation_value'=>$request['valor_pago'],
                                           'id_anuncio'=>$request['id_anuncio'],
@@ -447,11 +447,12 @@ class CampaniasController extends Controller
                             ->get();
                        $anunciante=User::where('id',$anuncio[0]->user_id)->first(); 
 
-                       $pg=pagos::where([
-                             'transactionId' => $request['codigo_anuncio']
-                          ])->get();
                        
-                       NotificacionAnuncio::dispatch($comprador, [$anunciante,$anuncio[0],$pg[0],['url'=>config('app.url').'/admin/ver_mis_compras/'.$comprador->id.'?id='.$request['codigo_anuncio']]],[],"CompraExitosa");
+                       $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
+                          'transactionId' => $request['codigo_anuncio']
+                        ])->get();
+                        
+                       NotificacionAnuncio::dispatch($comprador, [$anunciante,$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador->id.'?id='.$request['codigo_anuncio']]],[],"CompraExitosa");
                        $recar=Recargas::where("user_id",$anunciante->id)->first();
                      
                         NotificacionAnuncio::dispatch($anunciante, 
@@ -459,7 +460,7 @@ class CampaniasController extends Controller
                                                          $comprador,
                                                          $anuncio[0],
                                                          $pg[0],
-                                                         ['url'=>config('app.url').'/admin/ver_mis_ventas/'.$anunciante->id.'?id='.$request['codigo_anuncio'],
+                                                         ['url'=>config('app.url').'/ver_mis_ventas/'.$anunciante->id.'?id='.$request['codigo_anuncio'],
                                                           
                                                          ],
                                                          ['cupon'=>$cupon]
@@ -495,9 +496,9 @@ class CampaniasController extends Controller
                             ->get();
                        $anunciante=User::where('id',$anuncio[0]->id_user)->first(); 
 
-                        $pg=pagos::where([
-                             'transactionId' => $request['codigo_anuncio']
-                          ])->get();
+                        $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
+                          'transactionId' => $request['codigo_anuncio']
+                        ])->get();
             
                        NotificacionAnuncio::dispatch($comprador, [$anunciante,$anuncio[0],$pg[0],['url'=>config('app.url').'/admin/ver_mis_compras/'.$comprador->id.'?id='.$request['codigo_anuncio']]],[],"CompraExitosa");
                         $recar=Recargas::where("user_id",$anunciante->id)->first();

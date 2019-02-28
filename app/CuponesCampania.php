@@ -469,7 +469,7 @@ class CuponesCampania extends Model
                         return array(['respuesta'=>true,'mensaje'=>'Gracias, por redimir este cupón, este cupón es acumulable con otros, recuerda que para redimir otros cupones, estos no deben superar el monto del valor total de tu pago.','acumulable'=>$c->es_acumulable]);
                         
                       }else if($c->cupones_canjeados == $c->numero_de_cupones ){
-                        dd("---");
+                        
                         Campania::where("id",$id_campania)->update([
                                     'estado_campania'=>'CERRADA'
                                   ]);

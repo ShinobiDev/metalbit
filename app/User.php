@@ -148,9 +148,10 @@ class User extends Authenticatable
                 //['pagos.transactionId','!=',null]
             ])
             ->get();
-        //dd($pg);
+        
         if(count($pg)>0){
-          //dd($pg[0]);   
+          //var_dump($pg[0]->id_anuncio);   
+          //var_dump($pg[0]->transactionState);   
           //dd($pg);   
           return array("respuesta"=>true,
                         "pago"=>$pg[0]->transactionId,
@@ -159,7 +160,8 @@ class User extends Authenticatable
                         'quantity'=>$pg[0]->transactionQuantity,
                         'value'=>$pg[0]->transaction_value_pagado,
                         'value_transaccion'=>$pg[0]->transation_value,
-                        'state'=>$pg[0]->transactionState);
+                        'state'=>$pg[0]->transactionState,
+                        'type'=>$pg[0]->metodo_pago);
         }else{
           return array("respuesta"=>false,
                       "pago"=>"0",
@@ -168,7 +170,8 @@ class User extends Authenticatable
                       'quantity'=>'0',
                       'value'=>'0',                      
                       'value_transaccion'=>'0',
-                      'state'=>0);
+                      'state'=>'0',
+                      'type'=>'0');
         }
     }
     public function registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado){

@@ -423,7 +423,7 @@ class AnunciosController extends Controller
      * @return [type]       [description]
      */
     public function registrar_compra_anuncio($a,$p,$m,$id_u,$cantidad){
-
+            //dd($a,$p,$m,$id_u,$cantidad);
          $u=new User;
          return $u->registrar_venta($a,$p,$m,$id_u,$cantidad);
     }

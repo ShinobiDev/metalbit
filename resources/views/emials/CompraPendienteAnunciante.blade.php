@@ -15,6 +15,9 @@ Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en META
 
 ## Resumen Oferta ##
 
+# Número de transacción
+#{{$ad[2]->transactionId}}
+
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
@@ -22,7 +25,7 @@ Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en META
 @endcomponent
 
 
-@if($ad[2]->code_wallet=="" && $ad[2]->image_wallet=="")
+@if($ad[2]->code_wallet=="SIN REGISTRAR" && $ad[2]->image_wallet=="SIN REGISTRAR")
 	## Esta pendiente el registro del código wallet, por parte del comprador una vez este realice el debido registro, te informaremos para que puedas hacer la transacción ##
 @endif
 
