@@ -26,6 +26,7 @@ class RecargasController extends Controller
 
         $recargas = Recargas::select('users.id',
                                     'users.name',
+                                    'users.email',
                                     'recargas.status',
                                     'recargas.valor',
                                     'recargas.updated_at',
@@ -38,9 +39,11 @@ class RecargasController extends Controller
              //dd($recargas[0]->id);
         $mi_lista=Recargas::select('users.id',
                                     'users.name',
+                                    'detalle_recargas.id as id_recarga',
                                     'detalle_recargas.tipo_recarga',
                                     'detalle_recargas.estado_detalle_recarga',
                                     'detalle_recargas.valor_recarga',
+                                    'detalle_recargas.valor_pagado',
                                     'detalle_recargas.referencia_pago',
                                     'detalle_recargas.referencia_pago_pay_u',
                                     'detalle_recargas.created_at')
@@ -306,5 +309,139 @@ class RecargasController extends Controller
 
         return $u->registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado);
         
+    }
+
+     /**
+     * Funcion para confirmar el pago por parte de el cliente
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_pago_recarga(Request $request){
+        //registrar cambio de estado del pago
+                DB::table("detalle_recargas")
+                          ->where("id",$request['id_pago'])
+                          ->update([
+                                    'estado_detalle_recarga'=> 'PENDIENTE APROBACION', 
+                                    'updated_at'=>Carbon::now('America/Bogota'),
+                                    'referencia_pago_pay_u'=>$request['numero_transaccion']
+                                  ]);
+                $recarga=DB::table('detalle_recargas')->where('id',$request['id_pago'])->get();
+
+                
+                $anunciante=User::where("id",$recarga[0]->id_user)->get();
+                //dd($anunciante[0],$recarga[0]);
+                $uadmin=User::role('admin')->get();
+                
+                foreach ($uadmin as $key => $admin) {
+
+                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$recarga[0] ,['url'=>config('app.url').'/recargas']],0,"ConfirmarRecargaTransferenciaBancaria");  
+
+                       
+                }
+
+
+
+                
+
+
+        return response()->json(['mensaje'=>"Hemos confirmado tu recarga, uno de nuestros agentes confirmara tu pago gracias por confiar en ".config('app.name').'','respuesta'=>true]);
+    }
+
+     /**
+     * Funcion para confirmar el pago hecho en la entidad bancaria
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_pago_recarga_entidad_bancaria(Request $request){
+        //dd($request);
+        DB::table("detalle_recargas")
+                          ->where("id",$request['id_pago'])
+                          ->update([
+                            'estado_detalle_recarga'=>'APROBADA',
+                            'updated_at'=>Carbon::now('America/Bogota')             
+                                  ]);
+                //enviar email notificacion del pago realizado al anunciante
+                //enviar mensaje de confirmacion al comprador            
+                $dtr=DB::table('detalle_recargas')
+                          ->where("id",$request['id_pago'])
+                          ->first();
+                $cliente=User::where('id',$dtr->id_user)->first();
+                Recargas::where("user_id",$dtr->id_user)->increment('valor',$dtr->valor_recarga);
+
+                Recargas::registrar_bonificacion($cliente->id,$dtr->valor_recarga,$cliente->name);
+                
+                $recarga = Recargas::where("user_id",$dtr->id_user)->get();
+
+                
+
+                
+
+                NotificacionAnuncio::dispatch($cliente, [],[$recarga[0],["valor"=>$dtr->valor_recarga,"fecha"=>date('Y-m-d')]],"RecargaExitosa");
+
+            
+
+
+        return back()->with('success',"Hemos confirmado la recarga del usuario ".$cliente->name." recuerdale al usuario que hemos enviado la información al correo electrónico, ".$cliente->email." gracias por confiar en ".config('app.name'));
+    }
+    /**
+     * Funcion para confirmar el pago hecho en la entidad bancaria
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_pago_recarga_efectivo(Request $request){
+        
+                $dtr=DB::table("detalle_recargas")
+                          ->where([
+                                ["id_user",$request['id_pago']],
+                                ['estado_detalle_recarga','PENDIENTE APROBACION'],
+                                ['metodo_pago','Pago en efectivo']
+                            ])->get();
+                       
+                if(count($dtr)>0){
+                    DB::table("detalle_recargas")
+                          ->where([
+                                ["user_id",$request['id_pago']],
+                                ['estado_detalle_recarga','PENDIENTE APROBACION']
+                            ])
+                          ->take(1)
+                          ->update([
+                            'estado_detalle_recarga'=>'APROBADA',
+                            'updated_at'=>Carbon::now('America/Bogota'),
+                            'valor_pagado'=>$request['valor_a_recargar']             
+                                  ]);
+                    $dtr=DB::table('detalle_recargas')
+                          ->where("id",$request['id_pago'])
+                          ->first();
+                }else{
+                      $id=DB::table("detalle_recargas")
+                            ->insertGetId([
+                             'id_user'=>$request['id_pago'],       
+                            'tipo_recarga'=>'PAGO',    
+                            'referencia_pago'=>'rec-'.time()."-".date("s"),    
+                            'referencia_pago_pay_u'=>'rec-'.time()."-".date("s"),    
+                            'estado_detalle_recarga'=>'APROBADA',
+                            'created_at'=>Carbon::now('America/Bogota'),
+                            'updated_at'=>Carbon::now('America/Bogota'),
+                            'valor_pagado'=>$request['valor_a_recargar'],
+                            'valor_recarga'=>$request['valor_a_recargar']             
+                                  ]);  
+                    $dtr=DB::table('detalle_recargas')
+                          ->where("id",$id)
+                          ->first();
+                }
+
+
+               
+                 
+                $cliente=User::where('id',$dtr->id_user)->first();
+                Recargas::where("user_id",$dtr->id_user)->increment('valor',$dtr->valor_recarga);
+
+                Recargas::registrar_bonificacion($cliente->id,$dtr->valor_recarga,$cliente->name);
+                $recarga = Recargas::where("user_id",$dtr->id_user)->get();
+
+                NotificacionAnuncio::dispatch($cliente, [],[$recarga[0],["valor"=>$dtr->valor_recarga,"fecha"=>date('Y-m-d')]],"RecargaExitosa");
+
+        return back()->with('success',"Hemos registrado la recarga del usuario ".$cliente->name." recuerdale al usuario que hemos enviado la información al correo electrónico, ".$cliente->email." gracias por confiar en ".config('app.name'));
+    
     }
 }

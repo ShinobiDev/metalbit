@@ -71,7 +71,7 @@
          *
          * @version 2014-07-18
          */
-        function Number_format(numero, decimales, separador_decimal, separador_miles){ // v2007-08-06
+        function number_format(numero, decimales, separador_decimal, separador_miles){ // v2007-08-06
             numero=parseFloat(numero);
             if(isNaN(numero)){
                 return "";
@@ -105,7 +105,7 @@
            var t=parseFloat(cant)/parseFloat(val);
            document.getElementById("h5Total_"+id).value=t;
            document.getElementById("hdh5_total_"+id).value=t;
-           document.getElementById("h5Total_"+id).innerHTML=Number_format(t,2,",",".");
+           document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".");
            document.getElementById("hd_valor_venta_"+id).value=cant;
            document.getElementById("btn_comprar_"+id).style.display='none'; 
 
@@ -114,29 +114,29 @@
           peticion_ajax("get","obtener_valor_moneda_valida/"+document.getElementById("id_crip_moneda_"+id).value+"/"+document.getElementById("hd_mon_valido_"+id).value,function(rs){
                
                 //Calculo d eel valor por la moneda seleccionada pero no autorizada
-                document.getElementById("span_total_a_pagar_"+id).innerHTML=Number_format(cant,2,",",".");
+                document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(cant,2,",",".");
 
                 console.log(rs);                                
                 console.log(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price));
-                console.log(Number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "));
+                console.log(number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "));
                 //cambio el valor de la moneda permitida
-                var tt=Number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price*Number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "),10,"."," "));
-                document.getElementById("stValorMonedaValida_"+id).innerHTML=Number_format(tt,2,".",",")+" "+document.getElementById("hd_mon_valido_"+id).value;
+                var tt=number_format(parseFloat(rs.quotes[document.getElementById("hd_mon_valido_"+id).value].price*number_format(parseFloat(document.getElementById("hdh5_total_"+id).value),2,"."," "),10,"."," "));
+                document.getElementById("stValorMonedaValida_"+id).innerHTML=number_format(tt,2,".",",")+" "+document.getElementById("hd_mon_valido_"+id).value;
                 
-                document.getElementById("hd_pre_mon_valido"+id).value=Number_format(tt,2,".","");
+                document.getElementById("hd_pre_mon_valido"+id).value=number_format(tt,2,".","");
 
 
 
 
-                var hs=cod_anuncio+"/"+Number_format(tt,2,".","")+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
+                var hs=cod_anuncio+"/"+number_format(tt,2,".","")+"/"+document.getElementById("hd_mon_valido_"+id).value+"/"+id_usuario+"/"+t;
                 //peticion para el hash
                 peticion_ajax("get","hash_anuncio/"+hs,function(rs){
                         document.getElementById('msnEspera_'+id).innerHTML="";
                        
                         document.getElementById("hd_signature_"+id).value=rs.valor;
                         document.getElementById("currency_"+id).value=document.getElementById("hd_mon_valido_"+id).value;
-                        document.getElementById("hd_valor_venta_"+id).value=Number_format(tt,2,".","");
-                        //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +Number_format(t,2,",",".");
+                        document.getElementById("hd_valor_venta_"+id).value=number_format(tt,2,".","");
+                        //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +number_format(t,2,",",".");
                         document.getElementById("btn_comprar_"+id).style.display=''; 
  
                       });  
@@ -173,13 +173,13 @@
           document.getElementById("btn_comprar_"+id).style.display='none'; 
           mostrar_cargando("h5Total_"+id,10,"Calculando valor ...");
           peticion_ajax("get",hs,function(rs){
-            document.getElementById("span_total_a_pagar_"+id).innerHTML=Number_format(cant,2,",",".");
+            document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(cant,2,",",".");
 
             document.getElementById("hd_signature_"+id).value=rs.valor;
-            //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +Number_format(t,2,",",".");
+            //document.getElementById("hd_description_"+id).value=document.getElementById("hd_description_"+id).value.split(" cant # " )[0]+" cant # " +number_format(t,2,",",".");
             document.getElementById("h5Total_"+id).value=t;
             document.getElementById("hdh5_total_"+id).value=t;
-            document.getElementById("h5Total_"+id).innerHTML=Number_format(t,2,",",".")+" ";
+            document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".")+" ";
             document.getElementById("btn_comprar_"+id).style.display=''; 
           });
         }
@@ -201,27 +201,27 @@
 
             document.getElementById("msnEspera_compra_"+id).classList.add('text-red');
             document.getElementById("msnEspera_compra_"+id).style.display='';
-            document.getElementById("msnEspera_compra_"+id).innerHTML='Debes ingresar un valor entre $'+Number_format(Number(document.getElementById("num_cantidad_moneda_"+id).min),2,',','.')+' y $'+Number_format(Number(document.getElementById("num_cantidad_moneda_"+id).max),2,',','.');
+            document.getElementById("msnEspera_compra_"+id).innerHTML='Debes ingresar un valor entre $'+number_format(Number(document.getElementById("num_cantidad_moneda_"+id).min),2,',','.')+' y $'+number_format(Number(document.getElementById("num_cantidad_moneda_"+id).max),2,',','.');
             return false;
           }
           var val =document.getElementById("num_val_crip_moneda_"+id).value;
           var cant=document.getElementById("num_cantidad_moneda_"+id).value;
-          var t=Number_format(parseFloat(cant)/parseFloat(val),2,',','.')
+          var t=number_format(parseFloat(cant)/parseFloat(val),2,',','.')
           
           
-          var hs="registrar_compra_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+Number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
+          var hs="registrar_compra_anuncio/"+cod_anuncio+"/"+cant+"/"+moneda+"/"+id_usuario+"/"+number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
           
           mostrar_cargando("msnEspera_compra_"+id,10,"Calculando valor ...");
           peticion_ajax("get",hs,function(rs){
             
             console.log(rs);
             
-            document.getElementById("hdh5_total_"+id).value=Number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
+            document.getElementById("hdh5_total_"+id).value=number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
             document.getElementById("hd_valor_venta_"+id).value=document.getElementById('num_cantidad_moneda_'+id).value;
             document.getElementById("msnEspera_compra_"+id).innerHTML='';
-            document.getElementById("span_total_a_pagar_"+id).innerHTML=Number_format(document.getElementById('num_cantidad_moneda_'+id).value,2,',','.');
+            document.getElementById("span_total_a_pagar_"+id).innerHTML=number_format(document.getElementById('num_cantidad_moneda_'+id).value,2,',','.');
             
-            document.getElementById("h5Total_"+id).innerHTML=Number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
+            document.getElementById("h5Total_"+id).innerHTML=number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
             document.getElementById("msnEspera_compra_"+id).style.display='none';
             
             
@@ -233,7 +233,7 @@
           var cant=document.getElementById("num_cantidad_moneda_"+id).value;
           var t=parseFloat(val)*parseFloat(cant);
           document.getElementById("h5Total_"+id).value=t;
-          document.getElementById("h5Total_"+id).innerHTML=Number_format(t,2,",",".")+" "+moneda;
+          document.getElementById("h5Total_"+id).innerHTML=number_format(t,2,",",".")+" "+moneda;
           document.getElementById("hdh5_total_"+id).value=t;
         }
         /*funcion para cambiar el es estado de un anuncio*/
@@ -293,7 +293,7 @@
            var t=parseFloat(cant)/parseFloat(val);
            document.getElementById("h5Total_"+id_ad).value=t;
            document.getElementById("hdh5_total_"+id_ad).value=t;
-           document.getElementById("h5Total_"+id_ad).innerHTML=Number_format(t,2,",",".");
+           document.getElementById("h5Total_"+id_ad).innerHTML=number_format(t,2,",",".");
            document.getElementById("hd_valor_venta_"+id_ad).value=cant;
            
           var wallet;
@@ -441,9 +441,9 @@
               
               
               document.getElementById('hd_cupon'+id).value=e.nuevo_valor;
-              document.getElementById('hd_valor_venta_'+id).value=Number_format(e.nuevo_valor,0,'','');
+              document.getElementById('hd_valor_venta_'+id).value=number_format(e.nuevo_valor,0,'','');
               
-              document.getElementById('span_total_a_pagar_'+id).innerHTML=Number_format(e.nuevo_valor,0,',','.');
+              document.getElementById('span_total_a_pagar_'+id).innerHTML=number_format(e.nuevo_valor,0,',','.');
 
               if(e.hash_payu!=false){
                 //document.getElementById('hd_signature_'+id).value=e.hash_payu; 
@@ -452,7 +452,7 @@
               
               if(e.recarga_gratis){
                 //document.getElementById('btn_comprar_'+id).disabled=true;
-                document.getElementById('spTotalPagoTramite_'+id).innerHTML=Number_format(0,0,',','.');
+                document.getElementById('spTotalPagoTramite_'+id).innerHTML=number_format(0,0,',','.');
               }
 
               if(e.acumulable=='0'){
@@ -587,11 +587,27 @@
     document.getElementById('hd_tipo_pago'+id).value=e.value;
 
   }
+   /**
+   * Funcion para enviar email con informacion de tipo de pago seleccionado
+   * @param  {[type]} e  [description]
+   * @param  {[type]} id [description]
+   * @return {[type]}    [description]
+   */
+  function validar_tipo_pago_recargas(e,id){
+    
+    document.getElementById('btn_recarga').disabled=false;
+    document.getElementById('hd_tipo_pago').value=e.value;
+
+  }
+  /**
+   * Funcion para enviar la confirmación del tipo de pago seleccionado por el cliente
+   * @param  {[type]} id [description]
+   * @return {[type]}    [description]
+   */
   function enviar_registro_compra(id){
      mostrar_cargando("msnMensajeCompra_"+id,5,"Registrando medio de pago ...");
-    // document.getElementById('hd_valor_venta_'+id).value=document.getElementById("num_cantidad_moneda_"+id).value;
      
-    peticion_ajax('POST',
+     peticion_ajax('POST',
                   'registrar_medio_de_pago',
                   function(e){
                     //success
@@ -615,6 +631,42 @@
                      'usuario':id_usuario,
                      'total_a_pagar':document.getElementById('hd_valor_venta_'+id).value,
                      'tipo_pago':document.getElementById('hd_tipo_pago'+id).value
+                   },
+                  function(e){
+                  //error
+                  document.getElementById('msnMensajeCompra_'+id).innerHTML="";
+                  document.getElementById('msnMensajeCompra_'+id).classList.remove('text-success');  
+                  document.getElementById('msnMensajeCompra_'+id).classList.add('text-red');
+                  
+                  console.log(e)
+                }); 
+  }
+   function enviar_registro_recarga(id){
+     mostrar_cargando("msnMensajeCompra_"+id,5,"Registrando medio de pago ...");
+     
+     peticion_ajax('POST',
+                  'registrar_medio_de_pago_recarga',
+                  function(e){
+                    //success
+                    if(e.respuesta){
+                      
+                      document.getElementById('msnMensajeCompra_'+id).classList.remove('text-red');
+                      document.getElementById('msnMensajeCompra_'+id).  classList.add('text-success');    
+                      document.getElementById('msnMensajeCompra_'+id).innerHTML=e.mensaje;
+                    }else{
+                      document.getElementById('msnMensajeCompra_'+id).classList.remove('text-success');  
+                      document.getElementById('msnMensajeCompra_'+id).classList.add('text-red');  
+                      document.getElementById('msnMensajeCompra_'+id).innerHTML=e.mensaje;
+                    }
+                    
+                  }
+                  ,{ 
+                     //datos
+                     'valor_real':document.getElementById('num_valor_recarga').value,
+                     'ref_pago':document.getElementById('refRecarga').value,
+                     'usuario':id_usuario,
+                     'total_a_pagar':document.getElementById('hd_val_recarga').value,
+                     'tipo_pago':document.getElementById('hd_tipo_pago').value
                    },
                   function(e){
                   //error
@@ -671,5 +723,57 @@
                   
                 }); 
 
+  }
+  /**
+   * Funcion para confirmar el pago de una recarga por transaccion bancaria
+   * @param  {[type]} id [description]
+   * @return {[type]}    [description]
+   */
+  function confirmar_pago_recarga(id){
+      var datos=$('#formConfirmarPago').serializarFormulario();
+
+      mostrar_cargando("lblMsn"+id,5,"Procesando solicitud ...");
+      
+      if(datos.numero_transaccion==""){
+
+        document.getElementById('lblMsn'+id).classList.add('text-red');
+        console.log(document.getElementById('lblMsn'+id).classList);
+        document.getElementById('lblMsn'+id).innerHTML="Por favor ingresa un numero de transacción";
+
+        return false;
+        
+      }
+
+      peticion_ajax('POST',
+                  'confirmar_pago_recarga',
+                  function(e){
+                    //success
+                   
+                    if(e.respuesta){
+                      document.getElementById('lblMsn'+id).classList.remove('text-red');
+                      document.getElementById('lblMsn'+id).classList.add('text-success');
+                      document.getElementById('lblMsn'+id).innerHTML=e.mensaje;
+
+                    }else{
+                      document.getElementById('lblMsn'+id).classList.remove('text-success');
+                      document.getElementById('lblMsn'+id).classList.add('text-red');
+                      document.getElementById('lblMsn'+id).innerHTML=e.mensaje;
+                    }
+                  }
+                  ,datos,
+                  function(e){
+                  //error
+                  
+                }); 
+
+  }
+  /**
+   * Funcion para cambiar el valor de la recarga en mensajes
+   * @param  {[type]} e [description]
+   * @return {[type]}   [description]
+   */
+  function cambiar_valor_recarga(e){
+    document.getElementById('msnValorAPagar').innerHTML=number_format(e.value,0,',','.');
+    document.getElementById('hd_val_recarga').value=number_format(e.value,0,'','');
   }
 </script>

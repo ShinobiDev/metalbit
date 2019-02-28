@@ -241,4 +241,65 @@ class Recargas extends Model
 			break;
 	}
   }
+
+
+  public static function  registrar_bonificacion($quien_refiere,$valor_recarga,$nombre){
+  	$id_ref=DetalleReferido::where("id_quien_refiere",$quien_refiere)->get();	
+								
+		if(count($id_ref)>0){
+										$tot_recargas=detalle_recargas::where("id_user",$quien_refiere)->get();
+										//dd($tot_recargas);
+										if(count($tot_recargas)==0){
+											//aunentoo el 10% de la recarga 
+											$val_rec=(float)$valor_recarga*0.10;
+											DB::table("detalle_recargas")->insert([
+												    'id_user' => $id_ref[0]->id_referido,
+												    'valor_recarga'=>$val_rec,
+												    "referencia_pago"=>time().$quien_refiere,
+												     "referencia_pago_pay_u"=>time().$quien_refiere,
+												     "metodo_pago"=>"BONIFICACION RECARGA 10%  ".$nombre,
+												     "tipo_recarga"=>"BONIFICACION"	,
+												     "created_at"=>Carbon::now('America/Bogota')
+												   ]
+												);
+												
+											DB::table("bonificaciones")->insert(
+														["tipo_bonificacion"=>"RECARGA",
+														"fk_id_detalle_referido"=>$id_ref[0]->id,
+														"valor"=>$val_rec,
+														"created_at"=>Carbon::now('America/Bogota')	]);
+
+											Recargas::where("user_id",$id_ref[0]->id_referido)->increment("valor",$val_rec);
+											return true;	
+											
+										}else{
+											//var_dump($id_ref[0]->id_referido);
+											//var_dump($req['TX_VALUE']*0.01);
+											//
+											$val_rec=(float)$valor_recarga*0.01;	
+											//dd($val_rec);
+											DB::table("detalle_recargas")->insert([
+												    'id_user' => $id_ref[0]->id_referido,
+												    'valor_recarga'=>$val_rec,
+												    "referencia_pago"=>time().$quien_refiere,
+												     "referencia_pago_pay_u"=>time().$quien_refiere,
+												     "metodo_pago"=>"BONIFICACION RECARGA 1%  ".$nombre,
+												     "tipo_recarga"=>"BONIFICACION",
+												     "created_at"=>Carbon::now('America/Bogota')
+												     	]
+												);
+											DB::table("bonificaciones")->insert(
+														["tipo_bonificacion"=>"RECARGA",
+														"fk_id_detalle_referido"=>$id_ref[0]->id,
+														"valor"=>$val_rec,
+														"created_at"=>Carbon::now('America/Bogota')	]);
+
+											Recargas::where("user_id",$id_ref[0]->id_referido)->increment("valor",$val_rec);
+											return true;
+										}
+		}else{
+			return false;
+		}
+
+  }
 }

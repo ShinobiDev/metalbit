@@ -37,6 +37,7 @@ class UsersController extends Controller
     {
        $users = User::allowed()->get();
        $horarios=DB::table('detalle_horario_usuario')->where('id_user',auth()->user()->id)->get();
+
        return view('admin.user.index')
                         ->with('users', $users)
                         ->with('horarios',$horarios)
@@ -164,6 +165,8 @@ class UsersController extends Controller
 
           $horarios=DB::table('detalle_horario_usuario')->where('id_user',auth()->user()->id)->get();
 
+          $pendiente=DB::table('detalle_recargas')->where([['id_user',auth()->user()->id],['estado_detalle_recarga','PENDIENTE']])->first();
+        
 
           //dd($transacciones);
           return view('admin.user.show')->with('user', $user)
@@ -174,6 +177,7 @@ class UsersController extends Controller
                     ->with("ad",$ad)
                     ->with("transacciones",$transacciones)
                     ->with("variables",Variable::where('nombre','porcentaje_tramite')->get())
+                    ->with('recarga_pendiente',$pendiente)
                     ->with('horarios',$horarios);
     }
 

@@ -109,3 +109,4 @@ ALTER TABLE `pagos` CHANGE `pay_value` `pay_value` DECIMAL(10,2) NULL DEFAULT NU
 ALTER TABLE `pagos` ADD `numero_transaccion` VARCHAR(256) NULL AFTER `porcentaje_pago`; 
 ALTER TABLE `pagos` ADD `transaction_value_pagado` DECIMAL(10,2) NULL AFTER `transation_value`; 
 ALTER TABLE `pagos` CHANGE `transaction_value_pagado` `transaction_value_pagado` VARCHAR(191) NULL DEFAULT NULL; 
+ALTER TABLE `detalle_recargas` CHANGE `estado_detalle_recarga` `estado_detalle_recarga` ENUM('APROBADA','PENDIENTE','RECHAZADA','REGISTRADA','PENDIENTE APROBACION') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'REGISTRADA';

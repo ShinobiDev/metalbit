@@ -106,6 +106,20 @@ class NotificationMail extends Mailable
                             ->subject('Hemos registrado una nueva recarga, sin embargo se ha rechazado '. config('app.name'));
                 # code...
                 break;
+            case "PagoRecargaTransaccion":
+                    //dd($this->ad[0]['medio_pago']);
+                    return $this->markdown('emials.PagoRecargaTransferencia')
+                            ->subject('Información de tu medio de pago para tu recarga en '.config('app.name'));
+
+
+                    break;
+            case "PagoRecargaEfectivo":
+                    //dd($this);
+                    return $this->markdown('emials.PagoRecargaEnOficina')
+                            ->subject('Información de tu medio de pago para tu recarga en '.config('app.name'));
+
+
+                    break;   
             case 'CompraExitosa':
                 return $this->markdown('emials.CompraExitosa')
                             ->subject('Hemos registrado una nueva compra en '. config('app.name'));
@@ -221,7 +235,14 @@ class NotificationMail extends Mailable
 
 
                     break;          
+            case "ConfirmarRecargaTransferenciaBancaria":
+                    //dd($this->ad[0],$this->ad[1],$this->ad[2]);
+                    return $this->markdown('emials.PagoRecargaTransferenciaAdmin')
+                            ->subject('Un usuario ha confirmado una transacción bancaria para una recarga en '.config('app.name'));
 
+
+                    break;
+                    
             
                                              
             default:

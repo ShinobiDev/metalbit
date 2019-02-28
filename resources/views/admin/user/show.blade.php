@@ -172,8 +172,16 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
                       Recargar
                     </button>
+                    
+                    @if($recarga_pendiente!=null)
+                      @if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE' && $recarga_pendiente->metodo_pago=='Transferencia bancaria')
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ConfirmarRecarga">
+                          Confirma tu recarga
+                        </button>                      
+                      @endif
+                    @endif
 
-                    <!-- Modal -->
+                    <!-- Modal recargas -->
                    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -183,12 +191,43 @@
                               <span aria-hidden="true">&times;</span>
                             </button>
                           </div>
-                          <div class="modal-body">
-                            {{--@include('payu.recargas_payu')--}}
+                          <div class="modal-body">                            
+                            @include('partials.btn_recarga')
                           </div>
                         </div>
                       </div>
                     </div>
+                    <!--MODAL CONFIRMAR RECARGA-->
+                    @if($recarga_pendiente!=null)
+                      <div class="modal fade" id="ConfirmarRecarga" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLongTitle">Confirma tu recarga</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form id="formConfirmarPago">
+                                            <div class="form-group">
+                                              <label for="exampleInputEmail1">#Transacción</label>
+                                              <input name="numero_transaccion" type="text" class="form-control" placeholder="Ingresa el número de transacción">
+                                              @if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE' && $recarga_pendiente->metodo_pago=='Transferencia bancaria')
+                                                <input type="hidden" value="{{$recarga_pendiente->id}}" name="id_pago">
+                                              @endif
+                                                         
+                                            </div>                                          
+                                           <span id="lblMsn{{auth()->user()->id}}"></span>
+                                            <input type="button" value="Confirmar" onclick="confirmar_pago_recarga('{{auth()->user()->id}}')" type="submit" class="btn btn-primary" />
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    @endif
+
+
               </div>
           </div>
         </div>

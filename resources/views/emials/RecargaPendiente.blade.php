@@ -9,8 +9,8 @@ Recarga pendiente por valor: $ {{number_format($recarga[1]['valor'],'0',',','.')
 
 
 ## Resumen Oferta ##
-Anuncio:
-Estado: PENDIENTE DE APROBACION
+
+Estado: PENDIENTE DE APROBACIÓN
 
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.

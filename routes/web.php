@@ -114,10 +114,20 @@ Route::get('eliminar_cupon/{id}/{id_campana}',"CampaniasController@eliminar_cupo
 Route::post('canjear_cupon_recarga',"CampaniasController@canjear_cupones_recargas");
 Route::post('canjear_cupon_compra',"CampaniasController@canjear_cupones_compras");
 Route::post('registrar_medio_de_pago','AnunciosController@registrar_medio_de_pago');
+
 Route::post("confirmar_pago_comprador","AnunciosController@confirmar_pago_comprador")->name('confirmar_pago_comprador');
+
+Route::post("confirmar_pago_recarga","RecargasController@confirmar_pago_recarga")->name('confirmar_pago_recarga');
+
+Route::post("registrar_medio_de_pago_recarga","AnunciosController@confirmar_medio_pago_recarga")->name('registrar_medio_de_pago_recarga');
+
 Route::post("confirmar_pago_comprador_pago_efectivo","AnunciosController@confirmar_pago_comprador_pago_efectivo")->name('confirmar_pago_comprador_pago_efectivo');
+
 Route::post("confirmar_pago_comprador_entidad_bancaria","AnunciosController@confirmar_pago_comprador_entidad_bancaria")->name('confirmar_pago_comprador_entidad_bancaria');
 
+Route::post("confirmar_pago_recarga_entidad_bancaria","RecargasController@confirmar_pago_recarga_entidad_bancaria")->name('confirmar_pago_recarga_entidad_bancaria');
+
+Route::post("confirmar_pago_recarga_efectivo","RecargasController@confirmar_pago_recarga_efectivo")->name('confirmar_pago_recarga_efectivo');
 
 
 

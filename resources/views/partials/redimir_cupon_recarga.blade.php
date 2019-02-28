@@ -1,6 +1,6 @@
 <div>
 	<label for="valor">Tienes un cupón, puedes redimirlo aquí</label>
-	<input type="text" class="form-control" name="cupon" id="txt_cupon_{{$c}}" onchange="canjear_cupon(this,'{{$c}}')" placeholder="">
+	<input type="text" class="form-control" name="cupon" id="txt_cupon_{{$c}}" onchange="canjear_cupon(this,'{{$c}}')" placeholder="Ingresa tu código aquí">
 	<input type="hidden" name="valor_descuento_cupon" id="hd_cupon" value="0" >
 	<span id="sp_espera_cupon{{$c}}"></span>
 </div>
@@ -9,7 +9,7 @@
 
 		if(e.value!=""){
 			mostrar_cargando("sp_espera_cupon"+id,5,"Verificando cupón ...");
-			document.getElementById('btn_recarga').style.display='none';
+			
 			peticion_ajax('POST','canjear_cupon_recarga',function(e){
 					//success
 				console.log(e);
@@ -17,22 +17,15 @@
 					document.getElementById('sp_espera_cupon'+id).innerHTML=e.mensaje;
 					document.getElementById('sp_espera_cupon'+id).classList.remove('text-red');	
 					document.getElementById('sp_espera_cupon'+id).classList.add('text-success');	
-					document.getElementById('btn_acepta_recarga').disabled=false;
-					document.getElementById("btn_recarga").style.display='none';
-					//document.getElementById('num_valor_recarga').value=e.nuevo_valor;
-					//document.getElementById('num_valor_recarga').min=e.nuevo_valor;
-					//document.getElementById('hd_num_valor_recarga').value=e.nuevo_valor;
 					document.getElementById('hd_val_recarga').value=number_format(e.nuevo_valor,0,'','');
 					document.getElementById("msnValorAPagar").innerHTML=number_format(e.nuevo_valor,0,',','.');  
 					
 					document.getElementById('hd_cupon').value=e.nuevo_valor_recarga;
 					
-					if(e.hash_payu!=false){
-						document.getElementById('hd_signature_recarga').value=e.hash_payu;	
-					}					
+									
 					
 					if(e.recarga_gratis){
-						document.getElementById('btn_acepta_recarga').disabled=true;
+						//document.getElementById('btn_acepta_recarga').disabled=true;
 						document.getElementById('sp_valor_recarga').innerHTML=number_format(e.valor_recarga,0,',','.');
 					}
 
@@ -44,8 +37,8 @@
 					document.getElementById('sp_espera_cupon'+id).innerHTML=e.mensaje;
 					document.getElementById('sp_espera_cupon'+id).classList.remove('text-success');	
 					document.getElementById('sp_espera_cupon'+id).classList.add('text-red');
-					document.getElementById('btn_acepta_recarga').disabled=true;
-					document.getElementById("btn_recarga").style.display='none';
+					//document.getElementById('btn_acepta_recarga').disabled=true;
+					
 				}
 				
 
@@ -55,14 +48,11 @@
 				document.getElementById('sp_espera_cupon'+id).innerHTML="Este cuṕón no es válido";
 				document.getElementById('sp_espera_cupon'+id).classList.remove('text-success');	
 				document.getElementById('sp_espera_cupon'+id).classList.add('text-red');
-				document.getElementById('btn_acepta_recarga').disabled=true;
-				document.getElementById("btn_recarga").style.display='none';
-				console.log(e)
+			
 			});	
 		}else{
 			document.getElementById('sp_espera_cupon'+id).innerHTML="";
-			document.getElementById('btn_acepta_recarga').disabled=false;
-			document.getElementById("btn_recarga").style.display='none';
+			
 		}
 		
 	}	

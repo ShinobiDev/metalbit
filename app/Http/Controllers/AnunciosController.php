@@ -659,6 +659,86 @@ class AnunciosController extends Controller
         return response()->json(['mensaje'=>"Hemos confirmado tu compra, uno de nuestros agentes confirmara tu pago gracias por confiar en ".config('app.name').'','respuesta'=>true]);
     }
 
+     /**
+     * Funcion para confirmar el pago por parte de el cliente para la recarga
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_medio_pago_recarga(Request $request){
+        //registrar cambio de estado del pago
+        //dd($request);
+        if($request['tipo_pago']==1){
+            $metodo_pago='Transferencia bancaria';
+        }else{
+            $metodo_pago='Pago en efectivo';
+        }
+        //dd($metodo_pago);
+        //
+        //
+      
+        $re= DB::table("detalle_recargas")
+                        ->where([
+                                ["id_user",$request['usuario']],
+                                ["estado_detalle_recarga","PENDIENTE",]
+                            ])->get();
+        
+        if(count($re)>0){
+            DB::table("detalle_recargas")
+                        ->where([
+                                ["id_user",$request['usuario']],
+                                ["referencia_pago",$request['ref_pago']]
+                            ])
+                        ->update([
+                            "valor_recarga"=>$request['valor_real'],
+                            "valor_pagado"=>$request['total_a_pagar'],
+                            "referencia_pago_pay_u"=>$request['ref_pago'],
+                            "estado_detalle_recarga"=>"PENDIENTE",
+                            "metodo_pago"=>$metodo_pago,
+                            "updated_at"=>Carbon::now('America/Bogota')
+                                ]);
+        }else{
+            DB::table("detalle_recargas")                       
+                        ->insert([
+                            "valor_recarga"=>$request['valor_real'],
+                            "valor_pagado"=>$request['total_a_pagar'],
+                            "referencia_pago_pay_u"=>$request['ref_pago'],
+                            "estado_detalle_recarga"=>"PENDIENTE",
+                            "metodo_pago"=>$metodo_pago,
+                            "id_user"=>$request['usuario'],
+                            "referencia_pago"=>$request['ref_pago'],
+                            "updated_at"=>Carbon::now('America/Bogota')
+                                ]
+                        );
+        }
+        
+
+
+        
+          $cliente=User::where(".id",$request['usuario'])->get();          
+          $recarga=Recargas::where([
+                      
+                      ['user_id',$request['usuario']],
+                      
+                    ])->get();
+          if($request['tipo_pago']==1){
+         
+            NotificacionAnuncio::dispatch($cliente[0], [
+                            ['medio_pago'=>config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf']],[$recarga[0],["valor"=>$request['valor_real'],"fecha"=>date('Y-m-d')]],"PagoRecargaTransaccion");
+
+          }else{
+            NotificacionAnuncio::dispatch($cliente[0], [],[$recarga[0],["valor"=>$request['valor_real'],"fecha"=>date('Y-m-d')]],"PagoRecargaEfectivo");
+
+            
+          }
+          
+       
+
+        
+        
+        return response()->json(['mensaje'=>"Hemos registrado tu recarga y enviado información acerca del medio de pago seleccionado, a tu correo electrónico ".$cliente[0]->email,'respuesta'=>true]);
+    }
+
+
     /**
      * Funcion para confirmar el pago por parte de el cliente
      * @param  Request $request [description]

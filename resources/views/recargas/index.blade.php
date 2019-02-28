@@ -33,11 +33,13 @@
               <tr>
                 <th>id</th>
                 <th>Usuario</th>
+                <th>Email</th>
                 <th>Estado</th>
                 <th>Saldo recarga</th>
                 <th>Fecha última recarga</th>
                 <th>Costo del cllc</th>
                 <th>Acción</th>
+                <th>Recargar</th>
               </tr>
             </thead>
             <tbody>
@@ -47,11 +49,18 @@
                   <tr>
                     <td>{{ $recarga->id }}</td>
                     <td>{{ $recarga->name }}</td>
+                    <td>{{ $recarga->email }}</td>
                     <td>{{ $recarga->status }}</td>
                     <td>$ {{ number_format($recarga->valor,0,',','.')}}</td>
                     <td>{{ $recarga->updated_at }}</td>
-                    <td><input id="rec_{{$recarga->id}}" type="number" value="{{ $recarga->costo_clic }}" onchange='cambiar_valor_clic({{$recarga->id}})  ' /></td>
-                    <td><input id="ver_{{$recarga->id}}" type="button" value="Ver recargas" onclick='ver_recargas({{$recarga->id}})' class="btn btn-primary pull-right" /></td>
+                    <td><input id="rec_{{$recarga->id}}" type="number" value="{{ $recarga->costo_clic }}" onchange="cambiar_valor_clic('{{$recarga->id}}')"   /></td>
+                    <td>
+
+                      <input id="ver_{{$recarga->id}}" type="button" value="Ver recargas" onclick="ver_recargas('{{$recarga->id}}')" class="btn btn-primary" />
+                    </td>
+                    <td>
+                       <button type="button" class="btn btn-success" data-toggle="modal" data-target="#realizar_recarga{{$recarga->id}}">Recargar</button>   
+                    </td>
 
 
                     
@@ -59,7 +68,43 @@
               @endforeach
             </tbody>
           </table>
- 
+          <!--MODAL PARA REALIZAR RECARGA-->
+          @foreach ($recargas as $recarga)
+            <div class="modal fade" id="realizar_recarga{{$recarga->id}}" role="dialog">
+                <div class="modal-dialog">
+                
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Realizar recarga pago en efectivo</h4>
+                    </div>
+                   <form id="formRealizarRecarga" method="POST" action="{{route('confirmar_pago_recarga_efectivo')}}"> 
+                    <div class="modal-body">
+                      
+                      {{csrf_field()}}
+
+                      <input type="number" name="valor_a_recargar" value="20000" min="20000">
+                      <input type="hidden" name="id_pago" value="{{$recarga->id}}">
+
+                      
+
+                            
+                    </div>
+                    <div class="modal-body">
+                        <button type="submit" class="btn btn-primary ">Realizar recarga</button>
+                    </div>
+                  </form> 
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+                    </div>
+                  </div>
+                  
+                </div>
+           </div>
+
+          @endforeach
+            
       </div>
       
         <div class="box-body">
@@ -74,23 +119,80 @@
                   <th>Estado</th>
                   <th>Referecia recarga</th>                 
                   <th>Fecha recarga</th>                 
+                  <th>Acción</th>                 
                 </tr>
               </thead>
               <tbody id="tbl_mis_lista">
                  @foreach ($mi_lista_recarga as $mi_recarga)
                   
                    <tr>
-                    <td>{{ $mi_recarga->id }}</td>
+                    <td>{{ $mi_recarga->id }}.</td>
                     <td>{{ $mi_recarga->name }}</td>
                     <td>{{ $mi_recarga->tipo_recarga }}</td>
                     <td>$ {{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
                     <td>{{ $mi_recarga->estado_detalle_recarga }}</td>
                     <td>{{ $mi_recarga->referencia_pago_pay_u }}</td>
                     <td>{{ $mi_recarga->created_at }}</td>
+                    <td>
+                      @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
+                         <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#confirmar_recarga{{$mi_recarga->id_recarga}}">Confirmar recarga</button>
+                      @endif
+                         
+                         
+                          
+                    </td>
                    </tr> 
                  @endforeach
               </tbody>
           </table>
+
+        
+
+
+           @foreach ($mi_lista_recarga as $mi_recarga)
+                          
+                          @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
+
+                              <div class="modal fade" id="confirmar_recarga{{$mi_recarga->id_recarga}}" role="dialog">
+                                <div class="modal-dialog">
+                                
+                                  <!-- Modal content-->
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                      <h4 class="modal-title">Confirmar transacción</h4>
+                                    </div>
+                                   <form id="ad_form_{{$mi_recarga->id_recarga}}" method="POST" action="{{route('confirmar_pago_recarga_entidad_bancaria')}}"> 
+                                    <div class="modal-body">
+                                      
+                                      {{csrf_field()}}
+
+                                      <input type="number" name="valor_a_recargar" value="{{$mi_recarga->valor_pagado}}">
+                                      <input type="hidden" name="id_pago" value="{{$mi_recarga->id_recarga}}">
+
+                                      
+
+                                            
+                                    </div>
+                                    <div class="modal-body">
+                                        <button type="submit" class="btn btn-primary ">Registrar recarga</button>
+                                    </div>
+                                  </form> 
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+                                    </div>
+                                  </div>
+                                  
+                                </div>
+                              </div>
+
+
+                            
+                          @endif
+                          
+                          
+                        
+           @endforeach 
           
         </div>
  
@@ -183,7 +285,16 @@
 </script>
 
 <script type="text/javascript">
-  function ver_recargas(id){
+  function ver_recargas(valor){
+    window.scroll(0, 1000);
+    
+     $('#mis_recargas-table').DataTable().search(
+                    valor+".",
+                    false,
+                    false,                    
+                ).draw();
+  }
+  function ver_recargas_OLD(id){
      peticion_ajax("get","ver_recargas_mis_recargas/"+id,function(rs){
       location.href="#mis_recargas-table";
         console.log(rs);

@@ -203,7 +203,7 @@ class CampaniasController extends Controller
                       $recar=Recargas::where("user_id",$anunciante->id)->first();
                       $user=User::where('id',$request['usuario_que_redime'])->first();
                       
-                      NotificacionAnuncios::dispatch($user, [],[$recar,["valor"=>$request['valor_pago'],"fecha"=>date('Y-m-d')]],"RecargaExitosa");
+                      NotificacionAnuncio::dispatch($user, [],[$recar,["valor"=>$request['valor_pago'],"fecha"=>date('Y-m-d')]],"RecargaExitosa");
 
                        return response()->json(['respuesta'=>true,
                                                 'mensaje'=>'Cupón canjeado, hemos registrado una recarga completamente gratis.',
@@ -257,7 +257,7 @@ class CampaniasController extends Controller
                       $user=User::where('id',$request['usuario_que_redime'])->first();
                       $recar=Recargas::where("user_id",$request['usuario_que_redime'])  ->first();
 
-                      NotificacionAnuncios::dispatch($user, [],[$recar,["valor"=>$request['valor_recarga'],"fecha"=>date('Y-m-d')]],"RecargaExitosa");
+                      NotificacionAnuncio::dispatch($user, [],[$recar,["valor"=>$request['valor_recarga'],"fecha"=>date('Y-m-d')]],"RecargaExitosa");
 
                        return response()->json(['respuesta'=>true,
                                                 'mensaje'=>'Cupón canjeado, hemos registrado una recarga completamente gratis.',
@@ -383,7 +383,7 @@ class CampaniasController extends Controller
                        NotificacionAnuncio::dispatch($comprador, [$anunciante,$anuncio[0],$pg[0],['url'=>config('app.url').'/admin/ver_mis_compras/'.$comprador->id.'?id='.$request['codigo_anuncio']]],[],"CompraExitosa");
                         $recar=Recargas::where("user_id",$anunciante->id)->first();
 
-                        NotificacionAnuncios::dispatch($anunciante, 
+                        NotificacionAnuncio::dispatch($anunciante, 
                                                        [
                                                          $comprador,
                                                          $anuncio[0],
