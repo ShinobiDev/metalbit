@@ -125,6 +125,7 @@ class Anuncios extends Model
 
                                     if(( (float)$value->valor < (float)$value->costo_clic) || (float)$value->valor == 0 ){
                                             //$mostrar_info=false;
+                                            $mostrar_payu=false;
                                     }
                                    
                                     //var_dump($mostrar_info);
@@ -133,7 +134,7 @@ class Anuncios extends Model
                                       //$mostrar_info=false;                                      
                                     }
 
-                                     if(Auth()->user()!=null){
+                                     if(auth()->user()!=null){
 
 
                                        	  $dtc=DB::table('detalle_clic_anuncios')
@@ -153,10 +154,7 @@ class Anuncios extends Model
                                                 $mostrar_calificar=false;
                                             }
                                             
-                                         	}else{
-                                            $f=new Carbon(Carbon::now('America/Bogota'));
-                                            $visto=$f->format('M d, Y h:i A');
-                                          }		
+                                         	}	
                                      }                                 
                                      if(auth()->user()!=null){
                                       $transaccion_pendiente=$u->compra_pendiente($value->id,auth()->user()->id); 

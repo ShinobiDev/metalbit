@@ -53,7 +53,9 @@
                     <td>{{ $recarga->status }}</td>
                     <td>$ {{ number_format($recarga->valor,0,',','.')}}</td>
                     <td>{{ $recarga->updated_at }}</td>
-                    <td><input id="rec_{{$recarga->id}}" type="number" value="{{ $recarga->costo_clic }}" onchange="cambiar_valor_clic('{{$recarga->id}}')"   /></td>
+                    <td>
+                      <span id="spnMsn"></span>
+                      <input id="rec_{{$recarga->id}}" type="number" value="{{ $recarga->costo_clic }}" onchange="cambiar_valor_clic('{{$recarga->id}}',this)"   /></td>
                     <td>
 
                       <input id="ver_{{$recarga->id}}" type="button" value="Ver recargas" onclick="ver_recargas('{{$recarga->id}}')" class="btn btn-primary" />
@@ -278,8 +280,15 @@
 @endsection
 @include('partials.scripts')
 <script type="text/javascript">
-  function cambiar_valor_clic(id){
-     peticion_ajax("get","cambiar_valor_clic/"+id+"/"+document.getElementById("rec_"+id).value,function(rs){
+  function cambiar_valor_clic(id,e){
+
+     mostrar_cargando("spnMsn"+id,10,"Cambiando ...");
+     peticion_ajax("get","cambiar_valor_clic/"+id+"/"+e.value,function(rs){
+
+      if(rs.respuesta){
+        document.getElementById("spnMsn").innerHTML=rs.mensaje;
+      }
+        
         console.log(rs);
      });
   }

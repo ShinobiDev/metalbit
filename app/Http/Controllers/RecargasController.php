@@ -178,34 +178,17 @@ class RecargasController extends Controller
             }    
 
             $ad=Anuncios::where("id",$anuncio)->get();
-
-
-
-
-             //descuento al cliente solo si no es el anunciante
+             
             if($ad[0]->user_id!=$user_id){
-                DB::table("recargas")->where([
-                        ["user_id","=",$ad[0]->user_id],
-                        ["valor",">",0]
-                        ])->decrement('valor',floatval($costo));
-                $uu=User::where("id",$ad[0]->user_id)->get();
-                $uc=User::where("id",$user_id)->get();
 
-               /*Registro la consulta realizada*/
-                $rc=Recargas::select("valor")
-                    ->where("user_id",$ad[0]->user_id)
-                    ->get();
-
-
-                $us_clic=DetalleClicAnuncio::where([
+                    $us_clic=DetalleClicAnuncio::where([
                                                 ["id_usuario",$user_id],
                                                 ["id_anuncio",$ad[0]->id]
                                             ])
                                         ->get();
-                /*
-                aqui valido si el registr ya existe y en ese caso le agrego el numero de visitas y le actualizo la fecha
-                 */
-                //echo Carbon::now('America/Bogota');
+                    $uu=User::where("id",$ad[0]->user_id)->get();
+                    $uc=User::where("id",$user_id)->get();
+
                     if(count($us_clic)>0){
                         //dd($us_clic);
                         DetalleClicAnuncio::where([
@@ -219,6 +202,9 @@ class RecargasController extends Controller
                                                         "updated_at"=>Carbon::now('America/Bogota')
 
                                                     ]);
+                        $rc=Recargas::select("valor")
+                            ->where("user_id",$ad[0]->user_id)
+                            ->get();                    
                         
                     }else{
                         DetalleClicAnuncio::create([
@@ -228,10 +214,19 @@ class RecargasController extends Controller
                                         "tipo"=>$tipo,
                                         "created_at"=>Carbon::now('America/Bogota')
                                     ]);
+                         DB::table("recargas")->where([
+                        ["user_id","=",$ad[0]->user_id],
+                        ["valor",">",0]
+                        ])->decrement('valor',floatval($costo));
+                        
+
+                       /*Registro la consulta realizada*/
+                        $rc=Recargas::select("valor")
+                            ->where("user_id",$ad[0]->user_id)
+                            ->get();
                     }
 
-                
-                //dd($ad);
+     
                 NotificacionAnuncio::dispatch($uu[0], [$ad[0],$uc[0]],$rc[0]->valor,"AnuncioClickeado");
                 NotificacionAnuncio::dispatch($uc[0], [$ad[0],$uu[0],['url'=>route('anuncios_vistos')]],$rc[0]->valor,"AnuncioClickeadoCliente");
             }
@@ -273,6 +268,7 @@ class RecargasController extends Controller
     }
 
     public function cambiar_valor_clic($id_u,$costo){
+      
         User::where("id",$id_u)->update(["costo_clic"=>$costo]);
         return response()->json(["respuesta"=>true,
                                     "mensaje"=>"Se ha cambiado el costo de el clic"]);

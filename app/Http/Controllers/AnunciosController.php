@@ -89,10 +89,12 @@ class AnunciosController extends Controller
                         ->join("recargas","recargas.user_id","users.id")
                         ->whereIn("anuncios.user_id",$arr)
                         ->where("anuncios.estado_anuncio","activo")
-                        ->orderBy("anuncios.id","DESC")
+                        //->where("recargas.valor",'>',0)
+                        //->orderBy("anuncios.id","DESC")
                         ->orderBy("recargas.valor","DESC")
                         ->get();
         }   
+        //dd($anuncios_consultados);
         $ad_arr=new Anuncios();
         $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
           
