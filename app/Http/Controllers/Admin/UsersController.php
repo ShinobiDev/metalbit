@@ -732,8 +732,8 @@ class UsersController extends Controller
      * @return [type]     [description]
      */
     public function ver_mis_compras($id){
-
-        $pag=pagos::select('pagos.id as id_pago',
+        if($id==auth()->user()->id){
+            $pag=pagos::select('pagos.id as id_pago',
                            'pagos.transactionId',
                            'pagos.transactionStatePayU',
                            'pagos.transactionState',
@@ -784,6 +784,14 @@ class UsersController extends Controller
                 ->with('mis_compras',$pag);
 
 
+        
+
+        }else{
+            abort(404);
+        }    
+        
+
+
     }
     /**
      * Funcion para rconsultar las ventas que ha realizado
@@ -791,7 +799,9 @@ class UsersController extends Controller
      * @return [type]     [description]
      */
     public function ver_mis_ventas($id){
-        $pag=pagos::select('pagos.id as id_pago',
+
+        if($id==auth()->user()->id){
+            $pag=pagos::select('pagos.id as id_pago',
                            'pagos.transactionId',
                            'pagos.transactionStatePayU',
                            'pagos.transactionState',
@@ -833,6 +843,10 @@ class UsersController extends Controller
         //dd($pag);
         return view('posts.mis_ventas')
                 ->with('mis_ventas',$pag);
+        }else{
+                abort(404);
+        }
+        
     }
 
     public function ver_todas_las_transacciones(){
@@ -873,8 +887,16 @@ class UsersController extends Controller
      * @param  [type] $id [description]
      * @return [type]     [description]
      */
-    public function confirmar_transaccion($id_transaccion){
-        //dd($id);
+    public function confirmar_transaccion(Request $request,$id_transaccion){
+         //dd($id_transaccion,$request);
+
+
+        $pgh=pagos::where([['id',$id_transaccion],['transactionState','Transacción Finalizada']])->get();
+        if(count($pgh)>0){
+             return redirect()->route('mis_compras',[auth()->user()->id.'?='.$pgh[0]->transactionId])
+                    ->with('error','Esta transacción ya fue confirmada ');
+        }
+
          pagos::where('id',$id_transaccion)->update([
                                          'transactionState'=>'Transacción Finalizada'
                                         ]);
@@ -885,11 +907,29 @@ class UsersController extends Controller
                ->join('anuncios','anuncios.id','pagos.id_anuncio')
                ->join('users','users.id','anuncios.user_id')
                ->get();
-           $comprador=DB::table('pagos')
+          $comprador=DB::table('pagos')
                 ->where('pagos.id',$id_transaccion)
                ->join('anuncios','anuncios.id','pagos.id_anuncio')
                ->join('users','users.id','pagos.id_user_compra')
                ->get();    
+           if($request['sel_opt_calificacion']=='Otros'){
+            $opinion=$request['opinion'];
+           }else{
+            $opinion=$request['sel_opt_calificacion'];
+           }    
+
+          DB::table('detalle_clic_anuncios')
+                  ->where([
+                            ['id_anuncio',$request['id_anuncio_calificar']],
+                            ['id_usuario',auth()->user()->id]
+                        ])
+                  ->update(['calificacion'=>$request["nota"],'opinion'=>$request["sel_opt_calificacion"],'comentario'=>$opinion]);
+                  
+
+
+          $an=Anuncios::where('id',$request['id_anuncio_calificar'])->get();
+          User::where("id",$an[0]->user_id)->increment("calificacion",$request['nota']);
+          User::where("id",$an[0]->user_id)->increment("num_calificaciones",1);    
           //dd($pg[0]);     
           $ad=DB::table('pagos')
                 ->where('pagos.id',$id_transaccion)
@@ -898,7 +938,7 @@ class UsersController extends Controller
         $uadmin=User::role('admin')->get();
         //dd($uadmin);
         foreach ($uadmin as $key => $value) {      
-         NotificacionAnuncio::dispatch($value, [$pg[0],auth()->user(),$ad[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"TransaccionConfirmadaAdmin");
+         NotificacionAnuncio::dispatch($value, [$pg[0],auth()->user(),$ad[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId,'nota'=>$request['nota'],'comentario'=>$opinion]],0,"TransaccionConfirmadaAdmin");
         }
         //esta mal los datos no corresponden 
         //

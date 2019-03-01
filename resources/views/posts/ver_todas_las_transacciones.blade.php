@@ -107,12 +107,13 @@
                       <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</td>
                     <td>
 
-                      @if($transaccion->metodo_pago=="Pago en efectivo")
+                      @if($transaccion->metodo_pago=="Pago en efectivo" && $transaccion->transactionState=="Pendiente")
 
                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_cliente{{$transaccion->id_pago}}">
                             confirmar pago del comprador
                         </button>
                       @endif
+                      
                       @if($transaccion->transactionState=="Pago confirmado por el anunciante")
                         Pago confirmado por el anunciante
                       @endif

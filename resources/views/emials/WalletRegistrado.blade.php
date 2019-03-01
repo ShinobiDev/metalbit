@@ -16,6 +16,9 @@ Estimad@ {{$user->name}}, hemos registrado el código wallet de una de tus venta
 
 ## Resumen Oferta ##
 
+# Número de transacción
+#{{$ad[1]->transactionId}}
+
 
 
 @component('mail::table')

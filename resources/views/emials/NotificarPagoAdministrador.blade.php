@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, se ha confirmado el pago por parte de un anunciante
+Estimad@ {{$user->name}}, se ha confirmado el pago por parte de un anunciante.
 ## Resumen Oferta ##
 
 

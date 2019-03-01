@@ -76,7 +76,7 @@
                         @if($ad->transaccion_pendiente['quantity']!=0)
                           <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{$ad->transaccion_pendiente['quantity']}}" >
                         @else
-                          <input type="text" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
+                          <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
                         @endif
                         {{--@if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
                             @include("posts.no_permitidos")
@@ -104,8 +104,15 @@
                         @if($ad->transaccion_pendiente['state']=='Visto' || $ad->transaccion_pendiente['state']=='0')
                           @include('partials.redimir_cupon_venta',['c'=>$ad->id])
                         @endif
+                         
+                         
+                          
+                        
 
                         <div class="modal-body">
+                          @if($ad->transaccion_pendiente['state']=='Pendiente' )
+                            <a  href="{{config('app.url').'/ver_mis_compras/'.auth()->user()->id.'/?id='.$ad->transaccion_pendiente['pago']}}"><span class=" text-primary">Ver estado de la compra</span></a>
+                          @endif
                           @if(auth::user()->id!=$ad->id_anunciante)
                             @include('payu.botonpayu')
                             @include('partials.btn_comprar')

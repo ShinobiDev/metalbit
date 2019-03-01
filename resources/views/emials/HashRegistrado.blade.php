@@ -3,7 +3,7 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, hemos registrado el hash/id de una de tus compras
+Estimad@ {{$user->name}}, hemos registrado el hash/id de una de tus compras, por favor verifica que la transacción se ha realizado correctamente.
 
 ##Datos Vendedor##
 # Usuario :
@@ -16,22 +16,14 @@ Estimad@ {{$user->name}}, hemos registrado el hash/id de una de tus compras
 
 ## Resumen Oferta ##
 
-
+# Número de transacción
+#{{$ad[1]->transactionId}}
 
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
     | {{$ad[1]->tipo_anuncio}} | {{$ad[1]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{number_format($ad[1]->transation_value,'0',',','.')}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
-
-
-	{{--@if($ad[1]->code_wallet!="")
-		#[Ver código wallet][1]	
-		[1]:{{ config('app.url').'/ver_mis_ventas/'.$user->id.'?='.$ad[1]->transactionId }}
-	@elseif($ad[1]->image_wallet!="")
-		#[DESCARGA EL QR][1]
-		[1]:{{ config('app.url').'/ver_mis_ventas/'.$user->id.'?='.$ad[1]->transactionId }}
-	@endif--}}
 
 
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan

@@ -53,7 +53,83 @@
                  </td>
                   <td><strong>{{$ad->cripto_moneda}}</strong></td>
                   <td style="width: 200px">$ {{ number_format($ad->limite_min,2, ',', '.') }} / </br>$ {{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
-                  <td>
+                   <td style="width: 250px">
+                      @role('Admin')
+                        
+                        <div >
+                          <h5 id="h5_estado_{{$ad->id}}" class="text-red" style="width: 150px">{{$ad->estado_anuncio}}</h5>
+
+                          @if($ad->estado_anuncio=="sin publicar")
+
+                            <div>                              
+                              <select class="form-control" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                <option value="1" selected>Sin publicar</option>
+                                <option value="2">Bloqueado</option>
+                                <option value="3">Activo</option>
+                                <option value="4">Inactivo</option>
+                              </select>
+                            </div>
+
+                            
+                          @elseif($ad->estado_anuncio=="activo")
+                          <div>                              
+                              <select class="form-control" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                
+                                <option value="2">Bloqueado</option>
+                                <option value="3" selected>Activo</option>
+                                <option value="4">Inactivo</option>
+                              </select>
+                          </div>
+                          @elseif($ad->estado_anuncio=="bloqueado")
+                            <div>                              
+                               <select class="form-control" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                
+                                <option value="2" selected>Bloqueado</option>
+                                <option value="3">Activo</option>
+                                <option value="4">Inactivo</option>
+                              </select>
+                            </div>
+                          @elseif($ad->estado_anuncio=="inactivo")
+                              <div>                              
+                                  <select class="form-control" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                
+                                <option value="2">Bloqueado</option>
+                                <option value="3">Activo</option>
+                                <option value="4" selected>Inactivo</option>
+                              </select>
+                              </div>
+                          @endif
+                          
+
+                        </div>
+                      @endrole<span></span>
+
+
+                      @role('Comerciante')
+
+                        <h5 id="h5_estado_{{$ad->id}}" class="text-red">{{$ad->estado_anuncio}}</h5>
+                        @if($ad->estado_anuncio=="activo")
+                            <div>                              
+                               <select class="form-control" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                <option value="3" selected>Activo</option>
+                                <option value="4">Inactivo</option>
+                              </select>
+                            </div>
+                        
+                        @elseif($ad->estado_anuncio=="inactivo")
+                              <div>                              
+                                 <select class="form-control" onchange="cambiar_estado('{{$ad->id}}',this)">
+                                <option value="3">Activo</option>
+                                <option value="4" selected>Inactivo</option>
+                              </select>
+                              </div>
+                          
+                        @endif
+                      
+                      @endrole
+                    </td>
+                    
+                  {{--<td>
                     <h5 id="h5_estado_{{$ad->id}}" class="text-red">{{$ad->estado_anuncio}}</h5>
                     @if($ad->estado_anuncio=="activo")
                       <input id="rng_{{$ad->id}}" type="range" min="0" max="1" value="1" onchange="cambiar_estado('{{$ad->id}}')">
@@ -61,7 +137,7 @@
                       <input id="rng_{{$ad->id}}" type="range" min="0" max="1" value="0" onchange="cambiar_estado('{{$ad->id}}')">
                     @endif
 
-                  </td>
+                  </td>--}}
                   <td>
                     @guest
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->

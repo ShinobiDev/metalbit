@@ -15,6 +15,9 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{co
 
 ## Resumen Oferta ##
 
+# Número de transacción
+#{{$ad[1]->transactionId}}
+
 
 
 @component('mail::table')

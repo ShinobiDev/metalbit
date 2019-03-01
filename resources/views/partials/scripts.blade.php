@@ -238,38 +238,12 @@
         }
         /*funcion para cambiar el es estado de un anuncio*/
         function cambiar_estado(id,e){
-                   
-          mostrar_cargando("h5_estado_"+id,10,"Un momento, por favor...");
-           peticion_ajax("get","cambiar_estado_anuncio/"+id+"/"+e.value,function(rs){
-              console.log(rs);
-              switch(rs.respuesta){
-                case "sin publicar":                    
-                    document.getElementById("sp_1_"+id).classList.add('text-red');
-                    document.getElementById("sp_2_"+id).classList.remove('text-red');
-                    document.getElementById("sp_3_"+id).classList.remove('text-red');
-                    document.getElementById("sp_4_"+id).classList.remove('text-red');
-                  break;
-                case "bloqueado":
-                    document.getElementById("sp_1_"+id).classList.remove('text-red');
-                    document.getElementById("sp_2_"+id).classList.add('text-red');                    
-                    document.getElementById("sp_3_"+id).classList.remove('text-red');
-                    document.getElementById("sp_4_"+id).classList.remove('text-red');
-                  break;
-                case "activo":
-                    document.getElementById("sp_1_"+id).classList.remove('text-red');
-                    document.getElementById("sp_2_"+id).classList.remove('text-red');
-                    document.getElementById("sp_3_"+id).classList.add('text-red');                    
-                    document.getElementById("sp_4_"+id).classList.remove('text-red');
-                  break;                
-                case "inactivo":
-                    document.getElementById("sp_1_"+id).classList.remove('text-red');
-                    document.getElementById("sp_2_"+id).classList.remove('text-red');                    
-                    document.getElementById("sp_3_"+id).classList.remove('text-red');
-                    document.getElementById("sp_4_"+id).classList.add('text-red');
-                  break;
-              }
+          document.getElementById("h5_estado_"+id).innerHTML="";
+          mostrar_cargando("h5_estado_"+id,5,"Cambiando...");
+          peticion_ajax("get","cambiar_estado_anuncio/"+id+"/"+e.value,function(rs){
+              
               document.getElementById("h5_estado_"+id).innerHTML=rs.respuesta;
-           });
+          });
         }
         /**
          * [funcion para mostrar cargando luego de enviar la peticion a el servidor]
@@ -694,11 +668,6 @@
 
         return false;
         
-      }else if(datos.fecha_pago==""){
-        
-        document.getElementById('lblMsn'+id).classList.add('text-red');
-        document.getElementById('lblMsn'+id).innerHTML="Por favor ingresa una fecha del pago";
-        return false;
       }
 
       peticion_ajax('POST',

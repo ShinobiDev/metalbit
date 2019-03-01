@@ -77,7 +77,7 @@ class NotificationMail extends Mailable
                 break;
             case 'AnuncioBloqueado':
                 //dd($this);
-                return $this->markdown('emials.AnuncioDesactivado')
+                return $this->markdown('emials.AnuncioBloqueado')
                             ->subject('Tu anuncio ha sido bloqueado en '. config('app.name'));
                 # code...
                 break;
@@ -170,7 +170,7 @@ class NotificationMail extends Mailable
                 # code...
                 break;     
             case 'TransaccionConfirmadaVendedor':
-                //dd($this->ad[2]);
+                //dd($this);
                 return $this->markdown('emials.TransaccionConfirmadaVendedor')
                             ->subject('Un comprador ha confirmado una transacción en  '. config('app.name'));
                 # code...

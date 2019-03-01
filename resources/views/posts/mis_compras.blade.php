@@ -31,7 +31,7 @@
                 <th>Vendedor</th>                
                 <th>Cantidad comprada</th>
                 <th>Criptomoneda</th>
-                <th style="width: 300px">Valor comprado</th>
+                <th style="width: 300px">Valor pagado</th>
                 <th>Moneda local</th>
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
@@ -178,8 +178,8 @@
 
                         @if($compra->transactionState=="Moneda Envíada")
                          <!--VENTANA MODAL-->
-
-                            <div class="modal fade" id="confirmar_transaccion{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            @include('partials.btn_calificar_anunciante_transaccion_finalizada',['ad'=>$compra])
+                            {{--<div class="modal fade" id="confirmar_transaccion{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
@@ -206,9 +206,9 @@
                                     </div>
                                   </div>
                                 </div>
-                            }
                             
-                          </div>
+                            
+                          </div>--}}
                            <!--FIN VENTA MODAL-->
                         @endif
 

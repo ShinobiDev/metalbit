@@ -153,7 +153,10 @@ class Anuncios extends Model
                                                 $mostrar_calificar=false;
                                             }
                                             
-                                         	}		
+                                         	}else{
+                                            $f=new Carbon(Carbon::now('America/Bogota'));
+                                            $visto=$f->format('M d, Y h:i A');
+                                          }		
                                      }                                 
                                      if(auth()->user()!=null){
                                       $transaccion_pendiente=$u->compra_pendiente($value->id,auth()->user()->id); 

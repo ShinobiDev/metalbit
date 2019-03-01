@@ -44,6 +44,7 @@ class RecargasController extends Controller
                                     'detalle_recargas.estado_detalle_recarga',
                                     'detalle_recargas.valor_recarga',
                                     'detalle_recargas.valor_pagado',
+                                    'detalle_recargas.metodo_pago',
                                     'detalle_recargas.referencia_pago',
                                     'detalle_recargas.referencia_pago_pay_u',
                                     'detalle_recargas.created_at')

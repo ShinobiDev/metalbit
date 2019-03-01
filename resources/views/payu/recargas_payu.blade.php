@@ -8,22 +8,22 @@
                                 </div>
                                 <div>
                                 
-                                  <input   name="merchantId"    type="text"  value="{{trim($py->merchantId)}}"   >
-                                  <input name="accountId"     type="text"  value="{{trim($py->accountId)}}" >
-                                  <input name="description"   type="text"  value="Pagos y recargas de Metalbit"  >
-                                  <input id="refRecarga" name="referenceCode" type="text"  value="{{$ref_code}}" >
-                                  <input id="hd_val_recarga" type="text" name="amount" value="20000" >
-                                  <input name="tax"           type="text"  value="0"  >
-                                  <input name="taxReturnBase" type="text"  value="0" >
-                                  <input  name="currency"     type="text"  value="COP" >
-                                  <input id="hd_signature_recarga" name="signature"     type="text"  value="{{$hash}}">
-                                  <input name="buyerEmail"    type="text"  value="{{trim(Auth::user()->email)}}" >
-                                  <input name="responseUrl"    type="text"  value="{{config('app.url').trim($py->urlResponse)}}_recarga" >
-                                  <input name="confirmationUrl"    type="text"  value="{{config('app.url').trim($py->urlConfirm)}}_recarga" >
+                                  <input   name="merchantId"    type="hidden"  value="{{trim($py->merchantId)}}"   >
+                                  <input name="accountId"     type="hidden"  value="{{trim($py->accountId)}}" >
+                                  <input name="description"   type="hidden"  value="Pagos y recargas de Metalbit"  >
+                                  <input id="refRecarga" name="referenceCode" type="hidden"  value="{{$ref_code}}" >
+                                  <input id="hd_val_recarga" type="hidden" name="amount" value="20000" >
+                                  <input name="tax"           type="hidden"  value="0"  >
+                                  <input name="taxReturnBase" type="hidden"  value="0" >
+                                  <input  name="currency"     type="hidden"  value="COP" >
+                                  <input id="hd_signature_recarga" name="signature"     type="hidden"  value="{{$hash}}">
+                                  <input name="buyerEmail"    type="hidden"  value="{{trim(Auth::user()->email)}}" >
+                                  <input name="responseUrl"    type="hidden"  value="{{config('app.url').trim($py->urlResponse)}}_recarga" >
+                                  <input name="confirmationUrl"    type="hidden"  value="{{config('app.url').trim($py->urlConfirm)}}_recarga" >
                                   
                                 </div>  
                                 <div class="form-group">
-                                     <input type="text" id="hd_id_user" name="user_id" value="{{Auth::user()->id }}" class="form-control">
+                                     <input type="hidden" id="hd_id_user" name="user_id" value="{{Auth::user()->id }}" class="form-control">
                                      
                                 </div>
 

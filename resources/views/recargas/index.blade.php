@@ -134,6 +134,7 @@
                     <td>{{ $mi_recarga->referencia_pago_pay_u }}</td>
                     <td>{{ $mi_recarga->created_at }}</td>
                     <td>
+                      
                       @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
                          <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#confirmar_recarga{{$mi_recarga->id_recarga}}">Confirmar recarga</button>
                       @endif

@@ -48,6 +48,7 @@ class ValidarTransaccion extends Command
                          'pagos.transactionState',
                          'pagos.transactionQuantity',
                          'pagos.transation_value',
+                         'pagos.transaction_value_pagado',
                          'pagos.id_user_compra',
                          'anuncios.nombre_moneda',
                          'anuncios.nombre_cripto_moneda',

@@ -437,7 +437,7 @@ class AnunciosController extends Controller
     public function cambiar_estado_anuncio($id,$estado){
         $ad=Anuncios::where('id',$id)->get();
         $user=User::where('id',$ad[0]->user_id)->get();
-        $re=Recargas::where("user_id",auth()->user()->id)->get();
+        $re=Recargas::where("user_id",$ad[0]->user_id)->get();
         switch ($estado) {
             case '1':
                 $est="sin publicar";
@@ -618,7 +618,15 @@ class AnunciosController extends Controller
      */
     function confirmar_pago_comprador(Request $request){
         //registrar cambio de estado del pago
+            
+            $tr=DB::table("pagos")
+                          ->where('numero_transaccion',$request['numero_transaccion'])
+                          ->get();
 
+
+            if(count($tr)>0){
+                 return response()->json(['mensaje'=>"Esta transacción ya fue registrada",'respuesta'=>false]);
+            }
                 DB::table("pagos")
                           ->where("id",$request['id_pago'])
                           ->update([

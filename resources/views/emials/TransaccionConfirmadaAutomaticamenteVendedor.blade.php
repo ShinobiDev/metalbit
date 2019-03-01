@@ -16,6 +16,8 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de un pago en {{conf
 
 ## Resumen Oferta ##
 
+# Número de transacción
+#{{$ad[1]->transactionId}}
 
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 

@@ -23,6 +23,8 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{co
 
 ## Resumen Oferta ##
 
+# Número de transacción
+#{{$ad[2]->transactionId}}
 
 
 @component('mail::table')
@@ -31,6 +33,12 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{co
     | {{$ad[2]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[2]->nombre_cripto_moneda}} | ${{number_format($ad[2]->transaction_value_pagado,0,',','.')}} | {{$ad[2]->nombre_moneda}} | 
 @endcomponent
 
+
+
+#Calificación
+# {{$ad[3]['nota']}}
+#Comentario
+# {{$ad[3]['comentario']}}
 
 
 #[Ver transacciones][1]
