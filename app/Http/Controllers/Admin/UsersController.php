@@ -571,49 +571,46 @@ class UsersController extends Controller
                                     ["id_anuncio",$id],
                                     ["id_user_compra",auth()->user()->id],
                                     ["transactionState","Pendiente"],
-                                    ["image_wallet","=",'SIN REGISTRAR'],
+                                    //["image_wallet","=",'SIN REGISTRAR'],
                                     
                                 ])
                                 ->orwhere([
                                     ["id_anuncio",$id],
                                     ["id_user_compra",auth()->user()->id],
                                     ["transactionState","Pago Aceptado"],
-                                    ["image_wallet","=",'SIN REGISTRAR'],
+                                    //["image_wallet","=",'SIN REGISTRAR'],
                                     
                                 ])
                                 ->orwhere([
                                     ["id_anuncio",$id],
                                     ["id_user_compra",auth()->user()->id],
                                     ["transactionState","Visto"],
-                                    ["image_wallet","=",'SIN REGISTRAR'],
+                                    //["image_wallet","=",'SIN REGISTRAR'],
                                     
                                 ])
                                 ->get();
-         //dd($PG);                       
-         /*
-        PROBAR EN EL SERVIDOR
+                         
          
-        $filename = $request->file('file')->move('archivos/'.$id);
-          $newname="/wallet.".explode(".",$_FILES['file']['name'])[1];
-        rename($filename,realpath(dirname($filename)).$newname);
-
-        User::where('id',$id)
-                ->update([
-                        'codigo_wallet'=>'/archivos/transacciones/'.$id."".$newname
-                    ]);*/
-        //elimar etsa linea es solo modo pruebas
-        $ruta="blalalalal.pdf";                                            
+        
+                                                   
 
         if(count($PG)>0){
+                $filename = $request->file('file')->move('archivos/'.$PG[0]->id);
+                $newname="/wallet.".explode(".",$_FILES['file']['name'])[1];
+                rename($filename,realpath(dirname($filename)).$newname);
+
+                //dd($PG[0]->id.$newname);
 
                 DB::table('pagos')
                          ->where("id",$PG[0]->id)
                          ->update([
-                            "image_wallet"=>$ruta                            
+                            "image_wallet"=>$PG[0]->id.$newname                            
                          ]);
 
                return response()->json(["mensaje"=>"Wallet actualizado, ya puedes realizar la compra","respuesta"=>true]);
 
+        }else{
+             return  response()->json(['respuesta'=>true,'mensaje'=>'Por favor selecciona la cantidad que deseas comprar']);
         }                        
 
 
@@ -621,7 +618,7 @@ class UsersController extends Controller
       
                 
         
-        return  response()->json(['respuesta'=>true,'mensaje'=>'Se ha registrado tu wallet correctamente']);
+       
     }
     /**
      * Funcion para registar el codigo wallet desde el email

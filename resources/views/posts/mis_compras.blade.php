@@ -73,7 +73,7 @@
                       @endif
 
                       @if($compra->image_wallet!='SIN REGISTRAR')
-                        <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$compra->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
+                        <a target="_blank" href="{{config('app.url')}}/archivos/{{$compra->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
                       @endif
 
                         

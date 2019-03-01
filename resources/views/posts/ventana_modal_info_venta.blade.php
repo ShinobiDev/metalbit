@@ -93,7 +93,7 @@
                           
                           
                           @if($ad->transaccion_pendiente['wallet_qr']!='SIN REGISTRAR' && $ad->transaccion_pendiente['wallet_qr']!='0')
-                            <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
+                            <a target="_blank" href="{{config('app.url')}}/archivos/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
                           @endif
 
                            <input type="file" id="flWallet_{{$ad->id}}" name="wallet" onchange="subir_archivo('{{$ad->id}}',this)">    
