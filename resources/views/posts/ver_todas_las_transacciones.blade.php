@@ -66,21 +66,21 @@
                       @endif
                     </td>
                     <td>{{$transaccion->name}}</td>
-                   <td><span class="text-primary">
+                   <td>
                       @if($transaccion->cuenta_bancaria!="")
-                        {{$transaccion->cuenta_bancaria }}
+                       <span class="text-primary"> {{$transaccion->cuenta_bancaria }}</span>
                       @else
                         Sin registrar
                       @endif
                     </br>
                       @if($transaccion->certificacion_bancaria!="")
-                        <a target="_blank" href="{{config('app.url')}}/{{$transaccion->cuenta_bancaria}}">
+                       <span class="text-primary"> <a target="_blank" href="{{config('app.url')}}{{$transaccion->certificacion_bancaria}}">
                           Ver certificación bancaria
-                        </a>
+                        </a> </span>
                       @endif
 
 
-                   </span></td>
+                  </td>
                    <td>{{$transaccion->email}}</td>
                    <td>{{$transaccion->phone}}</td>
                     <td>{{$transaccion->transactionQuantity}}</td>
@@ -99,12 +99,26 @@
                     
                     <td><span class="text-red">{{$transaccion->code_wallet}}</span></td>
                     <td><span class="text-success">{{$transaccion->hash_txid}}</span></td>
+
+
                     <td>
+
                       @foreach ($variables as $var)
-                        {{$var->valor}} %
+
+                      @if($transaccion->transactionState=="Pago confirmado por el anunciante")
+                          {{$transaccion->porcentaje_pago}} %
+                      @else
+                          {{$var->valor}} %
+                      @endif
+                      
 
                     </td>
-                      <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</td>
+                        @if($transaccion->transactionState=="Pago hecho al anunciante" || $transaccion->transactionState=="Pago confirmado por el anunciante")
+
+                          <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($transaccion->porcentaje_pago/100)),0,',','.')}}</td>
+                        @else
+                          <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</td>
+                        @endif  
                     <td>
 
                       @if($transaccion->metodo_pago=="Pago en efectivo" && $transaccion->transactionState=="Pendiente")

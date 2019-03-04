@@ -202,12 +202,12 @@
       new Dropzone('.dropzone',{
         //url:"/",
         url:"{{config('app.url')}}"+"/actualizar_certificacion_bancaria/{{$user->id}}",
-        dictDefaultMessage:"Sube aquí tu código QR (solo se permiten imagenes con formato PNG,JPEG o JPG)",
+        dictDefaultMessage:"Sube aquí tu Certificación bancaria (solo se permiten archivos en formato PDF)",
         maxFiles:1,
         maxFilesize:10,//MB
-        acceptedFiles: "image/*",
+        acceptedFiles: ".pdf",
         dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
-        dictInvalidFileType:"Solo esta permitido subir imagenes",
+        dictInvalidFileType:"Solo esta permitido subir archivos pdf",
         headers:{
           'X-CSRF-TOKEN':'{{csrf_token()}}'
         }

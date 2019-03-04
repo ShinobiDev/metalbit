@@ -81,7 +81,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => $data['password'],
             'phone'=>$data['phone'],
-            'costo_clic'=>"50",
+            'costo_clic'=>"300",
             'codigo_referido'=>((int)$cod[0]->codigo_referido+1),
             'calificacion'=>'3',
             'num_calificaciones'=>'1'

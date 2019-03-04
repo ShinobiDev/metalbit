@@ -32,6 +32,7 @@
                 <th>Cantidad vendida</th>
                 <th>Criptomoneda</th>
                 <th style="width: 300px">Valor vendido</th>
+                <th style="width: 300px">Valor pagado por {{config('app.name')}}</th>
                 <th>Moneda local</th>
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
@@ -57,6 +58,16 @@
                     <td>{{number_format($venta->transactionQuantity,2,',','.')}}</td>                                   
                     <td><strong>{{$venta->nombre_cripto_moneda}}</strong></td>                                  
                     <td style="width: 300px">${{number_format($venta->transation_value,2,',','.')}}</td>
+
+                    @if($venta->transactionState=="Pago hecho al anunciante" || $venta->transactionState=="Pago confirmado por el anunciante")
+
+                      <td style="width: 300px">${{number_format($venta->transation_value-($venta->transation_value*($venta->porcentaje_pago/100)),0,',','.')}}</td>
+                    @else
+                       <td style="width: 300px">${{number_format($venta->transation_value-($venta->transation_value*($variable->valor/100)),0,',','.')}}</td>
+
+                    @endif  
+
+
                     <td>{{$venta->moneda_pago}}</td>                                    
                     <td><strong class="text-success">{{$venta->transactionId or 'Pendiente de venta'}}</strong></td>                                     
                     <td>
@@ -67,7 +78,7 @@
                       @endif
 
                       @if($venta->image_wallet!='SIN REGISTRAR')
-                        <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$venta->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
+                        <a target="_blank" href="{{config('app.url')}}/archivos/{{$venta->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
                       @endif
 
                         

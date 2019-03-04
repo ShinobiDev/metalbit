@@ -88,7 +88,7 @@ class UsersController extends Controller
         $u=User::select("codigo_referido")->orderBy("codigo_referido","DESC")->limit(1)->get();
         //dd($u->codigo_referido);
         $data['password'] = str_random(8);
-        $data['costo_clic'] = 0;
+        $data['costo_clic'] = 300;
         $data['codigo_referido'] = ((int)$u[0]->codigo_referido+1);
 
         //Crear usuario
@@ -804,7 +804,8 @@ class UsersController extends Controller
                            'pagos.transactionState',
                            'pagos.transactionQuantity',
                            'pagos.transation_value',
-                           'pagos.transaction_value_pagado',                          
+                           'pagos.transaction_value_pagado',
+                           'pagos.porcentaje_pago',
                            'pagos.id_anuncio',
                            'pagos.id_user_compra',
                            'pagos.metodo_pago',
@@ -837,9 +838,11 @@ class UsersController extends Controller
                             ])
                     ->orderBy('pagos.updated_at','DESC')
                     ->get();
+        $variables = DB::table('variables')->select('valor')->first();
         //dd($pag);
         return view('posts.mis_ventas')
-                ->with('mis_ventas',$pag);
+                ->with('mis_ventas',$pag)
+                ->with('variables',$variables);
         }else{
                 abort(404);
         }
@@ -847,12 +850,14 @@ class UsersController extends Controller
     }
 
     public function ver_todas_las_transacciones(){
-        $pag=pagos::select('pagos.id as id_pago',
+       if(auth()->user()->hasRole('Admin')){
+         $pag=pagos::select('pagos.id as id_pago',
                            'pagos.estado_pago',
                            'pagos.transactionState',
                            'pagos.metodo_pago',
                            'pagos.numero_transaccion',
                            'pagos.transactionQuantity',
+                           'pagos.porcentaje_pago',
                            'pagos.transation_value',
                            'pagos.transaction_value_pagado',
                            'pagos.transactionId',
@@ -877,6 +882,9 @@ class UsersController extends Controller
          $variables = DB::table('variables')->select('valor')->get();
 
          return view('posts.ver_todas_las_transacciones',compact('pag','variables'));
+       }else{
+            abort(404);
+       }
 
     }
     /**
@@ -953,10 +961,15 @@ class UsersController extends Controller
      */
     public function actualizar_certificacion_bancaria(Request $request,$id){
 
+        $newname=$id.".".explode(".",$_FILES['file']['name'])[1];
 
+        $filename = $request->file('file')->move('archivos/certificaciones/');
+        
+        rename($filename,'archivos/certificaciones/'.$newname);
+        //dd($filename);
         User::where('id',$id)
                 ->update([
-                        'certificacion_bancaria'=>Storage::url($request->file('file')->store('public'))
+                        'certificacion_bancaria'=>'/archivos/certificaciones/'.$newname
                     ]);
         return  response()->json(['respuesta'=>true,'mensaje'=>'Se ha registrado tu certificación bancaria']);
 
