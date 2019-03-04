@@ -432,7 +432,12 @@ class RecargasController extends Controller
                  
                 $cliente=User::where('id',$dtr->id_user)->first();
                 Recargas::where("user_id",$dtr->id_user)->increment('valor',$dtr->valor_recarga);
-
+                $r=Recargas::where("user_id",$dtr->id_user)->first();
+                if($r->valor > 0){
+                  Recargas::where("user_id",$dtr->id_user)->update(['status'=>'ACTIVA']);
+                }
+                
+                
                 Recargas::registrar_bonificacion($cliente->id,$dtr->valor_recarga,$cliente->name);
                 $recarga = Recargas::where("user_id",$dtr->id_user)->get();
 
