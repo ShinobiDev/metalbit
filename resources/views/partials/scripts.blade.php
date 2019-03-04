@@ -214,7 +214,7 @@
           mostrar_cargando("msnEspera_compra_"+id,10,"Calculando valor ...");
           peticion_ajax("get",hs,function(rs){
             
-            console.log(rs);
+    
             
             document.getElementById("hdh5_total_"+id).value=number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
             document.getElementById("hd_valor_venta_"+id).value=document.getElementById('num_cantidad_moneda_'+id).value;
@@ -474,8 +474,6 @@
     }
     
   }
-  var nuevo_valor_recarga=50;
-
   function descontar_recargar(id_ventana,id_anuncio,costo,tipo){
     
    
@@ -517,11 +515,15 @@
                   
                  }else{
                   if(tipo=="info"){
+                    
+                    document.getElementById("btn_info_"+id_anuncio).classList.remove('btn-success');
+                    //document.getElementById("btn_info_"+id_anuncio).classList.add('btn-primary');
+                    //document.getElementById("btn_info_"+id_anuncio).innerHTML="VISTO";
                     //$("#btn_info_"+id_anuncio).css({"display":"none"}); 
-                    //$("#anc_"+id_anuncio).css({"display":""});
+                    //$("#anc_"+id_anuncio).css({"display":"block"});
                     //
-                    document.getElementById("anc_"+id_anuncio).style.display='block';
-                   document.getElementById("btn_info_"+id_anuncio).style.display='none';
+                    /*document.getElementById("anc_"+id_anuncio).style.display='block';
+                    document.getElementById("btn_info_"+id_anuncio).style.display='none';*/
                     console.log(document.getElementById("anc_"+id_anuncio));
                     console.log(document.getElementById("btn_info_"+id_anuncio));    
                   }

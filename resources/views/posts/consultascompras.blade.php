@@ -56,7 +56,7 @@
                       <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->
 
 
-                            <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','info')">
+                            <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success " data-toggle="modal" onclick="descontar_recargar('{{ 'ventana_login'.$ad->id}}','{{$ad->id}}','0','info')">
                               <i class="fa fa-info-circle"> Ver info</i>
                               </button>
 
@@ -80,9 +80,12 @@
                                     </button>
                                    
                                 @else
-                                  
+                                    <button id="{{'btn_info_'.$ad->id}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id_anuncio}}','{{$ad->costo_clic}}','info')">
+                                    <i class="fa fa-info-circle"> Ver info</i>
+                                    </button>
+
                                     <!--<a id="anc_{{$ad->id}}" href="anuncios_vistos" class="btn btn-primary" style="display: none">Ya lo Viste</a>-->
-                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-primary btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')">
+                                    <button id="{{'anc_'.$ad->id}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','0','info')" style="display: none">
                                     <i class="fa fa fa-eye"> Ya lo viste</i>
                                     </button>
                                   
