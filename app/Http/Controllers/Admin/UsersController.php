@@ -620,6 +620,54 @@ class UsersController extends Controller
         
        
     }
+
+     /**
+     * Funcion para registarr el codigo qr del wallet
+     * @param  Request $request [description]
+     * @param  [type]  $id      [description]
+     * @return [type]           [description]
+     */
+    public function subir_certificado_pago(Request $request,$id){
+         //dd($id);
+         $this->validate(request(),[
+            'file'=>'required|max:10240|mimetypes:application/pdf'
+        ]);
+
+         $PG=DB::table('pagos')->where(
+                                    "id",$id
+                                )->get();
+                         
+         
+        
+                                                   
+
+        if(count($PG)>0){
+                $filename = $request->file('file')->move('archivos/'.$PG[0]->id);
+                $newname="/pago.".explode(".",$_FILES['file']['name'])[1];
+                rename($filename,realpath(dirname($filename)).$newname);
+
+                //dd($PG[0]->id.$newname);
+
+                DB::table('pagos')
+                         ->where("id",$PG[0]->id)
+                         ->update([
+                            "certificado_pago"=>$PG[0]->id.$newname                            
+                         ]);
+
+               return response()->json(["mensaje"=>"certifido actualizado uno de nuestros agentes lo revisara y hara la respectiva validación","respuesta"=>true]);
+
+        }else{
+             return  response()->json(['respuesta'=>true,'mensaje'=>'Por favor  ingresa un archivo valido']);
+        }                        
+
+
+       
+      
+                
+        
+       
+    }
+    
     /**
      * Funcion para registar el codigo wallet desde el email
      * @param  [type] $id_transaccion [description]
@@ -776,9 +824,19 @@ class UsersController extends Controller
                             ])*/
                     ->orderBy('pagos.updated_at','DESC')
                     ->get();
+        $cuenta_banco =  DB::table('variables')->where('nombre','cuenta_banco')->first();         
+        $nombre_banco =  DB::table('variables')->where('nombre','nombre_banco')->first();         
+        $url_certificacion =  DB::table('variables')->where('nombre','url_certificacion')->first();         
+        $direccion_oficina =  DB::table('variables')->where('nombre','direccion_oficina')->first();
+        $horario =  DB::table('variables')->where('nombre','horario_oficina')->first();         
         //dd([$pag,auth()->user()->name]);
         return view('posts.mis_compras')
-                ->with('mis_compras',$pag);
+                ->with('mis_compras',$pag)
+                ->with('cuenta_banco',$cuenta_banco)
+                ->with('nombre_banco',$nombre_banco)
+                ->with('url_certificacion',$url_certificacion)
+                ->with('direccion_oficina',$direccion_oficina)
+                ->with('horario',$horario);
 
 
         
@@ -838,11 +896,11 @@ class UsersController extends Controller
                             ])
                     ->orderBy('pagos.updated_at','DESC')
                     ->get();
-        $variables = DB::table('variables')->select('valor')->first();
+        $variables = DB::table('variables')->where('nombre','porcentaje_tramite')->select('valor')->first();
         //dd($pag);
         return view('posts.mis_ventas')
                 ->with('mis_ventas',$pag)
-                ->with('variables',$variables);
+                ->with('variable',$variables);
         }else{
                 abort(404);
         }
@@ -879,8 +937,9 @@ class UsersController extends Controller
                     ->join('users','users.id','anuncios.user_id')
                     ->where('transactionState','<>','Visto')
                     ->get();
-         $variables = DB::table('variables')->select('valor')->get();
-
+         
+         $variables = DB::table('variables')->where('nombre','porcentaje_tramite')->select('valor')->get();
+         //dd($pag);   
          return view('posts.ver_todas_las_transacciones',compact('pag','variables'));
        }else{
             abort(404);

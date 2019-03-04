@@ -252,15 +252,24 @@
                                     </div>
                                     <div class="modal-body">
                                             <i class="fa fa-info-circle"></i>
+
                                             @if($compra->metodo_pago=='Pago en efectivo')
                                               <h5>METALBIT S.A.S.</h5>
-                                            <h5>Calle 114 #53 - 96 Bogotá D.C. - Colombia </h5>
+                                            {{--<h5>Calle 114 #53 - 96 Bogotá D.C. - Colombia </h5>--}}
+                                            {{--<h5>Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m. </h5>--}}
+                                            <h5>{{$direccion_oficina->valor}}</h5>
+                                            <h5>{{$horario->valor}}</h5>
                                             <a target="_blank" href="https://www.google.com/maps/place/Cl.+114+%2353-96,+Bogot%C3%A1/@4.6992389,-74.0641402,17z/data=!4m13!1m7!3m6!1s0x8e3f9ace4c6c14bd:0xb2d45afe3cfaa98a!2sCl.+114+%2353-96,+Bogot%C3%A1!3b1!8m2!3d4.699174!4d-74.0641315!3m4!1s0x8e3f9ace4c6c14bd:0xb2d45afe3cfaa98a!8m2!3d4.699174!4d-74.0641315?hl=es">Ver ubicación</a>
-                                            <h5>Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m. </h5>
 
                                             @else
                                             <h5>Realiza la transferencia bancaria </h5>
-                                              <a href="{{config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf'}}" >
+                                              <h5>Banco <strong>{{$nombre_banco->valor}}</strong></h5>
+                                              <h5>Cuenta de ahorros <strong>{{$cuenta_banco->valor}}</strong></h5>
+                                              @php
+                                              $url=config('app.url') .$url_certificacion->valor;
+                                              @endphp
+                                              <a href="{{$url}}" target="_blank">
+                                                
                                                 <h5>Ver certificación bancaria
                                               </h5></a>
                                             @endif
@@ -295,7 +304,12 @@
                                           <div class="form-group">
                                             <label for="exampleInputEmail1">#Transacción</label>
                                             <input name="numero_transaccion" type="text" class="form-control" placeholder="Ingresa el número de transacción">
-                                            <input type="hidden" value="{{$compra->id_pago}}" name="id_pago">           
+                                            <label >Sube aquí, cualquier archivo para certificar tu pago, puede ser una imagen o un archivo .pdf</label>
+                                            <input name="archivo" id="flcerpago_{{$compra->id_anuncio}}" type="file" class="form-control" onchange="subir_archivo_certificacion_pago('{{$compra->id_pago}}',this)" >
+                                            <input type="hidden" value="{{$compra->id_pago}}" name="id_pago" >
+
+
+                                            <label id="msnEsperaPago_{{$compra->id_pago}}"></label>           
                                           </div>                                          
                                          <span id="lblMsn{{$compra->id_pago}}"></span>
                                           <input type="button" value="Confirmar" onclick="confirmar_pago_comprador('{{$compra->id_pago}}')" type="submit" class="btn btn-primary" />
@@ -363,6 +377,40 @@
                                   }
                           });
                   }
+              function subir_archivo_certificacion_pago(id,e){
+                    //e.preventDefault();
+                      mostrar_cargando("msnEsperaPago_"+id,10,"Cargando ...");
+                      var Token =  '{{csrf_token()}}';
+                      var formData = new FormData();
+                      formData.append("file", $('#'+e.id).get(0).files[0]);
+                      formData.append("Token", Token);
+
+                      // Send the token every ajax request
+                      $.ajaxSetup({
+                          headers: { 'X-CSRF-Token' : Token }
+                      });
+
+                          $.ajax({        
+                                  url: "{{config('app.url')}}"+"/subir_certificado_pago/"+id,
+                                  method: 'POST',
+                                  data: formData,
+                                  processData: false,
+                                  contentType: false,
+                                  cache: false,
+                                  success: function(data) {
+                                      document.getElementById("msnEsperaPago_"+id).innerHTML=data.mensaje;
+                                  },
+                                  error:function(data){
+                                    console.log(data);
+                                    if(data.responseJSON.message=="The given data was invalid."){
+                                      document.getElementById("msnEsperaPago_"+id).innerHTML="El formato del archivo debe ser .pdf";  
+                                    }else{
+                                      document.getElementById("msnEsperaPago_"+id).innerHTML=data.responseJSON.message;
+                                    }
+                                    
+                                  }
+                          });
+                  }    
           </script>
           <script>
             $(document).ready(function() {

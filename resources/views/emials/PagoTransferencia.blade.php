@@ -26,7 +26,10 @@ Estimad@ {{$user->name}}, hemos registrado un deseo de compra en {{config('app.n
     | {{$ad[1]->tipo_anuncio}} | {{$ad[2]->transactionQuantity}} | {{$ad[1]->nombre_cripto_moneda}} | ${{number_format($ad[2]->transaction_value_pagado,0,',','.')}} | {{$ad[1]->nombre_moneda}} | 
 @endcomponent
 
-#Presiona este link para ver la certificación bancaria donde podrás realizar el pago de tu compra en {{config('app.name')}}
+#Presiona el link para ver la certificación bancaria donde podrás realizar el pago de tu compra en {{config('app.name')}}
+
+#{{$ad[3]['nombre_banco']}}	
+#Cuenta de ahorro {{$ad[3]['cuenta_banco']}}	
 
 #[MEDIO DE PAGO][1]
 [1]:{{$ad[3]['medio_pago']}}	
