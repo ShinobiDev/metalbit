@@ -928,6 +928,7 @@ class UsersController extends Controller
                            'pagos.transaction_value_pagado',
                            'pagos.transactionId',
                            'pagos.code_wallet',
+                           'pagos.certificado_pago',
                            'pagos.hash_txid',
                            'pagos.moneda_pago',
                            'pagos.updated_at',

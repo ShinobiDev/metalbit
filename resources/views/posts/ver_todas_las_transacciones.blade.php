@@ -92,10 +92,21 @@
                     <td><strong>{{$transaccion->updated_at}}</strong></td>
                     
                     @if($transaccion->metodo_pago=='Transferencia bancaria')
-                      <td><strong class="text-success">{{$transaccion->numero_transaccion or 'Pendiente'}}</strong></td>
+                      <td>
+                        <strong class="text-success">{{$transaccion->numero_transaccion or 'Pendiente'}}</strong>
+                        @if($transaccion->certificado_pago != null)
+                          @php
+                            $url= config('app.url').'/archivos/'.$transaccion->certificado_pago
+                          @endphp
+                          <a target="_blank" href="{{$url}}">Ver certificado</a>
+                        @endif
+                        
+                      </td>
                     @else
                       <td>{{$transaccion->metodo_pago}}</td>
                     @endif
+
+
                     
                     <td><span class="text-red">{{$transaccion->code_wallet}}</span></td>
                     <td><span class="text-success">{{$transaccion->hash_txid}}</span></td>
