@@ -27,6 +27,8 @@ Estimad@ {{$user->name}}, hemos registrado la confirmación de una venta en {{co
 # Número de transacción
 #{{$ad[2]->transactionId}}
 
+#Estado transacción: Confirmada con entidad bancaria
+
 @component('mail::table')
     | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
     |:----------|:----------|:----------|:----------|:----------|

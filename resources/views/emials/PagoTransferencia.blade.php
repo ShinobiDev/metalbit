@@ -28,7 +28,7 @@ Estimad@ {{$user->name}}, hemos registrado un deseo de compra en {{config('app.n
 
 #Presiona el link para ver la certificación bancaria donde podrás realizar el pago de tu compra en {{config('app.name')}}
 
-#{{$ad[3]['nombre_banco']}}	
+#Entidad bancaria {{$ad[3]['nombre_banco']}}	
 #Cuenta de ahorro {{$ad[3]['cuenta_banco']}}	
 
 #[MEDIO DE PAGO][1]

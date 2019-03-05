@@ -622,7 +622,7 @@ class AnunciosController extends Controller
      */
     function confirmar_pago_comprador(Request $request){
         //registrar cambio de estado del pago
-            
+            //dd($request);
             $tr=DB::table("pagos")
                           ->where('numero_transaccion',$request['numero_transaccion'])
                           ->get();
@@ -658,7 +658,7 @@ class AnunciosController extends Controller
                 
                 foreach ($uadmin as $key => $admin) {
 
-                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$pg[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"ConfirmarTransferenciaBancaria");  
+                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$pg[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId,'estado'=>'Pendiente confirmación con entidad bancaria']],0,"ConfirmarTransferenciaBancaria");  
 
                        
                 }
@@ -811,7 +811,7 @@ class AnunciosController extends Controller
     }   
     
     /**
-     * Funcion para confirmar el pago hecho en la entidad bancaria
+     * Funcion para confirmar el pago hecho en la entidad bancaria por parte del administrador
      * @param  Request $request [description]
      * @return [type]           [description]
      */

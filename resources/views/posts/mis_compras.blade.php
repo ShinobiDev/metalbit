@@ -263,7 +263,7 @@
 
                                             @else
                                             <h5>Realiza la transferencia bancaria </h5>
-                                              <h5>Banco <strong>{{$nombre_banco->valor}}</strong></h5>
+                                              <h5>Entidad bancaria <strong>{{$nombre_banco->valor}}</strong></h5>
                                               <h5>Cuenta de ahorros <strong>{{$cuenta_banco->valor}}</strong></h5>
                                               @php
                                               $url=config('app.url') .$url_certificacion->valor;
@@ -302,10 +302,10 @@
                                             
                                       <form id="formConfirmarPago{{$compra->id_pago}}">
                                           <div class="form-group">
-                                            <label for="exampleInputEmail1">#Transacción</label>
+                                            <label for="exampleInputEmail1">Número de la transacción </label>
                                             <input name="numero_transaccion" type="text" class="form-control" placeholder="Ingresa el número de transacción">
                                             <label >Sube aquí, cualquier archivo para certificar tu pago, puede ser una imagen o un archivo .pdf</label>
-                                            <input name="archivo" id="flcerpago_{{$compra->id_anuncio}}" type="file" class="form-control" onchange="subir_archivo_certificacion_pago('{{$compra->id_pago}}',this)" >
+                                            <input name="archivo" id="flcerpago_{{$compra->id_anuncio}}" type="file" onchange="subir_archivo_certificacion_pago('{{$compra->id_pago}}',this)" >
                                             <input type="hidden" value="{{$compra->id_pago}}" name="id_pago" >
 
 

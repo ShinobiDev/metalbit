@@ -18,7 +18,7 @@ Estimad@ {{$user->name}}, tenemos buenas noticias, tu pago ya esta listo en
     | {{$ad[0]->tipo_anuncio}} | {{$ad[0]->transactionQuantity}} | {{$ad[0]->nombre_cripto_moneda}} | ${{number_format($ad[0]->transation_value,'0',',','.')}} | {{$ad[0]->nombre_moneda}} | 
 @endcomponent
 
-{{$ad[2]['mensaje']}}#
+{{$ad[2]['mensaje']}}
 
 
 #[Ver venta][1]
