@@ -83,8 +83,8 @@ class RegisterController extends Controller
             'phone'=>$data['phone'],
             'costo_clic'=>"300",
             'codigo_referido'=>((int)$cod[0]->codigo_referido+1),
-            'calificacion'=>'3',
-            'num_calificaciones'=>'1'
+            'calificacion'=>3,
+            'num_calificaciones'=>1
         ]);
          $u->assignRole('Comerciante');
          DB::table('detalle_horario_usuario')->insert([                                       
@@ -152,7 +152,8 @@ class RegisterController extends Controller
                                                 "referencia_pago"=>time().$u->id,
                                                  "referencia_pago_pay_u"=>time().$u->id,
                                                  "metodo_pago"=>"BONIFICACION REGISTRO REFERIDO ",
-                                                 "tipo_recarga"=>"BONIFICACION"
+                                                 "tipo_recarga"=>"BONIFICACION",
+                                                 'estado_detalle_recarga'=>'APROBADA'
                                                     ]
                                             );
             DB::table("detalle_referidos")->insert([

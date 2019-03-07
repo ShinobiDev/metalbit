@@ -215,10 +215,14 @@
                                               <input name="numero_transaccion" type="text" class="form-control" placeholder="Ingresa el número de transacción">
                                               @if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE' && $recarga_pendiente->metodo_pago=='Transferencia bancaria')
                                                 <input type="hidden" value="{{$recarga_pendiente->id}}" name="id_pago">
+
+                                                <label >Sube aquí, cualquier archivo para certificar tu pago, puede ser una imagen o un archivo .pdf</label>
+                                                <input name="archivo" id="flcerpago_{{$recarga_pendiente->id}}" type="file" onchange="subir_archivo_certificacion_pago_recarga('{{$recarga_pendiente->id}}',this)" >
+
                                               @endif
                                                          
                                             </div>                                          
-                                           <span id="lblMsn{{auth()->user()->id}}"></span>
+                                           <span id="lblMsn"></span>
                                             <input type="button" value="Confirmar" onclick="confirmar_pago_recarga('{{auth()->user()->id}}')" type="submit" class="btn btn-primary" />
                               </form>
                             </div>

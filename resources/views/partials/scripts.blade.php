@@ -703,13 +703,13 @@
   function confirmar_pago_recarga(id){
       var datos=$('#formConfirmarPago').serializarFormulario();
 
-      mostrar_cargando("lblMsn"+id,5,"Procesando solicitud ...");
+      mostrar_cargando("lblMsn",5,"Procesando solicitud ...");
       
       if(datos.numero_transaccion==""){
 
-        document.getElementById('lblMsn'+id).classList.add('text-red');
-        console.log(document.getElementById('lblMsn'+id).classList);
-        document.getElementById('lblMsn'+id).innerHTML="Por favor ingresa un numero de transacción";
+        document.getElementById('lblMsn').classList.add('text-red');
+        console.log(document.getElementById('lblMsn').classList);
+        document.getElementById('lblMsn').innerHTML="Por favor ingresa un numero de transacción";
 
         return false;
         
@@ -721,14 +721,14 @@
                     //success
                    
                     if(e.respuesta){
-                      document.getElementById('lblMsn'+id).classList.remove('text-red');
-                      document.getElementById('lblMsn'+id).classList.add('text-success');
-                      document.getElementById('lblMsn'+id).innerHTML=e.mensaje;
+                      document.getElementById('lblMsn').classList.remove('text-red');
+                      document.getElementById('lblMsn').classList.add('text-success');
+                      document.getElementById('lblMsn').innerHTML=e.mensaje;
 
                     }else{
-                      document.getElementById('lblMsn'+id).classList.remove('text-success');
-                      document.getElementById('lblMsn'+id).classList.add('text-red');
-                      document.getElementById('lblMsn'+id).innerHTML=e.mensaje;
+                      document.getElementById('lblMsn').classList.remove('text-success');
+                      document.getElementById('lblMsn').classList.add('text-red');
+                      document.getElementById('lblMsn').innerHTML=e.mensaje;
                     }
                   }
                   ,datos,
@@ -747,4 +747,38 @@
     document.getElementById('msnValorAPagar').innerHTML=number_format(e.value,0,',','.');
     document.getElementById('hd_val_recarga').value=number_format(e.value,0,'','');
   }
+  function subir_archivo_certificacion_pago_recarga(id,e){
+                    //e.preventDefault();
+                      mostrar_cargando("lblMsn",10,"Cargando ...");
+                      var Token =  '{{csrf_token()}}';
+                      var formData = new FormData();
+                      formData.append("file", $('#'+e.id).get(0).files[0]);
+                      formData.append("Token", Token);
+
+                      // Send the token every ajax request
+                      $.ajaxSetup({
+                          headers: { 'X-CSRF-Token' : Token }
+                      });
+
+                          $.ajax({        
+                                  url: "{{config('app.url')}}"+"/subir_certificado_pago_recarga/"+id,
+                                  method: 'POST',
+                                  data: formData,
+                                  processData: false,
+                                  contentType: false,
+                                  cache: false,
+                                  success: function(data) {
+                                      document.getElementById("lblMsn").innerHTML=data.mensaje;
+                                  },
+                                  error:function(data){
+                                    console.log(data);
+                                    if(data.responseJSON.message=="The given data was invalid."){
+                                      document.getElementById("lblMsn").innerHTML="El formato del archivo debe ser .pdf";  
+                                    }else{
+                                      document.getElementById("lblMsn").innerHTML=data.responseJSON.message;
+                                    }
+                                    
+                                  }
+                          });
+                  }  
 </script>

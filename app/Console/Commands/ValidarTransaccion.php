@@ -59,7 +59,7 @@ class ValidarTransaccion extends Command
                          'users.email')
                 ->join('anuncios','anuncios.id','pagos.id_anuncio')    
                 ->join('users','users.id','anuncios.user_id')    
-                ->where('pagos.transactionState','Pago hecho al anunciante')    
+                ->where('pagos.transactionState','Pago a anunciante')    
                 ->whereDate('pagos.updated_at',Carbon::now()->subDays('3')->format('Y-m-d'))
                 ->get();
         //dd($pagos);        

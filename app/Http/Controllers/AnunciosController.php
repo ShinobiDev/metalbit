@@ -696,10 +696,7 @@ class AnunciosController extends Controller
         
         if(count($re)>0){
             DB::table("detalle_recargas")
-                        ->where([
-                                ["id_user",$request['usuario']],
-                                ["referencia_pago",$request['ref_pago']]
-                            ])
+                        ->where('id',$re[0]->id)
                         ->update([
                             "valor_recarga"=>$request['valor_real'],
                             "valor_pagado"=>$request['total_a_pagar'],

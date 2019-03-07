@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{asset('admin-lte/plugins/datatables/datatables.min.css')}}">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
+    <link rel="icon" href="http://metalbit.co/wp-content/uploads/2018/10/cropped-Icono-32x32.png" sizes="32x32">
 
 
   <!-- Styles -->

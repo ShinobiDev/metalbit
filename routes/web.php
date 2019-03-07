@@ -34,7 +34,7 @@ Route::get("hash_anuncio/{cod_ad}/{monto}/{moneda}/{id_usuario}/{cantidad}","Anu
 Route::get("registrar_compra_anuncio/{cod_ad}/{monto}/{moneda}/{id_usuario}/{cantidad}","AnunciosController@registrar_compra_anuncio");
 
 
-Route::resource('recargas','RecargasController');
+
 
 Route::get('register_landing/{codigo_referido}',"Auth\RegisterController@create_landing");
 
@@ -64,7 +64,7 @@ Route::group([
 
 Route::get("ver_mas_comentarios/{id}/{min}/{max}","AnunciosController@ver_mas_comentarios");
 
-
+Route::resource('recargas','RecargasController');
 
 
 });
@@ -98,6 +98,7 @@ Route::get("cambiar_estado_dia/{id}/{estado}","UsersController@cambiar_estado_di
 Route::post("registrar_wallet/{id}","UsersController@registrar_wallet");
 Route::post("registrar_wallet_qr/{id}","UsersController@registrar_wallet_qr");
 Route::post("subir_certificado_pago/{id}","UsersController@subir_certificado_pago");
+Route::post("subir_certificado_pago_recarga/{id}","UsersController@subir_certificado_pago_recarga");
 Route::get('registrar_codigo_wallet/{id}',"UsersController@registrar_codigo_wallet_email");
 Route::get("mis_bonificaciones","UsersController@mis_bonificaciones");
 Route::get("anuncios_vistos","UsersController@anuncios_vistos_por_mi")->name('anuncios_vistos');

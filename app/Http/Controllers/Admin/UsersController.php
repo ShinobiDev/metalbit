@@ -676,6 +676,60 @@ class UsersController extends Controller
         }    
     }
     
+     /**
+     * Funcion para registarr el certificado de pago por parte del cliente
+     * @param  Request $request [description]
+     * @param  [type]  $id      [description]
+     * @return [type]           [description]
+     */
+    public function subir_certificado_pago_recarga(Request $request,$id){
+         //dd($id);
+         $this->validate(request(),[
+            'file'=>'required|max:10240|mimetypes:application/pdf'
+        ]);
+
+         $PG=DB::table('detalle_recargas')->where(
+                                    "id",$id
+                                )->get();                         
+
+        if(count($PG)>0){
+                $filename = $request->file('file')->move('archivos/'.$PG[0]->id);
+                $newname="/pago_recarga.".explode(".",$_FILES['file']['name'])[1];
+                rename($filename,realpath(dirname($filename)).$newname);
+
+                //dd($PG[0]->id.$newname);
+
+                DB::table('detalle_recargas')
+                         ->where("id",$PG[0]->id)
+                         ->update([
+                            "certificado_pago"=>$PG[0]->id.$newname
+                                                      
+                         ]);
+
+
+                /*$anuncio=Anuncios::where("id",$PG[0]->id_anuncio)->get();
+                
+                //dd($anuncio);
+                $comprador=User::where("id",$PG[0]->id_user_compra)->get();
+
+                $anunciante=User::where("id",$anuncio[0]->user_id)->get();
+
+                $uadmin=User::role('admin')->get();
+                
+                foreach ($uadmin as $key => $admin) {
+
+                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$PG[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$PG[0]->transactionId,'estado'=>'Pendiente confirmación con entidad bancaria']],0,"ConfirmarTransferenciaBancaria");  
+                       
+                }*/
+
+
+                return response()->json(["mensaje"=>"certificado actualizado uno de nuestros agentes lo revisara y hara la respectiva validación, no olvides también registrar el número de la transacción","respuesta"=>true]);
+
+
+        }else{
+             return  response()->json(['respuesta'=>true,'mensaje'=>'Por favor  ingresa un archivo valido']);
+        }    
+    }
     /**
      * Funcion para registar el codigo wallet desde el email
      * @param  [type] $id_transaccion [description]

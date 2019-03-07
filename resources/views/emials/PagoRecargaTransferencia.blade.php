@@ -12,6 +12,10 @@ Recarga pendiente por valor: $ {{number_format($recarga[1]['valor'],'0',',','.')
 
 #Presiona este link para ver la certificación bancaria donde podrás realizar el pago de tu recarga en {{config('app.name')}}.
 
+#Entidad bancaria Bancolombia S.A
+#Cuenta de ahorro 821-995486-69	
+
+
 #[MEDIO DE PAGO][1]
 [1]:{{$ad[0]['medio_pago']}}	
 

@@ -37,7 +37,10 @@ class RecargasController extends Controller
             ->orderBy('recargas.updated_at','users.id')           
             ->get();
              //dd($recargas[0]->id);
-        $mi_lista=Recargas::select('users.id',
+             //
+        $i=0;
+        foreach ($recargas as $key => $value) {
+          $mi_lista[$i]=Recargas::select('users.id',
                                     'users.name',
                                     'detalle_recargas.id as id_recarga',
                                     'detalle_recargas.tipo_recarga',
@@ -45,14 +48,18 @@ class RecargasController extends Controller
                                     'detalle_recargas.valor_recarga',
                                     'detalle_recargas.valor_pagado',
                                     'detalle_recargas.metodo_pago',
+                                    'detalle_recargas.certificado_pago',
                                     'detalle_recargas.referencia_pago',
                                     'detalle_recargas.referencia_pago_pay_u',
                                     'detalle_recargas.created_at')
                             ->join("users","recargas.user_id","users.id")
                             ->join('detalle_recargas','detalle_recargas.id_user','users.id')
                             ->orderBy('users.id')       
-                            ->where("users.id",$recargas[0]->id)    
-                            ->get();   
+                            ->where("users.id",$value->id)    
+                            ->get();       
+              $i++;              
+        }   
+          
         return view('recargas.index')->with('recargas' , $recargas)->with("mi_lista_recarga",$mi_lista);
 
     }

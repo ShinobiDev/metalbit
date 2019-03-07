@@ -125,15 +125,27 @@
                 </tr>
               </thead>
               <tbody id="tbl_mis_lista">
-                 @foreach ($mi_lista_recarga as $mi_recarga)
-                  
-                   <tr>
+                 @foreach ($mi_lista_recarga as $mis_recargas)
+                    
+                   @foreach($mis_recargas as $mi_recarga )
+                    
+                     @if(true)
+                      
+                      <tr>
                     <td>{{ $mi_recarga->id }}.</td>
                     <td>{{ $mi_recarga->name }}</td>
                     <td>{{ $mi_recarga->tipo_recarga }}</td>
                     <td>$ {{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
                     <td>{{ $mi_recarga->estado_detalle_recarga }}</td>
-                    <td>{{ $mi_recarga->referencia_pago_pay_u }}</td>
+                    <td>
+
+                      {{ $mi_recarga->referencia_pago_pay_u }}
+                      @if($mi_recarga->certificado_pago!=null)
+                        <strong class="text-success"><a target="_blank" href="archivos/{{$mi_recarga->certificado_pago}}">ver_certificado<a></strong>
+                      @endif
+
+
+                    </td>
                     <td>{{ $mi_recarga->created_at }}</td>
                     <td>
                       
@@ -144,7 +156,10 @@
                          
                           
                     </td>
-                   </tr> 
+                   </tr>  
+                     @endif
+                    
+                   @endforeach
                  @endforeach
               </tbody>
           </table>
@@ -152,49 +167,49 @@
         
 
 
-           @foreach ($mi_lista_recarga as $mi_recarga)
-                          
-                          @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
+           @foreach ($mi_lista_recarga as $mi_recargas)
+                     @foreach($mis_recargas as $mi_recarga )
+                         @if(true)  
+                              @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
 
-                              <div class="modal fade" id="confirmar_recarga{{$mi_recarga->id_recarga}}" role="dialog">
-                                <div class="modal-dialog">
-                                
-                                  <!-- Modal content-->
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                      <h4 class="modal-title">Confirmar transacción</h4>
-                                    </div>
-                                   <form id="ad_form_{{$mi_recarga->id_recarga}}" method="POST" action="{{route('confirmar_pago_recarga_entidad_bancaria')}}"> 
-                                    <div class="modal-body">
-                                      
-                                      {{csrf_field()}}
+                                      <div class="modal fade" id="confirmar_recarga{{$mi_recarga->id_recarga}}" role="dialog">
+                                        <div class="modal-dialog">
+                                        
+                                          <!-- Modal content-->
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                              <h4 class="modal-title">Confirmar transacción</h4>
+                                            </div>
+                                           <form id="ad_form_{{$mi_recarga->id_recarga}}" method="POST" action="{{route('confirmar_pago_recarga_entidad_bancaria')}}"> 
+                                            <div class="modal-body">
+                                              
+                                              {{csrf_field()}}
 
-                                      <input type="number" name="valor_a_recargar" value="{{$mi_recarga->valor_pagado}}">
-                                      <input type="hidden" name="id_pago" value="{{$mi_recarga->id_recarga}}">
+                                              <input type="number" name="valor_a_recargar" value="{{$mi_recarga->valor_pagado}}">
+                                              <input type="hidden" name="id_pago" value="{{$mi_recarga->id_recarga}}">
 
-                                      
+                                              
 
-                                            
-                                    </div>
-                                    <div class="modal-body">
-                                        <button type="submit" class="btn btn-primary ">Registrar recarga</button>
-                                    </div>
-                                  </form> 
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
-                                    </div>
-                                  </div>
-                                  
-                                </div>
-                              </div>
+                                                    
+                                            </div>
+                                            <div class="modal-body">
+                                                <button type="submit" class="btn btn-primary ">Registrar recarga</button>
+                                            </div>
+                                          </form> 
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+                                            </div>
+                                          </div>
+                                          
+                                        </div>
+                                      </div>
 
 
-                            
-                          @endif
-                          
-                          
-                        
+                                    
+                              @endif
+                         @endif
+                     @endforeach                        
            @endforeach 
           
         </div>
