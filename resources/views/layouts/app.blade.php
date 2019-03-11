@@ -197,6 +197,11 @@
     <!--SELECT 2-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>   
     @include('partials.scripts')
+     <script type="text/javascript">
+      $(document).ready(function() {
+      $('.select2').select2();
+    });
+    </script>
     @yield('scripts')
 </body>
 </html>

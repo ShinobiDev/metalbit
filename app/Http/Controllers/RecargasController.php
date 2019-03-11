@@ -348,7 +348,7 @@ class RecargasController extends Controller
                 
 
 
-        return response()->json(['mensaje'=>"Hemos confirmado tu recarga, uno de nuestros agentes confirmara tu pago gracias por confiar en ".config('app.name').'','respuesta'=>true]);
+        return response()->json(['mensaje'=>"Hemos confirmado tu recarga, uno de nuestros agentes confirmará tu pago gracias por confiar en ".config('app.name').'','respuesta'=>true]);
     }
 
      /**

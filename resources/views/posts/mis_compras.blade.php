@@ -163,6 +163,7 @@
 
 
                                             <label id="msnEspera_{{$compra->id_anuncio}}"></label>
+                                            <span class="text-red"><strong >Nota importante:</strong>Verifica que el código de la Wallet y el código QR correspondan al destino y criptomoneda seleccionada (<strong>{{$compra->nombre_cripto_moneda}}</strong>). El envío de otra criptomoneda puede resultar en la pérdida de tu depósito. <strong>{{config('app.name')}}</strong> no se responsabiliza por la perdida de los fondos causado por un código wallet mal registrado o adjuntado.</span>
                                     </div>
                                     <div class="modal-footer">
                                       <a class="btn btn-secondary" data-dismiss="modal">Salir</a>

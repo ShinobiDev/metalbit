@@ -90,10 +90,12 @@
                           <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
 
                           <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')" value="{{$ad->transaccion_pendiente['wallet']}}">
+
+                          <span class="text-red"><strong >Nota importante:</strong>Verifica que el código de la Wallet y el código QR correspondan al destino y criptomoneda seleccionada (<strong>{{$ad->cripto_moneda}}</strong>). El envío de otra criptomoneda puede resultar en la pérdida de tu depósito. <strong>{{config('app.name')}}</strong> no se responsabiliza por la perdida de los fondos causado por un código wallet mal registrado o adjuntado.</span>
                           
                           
                           @if($ad->transaccion_pendiente['wallet_qr']!='SIN REGISTRAR' && $ad->transaccion_pendiente['wallet_qr']!='0')
-                            <a target="_blank" href="{{config('app.url')}}/archivos/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
+                            <a  target="_blank" href="{{config('app.url')}}/archivos/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
                           @endif
 
                            <input type="file" id="flWallet_{{$ad->id}}" name="wallet" onchange="subir_archivo('{{$ad->id}}',this)">    
@@ -111,7 +113,7 @@
 
                         <div class="modal-body">
                           @if($ad->transaccion_pendiente['state']=='Pendiente' )
-                            <a  href="{{config('app.url').'/ver_mis_compras/'.auth()->user()->id.'/?id='.$ad->transaccion_pendiente['pago']}}"><span class=" text-primary">Ver estado de la compra</span></a>
+                            <a id="anc_pendiente_{{$ad->id}}" href="{{config('app.url').'/ver_mis_compras/'.auth()->user()->id.'/?id='.$ad->transaccion_pendiente['pago']}}"><span class=" text-primary">Ver estado de la compra</span></a>
                           @endif
                           @if(auth::user()->id!=$ad->id_anunciante)
                             @include('payu.botonpayu')

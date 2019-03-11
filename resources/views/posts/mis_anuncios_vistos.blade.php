@@ -45,8 +45,11 @@
 
               <tbody>
                 {{--se crear anuncio de compra--}}
+
                 @foreach ($anuncios_vistos as $ad)
-                    <tr>
+
+                    
+                    <tr id="row_{{$ad->id_anuncio}}">      
                       <td class="text-green text-center"><strong><h4>{{strtoupper($ad->tipo_anuncio)}}</h4></strong></td>
                       <td>{{$ad->name}}</td>
                       <td>{{$ad->banco }}</td>
@@ -65,9 +68,27 @@
                                         </button>
                                     
                                       @if($ad->tipo_anuncio=="venta")
-                                        <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
-                                          Comprar
-                                        </button>
+                                     
+
+
+
+
+
+                                         @if($ad->transaccion_pendiente['respuesta']==true && $ad->transaccion_pendiente['state']!='Visto')
+                                                <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
+                                                  <i class="fa fa-money"> Compra pendiente</i>
+                                                  
+                                                </button>
+                                                  
+                                                
+                                              @else
+                                                <button id="{{'btn_compra_'.$ad->id}}" type="button" class="btn btn-default btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infoventa'.$ad->id}}','{{$ad->id_anuncio}}','0','compra')" >
+                                                 <i class="fa fa-money"> Comprar</i>
+                                                </button>
+                                              @endif
+
+
+
                                        
                                       @endif
                                       

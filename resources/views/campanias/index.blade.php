@@ -54,30 +54,32 @@
                   <div class="form-group col-6 col-md-6">
                     <label for="exampleInputPassword1">Tipo de campaña</label>
                    
-                   <select class="form-control select2" name="tipo_canje" value="{{old('tipo_canje')}}">
+                   <select class="form-control " name="tipo_canje" value="{{old('tipo_canje')}}">
                         <option value="compra">Compras en {{config('app.name')}}</option>
                         <option value="recarga">Recargas en {{config('app.name')}}</option>
                     </select>
                   </div>
-                  <div class="form-group col-6 col-md-6">
-                    <label for="exampleInputPassword1">Selecciona para quien aplica la campaña</label>
-                   
-                   <select class="form-control select2" name="tipo_campania" value="{{old('tipo_campania')}}" onchange="cambiarselect(this);">
-                        
-                        <option value="comerciantes">comerciantes</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-6 col-md-6">
-                   <label for="exampleInputPassword1">Usuario autorizado para canjear</label>
-                   
-                   <select id="sel_usuario_tramitador" class="form-control select2"  name="usuario_tramitador" value="{{old('usuario_tramitador')}}">
-                        <option value="0">No selecciones ningún usuario si es una campaña abierta a todos los usuarios</option>
-                      @foreach($users_tramitadores as $u)
-                        <option value="{{$u->id}}">{{$u->name}}</option>
-                      @endforeach  
-                    </select>
+                  <div class="col-12 col-md-12">
+                      <div class="form-group col-6 col-md-6">
+                        <label for="exampleInputPassword1">Selecciona para quien aplica la campaña</label>
+                       
+                       <select class="form-control" name="tipo_campania" value="{{old('tipo_campania')}}">
+                            
+                            <option value="comerciantes">comerciantes</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-6 col-md-6">
+                       <label for="exampleInputPassword1">Usuario autorizado para canjear</label>
+                       
+                       <select id="sel_usuario_tramitador" class="form-control select2"  name="usuario_tramitador" value="{{old('usuario_tramitador')}}">
+                            <option value="0">No selecciones ningún usuario si es una campaña abierta a todos los usuarios</option>
+                          @foreach($users_tramitadores as $u)
+                            <option value="{{$u->id}}">{{$u->name}}</option>
+                          @endforeach  
+                        </select>
 
-                   
+                       
+                      </div>
                   </div>
                   
                   <div class="form-group col-6 col-md-6">
@@ -162,18 +164,6 @@
 
 @section('scripts')
   <script type="text/javascript">
-    function cambiarselect(e){
-     switch(e.value){
-        case "comerciantes":
-          document.getElementById('sel_usuario_tramitador').style.display='';
-          document.getElementById('sel_usuario_cliente').style.display='none';
-        break;
-        case "clientes":
-          document.getElementById('sel_usuario_cliente').style.display='';
-          document.getElementById('sel_usuario_tramitador').style.display='none';
-        break;
-      }      
-    }
     function cambio_dto(e){
       
       switch(e.value){

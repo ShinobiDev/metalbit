@@ -593,12 +593,14 @@ class AnunciosController extends Controller
                       ['id_user_compra',$request['usuario']],
                       ['transactionId' , $request['ref_pago']]
                     ])->get();
+          
           //dd( [$comprador[0],$anunciante[0],$anuncio[0],$pg]);
           //aqui debo enviar los datos de confirmación a la cuenta de correo}
           //dd($pg);
           if($request['tipo_pago']==1){
             $nombre_banco=DB::table('variables')->where('nombre','nombre_banco')->first();
             $cuenta_banco=DB::table('variables')->where('nombre','cuenta_banco')->first();
+            
             NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$request['ref_pago'],'nombre_banco'=>$nombre_banco->valor,'cuenta_banco'=>$cuenta_banco->valor,'medio_pago'=>config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf']],[],"PagoTransaccion");
           }else{
             NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$request['ref_pago']]],[],"PagoEfectivo");
@@ -611,7 +613,7 @@ class AnunciosController extends Controller
 
         
         
-        return response()->json(['mensaje'=>"Hemos registrado tu compra y enviado información acerca del medio de pago seleccionado, a tu correo electrónico ".$comprador[0]->email,'respuesta'=>true]);
+        return response()->json(['mensaje'=>"Hemos registrado tu compra y enviado información acerca del medio de pago seleccionado, a tu correo electrónico ".$comprador[0]->email,'respuesta'=>true,'refpago'=>$request['ref_pago']]);
         
     }
 
@@ -668,7 +670,7 @@ class AnunciosController extends Controller
                 
 
 
-        return response()->json(['mensaje'=>"Hemos confirmado tu compra, uno de nuestros agentes confirmara tu pago gracias por confiar en ".config('app.name').'','respuesta'=>true]);
+        return response()->json(['mensaje'=>"Hemos confirmado tu compra, uno de nuestros agentes confirmará tu pago gracias por confiar en ".config('app.name').'','respuesta'=>true]);
     }
 
      /**

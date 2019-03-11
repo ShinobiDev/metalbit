@@ -122,6 +122,7 @@
                   <th>Referecia recarga</th>                 
                   <th>Fecha recarga</th>                 
                   <th>Acción</th>                 
+
                 </tr>
               </thead>
               <tbody id="tbl_mis_lista">
@@ -129,7 +130,6 @@
                     
                    @foreach($mis_recargas as $mi_recarga )
                     
-                     @if(true)
                       
                       <tr>
                     <td>{{ $mi_recarga->id }}.</td>
@@ -150,32 +150,11 @@
                     <td>
                       
                       @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
-                         <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#confirmar_recarga{{$mi_recarga->id_recarga}}">Confirmar recarga</button>
-                      @endif
-                         
-                         
-                          
-                    </td>
-                   </tr>  
-                     @endif
-                    
-                   @endforeach
-                 @endforeach
-              </tbody>
-          </table>
-
-        
-
-
-           @foreach ($mi_lista_recarga as $mi_recargas)
-                     @foreach($mis_recargas as $mi_recarga )
-                         @if(true)  
-                              @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
-
-                                      <div class="modal fade" id="confirmar_recarga{{$mi_recarga->id_recarga}}" role="dialog">
+                         <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#confirmar_recarga{{$mi_recarga->referencia_pago_pay_u}}">Confirmar recarga</button>
+                         <div class="modal fade" id="confirmar_recarga{{$mi_recarga->referencia_pago_pay_u}}" role="dialog">
                                         <div class="modal-dialog">
                                         
-                                          <!-- Modal content-->
+                                          <!-- Modal content si no se ve en moviles debe sacrse de la tabla-->
                                           <div class="modal-content">
                                             <div class="modal-header">
                                               <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -206,11 +185,21 @@
                                       </div>
 
 
-                                    
-                              @endif
-                         @endif
-                     @endforeach                        
-           @endforeach 
+                      @endif
+                         
+                         
+                          
+                    </td>
+                   
+                   </tr>  
+                   
+                    
+                   @endforeach
+                 @endforeach
+              </tbody>
+          </table>
+
+
           
         </div>
  

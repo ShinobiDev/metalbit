@@ -3,7 +3,7 @@
 			@if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE')
 				<div>
 					<label>¿Monto a recargar?</label>
-					<input id="num_valor_recarga" type="number" min="20000" value="{{number_format($recarga_pendiente->valor_recarga,0,'','')}}" onchange="cambiar_valor_recarga(this)" readonly>
+					<input id="num_valor_recarga" type="number" min="20000" value="{{number_format($recarga_pendiente->valor_recarga,0,'','')}}" onchange="cambiar_valor_recarga(this)">
 					@include('partials.redimir_cupon_recarga',['c'=>auth()->user()->id])
 					<label  class="text-success">Total a pagar $<span id="msnValorAPagar">{{number_format($recarga_pendiente->valor_pagado,0,',','.')}}</span></label>
 					<input type="hidden" id="hd_val_recarga" value="20000">	

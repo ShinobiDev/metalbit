@@ -450,7 +450,7 @@ class UsersController extends Controller
        $ad_arr=new Anuncios();
        $arr_anuncios = $ad_arr->ver_anuncios($ad_saw);
 
-      //dd($ad_saw,$arr_anuncios);
+      
       return view('posts.mis_anuncios_vistos')
                 ->with('anuncios_vistos',$arr_anuncios)
                 ->with('success', 'Aqui esta el listado de los clic que haz visto');
@@ -668,7 +668,7 @@ class UsersController extends Controller
                 }*/
 
 
-                return response()->json(["mensaje"=>"certificado actualizado uno de nuestros agentes lo revisara y hara la respectiva validación, no olvides también registrar el número de la transacción","respuesta"=>true]);
+                return response()->json(["mensaje"=>"certificado actualizado uno de nuestros agentes lo revisará y hará la respectiva validación, no olvides también registrar el número de la transacción","respuesta"=>true]);
 
 
         }else{
@@ -707,23 +707,10 @@ class UsersController extends Controller
                          ]);
 
 
-                /*$anuncio=Anuncios::where("id",$PG[0]->id_anuncio)->get();
-                
-                //dd($anuncio);
-                $comprador=User::where("id",$PG[0]->id_user_compra)->get();
-
-                $anunciante=User::where("id",$anuncio[0]->user_id)->get();
-
-                $uadmin=User::role('admin')->get();
-                
-                foreach ($uadmin as $key => $admin) {
-
-                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$PG[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$PG[0]->transactionId,'estado'=>'Pendiente confirmación con entidad bancaria']],0,"ConfirmarTransferenciaBancaria");  
-                       
-                }*/
+               
 
 
-                return response()->json(["mensaje"=>"certificado actualizado uno de nuestros agentes lo revisara y hara la respectiva validación, no olvides también registrar el número de la transacción","respuesta"=>true]);
+                return response()->json(["mensaje"=>"certificado actualizado uno de nuestros agentes lo revisará y hará la respectiva validación, no olvides también registrar el número de la transacción","respuesta"=>true]);
 
 
         }else{
@@ -1186,4 +1173,6 @@ class UsersController extends Controller
         }
       return back()->with('success','Notificación enviada al administrador correctamente');
     }
+
+    
 }

@@ -61,6 +61,7 @@ Route::group([
     Route::get("ver_recargas_mis_recargas/{id}","RecargasController@ver_recargas_mis_recargas");
     Route::post("calificar","AnunciosController@calificar");
     Route::post("calificar_venta","AnunciosController@calificar_venta");
+  
 
 Route::get("ver_mas_comentarios/{id}/{min}/{max}","AnunciosController@ver_mas_comentarios");
 

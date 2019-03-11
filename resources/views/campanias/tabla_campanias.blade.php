@@ -27,7 +27,7 @@
           @if($c->id_user==NULL)
             <td><span class="text-danger">ABIERTA</span></td>
           @else
-            <td><span class="text-success">{{$c->usuario->nombre}}</span></td>
+            <td><span class="text-success">{{$c->usuario->name}}</span></td>
           @endif
             <td><span class="text-success">{{strtoupper($c->tipo_canje)}}</span></td>
           
