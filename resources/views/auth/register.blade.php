@@ -110,8 +110,7 @@
     function validar_codigo(e){
             var p_error_cod=document.getElementById("p_error_cod");
             var btn_register=document.getElementById("btn_register");
-            console.log(e);
-            console.log(e.value);
+     
             if(e.value!=""){
               peticion_ajax("GET","validar_codigo/"+e.value,function(rs){
                     if(rs.respuesta){
@@ -123,6 +122,9 @@
                           btn_register.disabled=true;
                     }
               },{});
+            }else{
+                p_error_cod.style.display='none';
+                btn_register.disabled=false;
             }
     }
 </script>

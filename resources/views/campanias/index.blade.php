@@ -54,9 +54,10 @@
                   <div class="form-group col-6 col-md-6">
                     <label for="exampleInputPassword1">Tipo de campaña</label>
                    
-                   <select class="form-control " name="tipo_canje" value="{{old('tipo_canje')}}">
+                   <select class="form-control " name="tipo_canje" value="{{old('tipo_canje')}}" onchange="validar_tipo_canje(this)">
                         <option value="compra">Compras en {{config('app.name')}}</option>
                         <option value="recarga">Recargas en {{config('app.name')}}</option>
+                        <option value="regalo_recarga">Bono de regalo en recargas para {{config('app.name')}}</option>
                     </select>
                   </div>
                   <div class="col-12 col-md-12">
@@ -95,10 +96,10 @@
                     <div class="col-3 col-md-3">
                         <label for="exampleInputPassword1">Aplicar descuento</label>
                       <div class="radio ">
-                        <label><input type="radio" value="valor_neto" name="tipo_dto" onchange="cambio_dto(this)" checked>Valor neto</label>
+                        <label><input id="rd_val" type="radio" value="valor_neto" name="tipo_dto" onchange="cambio_dto(this)" checked>Valor neto</label>
                       </div>
                       <div class="radio ">
-                        <label><input type="radio" value="porcentaje" name="tipo_dto" onchange="cambio_dto(this)" >Porcentaje</label>
+                        <label><input id="rd_por" type="radio" value="porcentaje" name="tipo_dto" onchange="cambio_dto(this)" >Porcentaje</label>
                       </div>
                       
                     </div>
@@ -181,5 +182,19 @@
         break;
       }      
     };
+
+    function validar_tipo_canje(e){
+      if(e.value=='regalo_recarga'){
+        document.getElementById('rd_por').disabled=true;
+        document.getElementById('rd_val').checked=true;
+        document.getElementById('lbl_dto').style.display='none';
+        document.getElementById('inp_dto').style.display='none';
+        document.getElementById('lbl_vlr').style.display='';
+        document.getElementById('inp_vlr').style.display='';
+      }else{
+        document.getElementById('rd_por').disabled=false;
+
+      }
+    }
   </script>
 @endsection

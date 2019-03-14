@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 13, 2019 at 05:01 PM
+-- Generation Time: Mar 14, 2019 at 11:36 AM
 -- Server version: 5.7.25-0ubuntu0.18.04.2
 -- PHP Version: 7.2.15-0ubuntu0.18.04.1
 
@@ -148,7 +148,8 @@ INSERT INTO `bonificaciones` (`id`, `tipo_bonificacion`, `fk_id_detalle_referido
 (51, 'RECARGA', 31, '210.00', '2019-01-31 02:15:07', '0000-00-00 00:00:00'),
 (52, 'RECARGA', 31, '200.00', '2019-01-31 02:16:51', '0000-00-00 00:00:00'),
 (53, 'RECARGA', 31, '1200.00', '2019-01-31 02:20:22', '0000-00-00 00:00:00'),
-(54, 'RECARGA', 31, '200.00', '2019-01-31 02:31:00', '0000-00-00 00:00:00');
+(54, 'RECARGA', 31, '200.00', '2019-01-31 02:31:00', '0000-00-00 00:00:00'),
+(55, 'REGISTRO', 32, '100.00', '2019-03-14 14:01:46', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -160,7 +161,7 @@ CREATE TABLE `campanias` (
   `id` int(11) NOT NULL,
   `nombre_campania` varchar(256) NOT NULL,
   `tipo_campania` enum('global','personal') NOT NULL,
-  `tipo_canje` enum('compra','recarga') NOT NULL,
+  `tipo_canje` enum('compra','recarga','regalo_recarga') NOT NULL,
   `fecha_inicial_vigencia` datetime DEFAULT NULL,
   `fecha_final_vigencia` datetime NOT NULL,
   `numero_de_cupones` int(11) NOT NULL,
@@ -184,7 +185,10 @@ CREATE TABLE `campanias` (
 
 INSERT INTO `campanias` (`id`, `nombre_campania`, `tipo_campania`, `tipo_canje`, `fecha_inicial_vigencia`, `fecha_final_vigencia`, `numero_de_cupones`, `cupones_disponibles`, `cupones_canjeados`, `id_user`, `limite_por_usuario`, `tipo_de_descuento`, `valor_de_descuento`, `moneda_descuento`, `costo_minimo`, `es_acumulable`, `estado_campania`, `created_at`, `updated_at`) VALUES
 (1, 'PAGA EL 25 % DE TU RECARGA 4', 'personal', 'recarga', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 1, 0, 2, 1, 'valor_neto', '20000.00', 'COP', '500.00', '0', 'ABIERTA', '2019-03-11 12:41:51', '2019-03-11 12:41:51'),
-(2, 'recargas brino', 'personal', 'recarga', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 1, 0, 2, 1, 'valor_neto', '19998.00', 'COP', '500.00', '0', 'ABIERTA', '2019-03-11 12:47:32', '2019-03-11 12:47:32');
+(2, 'recargas brino', 'personal', 'recarga', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 1, 0, 2, 1, 'valor_neto', '19998.00', 'COP', '500.00', '0', 'ABIERTA', '2019-03-11 12:47:32', '2019-03-11 12:47:32'),
+(3, 'MI primer regalo', 'global', 'regalo_recarga', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 10, 0, 10, NULL, 1, 'valor_neto', '5000.00', 'COP', '500.00', '0', 'ABIERTA', '2019-03-14 09:43:22', '2019-03-14 10:11:19'),
+(4, 'recarga de 20mil', 'global', 'recarga', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 100, 98, 2, NULL, 2, 'valor_neto', '20000.00', 'COP', '500.00', '0', 'ABIERTA', '2019-03-14 10:13:06', '2019-03-14 10:13:53'),
+(5, 'MI primer regalo', 'global', 'regalo_recarga', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 10, 9, 1, NULL, 1, 'valor_neto', '5000.00', 'COP', '500.00', '0', 'ABIERTA', '2019-03-14 10:30:00', '2019-03-14 10:30:38');
 
 -- --------------------------------------------------------
 
@@ -211,7 +215,118 @@ CREATE TABLE `cupones_campanias` (
 
 INSERT INTO `cupones_campanias` (`id`, `codigo_cupon`, `estado`, `fecha_canje`, `id_campania`, `transaccion_donde_se_aplico`, `monto_valor_redimido`, `id_usuario_canje`, `created_at`, `updated_at`) VALUES
 (1, 'NCLQQB', 'sin canjear', NULL, 1, NULL, NULL, NULL, '2019-03-11 12:41:51', '2019-03-11 12:41:51'),
-(2, 'J8Y5GA', 'sin canjear', NULL, 2, NULL, NULL, NULL, '2019-03-11 12:47:32', '2019-03-11 12:47:32');
+(2, 'J8Y5GA', 'sin canjear', NULL, 2, NULL, NULL, NULL, '2019-03-11 12:47:32', '2019-03-11 12:47:32'),
+(12, 'METALBIT', 'canjeado_pagado', '2019-03-14 10:11:19', 3, 'rec_1552576274-14', '5000.00', 571, '2019-03-14 09:43:22', '2019-03-14 10:11:19'),
+(13, 'METALBIT2', 'canjeado_pagado', '2019-03-14 10:13:40', 4, 'rec_1552576414-34', '20000.00', 555, '2019-03-14 10:13:06', '2019-03-14 10:13:40'),
+(14, 'METALBIT2', 'canjeado', '2019-03-14 10:13:53', 4, 'rec_1552576424-44', '20000.00', 555, '2019-03-14 10:13:06', '2019-03-14 10:13:53'),
+(15, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(16, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(17, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(18, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(19, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(20, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(21, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(22, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(23, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(24, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(25, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(26, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(27, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(28, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(29, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(30, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(31, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(32, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(33, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(34, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(35, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(36, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(37, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(38, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(39, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(40, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(41, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(42, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(43, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(44, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(45, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(46, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(47, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(48, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(49, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(50, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(51, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(52, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(53, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(54, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(55, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(56, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(57, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(58, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(59, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(60, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(61, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(62, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(63, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(64, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(65, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(66, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(67, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(68, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(69, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(70, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(71, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(72, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(73, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(74, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(75, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(76, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(77, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(78, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(79, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(80, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(81, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(82, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(83, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(84, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(85, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(86, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(87, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(88, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(89, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(90, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(91, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(92, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(93, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(94, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(95, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(96, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(97, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(98, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(99, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(100, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(101, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(102, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(103, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(104, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(105, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(106, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(107, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(108, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(109, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(110, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(111, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(112, 'METALBIT2', 'sin canjear', NULL, 4, NULL, NULL, NULL, '2019-03-14 10:13:06', '2019-03-14 10:13:06'),
+(113, 'METALBIT3', 'canjeado_pagado', '2019-03-14 10:30:38', 5, 'rec_1552577428-28', '5000.00', 576, '2019-03-14 10:30:00', '2019-03-14 10:30:38'),
+(114, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(115, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(116, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(117, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(118, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(119, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(120, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(121, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00'),
+(122, 'METALBIT3', 'sin canjear', NULL, 5, NULL, NULL, NULL, '2019-03-14 10:30:00', '2019-03-14 10:30:00');
 
 -- --------------------------------------------------------
 
@@ -402,7 +517,14 @@ INSERT INTO `detalle_horario_usuario` (`id`, `id_user`, `dia`, `horario`, `creat
 (180, 576, 'JUEVES', '08:00|17:00', '2019-01-31 02:09:38', '2019-01-30 21:09:38', 'ABIERTO'),
 (181, 576, 'VIERNES', '08:00|17:00', '2019-01-31 02:09:38', '2019-01-30 21:09:38', 'ABIERTO'),
 (182, 576, 'SABADO', '08:00|17:00', '2019-01-31 02:09:38', '2019-01-30 21:09:38', 'CERRADO'),
-(183, 576, 'DOMINGO', '08:00|17:00', '2019-01-31 02:09:38', '2019-01-30 21:09:38', 'CERRADO');
+(183, 576, 'DOMINGO', '08:00|17:00', '2019-01-31 02:09:38', '2019-01-30 21:09:38', 'CERRADO'),
+(184, 577, 'LUNES', '08:00|17:00', '2019-03-14 14:01:46', '2019-03-14 09:01:46', 'ABIERTO'),
+(185, 577, 'MARTES', '08:00|17:00', '2019-03-14 14:01:46', '2019-03-14 09:01:46', 'ABIERTO'),
+(186, 577, 'MIERCOLES', '08:00|17:00', '2019-03-14 14:01:46', '2019-03-14 09:01:46', 'ABIERTO'),
+(187, 577, 'JUEVES', '08:00|17:00', '2019-03-14 14:01:46', '2019-03-14 09:01:46', 'ABIERTO'),
+(188, 577, 'VIERNES', '08:00|17:00', '2019-03-14 14:01:46', '2019-03-14 09:01:46', 'ABIERTO'),
+(189, 577, 'SABADO', '08:00|17:00', '2019-03-14 14:01:46', '2019-03-14 09:01:46', 'CERRADO'),
+(190, 577, 'DOMINGO', '08:00|17:00', '2019-03-14 14:01:46', '2019-03-14 09:01:46', 'CERRADO');
 
 -- --------------------------------------------------------
 
@@ -465,7 +587,7 @@ INSERT INTO `detalle_recargas` (`id`, `id_user`, `tipo_recarga`, `valor_recarga`
 (90, 565, 'BONIFICACION', '100', NULL, '1544483746570', '1544483746570', 'BONIFICACION REGISTRO REFERIDO ', 'REGISTRADA', '2018-12-10 23:15:46', '2018-12-10 23:15:46', NULL),
 (91, 2, 'BONIFICACION', '100', NULL, '1544484108571', '1544484108571', 'BONIFICACION REGISTRO REFERIDO ', 'REGISTRADA', '2018-12-10 23:21:48', '2018-12-10 23:21:48', NULL),
 (92, 5, 'PAGO', '21000', NULL, 'rec_1544545427-56', '845080656', 'BALOTO', 'APROBADA', '2018-12-11 16:24:00', '2018-12-11 16:26:40', NULL),
-(97, 555, 'PAGO', '20000', NULL, 'rec_1545163146-06', '', '', 'REGISTRADA', '2018-12-18 19:57:54', '2018-12-18 19:59:20', NULL),
+(97, 555, 'PAGO', '20000', '20000.00', '30000', '', '', 'REGISTRADA', '2018-12-18 19:57:54', '2019-03-14 15:13:53', NULL),
 (98, 5, 'PAGO', '20000', NULL, 'rec_1545169141-01', '198857066', 'BALOTO', 'APROBADA', '2018-12-18 21:39:04', '2018-12-18 21:51:51', NULL),
 (99, 1, 'BONIFICACION', '200', NULL, '15451695175', '15451695175', 'BONIFICACION RECARGA 1%  edgar.guzman.vargas.adrian', 'REGISTRADA', '2018-12-18 21:45:17', '2018-12-18 21:45:17', NULL),
 (100, 1, 'BONIFICACION', '200', NULL, '15451696745', '15451696745', 'BONIFICACION RECARGA 1%  edgar.guzman.vargas.adrian', 'REGISTRADA', '2018-12-18 21:47:54', '2018-12-18 21:47:54', NULL),
@@ -488,7 +610,16 @@ INSERT INTO `detalle_recargas` (`id`, `id_user`, `tipo_recarga`, `valor_recarga`
 (117, 576, 'PAGO', '20000', NULL, 'rec_1548901819-19', '845316198', 'BALOTO', 'APROBADA', '2019-01-31 02:30:31', '2019-01-31 02:31:00', NULL),
 (118, 571, 'BONIFICACION', '200', NULL, '1548901860576', '1548901860576', 'BONIFICACION RECARGA 1%  EDGAR AREANDINA', 'REGISTRADA', '2019-01-31 02:31:00', '2019-01-31 02:31:00', NULL),
 (119, 555, 'PAGO', '20000', '20000.00', 'rec-1551459340-40', 'rec-1551459340-40', '', 'APROBADA', '2019-03-01 16:55:40', '2019-03-01 16:55:40', NULL),
-(120, 555, 'PAGO', '20000', '20000.00', 'rec_1551733640-20', '45455454', 'Transferencia bancaria', 'PENDIENTE APROBACION', '2019-03-04 21:07:29', '2019-03-04 21:09:48', NULL);
+(120, 555, 'PAGO', '20000', '20000.00', 'rec_1551733640-20', '45455454', 'Transferencia bancaria', 'PENDIENTE APROBACION', '2019-03-04 21:07:29', '2019-03-04 21:09:48', NULL),
+(121, 576, 'BONIFICACION', '100', NULL, '1552572106577', '1552572106577', 'BONIFICACION REGISTRO REFERIDO ', 'APROBADA', '2019-03-14 14:01:46', '2019-03-14 14:01:46', NULL),
+(122, 555, '', '5000', NULL, '1552575945555', '1552575945555', 'RECARGA GRATIS', 'APROBADA', '2019-03-14 15:05:45', '2019-03-14 15:05:45', NULL),
+(123, 555, '', '5000', '0.00', '1552576069555', '1552576069555', 'RECARGA GRATIS', 'APROBADA', '2019-03-14 15:07:49', '2019-03-14 15:07:49', NULL),
+(124, 555, '', '5000', '0.00', '1552576154555', '1552576154555', 'RECARGA GRATIS', 'APROBADA', '2019-03-14 15:09:14', '2019-03-14 15:09:14', NULL),
+(125, 571, '', '5000', '0.00', '1552576212571', '1552576212571', 'RECARGA GRATIS', 'APROBADA', '2019-03-14 15:10:12', '2019-03-14 15:10:12', NULL),
+(126, 571, '', '5000', '0.00', '1552576279571', '1552576279571', 'RECARGA GRATIS', 'APROBADA', '2019-03-14 15:11:19', '2019-03-14 15:11:19', NULL),
+(127, 555, '', '20000', '0.00', '1552576420555', '1552576420555', 'RECARGA GRATIS', 'APROBADA', '2019-03-14 15:13:40', '2019-03-14 15:13:40', NULL),
+(128, 555, 'PAGO', '30000', '10000.00', 'rec_1552576424-44', 'rec_1552576424-44', 'Transferencia bancaria', 'PENDIENTE', '2019-03-14 15:14:30', '2019-03-14 15:15:45', NULL),
+(129, 576, '', '5000', '0.00', '1552577438576', '1552577438576', 'RECARGA GRATIS', 'APROBADA', '2019-03-14 15:30:38', '2019-03-14 15:30:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -513,7 +644,8 @@ INSERT INTO `detalle_referidos` (`id`, `id_referido`, `id_quien_refiere`, `creat
 (27, 568, 569, '2018-12-03 04:57:55', '0000-00-00 00:00:00'),
 (29, 2, 571, '2018-12-10 23:21:48', '0000-00-00 00:00:00'),
 (30, 1, 575, '2019-01-31 02:08:09', '0000-00-00 00:00:00'),
-(31, 571, 576, '2019-01-31 02:09:38', '0000-00-00 00:00:00');
+(31, 571, 576, '2019-01-31 02:09:38', '0000-00-00 00:00:00'),
+(32, 576, 577, '2019-03-14 14:01:46', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -588,7 +720,8 @@ INSERT INTO `model_has_roles` (`role_id`, `model_id`, `model_type`) VALUES
 (3, 573, 'App\\User'),
 (3, 574, 'App\\User'),
 (3, 575, 'App\\User'),
-(3, 576, 'App\\User');
+(3, 576, 'App\\User'),
+(3, 577, 'App\\User');
 
 -- --------------------------------------------------------
 
@@ -764,16 +897,17 @@ INSERT INTO `recargas` (`id`, `status`, `valor`, `user_id`, `created_at`, `updat
 (2, 'ACTIVA', '19300.00', 2, NULL, '2018-12-11 04:21:48'),
 (3, 'ACTIVA', '17899.00', 3, NULL, NULL),
 (43, 'ACTIVA', '353700.00', 5, '2018-11-13 05:00:00', '2018-12-18 21:51:51'),
-(44, 'ACTIVA', '814450.00', 555, '2018-11-16 22:12:45', '2019-03-04 11:02:07'),
+(44, 'ACTIVA', '879450.00', 555, '2018-11-16 22:12:45', '2019-03-14 15:13:40'),
 (52, 'ACTIVA', '0.00', 563, '2018-12-01 00:40:51', '2018-12-01 00:40:51'),
 (53, 'ACTIVA', '0.00', 564, '2018-12-01 01:05:25', '2018-12-01 01:05:25'),
 (54, 'AGOTADA', '-200.00', 565, '2018-12-01 01:22:18', '2019-01-31 18:24:07'),
 (57, 'ACTIVA', '18200.00', 568, '2018-12-03 09:48:52', '2018-12-18 21:11:01'),
 (58, 'ACTIVA', '0.00', 569, '2018-12-03 09:57:55', '2019-03-04 11:00:07'),
-(60, 'ACTIVA', '900290.00', 571, '2018-12-11 04:21:49', '2019-03-04 11:00:39'),
+(60, 'ACTIVA', '910290.00', 571, '2018-12-11 04:21:49', '2019-03-14 15:11:19'),
 (61, 'ACTIVA', '0.00', 573, '2018-12-18 21:22:15', '2018-12-18 21:22:15'),
 (62, 'ACTIVA', '0.00', 575, '2019-01-29 17:00:15', '2019-01-29 17:00:15'),
-(63, 'ACTIVA', '241000.00', 576, '2019-01-31 02:09:42', '2019-01-31 02:31:00');
+(63, 'ACTIVA', '246100.00', 576, '2019-01-31 02:09:42', '2019-03-14 15:30:38'),
+(64, 'ACTIVA', '0.00', 577, '2019-03-14 14:01:48', '2019-03-14 14:01:48');
 
 -- --------------------------------------------------------
 
@@ -874,22 +1008,23 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `phone`, `email`, `password`, `costo_clic`, `confirmado`, `codigo_referido`, `remember_token`, `created_at`, `updated_at`, `calificacion`, `num_calificaciones`, `cuenta_bancaria`, `certificacion_bancaria`) VALUES
-(1, 'Heriberto Valencia', '3014751', 'adrian.vargas.2018@hotmail.com', '$2y$10$oX30Ts4767sRvW3PD/CRGe3YhYZ.XqTVDXIQJU4NkR4eRPOk5.OK6', '300.00', 'SI', 525, 'NxBkm4hLKUZe7rv2byX8KThOLnwU49pkmiyAjzTvXTYkG5Gj3QuDrv1Sc0DM', '2018-08-09 04:02:48', '2019-01-29 16:31:27', 36, 10, NULL, NULL),
+(1, 'Heriberto Valencia', '3014751', 'adrian.vargas.2018@hotmail.com', '$2y$10$oX30Ts4767sRvW3PD/CRGe3YhYZ.XqTVDXIQJU4NkR4eRPOk5.OK6', '300.00', 'SI', 525, 'RIDjFPcfQADwSJbFIz21bFdcjoVmrl6BX6RWyB7FRjxc1e8cdKvQz5kVXpGi', '2018-08-09 04:02:48', '2019-01-29 16:31:27', 36, 10, NULL, NULL),
 (2, 'Bruno Valenica', '123456', 'bruno@gmail.com', '$2y$10$wDjYL1KFNql.03tvWn/Vce/dIqSfWmsJ5X4aJq42bHTynnZS/DTTG', '300.00', 'SI', 526, 'c8Oxuh8Q7BF0ATONGnlmOajDJzh9FXMjUwG3Yf8NIaIbS8bklSrncuPkKFST', '2018-08-09 04:02:48', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
 (3, 'David Cabrera', '3147684576', 'cabrera.davidf@gmail.com', '$2y$10$P72/hwGX/cscp.IyGsWWSun9i.RwMvre1XtxBfbLTEUqc3COAs4/i', '300.00', 'SI', 535, 'qnrczWP8IjEsgCyPbQriJRQMzjhQKxfzYi5G9LdcNC04IlRPUJ65TBgjRcfP', '2018-10-27 01:27:14', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
-(5, 'edgar.guzman.vargas.adrian', '73232504', 'edgar.guzman21@gmail.com', '$2y$10$enPRe5F0VI.SurAGdWHxruhne2FvsBMg6j5up06xY9d1RHhAqFZkK', '300.00', 'SI', 539, '1ZKLkYtYPHF4IGVnRp97mwewKGW5rW2OaBa2pULeJA52OUqOxawrNutYTVVV', '2018-11-14 03:36:01', '2019-01-29 16:31:27', 28, 9, NULL, '/storage/rygxpriTqhyTnXVIxCZN5M5ZL7LV71A2MBjEcmlA.jpeg'),
+(5, 'edgar.guzman.vargas.adrian', '73232504', 'edgar.guzman21@gmail.com', '$2y$10$enPRe5F0VI.SurAGdWHxruhne2FvsBMg6j5up06xY9d1RHhAqFZkK', '300.00', 'SI', 539, 'I5WUWeqKdWfPlmsVKfapwDk7KAXJNfUy72yDBzyGiDZ6wRG9XqbAbGe5sncm', '2018-11-14 03:36:01', '2019-01-29 16:31:27', 28, 9, NULL, '/storage/rygxpriTqhyTnXVIxCZN5M5ZL7LV71A2MBjEcmlA.jpeg'),
 (554, 'miguelrios', '3165287824', 'miguel.rios@prismaweb.ne\r\n', '$2y$10$1BdagLqcENUvaqroFCINXOs.6h8B8Vf20f/Yuv5J8Jvch/RP4e/Je', '300.00', 'SI', 538, NULL, '2018-10-31 01:23:35', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
-(555, 'Edi samuel', '123489544', 'adrian.vargas.2018@outlook.com', '$2y$10$d2Qodd9/3nC3kNzqWDSwdOYRxT5HeGdoHWCIO7QKWZ5.12lkEvKUO', '10000.00', 'SI', 540, 'OLl84aAkO6GkjWTMH2mVZXZZq646FpTNDjY1fEWj14m4rYblF8RDSaAV061P', '2018-11-16 22:12:37', '2019-03-01 17:51:40', 66, 29, '0000222222', '/storage/LQPTo6iQzmd3xewLEPghEadYLa00Dcg5EnTFclEe.png'),
+(555, 'Edi samuel', '123489544', 'adrian.vargas.2018@outlook.com', '$2y$10$d2Qodd9/3nC3kNzqWDSwdOYRxT5HeGdoHWCIO7QKWZ5.12lkEvKUO', '10000.00', 'SI', 540, 'dDMlnvsqPlzDyl6ZqPjRhzF63MTLi9d3PSjDilOJOY0nCjPJTKrowaiC9e1t', '2018-11-16 22:12:37', '2019-03-01 17:51:40', 66, 29, '0000222222', '/storage/LQPTo6iQzmd3xewLEPghEadYLa00Dcg5EnTFclEe.png'),
 (563, 'Heriberot valencia', '12345644', 'hvhvalenci@gmail.com', '$2y$10$91jp7sB4vNni.sdO3GPhIulRO.ua3j6et1FysNR7fB3hc0M4xhpa6', '300.00', 'SI', 548, 'SimxFt1ab3XBSFjhNXEmhMWsJDUQjjznSpN3HgJUg8R0MEurYR9sBRLxMwmr', '2018-12-01 00:40:50', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
 (564, 'Heriberto Valencia munioz', '123456789', 'heriimperativo@hotmail.com', '$2y$10$5rPVtz9zdkNdtW90BAIVnugTfumvkRHKzU926WkLrG9CF51wL2NwK', '300.00', 'SI', 549, NULL, '2018-12-01 01:05:25', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
 (565, 'Miguel Rios', '123456789', 'miguelrios1@hotmail.com', '$2y$10$dd44UdniR7pbXbJXlrWNYOrHQV6zUy7iuX95eZeDhVD8liDL7rIRy', '300.00', 'SI', 550, NULL, '2018-12-01 01:22:17', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
 (568, 'Luis Herrera', '3204296592', 'luisherresa13@gmail.com', '$2y$10$.yZLbqIk630eWvQWJ.TJEeEuKe4PdwoOWON7cOFtLfoIlYEsAay.C', '350.00', 'SI', 553, NULL, '2018-12-03 09:48:51', '2019-01-29 16:31:34', 12, 4, NULL, NULL),
 (569, 'Luis Salazar', '1234567', 'luisherresa13@hotmail.com', '$2y$10$qBFHDtImJC/DuU94vsu9deKBWj1jv81a/QdGWlviJfGsBnwjeN4gO', '300.00', 'SI', 554, NULL, '2018-12-03 09:57:55', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
-(571, 'edgar.guzman.vargas.mhan', '3158790446', 'edgar.devmohan@gmail.com', '$2y$10$enPRe5F0VI.SurAGdWHxruhne2FvsBMg6j5up06xY9d1RHhAqFZkK', '300.00', 'SI', 556, 'BWdrFZ39481NH5djxlbKgPYGU2ytGJ3KaEWsGiH4NmTFuZFUaHsPlHiJtvs5', '2018-12-11 04:21:48', '2019-03-05 12:08:11', 3, 1, '121212121212', '/storage/gKV7XFMoPLzqdYApiEKt7oweAz8Rh1rlh2B2UKZ3.png'),
+(571, 'edgar.guzman.vargas.mhan', '3158790446', 'edgar.devmohan@gmail.com', '$2y$10$enPRe5F0VI.SurAGdWHxruhne2FvsBMg6j5up06xY9d1RHhAqFZkK', '300.00', 'SI', 556, '3T57PChiIubSxSVg97mjUD1i1oW6wH1T4wuRTQU6dm6vWSwYcHS6xnqDuorb', '2018-12-11 04:21:48', '2019-03-05 12:08:11', 3, 1, '121212121212', '/storage/gKV7XFMoPLzqdYApiEKt7oweAz8Rh1rlh2B2UKZ3.png'),
 (572, 'Soporte Prisma Web', '00000000', 'soporte@prismaweb.net', '$2y$10$VJWee5nsKmIN4BhnfKKntORgbnASufgnz.FCG5cOXog9mswbhq9MS', '300.00', 'SI', 557, NULL, '2018-12-13 15:35:49', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
 (573, 'Francisco Niño', '3166913626', 'paconino33@hotmail.com', '$2y$10$C7q3ysEtEWGNY4diaqB8pOsa9FapGmfFqVnHPklYJ.syK5w07Z90W', '300.00', 'SI', 558, NULL, '2018-12-18 21:22:15', '2019-01-29 16:31:27', 0, 0, NULL, NULL),
 (575, 'EDGAR DUZMAN', '123566666', 'adrian.vargas.2018@hotmail.com.co', '$2y$10$lTcO.GGEBA/Y/uUPK0gCIOxwRSpSQAFQy3KonvfktOBtL.c6nQrvu', '50.00', 'SI', 559, NULL, '2019-01-29 17:00:10', '2019-01-29 17:00:10', 0, 0, NULL, NULL),
-(576, 'EDGAR AREANDINA', '315879642', 'eguzman30@estudiantes.areandina.edu.co', '$2y$10$0iYBMbq.nP1xOsLABrJsdObbYJVenhNBk3eikwReuQurybpj.u9wW', '50.00', 'SI', 560, NULL, '2019-01-31 02:09:37', '2019-01-31 02:09:37', 0, 0, NULL, NULL);
+(576, 'EDGAR AREANDINA', '315879642', 'eguzman30@estudiantes.areandina.edu.co', '$2y$10$BnJ6KlKdvk19zFxn5yyi0OHCkYBHhf6ITKLInSJYn7qz4JKl/LbVW', '50.00', 'SI', 560, 'iAx0NvrkkNR1zqmAhImOyrIhFLnOurF0LSIoZmYwLxzf7HwuFeZD2sI6UWD0', '2019-01-31 02:09:37', '2019-03-14 15:28:42', 0, 0, NULL, NULL),
+(577, 'Stalin Chacon', '3114461157', 'stalin1@misena.edu.co', '$2y$10$HvNkI.yldXzSXXq6kojG/uXjAsVv0vvbvburL/414ROjEc3BajMr6', '500.00', 'SI', 561, NULL, '2019-03-14 14:01:46', '2019-03-14 15:28:17', 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -915,7 +1050,8 @@ INSERT INTO `variables` (`id`, `nombre`, `valor`, `created_at`, `updated_at`) VA
 (5, 'nombre_banco', 'Bancolombia S.A', '2019-03-04 21:30:36', '2019-03-04 21:30:36'),
 (6, 'url_certificacion', '/archivos/certificaci%C3%B3n_bancaria_Metalbit_SAS.pdf', '2019-03-04 21:32:28', '2019-03-04 21:32:28'),
 (9, 'direccion_oficina', 'Calle 114 #53 - 96\nBogotá D.C. - Colombia', '2019-03-04 21:53:10', '2019-03-04 21:53:10'),
-(10, 'horario_oficina', 'Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m.', '2019-03-04 21:53:52', '2019-03-04 21:53:52');
+(10, 'horario_oficina', 'Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m.', '2019-03-04 21:53:52', '2019-03-04 21:53:52'),
+(11, 'precio_clic_default', '500', '2019-03-14 13:30:02', '2019-03-14 13:30:02');
 
 --
 -- Indexes for dumped tables
@@ -1070,17 +1206,17 @@ ALTER TABLE `anuncios`
 -- AUTO_INCREMENT for table `bonificaciones`
 --
 ALTER TABLE `bonificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 --
 -- AUTO_INCREMENT for table `campanias`
 --
 ALTER TABLE `campanias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `cupones_campanias`
 --
 ALTER TABLE `cupones_campanias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 --
 -- AUTO_INCREMENT for table `detalle_clic_anuncios`
 --
@@ -1090,17 +1226,17 @@ ALTER TABLE `detalle_clic_anuncios`
 -- AUTO_INCREMENT for table `detalle_horario_usuario`
 --
 ALTER TABLE `detalle_horario_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=191;
 --
 -- AUTO_INCREMENT for table `detalle_recargas`
 --
 ALTER TABLE `detalle_recargas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 --
 -- AUTO_INCREMENT for table `detalle_referidos`
 --
 ALTER TABLE `detalle_referidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
@@ -1125,7 +1261,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `recargas`
 --
 ALTER TABLE `recargas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 --
 -- AUTO_INCREMENT for table `roles`
 --
@@ -1135,12 +1271,12 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=577;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=578;
 --
 -- AUTO_INCREMENT for table `variables`
 --
 ALTER TABLE `variables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- Constraints for dumped tables
 --

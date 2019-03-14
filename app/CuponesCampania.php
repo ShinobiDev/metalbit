@@ -58,19 +58,23 @@ class CuponesCampania extends Model
               
                 /*
                   AQUI VALIDAR FECHA
-                 */
-                  //dd($camp[0]->campania->fecha_inicial_vigencia,$camp[0]->campania->fecha_final_vigencia);
+                 */                  
                  if($camp[0]->campania->fecha_inicial_vigencia != '0000-00-00 00:00:00' and $camp[0]->campania->fecha_final_vigencia != '0000-00-00 00:00:00'){
                   
-                   $hoy=Carbon::now('America/Bogota');
-                  
-                  if($hoy->between(Carbon::parse($camp[0]->campania->fecha_inicial_vigencia),Carbon::parse($camp[0]->campania->fecha_final_vigencia))==false){
-                          return array(['respuesta'=>false,'mensaje'=>'Error de vigencía: Este cupón no es válido. Deja el espacio vacío o verifícalo con quien te lo suministro.','id_campania'=>$camp[0]->campania->id]);
-                  }
+                     $hoy=Carbon::now('America/Bogota');
+                    
+                    if($hoy->between(Carbon::parse($camp[0]->campania->fecha_inicial_vigencia),Carbon::parse($camp[0]->campania->fecha_final_vigencia))==false){
+                            return array(['respuesta'=>false,'mensaje'=>'Error de vigencía: Este cupón no es válido. Deja el espacio vacío o verifícalo con quien te lo suministro.','id_campania'=>$camp[0]->campania->id]);
+                    }
                  }
 
 
-                //dd($tipo_de_campania,$camp[0]->campania->tipo_canje);
+                //cambio el tipo de campaña solo para los recalos
+                if($camp[0]->campania->tipo_canje=="regalo_recarga"){
+                  $tipo_de_campania = "regalo_recarga";
+
+                }
+
                 if($tipo_de_campania!=$camp[0]->campania->tipo_canje){
                         return array(['respuesta'=>false,'mensaje'=>'Error de autorización: Este cupón no es válido para este tipo de transacciones. Deja el espacio vacío o verifícalo con quien te lo suministro.','id_campania'=>$camp[0]->campania->id]);
                 }
@@ -124,20 +128,34 @@ class CuponesCampania extends Model
                               $val_dto=$monto_valor_a_redimir;
                               $gratis=true;
                             }else{
-                              $val_dto=$monto_valor_a_redimir-($monto_valor_a_redimir*($camp[0]->campania->valor_de_descuento)/100);
+
+                              if($camp[0]->campania->tipo_canje=="regalo_recarga"){
+                                $val_dto=$monto_valor_a_redimir;
+                                $gratis=true;
+                              }else{
+                                $val_dto=$monto_valor_a_redimir-($monto_valor_a_redimir*($camp[0]->campania->valor_de_descuento)/100);
+                                $gratis=false;    
+                              }
+                              
                             }  
 
-                            $gratis=false;  
+                            
                             
                         }else{
                           // aqui hago el dto por un valor neto
                             if((float)$monto_valor_a_redimir == (float)$camp[0]->campania->valor_de_descuento){
                               $gratis=true;  
                             }else{
-                              $gratis=false;  
+                              if($camp[0]->campania->tipo_canje=="regalo_recarga"){
+                                $gratis=true;
+                              }else{
+                                $gratis=false;    
+                                $val_dto=$camp[0]->campania->valor_de_descuento;
+                                $monto_valor_a_redimir=$camp[0]->campania->valor_de_descuento;  
+                              }
+
+                              
                             }
-                            $val_dto=$camp[0]->campania->valor_de_descuento;
-                            $monto_valor_a_redimir=$camp[0]->campania->valor_de_descuento;  
 
                             
                         }
@@ -177,7 +195,13 @@ class CuponesCampania extends Model
                             if((float)$monto_valor_a_redimir == (float)$camp[0]->campania->valor_de_descuento){
                               $gratis=true;  
                             }else{
-                              $gratis=false;  
+                              if($camp[0]->campania->tipo_canje=="regalo_recarga"){
+                                $gratis=true;
+                                
+                              }else{
+                                $gratis=false;    
+                              }
+                              
                             }
                             $val_dto=$camp[0]->campania->valor_de_descuento;
                             $monto_valor_a_redimir=$camp[0]->campania->valor_de_descuento; 
