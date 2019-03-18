@@ -516,11 +516,11 @@
                  }else{
                   if(tipo=="info"){
                     
-                    document.getElementById("btn_info_"+id_anuncio).classList.remove('btn-success');
+                    //document.getElementById("btn_info_"+id_anuncio).classList.remove('btn-success');
                     //document.getElementById("btn_info_"+id_anuncio).classList.add('btn-primary');
                     //document.getElementById("btn_info_"+id_anuncio).innerHTML="VISTO";
-                    //$("#btn_info_"+id_anuncio).css({"display":"none"}); 
-                    //$("#anc_"+id_anuncio).css({"display":"block"});
+                    $("#btn_info_"+id_anuncio).css({"display":"none"}); 
+                    $("#anc_"+id_anuncio).css({"display":"block"});
                     //
                     /*document.getElementById("anc_"+id_anuncio).style.display='block';
                     document.getElementById("btn_info_"+id_anuncio).style.display='none';*/
