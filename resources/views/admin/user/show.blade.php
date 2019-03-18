@@ -169,12 +169,12 @@
                   @endforeach
 
 
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ventanarecarga">
                       Recargar
                     </button>
                     
                     @if($recarga_pendiente!=null)
-                      @if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE' && $recarga_pendiente->metodo_pago=='Transferencia bancaria')
+                      @if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE APROBACION' &&( $recarga_pendiente->metodo_pago=='Transferencia bancaria' || $recarga_pendiente->metodo_pago=='Consignacion bancaria' ) )
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ConfirmarRecarga">
                           Confirma tu recarga
                         </button>                      
@@ -182,7 +182,7 @@
                     @endif
 
                     <!-- Modal recargas -->
-                   <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                   <div class="modal fade" id="ventanarecarga" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -209,11 +209,14 @@
                               </button>
                             </div>
                             <div class="modal-body">
+                                <h4>Valor recarga: $ {{number_format($recarga_pendiente->valor_pagado,0,',','.')}}</h4>
+                            </div>
+                            <div class="modal-body">
                               <form id="formConfirmarPago">
                                             <div class="form-group">
                                               <label for="exampleInputEmail1">#Transacción</label>
                                               <input name="numero_transaccion" type="text" class="form-control" placeholder="Ingresa el número de transacción">
-                                              @if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE' && $recarga_pendiente->metodo_pago=='Transferencia bancaria')
+                                              @if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE APROBACION' && ($recarga_pendiente->metodo_pago=='Transferencia bancaria' || $recarga_pendiente->metodo_pago=='Consignacion bancaria'))
                                                 <input type="hidden" value="{{$recarga_pendiente->id}}" name="id_pago">
 
                                                 <label >Sube aquí, cualquier archivo para certificar tu pago, puede ser una imagen o un archivo .pdf</label>
@@ -256,4 +259,3 @@
 
 
 @endsection
-@include('partials.scripts')

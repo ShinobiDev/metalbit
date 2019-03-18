@@ -573,6 +573,8 @@
     
     document.getElementById('btn_recarga').disabled=false;
     document.getElementById('hd_tipo_pago').value=e.value;
+    calcular_valores_de_medios_de_pago_recarga(Number(document.getElementById('hd_val_recarga').value));
+
 
   }
   /**
@@ -622,6 +624,11 @@
                   console.log(e)
                 }); 
   }
+   /**
+    * Funcion para enviar la seleccion de medio de pago por parte del cliente
+    * @param  {[type]} id [description]
+    * @return {[type]}    [description]
+    */
    function enviar_registro_recarga(id){
      mostrar_cargando("msnMensajeCompra_"+id,5,"Registrando medio de pago ...");
      
@@ -646,7 +653,7 @@
                      'valor_real':document.getElementById('num_valor_recarga').value,
                      'ref_pago':document.getElementById('refRecarga').value,
                      'usuario':id_usuario,
-                     'total_a_pagar':document.getElementById('hd_val_recarga').value,
+                     'total_a_pagar':document.getElementById('hd_val_a_pagar').value,
                      'tipo_pago':document.getElementById('hd_tipo_pago').value
                    },
                   function(e){
@@ -749,9 +756,64 @@
    * @return {[type]}   [description]
    */
   function cambiar_valor_recarga(e){
-    document.getElementById('msnValorAPagar').innerHTML=number_format(e.value,0,',','.');
-    document.getElementById('hd_val_recarga').value=number_format(e.value,0,'','');
+    //document.getElementById('msnValorAPagar').innerHTML=number_format(e.value,0,',','.');
+    if(Number(e.value)>=20000){
+      document.getElementById('hd_val_recarga').value=number_format(e.value,0,'','');
+      calcular_valores_de_medios_de_pago_recarga(Number(e.value));  
+    }else{
+      document.getElementById("msnMensajeCompra_"+id_usuario).innerHTML="El valor mínimo de la recarga es $20.000";
+      e.value=20000;
+      //document.getElementById("btn_recarga").disabled=true;
+    }
+    
+
+
   }
+  /**
+   * Funcion para calcular el valor a pagar de acuerdo al valor a recargar 
+   * @param  {[type]} valor [description]
+   * @return {[type]}       [description]
+   */
+  function calcular_valores_de_medios_de_pago_recarga(valor){
+
+    var ele=document.getElementsByName("tipo_pago");
+    var tipo="";
+    var total_a_pagar=0;
+    for(var l in ele){
+      if(ele[l].checked){
+        tipo=Number(ele[l].value);
+      }
+    }
+    switch(tipo){
+      case 1:
+        //transferencia
+        total_a_pagar=valor+(valor*4/1000);
+        
+        break;
+      case 2 : 
+        //efectivo 
+        total_a_pagar=valor;
+        break;
+      case 3:
+        //consignacion  
+        total_a_pagar=valor+(valor*4/1000)+13000;        
+        break;
+      default:
+        total_a_pagar=valor;
+        break;    
+    }
+    var total_a_pagar_consig=Number(valor)+(Number(valor)*4/1000)+13000;
+    var total_a_pagar_trans=Number(valor)+(Number(valor)*4/1000);      
+    document.getElementById('spPagoCons').innerHTML=number_format(total_a_pagar_consig,0,',','.');
+    document.getElementById('spPagoTrans').innerHTML=number_format(total_a_pagar_trans,0,',','.');
+    document.getElementById('msnValorAPagar').innerHTML=number_format(total_a_pagar,0,',','.');
+    document.getElementById('hd_val_a_pagar').value=number_format(total_a_pagar,0,'','');
+    document.getElementById('msnMensajeCompra_'+id_usuario).innerHTML="";
+    
+    
+  }
+
+
   function subir_archivo_certificacion_pago_recarga(id,e){
                     //e.preventDefault();
                       mostrar_cargando("lblMsn",10,"Cargando ...");
@@ -815,4 +877,17 @@
 
 
  }                
+ 
+     /**
+      * Funcion para desplazar hacia la izq la tabla de medios de pagos
+      * @return {[type]} [description]
+      */
+    function mover_izq(){
+      var elem=document.getElementsByClassName('table-responsive');
+      for(var f in elem){
+        elem[f].scrollLeft+=20;
+      }
+      
+    }
+  
 </script>

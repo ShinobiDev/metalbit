@@ -19,6 +19,7 @@ Recarga pendiente por valor: $ {{number_format($recarga[1]['valor'],'0',',','.')
 #[MEDIO DE PAGO][1]
 [1]:{{$ad[0]['medio_pago']}}	
 
+Valor a pagar: $ {{number_format($recarga[1]['valor_a_pagar'],'0',',','.')}}
 
 Estado: PENDIENTE DE APROBACIÓN
 

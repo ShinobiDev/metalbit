@@ -18,6 +18,8 @@
 					document.getElementById('sp_espera_cupon'+id).classList.remove('text-red');	
 					document.getElementById('sp_espera_cupon'+id).classList.add('text-success');	
 					document.getElementById('hd_val_recarga').value=number_format(e.nuevo_valor,0,'','');
+					document.getElementById('hd_val_a_pagar').value=number_format(e.nuevo_valor_recarga,0,'','');
+					
 					document.getElementById("msnValorAPagar").innerHTML=number_format(e.nuevo_valor,0,',','.');  
 					
 					document.getElementById('hd_cupon').value=e.nuevo_valor_recarga;
@@ -27,6 +29,8 @@
 					if(e.recarga_gratis){
 						//document.getElementById('btn_acepta_recarga').disabled=true;
 						document.getElementById('sp_valor_recarga').innerHTML=number_format(e.valor_recarga,0,',','.');
+					}else{
+						calcular_valores_de_medios_de_pago_recarga(Number(document.getElementById('hd_val_recarga').value));
 					}
 
 					if(e.acumulable=='0'){

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
     <link rel="icon" href="http://metalbit.co/wp-content/uploads/2018/10/cropped-Icono-32x32.png" sizes="32x32">
-
+    <script src="{{asset('admin-lte/plugins/jquery/jquery.min.js')}}">  </script>
 
   <!-- Styles -->
   <style>
@@ -200,6 +200,11 @@
      <script type="text/javascript">
       $(document).ready(function() {
       $('.select2').select2();
+       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+         $('.movil').show();
+       }else{
+        $('.movil').hide();
+       }
     });
     </script>
     @yield('scripts')

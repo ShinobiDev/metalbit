@@ -118,6 +118,8 @@
                   <th>Usuario</th>
                   <th>Tipo recarga</th>
                   <th>Valor recarga</th>
+                  <th>Valor pagado</th>
+                  <th>Tipo de transacción</th>
                   <th>Estado</th>
                   <th>Referecia recarga</th>                 
                   <th>Fecha recarga</th>                 
@@ -136,6 +138,12 @@
                     <td>{{ $mi_recarga->name }}</td>
                     <td>{{ $mi_recarga->tipo_recarga }}</td>
                     <td>$ {{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
+                    <td>$ {{ number_format($mi_recarga->valor_pagado,0,',','.') }}</td>
+                    <td>
+                      {{$mi_recarga->metodo_pago}}
+
+
+                    </td>
                     <td>{{ $mi_recarga->estado_detalle_recarga }}</td>
                     <td>
 
@@ -149,8 +157,31 @@
                     <td>{{ $mi_recarga->created_at }}</td>
                     <td>
                       
-                      @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && $mi_recarga->metodo_pago=="Transferencia bancaria")
+                      @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && ($mi_recarga->metodo_pago=="Transferencia bancaria" || $mi_recarga->metodo_pago=="Consignacion bancaria") )
                          <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#confirmar_recarga{{$mi_recarga->referencia_pago_pay_u}}">Confirmar recarga</button>
+                        
+
+
+                      @endif
+                         
+                         
+                          
+                    </td>
+                   
+                   </tr>  
+                   
+                    
+                   @endforeach
+                 @endforeach
+              </tbody>
+          </table>
+          @foreach ($mi_lista_recarga as $mis_recargas)
+                    
+                   @foreach($mis_recargas as $mi_recarga )
+                    
+                    
+                      @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && ($mi_recarga->metodo_pago=="Transferencia bancaria" || $mi_recarga->metodo_pago=="Consignacion bancaria") )
+                       
                          <div class="modal fade" id="confirmar_recarga{{$mi_recarga->referencia_pago_pay_u}}" role="dialog">
                                         <div class="modal-dialog">
                                         
@@ -188,17 +219,11 @@
                       @endif
                          
                          
-                          
-                    </td>
-                   
-                   </tr>  
+                    
                    
                     
                    @endforeach
                  @endforeach
-              </tbody>
-          </table>
-
 
           
         </div>
@@ -278,6 +303,7 @@
                       }
                   }
               } );
+              filtro_url('#mis_recargas-table');
 
             });
           </script>

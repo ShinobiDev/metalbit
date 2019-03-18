@@ -51,14 +51,16 @@ class RecargasController extends Controller
                                     'detalle_recargas.certificado_pago',
                                     'detalle_recargas.referencia_pago',
                                     'detalle_recargas.referencia_pago_pay_u',
-                                    'detalle_recargas.created_at')
+                                    'detalle_recargas.created_at',
+                                    'detalle_recargas.updated_at')
                             ->join("users","recargas.user_id","users.id")
                             ->join('detalle_recargas','detalle_recargas.id_user','users.id')
-                            ->orderBy('users.id')       
+                            ->orderBy('detalle_recargas.updated_at','DESC')       
                             ->where("users.id",$value->id)    
                             ->get();       
               $i++;              
         }   
+        
           
         return view('recargas.index')->with('recargas' , $recargas)->with("mi_lista_recarga",$mi_lista);
 
@@ -338,7 +340,7 @@ class RecargasController extends Controller
                 
                 foreach ($uadmin as $key => $admin) {
 
-                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$recarga[0] ,['url'=>config('app.url').'/recargas']],0,"ConfirmarRecargaTransferenciaBancaria");  
+                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$recarga[0] ,['url'=>config('app.url').'/recargas?id='.$recarga[0]->referencia_pago_pay_u."#mis_recargas-table"]],0,"ConfirmarRecargaTransferenciaBancaria");  
 
                        
                 }
@@ -400,21 +402,39 @@ class RecargasController extends Controller
                                 ['estado_detalle_recarga','PENDIENTE APROBACION'],
                                 ['metodo_pago','Pago en efectivo']
                             ])->get();
-                       
+                
+
+
+                
                 if(count($dtr)>0){
+
+                    $cupon=DB::table('cupones_campanias')
+                              ->where("transaccion_donde_se_aplico",$dtr[0]->referencia_pago)
+                              ->get();
+                    if(count($cupon)>0){
+                      $recarga=$dtr[0]->valor_recarga;
+                    }else{
+                      $recarga=$request['valor_a_recargar']; 
+                    }          
+
+
+
                     DB::table("detalle_recargas")
                           ->where([
-                                ["user_id",$request['id_pago']],
-                                ['estado_detalle_recarga','PENDIENTE APROBACION']
+                                ["id_user",$request['id_pago']],
+                                ['estado_detalle_recarga','PENDIENTE APROBACION'],
+                                ['metodo_pago','Pago en efectivo']
                             ])
                           ->take(1)
                           ->update([
                             'estado_detalle_recarga'=>'APROBADA',
                             'updated_at'=>Carbon::now('America/Bogota'),
-                            'valor_pagado'=>$request['valor_a_recargar']             
+                            'valor_pagado'=>$request['valor_a_recargar']  ,
+                            'valor_recarga'=>$recarga 
+
                                   ]);
                     $dtr=DB::table('detalle_recargas')
-                          ->where("id",$request['id_pago'])
+                          ->where("id",$dtr[0]->id)
                           ->first();
                 }else{
                       $id=DB::table("detalle_recargas")
@@ -436,7 +456,6 @@ class RecargasController extends Controller
 
 
                
-                 
                 $cliente=User::where('id',$dtr->id_user)->first();
                 Recargas::where("user_id",$dtr->id_user)->increment('valor',$dtr->valor_recarga);
                 $r=Recargas::where("user_id",$dtr->id_user)->first();
@@ -452,5 +471,78 @@ class RecargasController extends Controller
 
         return back()->with('success',"Hemos registrado la recarga del usuario ".$cliente->name." recuerdale al usuario que hemos enviado la información al correo electrónico, ".$cliente->email." gracias por confiar en ".config('app.name'));
     
+    }
+     /**
+     * Funcion para confirmar el pago por parte de el cliente para la recarga
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    function confirmar_medio_pago_recarga(Request $request){
+        //registrar cambio de estado del pago
+        //dd($request);
+        
+        if($request['tipo_pago']==1){
+            $metodo_pago='Transferencia bancaria';
+        }else if($request['tipo_pago']==2){
+            $metodo_pago='Pago en efectivo';
+        }else{
+            $metodo_pago='Consignacion bancaria';
+        }
+  
+      
+        $re= DB::table("detalle_recargas")
+                        ->where([
+                                ["id_user",$request['usuario']],
+                                ["estado_detalle_recarga","PENDIENTE APROBACION",]
+                            ])->get();
+        
+        if(count($re)>0){
+            DB::table("detalle_recargas")
+                        ->where('id',$re[0]->id)
+                        ->update([
+                            "valor_recarga"=>$request['valor_real'],
+                            "valor_pagado"=>$request['total_a_pagar'],
+                            "referencia_pago_pay_u"=>$request['ref_pago'],
+                            "estado_detalle_recarga"=>"PENDIENTE APROBACION",
+                            "metodo_pago"=>$metodo_pago,
+                            "updated_at"=>Carbon::now('America/Bogota')
+                                ]);
+        }else{
+            DB::table("detalle_recargas")                       
+                        ->insert([
+                            "valor_recarga"=>$request['valor_real'],
+                            "valor_pagado"=>$request['total_a_pagar'],
+                            "referencia_pago_pay_u"=>$request['ref_pago'],
+                            "estado_detalle_recarga"=>"PENDIENTE APROBACION",
+                            "metodo_pago"=>$metodo_pago,
+                            "id_user"=>$request['usuario'],
+                            "referencia_pago"=>$request['ref_pago'],
+                            "updated_at"=>Carbon::now('America/Bogota')
+                                ]
+                        );
+        }
+        
+        
+          $cliente=User::where(".id",$request['usuario'])->get();          
+          $recarga=Recargas::where([                      
+                      ['user_id',$request['usuario']],                      
+                    ])->get();
+
+          if($request['tipo_pago']==1 || $request['tipo_pago']==3){
+         
+            NotificacionAnuncio::dispatch($cliente[0], [
+                            ['medio_pago'=>config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf']],[$recarga[0],["valor"=>$request['valor_real'],'valor_a_pagar'=>$request['total_a_pagar'],"fecha"=>date('Y-m-d')]],"PagoRecargaTransaccion");
+
+          }else{
+            NotificacionAnuncio::dispatch($cliente[0], [],[$recarga[0],["valor"=>$request['valor_real'],"fecha"=>date('Y-m-d'),'valor_a_pagar'=>$request['total_a_pagar']]],"PagoRecargaEfectivo");
+
+            
+          }
+          
+       
+
+        
+        
+        return response()->json(['mensaje'=>"Hemos registrado tu recarga y enviado información acerca del medio de pago seleccionado, a tu correo electrónico ".$cliente[0]->email,'respuesta'=>true]);
     }
 }

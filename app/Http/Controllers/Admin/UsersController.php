@@ -165,7 +165,7 @@ class UsersController extends Controller
 
           $horarios=DB::table('detalle_horario_usuario')->where('id_user',auth()->user()->id)->get();
 
-          $pendiente=DB::table('detalle_recargas')->where([['id_user',auth()->user()->id],['estado_detalle_recarga','PENDIENTE']])->first();
+          $pendiente=DB::table('detalle_recargas')->where([['id_user',auth()->user()->id],['estado_detalle_recarga','PENDIENTE APROBACION']])->first();
         
 
           //dd($transacciones);
@@ -177,6 +177,8 @@ class UsersController extends Controller
                     ->with("ad",$ad)
                     ->with("transacciones",$transacciones)
                     ->with("variables",Variable::where('nombre','porcentaje_tramite')->get())
+                    ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                    ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first())
                     ->with('recarga_pendiente',$pendiente)
                     ->with('horarios',$horarios);
     }

@@ -17,7 +17,7 @@ Recarga pendiente por valor: $ {{number_format($recarga[1]['valor'],'0',',','.')
 #Bogotá D.C. - Colombia 
 #Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m. 
 
-
+Valor a pagar: $ {{number_format($recarga[1]['valor_a_pagar'],'0',',','.')}}
 
 Estado: PENDIENTE DE APROBACIÓN
 

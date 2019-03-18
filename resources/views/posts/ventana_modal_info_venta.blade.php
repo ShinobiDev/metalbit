@@ -78,20 +78,14 @@
                         @else
                           <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
                         @endif
-                        {{--@if($ad->moneda != "BRL" && $ad->moneda != "CLP" && $ad->moneda != "COP" && $ad->moneda != "MXN" && $ad->moneda != "USD")
-                            @include("posts.no_permitidos")
-                            <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{ number_format(((float)number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.',''),2,'.',''))*number_format($ad->precio_moneda_usd_sf,2,'.','') ,2,'.','')
-                          }}" >
-                        @else
-                            <input type="hidden" id="hdh5_total_{{$ad->id}}" value="{{number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.','')  ,2,'.','')}}" >
-                        @endif--}}
+                       
                          <div class="modal-body">
                           <i class="fa fa-info-circle"></i>
                           <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
 
                           <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')" value="{{$ad->transaccion_pendiente['wallet']}}">
 
-                          <span class="text-red"><strong >Nota importante:</strong>Verifica que el código de la Wallet y el código QR correspondan al destino y criptomoneda seleccionada (<strong>{{$ad->cripto_moneda}}</strong>). El envío de otra criptomoneda puede resultar en la pérdida de tu depósito. <strong>{{config('app.name')}}</strong> no se responsabiliza por la perdida de los fondos causado por un código wallet mal registrado o adjuntado.</span>
+                          <span class="text-red"><strong >Nota importante:</strong> Verifica que el código de la Wallet y el código QR correspondan al destino y criptomoneda seleccionada (<strong>{{$ad->cripto_moneda}}</strong>). El envío de otra criptomoneda puede resultar en la pérdida de tu depósito. <strong>{{config('app.name')}}</strong> no se responsabiliza por la perdida de los fondos causado por un código wallet mal registrado o adjuntado.</span>
                           
                           
                           @if($ad->transaccion_pendiente['wallet_qr']!='SIN REGISTRAR' && $ad->transaccion_pendiente['wallet_qr']!='0')
@@ -107,8 +101,7 @@
                           @include('partials.redimir_cupon_venta',['c'=>$ad->id])
                         @endif
                          
-                         
-                          
+                                                   
                         
 
                         <div class="modal-body">
@@ -118,8 +111,14 @@
                           @if(auth::user()->id!=$ad->id_anunciante)
                             @include('payu.botonpayu')
                             @include('partials.btn_comprar')
+
+
+
+                              
+
                           @endif
                         </div>
+                        
                 </form>
             </div>
             <div class="modal-body">

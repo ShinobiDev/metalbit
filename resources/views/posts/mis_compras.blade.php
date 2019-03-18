@@ -112,7 +112,7 @@
                             Información medio de pago
                         </button>
                        
-                        @if($compra->metodo_pago=="Transferencia bancaria")
+                        @if($compra->metodo_pago=="Transferencia bancaria" ||  $compra->metodo_pago=='Consignacion bancaria' )
 
                           <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_{{$compra->id_pago}}">
                             Confirmar pago de transacción
@@ -163,7 +163,7 @@
 
 
                                             <label id="msnEspera_{{$compra->id_anuncio}}"></label>
-                                            <span class="text-red"><strong >Nota importante:</strong>Verifica que el código de la Wallet y el código QR correspondan al destino y criptomoneda seleccionada (<strong>{{$compra->nombre_cripto_moneda}}</strong>). El envío de otra criptomoneda puede resultar en la pérdida de tu depósito. <strong>{{config('app.name')}}</strong> no se responsabiliza por la perdida de los fondos causado por un código wallet mal registrado o adjuntado.</span>
+                                            <span class="text-red"><strong >Nota importante:</strong> Verifica que el código de la Wallet y el código QR correspondan al destino y criptomoneda seleccionada (<strong>{{$compra->nombre_cripto_moneda}}</strong>). El envío de otra criptomoneda puede resultar en la pérdida de tu depósito. <strong>{{config('app.name')}}</strong> no se responsabiliza por la perdida de los fondos causado por un código wallet mal registrado o adjuntado.</span>
                                     </div>
                                     <div class="modal-footer">
                                       <a class="btn btn-secondary" data-dismiss="modal">Salir</a>
@@ -288,7 +288,7 @@
                          
                       @endif
                       
-                      @if($compra->transactionState=="Pendiente" && $compra->metodo_pago == 'Transferencia bancaria')
+                      @if($compra->transactionState=="Pendiente" && ($compra->metodo_pago == 'Transferencia bancaria' ||  $compra->metodo_pago=='Consignacion bancaria' ))
                          <div class="modal fade" id="confirmar_pago_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           
                                 <div class="modal-dialog" role="document">
