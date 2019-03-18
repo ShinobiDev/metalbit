@@ -840,7 +840,7 @@
                                   error:function(data){
                                     console.log(data);
                                     if(data.responseJSON.message=="The given data was invalid."){
-                                      document.getElementById("lblMsn").innerHTML="El formato del archivo debe ser .pdf";  
+                                      document.getElementById("lblMsn").innerHTML="El formato del archivo debe ser .pdf o una imagen de tipo .png, jpg o jpeg";  
                                     }else{
                                       document.getElementById("lblMsn").innerHTML=data.responseJSON.message;
                                     }

@@ -209,7 +209,7 @@
                               </button>
                             </div>
                             <div class="modal-body">
-                                <h4>Valor recarga: $ {{number_format($recarga_pendiente->valor_pagado,0,',','.')}}</h4>
+                                <h4>Valor a pagar: $ {{number_format($recarga_pendiente->valor_pagado,0,',','.')}}</h4>
                             </div>
                             <div class="modal-body">
                               <form id="formConfirmarPago">

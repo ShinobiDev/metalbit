@@ -687,7 +687,7 @@ class UsersController extends Controller
     public function subir_certificado_pago_recarga(Request $request,$id){
          //dd($id);
          $this->validate(request(),[
-            'file'=>'required|max:10240|mimetypes:application/pdf'
+            'file'=>'required|max:10240|mimetypes:application/pdf,image/png,image/jpeg'
         ]);
 
          $PG=DB::table('detalle_recargas')->where(

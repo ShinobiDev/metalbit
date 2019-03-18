@@ -360,7 +360,12 @@ class RecargasController extends Controller
      */
     function confirmar_pago_recarga_entidad_bancaria(Request $request){
         //dd($request);
-        DB::table("detalle_recargas")
+        $dt=DB::table("detalle_recargas")
+                          ->where("id",$request['id_pago'])
+                          ->get();
+
+       if($dt[0]->estado_detalle_recarga=="PENDIENTE APROBACION"){
+         DB::table("detalle_recargas")
                           ->where("id",$request['id_pago'])
                           ->update([
                             'estado_detalle_recarga'=>'APROBADA',
@@ -388,6 +393,9 @@ class RecargasController extends Controller
 
 
         return back()->with('success',"Hemos confirmado la recarga del usuario ".$cliente->name." recuerdale al usuario que hemos enviado la información al correo electrónico, ".$cliente->email." gracias por confiar en ".config('app.name'));
+       }else{
+          return back()->with('error',"No es posible registrar esta recarga, por favor verifica el estado de la transacción");
+       }
     }
     /**
      * Funcion para confirmar el pago hecho en la entidad bancaria

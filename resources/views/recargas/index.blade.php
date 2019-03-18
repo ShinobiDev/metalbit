@@ -122,6 +122,7 @@
                   <th>Tipo de transacción</th>
                   <th>Estado</th>
                   <th>Referecia recarga</th>                 
+                  <th>Referecia recarga {{config('app.name')}}</th>                 
                   <th>Fecha recarga</th>                 
                   <th>Acción</th>                 
 
@@ -154,6 +155,7 @@
 
 
                     </td>
+                    <td>{{$mi_recarga->referencia_pago}}</td>
                     <td>{{ $mi_recarga->created_at }}</td>
                     <td>
                       
