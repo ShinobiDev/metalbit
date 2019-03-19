@@ -49,6 +49,8 @@
                     <td>
                       @if($venta->transactionState=="Pendiente")
                         <span class="text-danger">Pendiente por pago</span>
+                      @elseif(($venta->transactionState == 'Pago Aceptado' && $venta->estado_pago =='PENDIENTE'))
+                        <span class="text-danger">Pago aceptado, pendiente confirmación entidad bancaria</span>
                       @else
                         <span class="text-success">{{$venta->transactionState}}</span>
                       @endif

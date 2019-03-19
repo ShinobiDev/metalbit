@@ -52,10 +52,8 @@
                         <span class="text-danger">Pendiente por pago</span>
                       @elseif($compra->transactionState == 'Pago confirmado por el anunciante' || $compra->transactionState == 'Pago hecho al anunciante')  
                         <span class="text-success">Transacción finalizada</span>
-                      @elseif($compra->transactionState == 'Pago Aceptado')
-                          
-                            <span class="text-success">{{$compra->transactionState}}</span>
-
+                      @elseif(($compra->transactionState == 'Pago Aceptado' && $compra->estado_pago =='PENDIENTE'))
+                            <span class="text-danger">Pago aceptado, pendiente confirmación entidad bancaria</span>
                       @else
                         <span class="text-success">{{$compra->transactionState}}</span>
                       @endif

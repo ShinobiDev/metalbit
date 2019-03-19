@@ -62,7 +62,7 @@
                       @elseif($transaccion->transactionState == 'Pago confirmado por el anunciante')  
                         <span class="text-success">{{$transaccion->transactionState}}</span>
                       @elseif($transaccion->transactionState == 'Pago Aceptado' && $transaccion->estado_pago =='PENDIENTE')
-                        <span class="text-danger">Pago aceptado, pendiente confirmacion entidad bancaria</span>
+                        <span class="text-danger">Pago aceptado, pendiente confirmación entidad bancaria</span>
                       @else
                         <span class="text-success">{{$transaccion->transactionState}}</span>                      
                       @endif
