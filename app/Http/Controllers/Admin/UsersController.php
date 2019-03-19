@@ -566,7 +566,7 @@ class UsersController extends Controller
     public function registrar_wallet_qr(Request $request,$id){
          //dd($id);
          $this->validate(request(),[
-            'file'=>'required|max:10240|mimetypes:application/pdf'
+            'file'=>'required|max:10240|mimetypes:application/pdf,image/png,image/jpeg'
         ]);
 
          $PG=DB::table('pagos')->where([
@@ -632,7 +632,7 @@ class UsersController extends Controller
     public function subir_certificado_pago(Request $request,$id){
          //dd($id);
          $this->validate(request(),[
-            'file'=>'required|max:10240|mimetypes:application/pdf'
+            'file'=>'required|max:10240|mimetypes:application/pdf,image/png,image/jpeg'
         ]);
 
          $PG=DB::table('pagos')->where(
@@ -839,6 +839,7 @@ class UsersController extends Controller
                            'pagos.id_anuncio',
                            'pagos.id_user_compra',
                            'pagos.metodo_pago',
+                           'pagos.valor_sobre_costo',
                            'pagos.estado_pago',
                            'pagos.calificacion',
                            'pagos.opinion',
@@ -969,6 +970,7 @@ class UsersController extends Controller
                            'pagos.porcentaje_pago',
                            'pagos.transation_value',
                            'pagos.transaction_value_pagado',
+                           'pagos.valor_sobre_costo',
                            'pagos.transactionId',
                            'pagos.code_wallet',
                            'pagos.certificado_pago',

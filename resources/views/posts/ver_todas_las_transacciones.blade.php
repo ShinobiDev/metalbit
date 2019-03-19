@@ -35,6 +35,8 @@
                 <th>Cantidad vendido</th>
                 <th>Criptomoneda</th>
                 <th>Valor vendido</th>
+                <th>Metodo de pago</th>
+                <th>Valor sobre costo</th>
                 <th>Valor real pagado</th>
                 <th>Moneda local</th>
                 <th>Referecia de pago</th>
@@ -43,7 +45,7 @@
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
                 <th>% Metalbit</th>
-                <th>Valor a transferir</th>
+                <th>Valor a transferir al anunciante</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -52,7 +54,7 @@
               @foreach ($pag as $transaccion)
                    
                   <tr id="row_{{$transaccion->id_pago}}">
-                    <td>{{$transaccion->tipo_anuncio}}</td>
+                    <td><strong class="text-success">{{$transaccion->tipo_anuncio}}</strong></td>
                      <td>
                       
                       @if($transaccion->transactionState=="Pendiente")
@@ -65,7 +67,7 @@
                         <span class="text-success">{{$transaccion->transactionState}}</span>                      
                       @endif
                     </td>
-                    <td>{{$transaccion->name}}</td>
+                    <td><strong>{{$transaccion->name}}</strong></td>
                    <td>
                       @if($transaccion->cuenta_bancaria!="")
                        <span class="text-primary"> {{$transaccion->cuenta_bancaria }}</span>
@@ -81,17 +83,19 @@
 
 
                   </td>
-                   <td>{{$transaccion->email}}</td>
-                   <td>{{$transaccion->phone}}</td>
-                    <td>{{$transaccion->transactionQuantity}}</td>
+                   <td><strong class="text-info">{{$transaccion->email}}</strong></td>
+                   <td><strong>{{$transaccion->phone}}</strong></td>
+                    <td><strong>{{$transaccion->transactionQuantity}}</strong></td>
                     <td><strong>{{$transaccion->nombre_cripto_moneda}}</strong></td>
                     <td >${{number_format($transaccion->transation_value,0,',','.')}}</td>
-                    <td >${{number_format($transaccion->transaction_value_pagado,0,',','.')}}</td>
+                    <td ><strong class="text-success">{{$transaccion->metodo_pago}}</strong></td>
+                    <td >${{number_format($transaccion->valor_sobre_costo,0,',','.')}}</td>
+                    <td >${{number_format($transaccion->transaction_value_pagado+$transaccion->valor_sobre_costo,0,',','.')}}</td>
                     <td>{{$transaccion->moneda_pago}}</td>
                     <td><strong>{{$transaccion->transactionId}}</strong></td>
                     <td><strong>{{$transaccion->updated_at}}</strong></td>
                     
-                    @if($transaccion->metodo_pago=='Transferencia bancaria')
+                    @if($transaccion->metodo_pago=='Transferencia bancaria' || $transaccion->metodo_pago=='Consignacion bancaria')
                       <td>
                         <strong class="text-success">{{$transaccion->numero_transaccion or 'Pendiente'}}</strong>
                         @if($transaccion->certificado_pago != null)
@@ -126,9 +130,9 @@
                     </td>
                         @if($transaccion->transactionState=="Pago hecho al anunciante" || $transaccion->transactionState=="Pago confirmado por el anunciante")
 
-                          <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($transaccion->porcentaje_pago/100)),0,',','.')}}</td>
+                          <td><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($transaccion->porcentaje_pago/100)),0,',','.')}}</strong></td>
                         @else
-                          <td>$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</td>
+                          <td><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</strong></td>
                         @endif  
                     <td>
 
@@ -260,7 +264,7 @@
                                                 <div class="modal-body">
                                                     <div class="form-group">
                                                       <label for="">el valor pagado debe ser de:</label>
-                                                      <input class="form-control" type="text" name="valor_a_pagar" value="${{number_format($transaccion->transation_value,2,',','.')}}" readonly>
+                                                      <input class="form-control" type="text" name="valor_a_pagar" value="${{number_format($transaccion->transaction_value_pagado+$transaccion->valor_sobre_costo,2,',','.')}}" readonly>
                                                       <input type="hidden"value="{{$transaccion->id_pago}}" name="id_pago">
                                                     </div>
                                                   

@@ -223,6 +223,10 @@
             
             document.getElementById("h5Total_"+id).innerHTML=number_format(parseFloat(cant)/parseFloat(val),2,'.',',');
             document.getElementById("msnEspera_compra_"+id).style.display='none';
+            document.getElementById("hd_cupon"+id).value=document.getElementById("num_cantidad_moneda_"+id).value;
+            calcular_valores_de_medios_de_pago_compra(Number(document.getElementById("hd_cupon"+id).value),id);
+            
+
             
             
           });
@@ -561,6 +565,7 @@
     
     document.getElementById('btn_comprar_'+id).disabled=false;
     document.getElementById('hd_tipo_pago'+id).value=e.value;
+    calcular_valores_de_medios_de_pago_compra(Number(document.getElementById('hd_cupon'+id).value),id);
 
   }
    /**
@@ -613,7 +618,8 @@
                      'id_anuncio':id,
                      'usuario':id_usuario,
                      'total_a_pagar':document.getElementById('hd_valor_venta_'+id).value,
-                     'tipo_pago':document.getElementById('hd_tipo_pago'+id).value
+                     'tipo_pago':document.getElementById('hd_tipo_pago'+id).value,
+                     'sobrecosto':document.getElementById("hd_val_sobrecosto_"+id).value
                    },
                   function(e){
                   //error
@@ -812,7 +818,51 @@
     
     
   }
+    /**
+   * Funcion para calcular el valor a pagar de acuerdo al valor a comprar 
+   * @param  {[type]} valor [description]
+   * @return {[type]}       [description]
+   */
+  function calcular_valores_de_medios_de_pago_compra(valor,id){
 
+    var ele=document.getElementsByName("tipo_pago_"+id);
+    var tipo="";
+    var total_a_pagar=0;
+    for(var l in ele){
+      if(ele[l].checked){
+        tipo=Number(ele[l].value);
+      }
+    }
+    var sobrecosto=0;
+    switch(tipo){
+      case 1:
+        //transferencia
+        total_a_pagar=valor+(valor*4/1000);
+        sobrecosto=(valor*4/1000);
+        break;
+      case 2 : 
+        //efectivo 
+        total_a_pagar=valor;
+        break;
+      case 3:
+        //consignacion  
+        total_a_pagar=valor+(valor*4/1000)+13000;        
+        sobrecosto=(valor*4/1000)+13000;
+        break;
+      default:
+        total_a_pagar=valor;
+        break;    
+    }
+    var total_a_pagar_consig=(Number(valor)*4/1000)+13000;
+    var total_a_pagar_trans=(Number(valor)*4/1000);      
+    document.getElementById('spPagoCons_'+id).innerHTML=number_format(total_a_pagar_consig,0,',','.');
+    document.getElementById('spPagoTrans_'+id).innerHTML=number_format(total_a_pagar_trans,0,',','.');
+    document.getElementById('span_total_a_pagar_'+id).innerHTML=number_format(total_a_pagar,2,',','.');
+    document.getElementById('hd_val_sobrecosto_'+id).value=number_format(sobrecosto,0,'','');
+    //document.getElementById('msnMensajeCompra_'+id_usuario).innerHTML="";
+    
+    
+  }
 
   function subir_archivo_certificacion_pago_recarga(id,e){
                     //e.preventDefault();

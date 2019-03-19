@@ -99,6 +99,9 @@
                         </div>
                         @if($ad->transaccion_pendiente['state']=='Visto' || $ad->transaccion_pendiente['state']=='0')
                           @include('partials.redimir_cupon_venta',['c'=>$ad->id])
+                        @else
+                          <input type="hidden" name="valor_descuento_cupon" id="hd_cupon{{$ad->id}}" value="{{$ad->transaccion_pendiente['value']}}" >
+    
                         @endif
                          
                                                    

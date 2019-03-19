@@ -160,6 +160,7 @@ class User extends Authenticatable
                         'quantity'=>$pg[0]->transactionQuantity,
                         'value'=>$pg[0]->transaction_value_pagado,
                         'value_transaccion'=>$pg[0]->transation_value,
+                        'value_sobre_costo'=>$pg[0]->valor_sobre_costo,
                         'state'=>$pg[0]->transactionState,
                         'type'=>$pg[0]->metodo_pago);
         }else{
@@ -170,6 +171,7 @@ class User extends Authenticatable
                       'quantity'=>'0',
                       'value'=>'0',                      
                       'value_transaccion'=>'0',
+                      'value_sobre_costo'=>'0',
                       'state'=>'0',
                       'type'=>'0');
         }

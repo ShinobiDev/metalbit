@@ -31,8 +31,10 @@
                 <th>Vendedor</th>                
                 <th>Cantidad comprada</th>
                 <th>Criptomoneda</th>
-                <th style="width: 300px">Valor pagado</th>
+                <th style="width: 300px">Valor comprado</th>
+                <th style="width: 300px">Valor a pagar a {{config('app.name')}}</th>
                 <th>Moneda local</th>
+                <th>Metodo de pago</th>
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
@@ -60,10 +62,17 @@
                     </td>       
                     <td>{{$compra->name}}</td>          
                                                 
-                    <td>{{number_format($compra->transactionQuantity,2,',','.')}}</td>                                   
-                    <td><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
-                    <td style="width: 300px">${{number_format($compra->transaction_value_pagado,2,',','.')}}</td>
-                    <td>{{$compra->moneda_pago}}</td>                                    
+                    <td class="text-center">{{number_format($compra->transactionQuantity,2,',','.')}}</td>                                   
+                    <td class="text-center"><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
+                    <td class="text-center" style="width: 300px">${{number_format($compra->transation_value,2,',','.')}}</td>
+                    <td class="text-center" style="width: 300px">${{number_format($compra->transaction_value_pagado+$compra->valor_sobre_costo,2,',','.')}}</td>
+                    <td class="text-center">{{$compra->moneda_pago}}</td> 
+                    <td>
+                      <strong>
+                        {{$compra->metodo_pago}}
+                      </strong>
+                      ${{number_format($compra->valor_sobre_costo,2,',','.')}}
+                    </td>                                    
                     <td><strong class="text-success">{{$compra->transactionId or 'Pendiente de compra'}}</strong></td>                                     
                     <td>
                       @if($compra->code_wallet!='SIN REGISTRAR')
@@ -80,7 +89,7 @@
 
                     </td>                                   
                     <td><span class="text-success">{{$compra->hash_txid}}</span></td>
-                    <td><span>{{$compra->updated_at}}</span></td>
+                    <td><strong>{{$compra->updated_at}}</strong></td>
                     <td>
                       
 

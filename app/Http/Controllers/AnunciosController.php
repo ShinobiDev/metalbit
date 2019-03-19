@@ -100,9 +100,18 @@ class AnunciosController extends Controller
           
          //dd($arr_anuncios); 
         if(auth()->user()!=null){
-            return view('welcome')->with('anuncios',$arr_anuncios)->with("mis_anuncios",false);
+            return view('welcome')
+                    ->with('anuncios',$arr_anuncios)
+                    ->with("mis_anuncios",false)
+                    ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                    ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first());
         }else{
-            return view('welcome')->with('anuncios',$arr_anuncios)->with("mis_anuncios",false);
+            return view('welcome')
+                            ->with('anuncios',$arr_anuncios)
+                            ->with("mis_anuncios",false)
+                            ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                            ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first())
+                            ;
         }
     }
 
@@ -289,7 +298,11 @@ class AnunciosController extends Controller
         $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
         
         //dd($arr_anuncios);
-        return view('welcome')->with('anuncios',$arr_anuncios)->with("mis_anuncios",true);
+        return view('welcome')
+                    ->with('anuncios',$arr_anuncios)
+                    ->with("mis_anuncios",true)
+                    ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                    ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first());
         
     }
 
@@ -352,7 +365,11 @@ class AnunciosController extends Controller
         $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
         
         //dd($arr_anuncios);
-        return view('welcome')->with('anuncios',$arr_anuncios)->with("mis_anuncios",true);
+        return view('welcome')
+            ->with('anuncios',$arr_anuncios)
+            ->with("mis_anuncios",true)
+            ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+            ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first());
         
     }
 
@@ -583,6 +600,7 @@ class AnunciosController extends Controller
                         'transation_value'=>$request['valor_real'],
                         'transaction_value_pagado'=>$request['total_a_pagar'],
                         'transactionState'=>'Pendiente',
+                        'valor_sobre_costo'=>$request['sobrecosto'],
                         'metodo_pago'=>$metodo_pago
 
                     ]);
@@ -738,47 +756,54 @@ class AnunciosController extends Controller
      * @return [type]           [description]
      */
     function confirmar_pago_comprador_entidad_bancaria(Request $request){
-        DB::table("pagos")
-                          ->where("id",$request['id_pago'])
-                          ->update([
-                            'estado_pago'=>'APROBADA',
-                            'updated_at'=>Carbon::now('America/Bogota')             
-                                  ]);
-                //enviar email notificacion del pago realizado al anunciante
-                //enviar mensaje de confirmacion al comprador            
-                $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
-                      'pagos.id' => $request['id_pago']
-                    ])->get();
+        $dt=DB::table("pagos")
+                ->where("id",$request['id_pago'])
+                ->get();
+       if($dt[0]->estado_pago=="PENDIENTE"){
+            DB::table("pagos")
+                              ->where("id",$request['id_pago'])
+                              ->update([
+                                'estado_pago'=>'APROBADA',
+                                'updated_at'=>Carbon::now('America/Bogota')             
+                                      ]);
+                    //enviar email notificacion del pago realizado al anunciante
+                    //enviar mensaje de confirmacion al comprador            
+                    $pg=pagos::join('anuncios','pagos.id_anuncio','anuncios.id')->where([
+                          'pagos.id' => $request['id_pago']
+                        ])->get();
 
-                $anuncio=Anuncios::where("id",$pg[0]->id_anuncio)->get();
-                
-                //dd($anuncio);
-                $comprador=User::where("id",$pg[0]->id_user_compra)->get();
+                    $anuncio=Anuncios::where("id",$pg[0]->id_anuncio)->get();
+                    
+                    //dd($anuncio);
+                    $comprador=User::where("id",$pg[0]->id_user_compra)->get();
 
-                $anunciante=User::where("id",$anuncio[0]->user_id)->get();
+                    $anunciante=User::where("id",$anuncio[0]->user_id)->get();
 
-                 $uadmin=User::role('admin')->get();
-                
-                foreach ($uadmin as $key => $admin) {
+                     $uadmin=User::role('admin')->get();
+                    
+                    foreach ($uadmin as $key => $admin) {
 
-                       NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$pg[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"ConfirmarPagoExitosoTransferenciaBancaria");  
+                           NotificacionAnuncio::dispatch($admin, [$anunciante[0],$comprador[0],$pg[0],['url'=>config('app.url').'/ver_todas_las_transacciones?id='.$pg[0]->transactionId]],0,"ConfirmarPagoExitosoTransferenciaBancaria");  
 
-                       
-                }
-                NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$pg[0]->transactionId]],[],"CompraExitosa");
-                $recarga=Recargas::where('user_id',$anunciante[0]->id)->get();
+                           
+                    }
+                    NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url').'/ver_mis_compras/'.$comprador[0]->id.'?id='.$pg[0]->transactionId]],[],"CompraExitosa");
+                    $recarga=Recargas::where('user_id',$anunciante[0]->id)->get();
 
-                NotificacionAnuncio::dispatch(
-                                        $anunciante[0], 
-                                        [
-                                            $comprador[0],
-                                            $anuncio[0],
-                                            $pg[0],
-                                            ['url'=>config('app.url').'/ver_mis_ventas/'.$anunciante[0]->id.'?id='.$pg[0]->transactionId]],
-                                            $recarga[0]->valor,
-                                            "CompraExitosaAnunciante");
+                    NotificacionAnuncio::dispatch(
+                                            $anunciante[0], 
+                                            [
+                                                $comprador[0],
+                                                $anuncio[0],
+                                                $pg[0],
+                                                ['url'=>config('app.url').'/ver_mis_ventas/'.$anunciante[0]->id.'?id='.$pg[0]->transactionId]],
+                                                $recarga[0]->valor,
+                                                "CompraExitosaAnunciante");
 
 
-        return back()->with('success',"Hemos confirmado la compra del usuario ".$comprador[0]->name." recuerdale al usuario que hemos enviado la información al correo electrónico, ".$comprador[0]->email." gracias por confiar en ".config('app.name'));
+            return back()->with('success',"Hemos confirmado la compra del usuario ".$comprador[0]->name." recuerdale al usuario que hemos enviado la información al correo electrónico, ".$comprador[0]->email." gracias por confiar en ".config('app.name'));
+       }else{
+            return back()->with('error',"No ha sido posible registrar esta transacción, por favor revisa el estado actual, al parecer ya se habia registrado con anterioridad");
+       }
     }
 }
