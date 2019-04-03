@@ -33,7 +33,7 @@ class AnunciosController extends Controller
 
         if($u!=null){
             //dd($u->id);
-            $uc=User::where("confirmado","SI")->select("id")->get();
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
             $arr=[];
             $i=0;
             //dd($uc);
@@ -44,7 +44,7 @@ class AnunciosController extends Controller
             }
         }else{
 
-            $uc=User::where("confirmado","SI")->select("id")->get();
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
 
             $arr=[];
             $i=0;
@@ -252,7 +252,7 @@ class AnunciosController extends Controller
         $this->authorize('view', new Anuncios); 
         $u=auth()->user();
         $anuncios_consultados=array();
-        $uc=User::where("confirmado","SI")->select("id")->get();
+        $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
         $arr=[];
         $i=0;
         foreach ($uc as $key => $value) {
@@ -320,7 +320,7 @@ class AnunciosController extends Controller
         $u=auth()->user();
 
         $anuncios_consultados=array();
-        $uc=User::where("confirmado","SI")->select("id")->get();
+        $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
         $arr=[];
         $i=0;
         foreach ($uc as $key => $value) {

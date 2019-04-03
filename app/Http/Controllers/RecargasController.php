@@ -39,6 +39,7 @@ class RecargasController extends Controller
              //dd($recargas[0]->id);
              //
         $i=0;
+        $mi_lista=array();
         foreach ($recargas as $key => $value) {
           $mi_lista[$i]=Recargas::select('users.id',
                                     'users.name',
