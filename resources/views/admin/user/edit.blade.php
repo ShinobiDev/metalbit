@@ -46,20 +46,25 @@
 
                                 
                             </div>
+                            @if($user->estado=='1')
+                              <div class="form-group">
+                                <span class="help-block">Dejar en blanco si no quiere cambiar la contraseña</span>
+                                  <label for="password">Contraseña</label>
+                                  <input type="password" name="password"  class="form-control" placeholder="Nueva Contraseña">
 
-                            <div class="form-group">
-                              <span class="help-block">Dejar en blanco si no quiere cambiar la contraseña</span>
-                                <label for="password">Contraseña</label>
-                                <input type="password" name="password"  class="form-control" placeholder="Nueva Contraseña">
+                              </div>
 
-                            </div>
+                              <div class="form-group">
+                                  <label for="password_confirmation">Confirmar la contraseña</label>
+                                  <input type="password" name="password_confirmation"  class="form-control" placeholder="Confirmar contraseña">
+                              </div>
 
-                            <div class="form-group">
-                                <label for="password_confirmation">Confirmar la contraseña</label>
-                                <input type="password" name="password_confirmation"  class="form-control" placeholder="Confirmar contraseña">
-                            </div>
-
-                            <button class="btn btn-primary btn-block"> <i class="fa fa-refresh"></i> Actualizar usuario</button>
+                              <button class="btn btn-primary btn-block"> <i class="fa fa-refresh"></i> Actualizar usuario</button>
+                            @else
+                                @role('Admin')
+                                  <h1 class="text-red">Este usuario esta deshabilitado</h1>
+                                @endrole
+                            @endif  
 
                   </form>
               </div>
@@ -141,7 +146,7 @@
           </div>
            <!--PERMISOS--> 
           <div class="box box-primary">
-              <div class="box-header with-border">
+              {{--<div class="box-header with-border">
                     <div class="box-title ">
                         <h3> <i class="fa fa-unlock-alt"></i> Permisos</h3>
                     </div>
@@ -167,7 +172,7 @@
                     @endforelse
                 </ul>
                 @endrole
-              </div>
+              </div>--}}
 
             </div>
       </div>

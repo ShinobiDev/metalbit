@@ -56,7 +56,7 @@ Route::group([
     Route::resource('users', 'UsersController');
     Route::resource('roles', 'RolesController');
     Route::resource('permissions', 'PermissionsController');
-
+    Route::post('habilitar/{id}','UsersController@habilitar')->name('users.habilitar');
     Route::middleware('role:Admin')->put('users/{user}/roles', 'UserRolesController@update')->name('users.roles.update');
     Route::middleware('role:Admin')->put('users/{user}/permissions', 'UserPermissionsController@update')->name('users.permissions.update');
   Route::post('registrar_wallet_transaccion_realizada/{id}','UsersController@registrar_wallet_transaccion_realizada')->name('registrar_wallet_transaccion_realizada');

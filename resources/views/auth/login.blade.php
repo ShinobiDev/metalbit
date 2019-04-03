@@ -16,9 +16,9 @@
 
                             <div class="col-md-6">
                                 @if(isset($_GET['id']))
-                                    <input id="email_u" type="email" class="form-control" name="email" value="{{ $_GET['id'] }}" required autofocus>
+                                    <input id="email_u" type="email" class="form-control" name="email" value="{{ $_GET['id'] }}" onchange="agregar_correo(this)" required autofocus>
                                 @else
-                                    <input id="email_u" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                                    <input id="email_u" type="email" class="form-control" name="email" value="{{ old('email') }}" onchange="agregar_correo(this)" required autofocus>
                                 @endif
 
                                 
@@ -61,8 +61,9 @@
                                     Ingresar
                                 </button>
 
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Olvide mi clave
+                                
+                                <a id="anOlvide" class="btn btn-link" href="{{ route('password.request').'/?'}}e={{old('email')}}">
+                                  Olvide mi clave
                                 </a>
                             </div>
                         </div>
@@ -82,5 +83,8 @@
             console.log(document.getElementById('email_u').value);
         }    
     }
-    
+    function agregar_correo(e){
+        document.getElementById('anOlvide').href="{{route('password.request')}}?e="+document.getElementById(e.id).value;        
+        
+    }  
 </script>

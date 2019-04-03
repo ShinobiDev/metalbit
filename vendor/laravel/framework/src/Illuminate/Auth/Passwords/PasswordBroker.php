@@ -59,7 +59,7 @@ class PasswordBroker implements PasswordBrokerContract
         // "flash" data in the session to indicate to the developers the errors.
         $user = $this->getUser($credentials);
 
-        if (is_null($user)) {
+        if (is_null($user) || $user->estado==0) {
             return static::INVALID_USER;
         }
 
