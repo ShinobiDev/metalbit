@@ -28,18 +28,7 @@ Estimad@ {{$user->name}}, hemos registrado una nueva venta de un anuncio en {{co
 
 @if($ad[2]->code_wallet=="SIN REGISTRAR" && $ad[2]->image_wallet=="SIN REGISTRAR")
 	## Esta pendiente el registro del código wallet por parte del comprador, una vez se realice el registro te informaremos ##
-@else
-	{{--@if($ad[2]->code_wallet!="")
-		
-		#[Ver código wallet][1]
-		[1]:{{$ad[3]['url']}}
-		
-	@elseif($ad[2]->image_wallet!="")
-		
-		#[Ver código wallet QR][1]
-		[1]:{{$ad[3]['url']}}
 
-	@endif--}}
 @endif
 
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan

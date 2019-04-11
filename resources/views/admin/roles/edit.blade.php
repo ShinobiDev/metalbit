@@ -10,7 +10,7 @@
               <div class="box box-primary">
 
                   <div class="box-header with-border">
-                      <h3><i class="fa fa-edit"></i>  Editar Role</h3>
+                      <h3><i class="fa fa-edit"></i>  Editar Rol</h3>
                   </div>
 
                   <div class="box-body">
@@ -21,7 +21,7 @@
 
                             @include('admin.roles.form')
 
-                            <button class="btn btn-primary btn-block"><i class="fa fa-refresh"></i> Actulizar Role</button>
+                            <button class="btn btn-primary btn-block"><i class="fa fa-refresh"></i> Actualizar Rol</button>
                     </form>
 
                  </div>

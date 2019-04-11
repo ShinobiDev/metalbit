@@ -3,9 +3,9 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Estimad@ {{$user->name}}, se ha rechazado una nueva recarga pendiente.
+Estimad@ {{$user->name}}, se ha rechazado una recarga.
 
-Recarga rechazada por valor: $ {{$recarga[1]['valor']}}  {{$recarga[1]['fecha']}}, intentanuevamente o comunicate la entidad que seleccionate para realizar la recarga
+Recarga rechazada por valor: $ {{$recarga[1]['valor']}}  {{$recarga[1]['fecha']}}, intenta nuevamente o comunícate la entidad que seleccionaste para realizar la recarga.
 
 
 ## Resumen Oferta ##

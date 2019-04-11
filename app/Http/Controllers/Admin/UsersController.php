@@ -463,6 +463,8 @@ class UsersController extends Controller
       
       return view('posts.mis_anuncios_vistos')
                 ->with('anuncios_vistos',$arr_anuncios)
+                ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first())
+                ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
                 ->with('success', 'Aqui esta el listado de los clic que haz visto');
     }
 

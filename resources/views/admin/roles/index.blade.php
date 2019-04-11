@@ -7,7 +7,7 @@
 
     <ol class="breadcrumb">
       <li><a href="{{route('welcome')}}"><i class="fa fa-dashboard">  Inicio</i></a></li>
-      <li class="active">Usuaios</li>
+      <li class="active">Usuarios</li>
     </0l>
 
 @endsection
@@ -51,7 +51,7 @@
                      @can ('delete', $role)
                        <form method="POST" action="{{route('roles.destroy', $role)}}" style="display: inline">
                          {{csrf_field()}} {{method_field('DELETE')}}
-                         <button class="btn btn-danger" name="button" onclick="return confirm('¿Esta seguro de querer Eliminar  este usuraio?')">
+                         <button class="btn btn-danger" name="button" onclick="return confirm('¿Está seguro de eliminar este rol?')">
                              <i class="fa fa-trash"></i>
                          </button>
                        </form>

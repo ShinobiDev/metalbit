@@ -11,7 +11,7 @@
               <div class="box box-primary">
 
                   <div class="box-header with-border">
-                      <h3><i class="fa fa-pencil"></i>  Crear Role</h3>
+                      <h3><i class="fa fa-pencil"></i>  Crear Rol</h3>
                   </div>
 
                   <div class="box-body">
@@ -21,7 +21,7 @@
 
                                 @include('admin.roles.form')
 
-                                <button class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Crear Role</button>
+                                <button class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Crear Rol</button>
 
                          </form>
 

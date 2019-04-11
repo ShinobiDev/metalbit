@@ -34,7 +34,7 @@
                 <th style="width: 300px">Valor comprado</th>
                 <th style="width: 300px">Valor a pagar a {{config('app.name')}}</th>
                 <th>Moneda local</th>
-                <th>Metodo de pago</th>
+                <th>Método de pago + valor adicional</th>
                 <th>Referecia de pago</th>
                 <th>Código wallet</th>
                 <th>Hash transacción</th>
