@@ -27,7 +27,7 @@
     <div class="box-body">
         <table id="roles-table"class="table table-bordered table-striped">
           <thead>
-            <tr>
+            <tr class="bg-purple">
               <th>ID</th>
               <th>Identificador</th>
               <th>Nombre</th>
@@ -39,7 +39,7 @@
             @foreach ($roles as $role)
                 <tr>
                   <td>{{ $role->id }}</td>
-                  <td>{{ $role->name }}</td>
+                  <td><b class="text-red">{{ $role->name }}</b></td>
                   <td>{{ $role->display_name}}</td>
                   <td>{{ $role->permissions->pluck('name')->implode(', ')}}</td>
                   <td>

@@ -30,7 +30,7 @@
     <div class="box-body">
         <table id="users-table" class="table table-bordered table-striped">
           <thead>
-            <tr>
+            <tr class="btn-danger">
               <th>ID</th>
               <th>Nombre</th>
               <th>Email</th>
@@ -42,12 +42,12 @@
           <tbody>
             @foreach ($users as $user)
                 <tr>
-                  <td>{{ $user->id }}</td>
+                  <td class="btn-info">{{ $user->id }}</td>
                   <td>{{ $user->name }}</td>
-                  <td>{{ $user->email }}</td>
+                  <td >{{ $user->email }}</td>
                   <td>{{ $user->getRoleNames()->implode(', ')}}</td>
-                  <td>{{ $user->estado == '1' ? 'Activo' : 'Deshabilitado'}}</td>
-                  <td>
+                  <td class="text-red">{{ $user->estado == '1' ? 'Activo' : 'Deshabilitado'}}</td>
+                  <td class="btn-info">
                     @can ('view', $user)
                         <a href="{{route('users.show', $user)}}" class="btn btn-xs btn-warning"><i class="fa fa-eye"></i></a>
                     @endcan

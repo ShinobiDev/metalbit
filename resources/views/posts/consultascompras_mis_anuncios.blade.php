@@ -17,7 +17,7 @@
      <div class="box-body">
         <table id="comprar-table"class="table table-striped table-codensed table-hover table-resposive">
           <thead>
-            <tr>
+            <tr class="bg-yellow">
               {{--<th>Código anuncio</th>--}}
               <th>Tipo transacción</th>
               <th>Calificación</th>
@@ -38,21 +38,24 @@
                 @if($ad->tipo_anuncio=="compra")
                 <tr id="row_{{$ad->id}}">
                   {{--<td class="text-center"><strong><h6>C-{{$ad->id}}</h6></strong></td>--}}
-                  <td class="text-green text-center"><strong><h4>Compra</h4></strong></td>
+                  <td class="text-green text-center bg-danger"><strong><h4>Compra</h4></strong></td>
                   <td>
-                    @for($i=1;$i<=$ad->calificacion;$i++)
+                    <div style="margin-top: 15px">
+                      @for($i=1;$i<=$ad->calificacion;$i++)
                         @if($i<=3)
                           <img  class="star" src="{{asset('img/star.png')}}">
                         @endif
-                    @endfor
+                      @endfor  
+                    </div>
+                    
                   </td><td>{{$ad->banco }}</td>
-                  <td>{{$ad->ubicacion}}</td>
+                  <td class="bg-success">{{$ad->ubicacion}}</td>
                   <td>
-                     <span class="text-blue"><h5> $ {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></h5></span> 
+                     <span class="text-blue"><h5> <span class="text-red">$</span> {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></h5></span> 
 
                  </td>
                   <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                  <td style="width: 200px">$ {{ number_format($ad->limite_min,2, ',', '.') }} / </br>$ {{ number_format($ad->limite_max,2, ',', '.')}} <strong>{{$ad->moneda}}</strong></td>
+                  <td class="bg-danger text-primary" style="width: 200px"><span class="text-red">$</span> {{ number_format($ad->limite_min,2, ',', '.') }} / </br><span class="text-red">$</span>{{ number_format($ad->limite_max,2, ',', '.')}} <strong class="text-red">{{$ad->moneda}}</strong></td>
                    <td style="width: 250px">
                       @role('Admin')
                         

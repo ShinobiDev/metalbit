@@ -12,7 +12,7 @@
 			<div class="table-responsive">
 				<table class="table table-striped table-hover">
 				  <thead>
-				    <tr>
+				    <tr class="bg-info">
 				      <th scope="col">Metodo de pago</th>
 				      <th scope="col">Sobrecosto</th>
 				      <th scope="col">Valor</th>					      
@@ -26,16 +26,16 @@
 						</div>
 				      </th>
 				      <td><span>-</span></td>
-				  	  <td><span>0</span></td>
+				  	  <td><span>$0</span></td>
 				    </tr>
-				    <tr>
+				    <tr class="bg-danger">
 				      <th scope="row">
 				      	<div class="radio">
 						  <label><input type="radio" name="tipo_pago_{{$ad->id}}" onchange="validar_tipo_pago(this,'{{$ad->id}}')" value="3">2. Pago consignación ventanilla Bancolombia.
 						</label>
 						</div>
 				      </th>
-				      <td><span>13.000 + 4x1.000</span></td>
+				      <td><span>$13.000 + 4x$1.000</span></td>
 					  <td><span id="spPagoCons_{{$ad->id}}">{{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000)+$comision_consignacion->valor ,0,',','.')}}
 					  </span></td>
 				    </tr>
@@ -46,10 +46,10 @@
 						</label>
 						</div>
 				      </th>
-				      <td><span>+ 4x1.000</span></td>
+				      <td><span>+ 4x$1.000</span></td>
 					  <td><span id="spPagoTrans_{{$ad->id}}">{{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000) ,0,',','.')}}</span></td>
 				    </tr>
-				    <tr>
+				   <tr class="bg-success">
 				    	<th colspan="2">
 				    		<label class="text-success">Total a pagar </label>
 				    	</th>
@@ -73,7 +73,7 @@
 			<div class="table-responsive">
 				<table class="table table-striped table-hover">
 					  <thead>
-					    <tr>
+					    <tr class="bg-info">
 					      <th scope="col">Metodo de pago</th>
 					      <th scope="col">Sobrecosto</th>
 					      <th scope="col">Valor</th>	
@@ -87,17 +87,17 @@
 							</div>
 					      </th>
 					      <td><span>-</span></td>
-				  		  <td><span>0</span></td>
+				  		  <td><span>$0</span></td>
 					    </tr>
-					    <tr>
+					   	<tr class="bg-danger">
 					      <th scope="row">
 					      	<div class="radio">
 							  <label><input type="radio" name="tipo_pago_{{$ad->id}}" onchange="validar_tipo_pago(this,'{{$ad->id}}')" value="3">2. Pago consignación ventanilla Bancolombia.
 							</label>
 							</div>
 					      </th>
-					      <td><span>13.000 + 4x1.000</span></td>
-					      <td><span id="spPagoCons_{{$ad->id}}">{{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000)+$comision_consignacion->valor ,0,',','.')}}</span></td>
+					      <td><span>$13.000 + 4x$1.000</span></td>
+					      <td><span id="spPagoCons_{{$ad->id}}">${{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000)+$comision_consignacion->valor ,0,',','.')}}</span></td>
 					    </tr>
 					    <tr>
 					      <th scope="row">
@@ -106,10 +106,10 @@
 							</label>
 							</div>
 					      </th>
-					      <td><span>+ 4x1.000</span></td>
-					      <td><span id="spPagoTrans_{{$ad->id}}">{{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000),0,',','.')}}</span></td>
+					      <td><span>+ 4x$1.000</span></td>
+					      <td><span id="spPagoTrans_{{$ad->id}}">${{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000),0,',','.')}}</span></td>
 					    </tr>
-					    <tr>
+					    <tr class="bg-success">
 					    	<th colspan="2">
 					    		<label class="text-success">Total a pagar </label>
 					    	</th>
@@ -130,7 +130,7 @@
 			<div class="table-responsive">
 				<table class="table table-striped table-hover">
 				  <thead>
-				    <tr>
+				    <tr class="bg-info">
 				      <th scope="col">Metodo de pago</th>
 				      <th scope="col">Sobrecosto</th>
 				      <th scope="col">Valor</th>	
@@ -144,16 +144,16 @@
 						</div>
 				      </th>
 				      <td><span>-</span></td>
-				  	  <td><span>0</span></td>
+				  	  <td><span>$0</span></td>
 				    </tr>
-				    <tr>
+				    <tr class="bg-danger">
 				      <th scope="row">
 				      	<div class="radio">
 						  <label><input type="radio" name="tipo_pago_{{$ad->id}}" onchange="validar_tipo_pago(this,'{{$ad->id}}')" value="3" checked>2. Pago consignación ventanilla Bancolombia.
 						</label>
 						</div>
 				      </th>
-				      <td><span>13.000 + 4x1.000</span></td>
+				      <td><span>$13.000 + 4x$1.000</span></td>
 					  <td><span id="spPagoCons_{{$ad->id}}">{{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000)+$comision_consignacion->valor ,0,',','.')}}</span></td>
 				    </tr>
 				    <tr>
@@ -163,10 +163,10 @@
 						</label>
 						</div>	
 				      </th>
-				      <td><span>+ 4x1.000</span></td>
+				      <td><span>+ 4x$1.000</span></td>
 					  <td><span id="spPagoTrans_{{$ad->id}}">{{number_format((($ad->transaccion_pendiente['value_transaccion']*$pesos_por_mil->valor)/1000) ,0,',','.')}}</span></td>
 				    </tr>
-				    <tr>
+				    <tr class="bg-success">
 				    	<th colspan="2">
 				    		<label class="text-success">Total a pagar </label>
 				    	</th>
@@ -195,7 +195,7 @@
 		<div class="table-responsive">
 			<table class="table table-striped table-hover">
 			  <thead>
-			    <tr>
+			    <tr class="bg-info">
 			      <th scope="col">Metodo de pago</th>
 				  <th scope="col">Sobrecosto</th>
 				  <th scope="col">Valor</th>					      
@@ -209,16 +209,16 @@
 					</div>				
 			      </th>
 			      <td><span>-</span></td>
-				  <td><span>0</span></td>
+				  <td><span>$0</span></td>
 			    </tr>
-			    <tr>
+			    <tr class="bg-danger">
 			      <th scope="row">
 			      	<div class="radio">
 					  <label><input type="radio" name="tipo_pago_{{$ad->id}}" onchange="validar_tipo_pago(this,'{{$ad->id}}')" value="3">2. Pago consignación ventanilla Bancolombia.
 						</label>
 					</div>
 			      </th>
-			     <td><span>13.000 + 4x1.000</span></td>
+			     <td><span>$13.000 + 4x$1.000</span></td>
 			     <td><span id="spPagoCons_{{$ad->id}}">{{number_format((($ad->limite_min*$pesos_por_mil->valor)/1000)+$comision_consignacion->valor ,0,',','.')}}</span></td>
 			    </tr>
 			    <tr>
@@ -228,10 +228,10 @@
 						</label>
 					</div>	
 			      </th>
-			      <td><span>+ 4x1.000</span></td>
+			      <td><span>+ 4x$1.000</span></td>
 				  <td><span id="spPagoTrans_{{$ad->id}}">{{number_format((($ad->limite_min*$pesos_por_mil->valor)/1000),0,',','.')}}</span></td>
 			    </tr>
-			    <tr>
+			    <<tr class="bg-success">
 			    	<th colspan="2">
 			    		<label class="text-success">Total a pagar </label>
 			    	</th>

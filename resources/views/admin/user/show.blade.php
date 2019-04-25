@@ -11,7 +11,7 @@
 
             <h3 class="profile-username text-center">{{$user->name}}</h3>
 
-            <p class="text-muted text-center">{{$user->getRoleNames()->implode(', ')}}</p>
+            <h3 class="text-muted text-center">{{$user->getRoleNames()->implode(', ')}}</h3>
 
             <ul class="list-group list-group-unbordered">
               <li class="list-group-item" style="margin-left:  10px;">
@@ -49,14 +49,14 @@
                   <h3 class="box-title">Mis bonificaciones</h3>
               </div>
               <div class="box-body"><h4 class="box-title"></h4>
-                        <a class="btn btn-primary" href="{{config('app.url').'/mis_bonificaciones'}}">VER</a>
+                        <a class="btn btn-success" href="{{config('app.url').'/mis_bonificaciones'}}">VER</a>
               </div> 
 
           </div>
         
           <!--DIVISION MIS TRANSACIIONES-->
 
-           <div class="box box-primary">
+           <div class="box box-danger">
               <div class="box-header with-border">
                   <h3 class="box-title">Compartir en facebook</h3>
               </div>
@@ -67,12 +67,12 @@
           </div>
 
            <!--DIVISION COMPARTIR EMAIL-->
-           <div class="box box-primary">
+           <div class="box box-warning">
               <div class="box-header with-border">
                   <h3 class="box-title">Compartir por correo electrónico</h3>
               </div>
               <div class="box-body">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLongShareMail">
+                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalLongShareMail">
                       Compartir
                     </button>
 
@@ -106,12 +106,12 @@
         @role('Admin')
           <!--DIVISION PARA PORCENTAJE-->
           
-              <div class="box box-primary">
+              <div class="box box-success">
                   <div class="box-header with-border">
                     <h3 class="box-title">Editar porcentaje ganacia </h3>
                 </div>
                 <div class="box-body">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLongEditar">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLongEditar">
                         Editar
                       </button>
 
@@ -152,7 +152,7 @@
           
         <div class="col-md-3">
            <!--DIVISION RECARAGS-->
-          <div class="box box-primary">
+          <div class="box box-danger">
               <div class="box-header with-border">
                   <h3 class="box-title">Realizar Recarga</h3>
               </div>
@@ -169,7 +169,7 @@
                   @endforeach
 
 
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ventanarecarga">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ventanarecarga">
                       Recargar
                     </button>
                     
@@ -185,8 +185,8 @@
                    <div class="modal fade" id="ventanarecarga" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Realizar Recargas</h5>
+                          <div class="modal-header bg-primary text-center">
+                            <h4 class="modal-title" id="exampleModalLongTitle">Realizar Recargas</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>

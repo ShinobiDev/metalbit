@@ -20,9 +20,9 @@
   <div class="container">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Listado de usuarios</h3>
+          <h3 class="box-title text-red">Listado de usuarios</h3>
             
-              <a href="{{route('recargas.create')}}" class="btn btn-primary pull-right" >
+              <a href="{{route('recargas.create')}}" class="btn btn-danger pull-right" >
                   <i class="fa fa-car"> Cambiar costo del clic</i>
               </a>
 
@@ -30,7 +30,7 @@
       <div class="box-body">
           <table id="recargas-table"class="table table-bordered table-striped">
             <thead>
-              <tr>
+              <tr class="bg-primary">
                 <th>id</th>
                 <th>Usuario</th>
                 <th>Email</th>
@@ -48,11 +48,11 @@
               @foreach ($recargas as $recarga)
                   <tr>
                     <td>{{ $recarga->id }}</td>
-                    <td>{{ $recarga->name }}</td>
+                    <td class="text-green">{{ $recarga->name }}</td>
                     <td>{{ $recarga->email }}</td>
-                    <td>{{ $recarga->status }}</td>
-                    <td>$ {{ number_format($recarga->valor,0,',','.')}}</td>
-                    <td>{{ $recarga->updated_at }}</td>
+                    <td class="text-red">{{ $recarga->status }}</td>
+                    <td class="text-red">$ <span class="text-primary">{{ number_format($recarga->valor,0,',','.')}}</td>
+                    <td>{{ $recarga->updated_at }}</span></td>
                     <td>
                       <span id="spnMsn"></span>
                       <input id="rec_{{$recarga->id}}" type="number" value="{{ $recarga->costo_clic }}" onchange="cambiar_valor_clic('{{$recarga->id}}',this)"   /></td>
@@ -110,10 +110,10 @@
       </div>
       
         <div class="box-body">
-          <h3 class="box-title">Recargas</h3>
+          <h3 class="box-title text-primary">Recargas</h3>
           <table id="mis_recargas-table" class="table table-bordered table-striped">
                <thead>
-                <tr>
+                <tr class="bg-red">
                   <th>Items</th>
                   <th>Usuario</th>
                   <th>Tipo recarga</th>
@@ -136,17 +136,17 @@
                       
                       <tr>
                     <td>{{ $mi_recarga->id }}.</td>
-                    <td>{{ $mi_recarga->name }}</td>
-                    <td>{{ $mi_recarga->tipo_recarga }}</td>
-                    <td>$ {{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
-                    <td>$ {{ number_format($mi_recarga->valor_pagado,0,',','.') }}</td>
-                    <td>
+                    <td class="text-warning">{{ $mi_recarga->name }}</td>
+                    <td >{{ $mi_recarga->tipo_recarga }}</td>
+                    <td class="text-red">{{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
+                    <td class="text-red"><span class="text-primary">$ </span>{{ number_format($mi_recarga->valor_pagado,0,',','.') }}</td>
+                    <td class="text-success">
                       {{$mi_recarga->metodo_pago}}
 
 
                     </td>
                     <td>{{ $mi_recarga->estado_detalle_recarga }}</td>
-                    <td>
+                    <td class="text-primary">
 
                       {{ $mi_recarga->referencia_pago_pay_u }}
                       @if($mi_recarga->certificado_pago!=null)

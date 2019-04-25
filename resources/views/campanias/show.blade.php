@@ -22,14 +22,14 @@
         <div class="box box-primary">
           <div class="col-lg-12 col-12 col-md-12 box-header">
             <div class="col-lg-4 col-4 col-md-4" >
-              <h3 class="box-title">Campañas</h3>
+              <h3 class="box-title text-success">Campañas</h3>
             </div>
             <div class="col-lg-4 col-4 col-md-4" >
               
             </div>
             <div class="col-lg-4 col- col-md-4" >
                 
-                  <a href="{{route('campanias.index')}}" class="btn btn-primary pull-right btn-lg  btn-block" >
+                  <a href="{{route('campanias.index')}}" class="btn btn-success pull-right btn-lg  btn-block" >
                   <i class="fa fa-user-plus"> Crea una campaña</i>
                   </a>
                   

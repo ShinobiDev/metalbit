@@ -20,12 +20,12 @@
   <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Listado de compras realizadas</h3>
+          <h3 class="box-title text-info">Listado de compras realizadas</h3>
       </div>
       <div class="box-body">
           <table id="compras-table" class="table table-bordered table-striped">
             <thead>
-              <tr>
+              <tr class="bg-primary">
                 <th>Tipo</th>
                 <th>Estado compra</th>
                 <th>Vendedor</th>                
@@ -54,7 +54,7 @@
               @foreach ($pag as $transaccion)
                    
                   <tr id="row_{{$transaccion->id_pago}}">
-                    <td><strong class="text-success">{{$transaccion->tipo_anuncio}}</strong></td>
+                    <td class="bg-danger" ><h4><strong class="text-success">{{$transaccion->tipo_anuncio}}</strong></h4></td>
                      <td>
                       
                       @if($transaccion->transactionState=="Pendiente")
@@ -67,33 +67,33 @@
                         <span class="text-success">{{$transaccion->transactionState}}</span>                      
                       @endif
                     </td>
-                    <td><strong>{{$transaccion->name}}</strong></td>
+                    <td class="bg-success"><strong>{{$transaccion->name}}</strong></td>
                    <td>
                       @if($transaccion->cuenta_bancaria!="")
-                       <span class="text-primary"> {{$transaccion->cuenta_bancaria }}</span>
+                       <span class="text-red"> {{$transaccion->cuenta_bancaria }}</span>
                       @else
                         Sin registrar
                       @endif
                     </br>
                       @if($transaccion->certificacion_bancaria!="")
-                       <span class="text-primary"> <a target="_blank" href="{{config('app.url')}}{{$transaccion->certificacion_bancaria}}">
+                       <span class="text-red"> <a target="_blank" href="{{config('app.url')}}{{$transaccion->certificacion_bancaria}}">
                           Ver certificación bancaria
                         </a> </span>
                       @endif
 
 
                   </td>
-                   <td><strong class="text-info">{{$transaccion->email}}</strong></td>
+                   <td class="bg-warning"><strong class="text-info">{{$transaccion->email}}</strong></td>
                    <td><strong>{{$transaccion->phone}}</strong></td>
-                    <td><strong>{{$transaccion->transactionQuantity}}</strong></td>
+                    <td class="bg-danger"><strong>{{$transaccion->transactionQuantity}}</strong></td>
                     <td><strong>{{$transaccion->nombre_cripto_moneda}}</strong></td>
-                    <td >${{number_format($transaccion->transation_value,0,',','.')}}</td>
+                    <td class="bg-success">${{number_format($transaccion->transation_value,0,',','.')}}</td>
                     <td ><strong class="text-success">{{$transaccion->metodo_pago}}</strong></td>
-                    <td >${{number_format($transaccion->valor_sobre_costo,0,',','.')}}</td>
+                    <td class="bg-info" >${{number_format($transaccion->valor_sobre_costo,0,',','.')}}</td>
                     <td >${{number_format($transaccion->transaction_value_pagado+$transaccion->valor_sobre_costo,0,',','.')}}</td>
-                    <td>{{$transaccion->moneda_pago}}</td>
+                    <td class="bg-warning">{{$transaccion->moneda_pago}}</td>
                     <td><strong>{{$transaccion->transactionId}}</strong></td>
-                    <td><strong>{{$transaccion->updated_at}}</strong></td>
+                    <td class="bg-danger"><strong>{{$transaccion->updated_at}}</strong></td>
                     
                     @if($transaccion->metodo_pago=='Transferencia bancaria' || $transaccion->metodo_pago=='Consignacion bancaria')
                       <td>
@@ -107,16 +107,16 @@
                         
                       </td>
                     @else
-                      <td>{{$transaccion->metodo_pago}}</td>
+                      <td >{{$transaccion->metodo_pago}}</td>
                     @endif
 
 
                     
-                    <td><span class="text-red">{{$transaccion->code_wallet}}</span></td>
-                    <td><span class="text-success">{{$transaccion->hash_txid}}</span></td>
+                    <td class="bg-info"><span class="text-red">{{$transaccion->code_wallet}}</span></td>
+                    <td ><span class="text-success">{{$transaccion->hash_txid}}</span></td>
 
 
-                    <td>
+                    <td class="bg-danger">
 
                       @foreach ($variables as $var)
 
@@ -130,11 +130,11 @@
                     </td>
                         @if($transaccion->transactionState=="Pago hecho al anunciante" || $transaccion->transactionState=="Pago confirmado por el anunciante")
 
-                          <td><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($transaccion->porcentaje_pago/100)),0,',','.')}}</strong></td>
+                          <td ><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($transaccion->porcentaje_pago/100)),0,',','.')}}</strong></td>
                         @else
-                          <td><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</strong></td>
+                          <td ><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</strong></td>
                         @endif  
-                    <td>
+                    <td >
 
                       @if($transaccion->metodo_pago=="Pago en efectivo" && $transaccion->transactionState=="Pendiente")
 
@@ -151,7 +151,7 @@
                             confirmar pago al usuario
                         </button>
                      </td>    
-                     <td>  <!--VENTANA MODAL-->
+                     <td >  <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$transaccion->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
                             <form id="ad_form_{{$transaccion->id_pago}}" method="POST" action="{{route('confirmar_pago_vendedor',[$transaccion->id_pago])}}">

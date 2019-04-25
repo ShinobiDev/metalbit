@@ -2,7 +2,7 @@
 	@if($recarga_pendiente!=null)
 			@if($recarga_pendiente->estado_detalle_recarga=='PENDIENTE APROBACION')
 				<div>
-					<label>¿Monto a recargar?</label>
+					<label >¿Monto a recargar?</label>
 					<input id="num_valor_recarga" type="number" min="20000" value="{{number_format($recarga_pendiente->valor_recarga,0,'','')}}" onchange="cambiar_valor_recarga(this)" >
 					@include('partials.redimir_cupon_recarga',['c'=>auth()->user()->id])
 					
@@ -11,8 +11,8 @@
 				@if($recarga_pendiente->metodo_pago=='Pago en efectivo')
 					<div class="table-responsive">
 						<table class="table table-striped table-hover">
-						  <thead>
-						    <tr>
+						  <thead >
+						    <tr class="bg-success" >
 						      <th scope="col">Metodo de pago</th>
 						      <th scope="col">Sobrecosto</th>
 						      <th scope="col">Valor</th>					      
@@ -28,7 +28,7 @@
 						      <td><span>0</span></td>
 						      
 						    </tr>
-						    <tr>
+						    <tr class="bg-danger">
 						      <th scope="row">
 						      	<div class="radio">
 								  <label><input type="radio" name="tipo_pago" onchange="validar_tipo_pago_recargas(this,'{{auth()->user()->id}}')" value="3">2. Pago consignación ventanilla Bancolombia.</label>
@@ -48,7 +48,7 @@
 						      <td><span>+ 4x1.000</span></td>
 						      <td><span id="spPagoTrans">{{number_format(($recarga_pendiente->valor_recarga*$pesos_por_mil->valor)/1000,0,',','.')}}</span></td>
 						    </tr>
-						    <tr>
+						    <tr class="bg-info">
 						    	<th colspan="2">
 						    		<div>
 										<label  class="text-success">Total a pagar </label>
@@ -71,7 +71,7 @@
 					<div class="table-responsive">
 						<table class="table table-striped table-hover">
 						  <thead>
-						    <tr>
+						    <tr class="bg-success">
 						      <th scope="col">Metodo de pago</th>
 						      <th scope="col">Sobrecosto</th>
 						      <th scope="col">Valor</th>					      
@@ -88,7 +88,7 @@
 						      <td><span>0</span></td>
 						      
 						    </tr>
-						    <tr>
+						    <tr class="bg-danger">
 						      <th scope="row">
 						      	<div class="radio">
 								  <label><input type="radio" name="tipo_pago" onchange="validar_tipo_pago_recargas(this,'{{auth()->user()->id}}')" value="3" >2. Pago consignación ventanilla Bancolombia.</label>
@@ -109,7 +109,7 @@
 						      <td><span id="spPagoTrans">{{number_format((($recarga_pendiente->valor_pagado*$pesos_por_mil->valor)/1000),0,',','.')}}</span></td>
 						      
 						    </tr>
-						     <tr>
+						    <tr class="bg-info">
 						    	<th colspan="2">
 						    		<div>
 										<label  class="text-success">Total a pagar </label>
@@ -134,7 +134,7 @@
 					<div class="table-responsive">
 						<table class="table table-striped table-hover">
 						  <thead>
-						    <tr>
+						    <tr class="bg-success">
 						      <th scope="col">Metodo de pago</th>
 						      <th scope="col">Sobrecosto</th>
 						      <th scope="col">Valor</th>					      
@@ -151,7 +151,7 @@
 						      <td><span>-</span></td>
 						      
 						    </tr>
-						    <tr>
+						    <tr class="bg-danger">
 						      <th scope="row">
 						      	<div class="radio">
 								  <label><input type="radio" name="tipo_pago" onchange="validar_tipo_pago_recargas(this,'{{auth()->user()->id}}')" value="3" checked>2. Pago consignación ventanilla Bancolombia.</label>
@@ -172,7 +172,7 @@
 						      <td><span id="spPagoTrans">{{number_format((($recarga_pendiente->valor_recarga*$pesos_por_mil->valor)/1000),0,',','.')}}</span></td>
 						      
 						    </tr>
-						     <tr>
+						    <tr class="bg-info">
 						    	<th colspan="2">
 						    		<div>
 										<label  class="text-success">Total a pagar </label>
@@ -216,7 +216,7 @@
 			<div class="table-responsive">
 				<table class="table table-striped table-hover">
 				  <thead>
-				    <tr>
+				    <tr class="bg-success">
 				      <th scope="col">Metodo de pago</th>
 				      <th scope="col">Sobrecosto</th>
 				      <th scope="col">Valor</th>					      
@@ -233,7 +233,7 @@
 					  <td><span>-</span></td>
 				      
 				    </tr>
-				    <tr>
+				    <tr class="bg-danger">
 				      <th scope="row">
 				      	<div class="radio">
 						  <label><input type="radio" name="tipo_pago" onchange="validar_tipo_pago_recargas(this,'{{auth()->user()->id}}')" value="3" >2. Pago consignación ventanilla Bancolombia.</label>
@@ -254,7 +254,7 @@
 					  <td><span id="spPagoTrans">{{number_format(((20000*$pesos_por_mil->valor)/1000),0,'.',',')}}</span></td>
 				      
 				    </tr>
-				    <tr>
+				    <tr class="bg-info">
 				    	<th colspan="2">
 				    		<div>
 								<label  class="text-success">Total a pagar </label>

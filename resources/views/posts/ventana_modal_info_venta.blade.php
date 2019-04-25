@@ -10,11 +10,11 @@
                   <span aria-hidden="true" >&times;</span>
                 </button>
             </div>
-            <div class="modal-header">
-              <h4 style="text-align: center;" class="modal-title" id="exampleModalLabel"><b>Realiza tu compra</b></h4>
+            <div class="modal-header bg-info">
+              <h4 style="text-align: center;" class="modal-title " id="exampleModalLabel"><b>Realiza tu compra</b></h4>
             </div>
             <div class="modal-body">
-              <h5 class="modal-title" id="exampleModalLabel">Ingresa la cantidad de {{$ad->moneda}} que quieres adquirir en {{$ad->cripto_moneda}}</h5>
+              <h5 class="modal-title" id="exampleModalLabel"><b>Ingresa la cantidad de {{$ad->moneda}} que quieres adquirir en {{$ad->cripto_moneda}}</b></h5>
                 <form method="POST" id="ad_form_{{$ad->id}}" action="{{$ad->url_api}}">
                        <input  type="hidden" id="num_val_crip_moneda_{{$ad->id}}" value="{{$ad->precio_moneda_cf}}">
 
@@ -44,21 +44,21 @@
                              onchange="cambiar_valor_form_payu('{{ $ad->id}}','{{$ad->cod_anuncio}}','{{$ad->moneda}}')" required>
                         @endif--}}
                        <div class="modal-body">
-                            <h5 class="modal-title" id="exampleModalLabel">Precio de venta  {{$ad->cripto_moneda}} $ {{ $ad->precio_moneda}} en {{$ad->moneda}}</h5>
+                            <h5 class="modal-title text-red" id="exampleModalLabel"><b class="text-primary">Precio de venta</b>  {{$ad->cripto_moneda}} <b class="text-red">$ {{ $ad->precio_moneda}}</b> en <b>{{$ad->moneda}}</b></h5>
                           </div>
                            <div class="modal-body">
                                 <h5 id="msnEspera_compra_{{$ad->id}}" style="display: none"></h5>
                                 
                                 @if($ad->transaccion_pendiente['value']!=0)
-                                  <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> 
+                                  <h4 class="modal-title text-primary" ><b>Total:</b><span  class="text-red" id="h5Total_{{$ad->id}}"> 
                                     {{number_format($ad->transaccion_pendiente['quantity'],2,',','.')}}
 
-                                 </span> {{$ad->cripto_moneda}}</h5>
+                                 </span ><b class="text-red">{{$ad->cripto_moneda}}</b></h4>
                                 @else
-                                  <h5 class="modal-title" >Total:<span id="h5Total_{{$ad->id}}"> 
+                                  <h4 class="modal-title text-primary" ><b>Total:</b><span class="text-red" id="h5Total_{{$ad->id}}"> 
                                     {{number_format($ad->limite_min / (float)$ad->precio_moneda_sf,2,',','.')}}
 
-                                 </span> {{$ad->cripto_moneda}}</h5>
+                                 </span ><b class="text-red">{{$ad->cripto_moneda}} </b></h4>
                                 @endif
 
                                 
@@ -67,7 +67,7 @@
                                   {{-- number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",",".")--}}
                                   
                                   
-                                <input type="hidden" id="hdTotal_{{$ad->id}}" value="{{ number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,".",""),2,",","")}} " >
+                                <input type="hidden" id="hdTotal_{{$ad->id}}" value="{{ number_format($ad->limite_min / (float)number_format($ad->precio_moneda_sf,2,'.',''),2,'','')}}" >
 
                         </div>
 
@@ -81,7 +81,7 @@
                        
                          <div class="modal-body">
                           <i class="fa fa-info-circle"></i>
-                          <h5>Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</h5>
+                          <h5><b class="text-success">Ingresa o sube el código QR de tu wallet dónde deseas recibir las monedas compradas</b></h5>
 
                           <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" onchange="registrar_wallet(this,'{{$ad->id}}')" value="{{$ad->transaccion_pendiente['wallet']}}">
 
@@ -125,11 +125,11 @@
                 </form>
             </div>
             <div class="modal-body">
-                <b>Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}
+               <h4> <b class="text-primary">Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}</h4>
                
             </div>
             <div class="modal-body">
-                  <h4>Calificación del anunciante: </h4>
+                  <h4 class="text-primary">Calificación del anunciante: </h4>
                   @for($i=1;$i<=$ad->calificacion;$i++)
                       @if($i<=3)
                         <img  class="star" src="{{asset('img/star.png')}}">
@@ -137,10 +137,10 @@
                   @endfor
             </div>
             <div class="modal-body">
-                <h6>Visto por última vez {{$ad->visto}}</h6>
+                <h6 class="text-info">Visto por última vez {{$ad->visto}}</h6>
             </div>
             <div class="modal-body" >
-                  <h4>Comentarios de otros usuarios: </h4>
+                  <h4 class="text-success">Comentarios de otros usuarios: </h4>
                   @include('partials.comentarios')
             </div>
             <div class="modal-footer">

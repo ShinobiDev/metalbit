@@ -3,7 +3,7 @@
  <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Venta de criptomonedas</h3>
+          <h3 class="box-title text-green">Venta de criptomonedas</h3>
             @guest
               <a href="{{route('login')}}" class="btn btn-primary pull-right btn-lg" >
                   <i class="fa fa-user-plus"> Crea un anuncio</i>
@@ -18,7 +18,7 @@
      <div class="box-body">
           <table id="users-table"class="table table-striped table-codensed table-hover table-resposive">
             <thead>
-              <tr>
+              <tr class="bg-primary">
                 <th>Tipo transacción</th>
                 <th>Calificación</th>
                 <th>Forma de Pago</th>
@@ -35,22 +35,25 @@
               @foreach ($anuncios as $ad)
                   @if($ad->tipo_anuncio =="venta")
                    <tr id="row_{{$ad->id}}">
-                    <td class="text-green text-center"><strong><h4>Venta</h4></strong></td>
+                    <td class="text-green text-center bg-success"><strong><h3>Venta</h3></strong></td>
                     <td>
-                      @for($i=1;$i<=$ad->calificacion;$i++)
+                      <div style="margin-top: 15px">
+                        @for($i=1;$i<=$ad->calificacion;$i++)
                           @if($i<=3)
                             <img  class="star" src="{{asset('img/star.png')}}">
                           @endif
-                      @endfor
+                      @endfor  
+                      </div>
+                      
                     </td>
-                    <td>{{$ad->banco }}</td>
+                    <td class="bg-danger">{{$ad->banco }}</td>
                     <td>{{$ad->ubicacion}}</td>
-                    <td>
-                       <span class="text-blue"><h5>$ {{$ad->precio_moneda}}  <span class="text-red">{{$ad->moneda}}</span></h5></span>
+                    <td class="bg-info">
+                       <span class="text-blue "><h5>$ {{$ad->precio_moneda}}  <span class="text-red">{{$ad->moneda}}</span></h5></span>
                       
                    </td>
                     <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                    <td style="width: 200px;">${{ number_format($ad->limite_min,2, ',', '.') }} / ${{ number_format($ad->limite_max,2, ',', '.')}} </br><strong>{{$ad->moneda}}</strong></td>
+                    <td style="width: 200px;" class="bg-warning text-primary"><span class="text-red">$</span>{{ number_format($ad->limite_min,2, ',', '.') }} / <span class="text-red">$</span>{{ number_format($ad->limite_max,2, ',', '.')}} </br><strong class="text-red">{{$ad->moneda}}</strong></td>
                     <td>
                       @guest
                              <!--AQUI SE MUESTRA LOS BOTONES PARA LOGIN -->

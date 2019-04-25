@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 19, 2019 at 02:41 PM
+-- Generation Time: Apr 25, 2019 at 02:14 PM
 -- Server version: 10.2.12-MariaDB-log
 -- PHP Version: 7.2.7
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `metbitco_db`
+-- Database: `metbitco_db_test`
 --
 
 -- --------------------------------------------------------
@@ -1500,7 +1500,7 @@ INSERT INTO `detalle_clic_anuncios` (`id`, `id_anuncio`, `id_usuario`, `costo`, 
 (284, 103, 571, '300.00', 'compra', 2, NULL, NULL, '', '2019-03-04 11:28:21', '2019-03-04 15:15:50'),
 (287, 86, 571, '300.00', 'info', 1, NULL, NULL, '', '2019-03-04 17:35:42', '2019-03-04 12:35:42'),
 (288, 136, 555, '0.00', 'compra', 6, NULL, NULL, '', '2019-03-04 20:27:02', '2019-03-05 07:22:18'),
-(289, 82, 578, '300.00', 'compra', 16, 5, 'Recomendadísimo', 'Recomendadísimo', '2019-03-07 13:20:37', '2019-03-19 11:55:15'),
+(289, 82, 578, '300.00', 'info', 19, 3, 'Usuario no fue puntual con transacción', 'Usuario no fue puntual con transacción', '2019-03-07 13:20:37', '2019-04-11 10:33:50'),
 (290, 103, 578, '300.00', 'compra', 12, 5, 'Recomendadísimo', 'Recomendadísimo', '2019-03-07 13:27:27', '2019-03-19 12:01:23'),
 (291, 90, 578, '300.00', 'compra', 6, NULL, NULL, '', '2019-03-07 14:14:15', '2019-03-07 09:33:54'),
 (292, 71, 578, '300.00', 'info', 1, NULL, NULL, '', '2019-03-07 14:14:23', '2019-03-07 09:14:23'),
@@ -1653,7 +1653,14 @@ INSERT INTO `detalle_horario_usuario` (`id`, `id_user`, `dia`, `horario`, `creat
 (201, 579, 'JUEVES', '08:00|17:00', '2019-03-14 14:03:11', '2019-03-14 10:03:11', 'ABIERTO'),
 (202, 579, 'VIERNES', '08:00|17:00', '2019-03-14 14:03:11', '2019-03-14 10:03:11', 'ABIERTO'),
 (203, 579, 'SABADO', '08:00|17:00', '2019-03-14 14:03:11', '2019-03-14 10:03:11', 'CERRADO'),
-(204, 579, 'DOMINGO', '08:00|17:00', '2019-03-14 14:03:11', '2019-03-14 10:03:11', 'CERRADO');
+(204, 579, 'DOMINGO', '08:00|17:00', '2019-03-14 14:03:11', '2019-03-14 10:03:11', 'CERRADO'),
+(205, 580, 'LUNES', '08:00|17:00', '2019-04-03 21:04:11', '2019-04-03 17:04:11', 'ABIERTO'),
+(206, 580, 'MARTES', '08:00|17:00', '2019-04-03 21:04:11', '2019-04-03 17:04:11', 'ABIERTO'),
+(207, 580, 'MIERCOLES', '08:00|17:00', '2019-04-03 21:04:11', '2019-04-03 17:04:11', 'ABIERTO'),
+(208, 580, 'JUEVES', '08:00|17:00', '2019-04-03 21:04:11', '2019-04-03 17:04:11', 'ABIERTO'),
+(209, 580, 'VIERNES', '08:00|17:00', '2019-04-03 21:04:11', '2019-04-03 17:04:11', 'ABIERTO'),
+(210, 580, 'SABADO', '08:00|17:00', '2019-04-03 21:04:11', '2019-04-03 17:04:11', 'CERRADO'),
+(211, 580, 'DOMINGO', '08:00|17:00', '2019-04-03 21:04:11', '2019-04-03 17:04:11', 'CERRADO');
 
 -- --------------------------------------------------------
 
@@ -1901,7 +1908,8 @@ INSERT INTO `model_has_roles` (`role_id`, `model_id`, `model_type`) VALUES
 (3, 575, 'App\\User'),
 (3, 576, 'App\\User'),
 (3, 578, 'App\\User'),
-(3, 579, 'App\\User');
+(3, 579, 'App\\User'),
+(3, 580, 'App\\User');
 
 -- --------------------------------------------------------
 
@@ -1957,13 +1965,14 @@ INSERT INTO `pagos` (`id`, `transactionId`, `transactionStatePayU`, `transaction
 (45, NULL, '0', 'Visto', '0.44', '79000', NULL, '0.00', NULL, 103, 568, '', '', NULL, NULL, '2019-03-08 19:40:19', NULL, 'SIN REGISTRAR', 'SIN REGISTRAR', 'SIN REGISTRAR', NULL, NULL, NULL, NULL),
 (46, 'V2-82-1552074818-0', '0', 'Pendiente', '2.25', '400000', '400000', '0.00', NULL, 82, 568, 'Pago en efectivo', '', NULL, NULL, '2019-03-08 19:53:57', '2019-03-08 19:57:32', '1234', 'SIN REGISTRAR', 'SIN REGISTRAR', NULL, NULL, NULL, NULL),
 (47, 'V2-103-1552075103-8', '4', 'Pago confirmado por el anunciante', '0.50', '90000', '90000', '0.00', NULL, 103, 578, 'Transferencia bancaria', 'APROBADA', NULL, NULL, '2019-03-08 19:59:12', '2019-03-08 20:15:53', '1236874', '47/wallet.pdf', 'UIUIUIUIUIUIHGJHGJHGKJKHJHKJHKJHKJHKHHKJHK', 'COP', '5.10', '0125989889887874', '47/pago.pdf'),
-(48, 'V2-82-1553007826-0', '4', 'Moneda Envíada', '2.42', '450000', '450000', '14800.00', NULL, 82, 578, 'Consignacion bancaria', 'APROBADA', NULL, NULL, '2019-03-18 15:59:43', '2019-03-19 14:20:09', '654654654654', 'SIN REGISTRAR', 'HaGskdbslssbhsnslsbsdsb', 'COP', NULL, '546546546546464', '48/pago.jpg'),
+(48, 'V2-82-1553007826-0', '4', 'Transacción Finalizada', '2.42', '450000', '450000', '14800.00', NULL, 82, 578, 'Consignacion bancaria', 'APROBADA', NULL, NULL, '2019-03-18 15:59:43', '2019-04-11 14:32:07', '654654654654', 'SIN REGISTRAR', 'HaGskdbslssbhsnslsbsdsb', 'COP', NULL, '546546546546464', '48/pago.jpg'),
 (49, 'V2-82-1553008900-0', '4', 'Pago Aceptado', '2.18', '405000', '360450', '1442.00', NULL, 82, 578, 'Transferencia bancaria', 'PENDIENTE', NULL, NULL, '2019-03-19 15:22:11', '2019-03-19 14:27:34', 'SIN REGISTRAR', 'SIN REGISTRAR', 'SIN REGISTRAR', 'COP', NULL, '779879879879879879798798', '49/pago.jpg'),
 (50, 'V2-103-1553009710-8', '4', 'Transacción Finalizada', '0.42', '79500', '70755', '283.00', NULL, 103, 578, 'Transferencia bancaria', 'APROBADA', NULL, NULL, '2019-03-19 15:35:34', '2019-03-19 14:51:18', '46546546465', '50/wallet.jpg', 'Hahshshshsds', 'COP', NULL, '6465465465465464', '50/pago.jpg'),
 (51, 'V2-82-1553014389-0', '4', 'Transacción Finalizada', '2.15', '400000', '400000', '14600.00', NULL, 82, 578, 'Consignacion bancaria', 'APROBADA', NULL, NULL, '2019-03-19 16:55:15', '2019-03-19 16:27:58', 'SDGFSADFGAF', 'SIN REGISTRAR', 'Hahahahahahahshassh', 'COP', NULL, '999999999999999', '51/pago.jpg'),
 (52, 'V2-103-1553014867-8', '4', 'Pago Aceptado', '0.42', '79000', '79000', '316.00', NULL, 103, 578, 'Transferencia bancaria', 'APROBADA', NULL, NULL, '2019-03-19 16:58:27', '2019-03-19 16:09:00', 'ZDFHDFHFHHVBVB', '52/wallet.jpg', 'SIN REGISTRAR', 'COP', NULL, '666666666666666666666', '52/pago.jpg'),
 (53, 'V4-106-1553014774-9', '4', 'Pago hecho al anunciante', '128.68', '10000', '10000', '0.00', NULL, 106, 578, 'Pago en efectivo', 'APROBADA', NULL, NULL, '2019-03-19 17:00:01', '2019-03-19 16:33:31', 'SDGASDGA', '53/wallet.jpg', 'Sh hay hshshssh', 'COP', '1.00', NULL, NULL),
-(54, NULL, '0', 'Visto', '0.42', '79000', NULL, '0.00', NULL, 103, 5, '', '', NULL, NULL, '2019-03-19 18:02:57', NULL, 'SIN REGISTRAR', 'SIN REGISTRAR', 'SIN REGISTRAR', NULL, NULL, NULL, NULL);
+(54, NULL, '0', 'Visto', '0.42', '79000', NULL, '0.00', NULL, 103, 5, '', '', NULL, NULL, '2019-03-19 18:02:57', NULL, 'SIN REGISTRAR', 'SIN REGISTRAR', 'SIN REGISTRAR', NULL, NULL, NULL, NULL),
+(55, NULL, '0', 'Visto', '1.63', '400000', NULL, '0.00', NULL, 82, 578, '', '', NULL, NULL, '2019-04-11 15:20:07', NULL, 'SIN REGISTRAR', 'SIN REGISTRAR', 'SIN REGISTRAR', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1990,8 +1999,8 @@ INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 ('luisherresa13@gmail.com', '$2y$10$9nUl.nY3hlEIzqRR.DdstuEW3T9U/So.veR3ZNhCuEe4Lrl6sXkuW', '2018-12-18 21:03:45'),
 ('miguelrios1@hotmail.com', '$2y$10$2HGpUohzydGu0HC7Yzeg5uqdt8CR5wIyBSwfgqFVpwKPfgw4hGqTm', '2018-12-18 21:20:24'),
 ('edgar.guzman21@gmail.com', '$2y$10$TjLbyZ9bjo6GM7I1qi3c.OZUiI2ztwBQa7YJ7QBxuwM4S4J2d9HvS', '2018-12-31 20:23:54'),
-('adrian.vargas.2018@outlook.com', '$2y$10$6pN7XC6G3vT0pmdo.v2fsedXVwE7BUyujWy60dk/sv1VTp1DnBm3y', '2019-03-07 14:12:10'),
-('eguzman30@estudiantes.areandina.edu.co', '$2y$10$qUFs585VaWi.pliAFthA/OU88lzk.nffCblCp4pmAxnbARYI.yYuK', '2019-03-14 13:04:56');
+('eguzman30@estudiantes.areandina.edu.co', '$2y$10$qUFs585VaWi.pliAFthA/OU88lzk.nffCblCp4pmAxnbARYI.yYuK', '2019-03-14 13:04:56'),
+('adrian.vargas.2018@outlook.com', '$2y$10$oMOBNKEqVNM93UA3792pN.PlLJfa5p8J8dvn.dkq9TozRv1HiSvpe', '2019-04-03 20:02:23');
 
 -- --------------------------------------------------------
 
@@ -2105,7 +2114,8 @@ INSERT INTO `recargas` (`id`, `status`, `valor`, `user_id`, `created_at`, `updat
 (62, 'ACTIVA', '0.00', 575, '2019-01-29 17:00:15', '2019-01-29 17:00:15'),
 (63, 'ACTIVA', '246100.00', 576, '2019-01-31 02:09:42', '2019-03-14 14:26:37'),
 (65, 'ACTIVA', '610000.00', 578, '2019-03-07 12:58:04', '2019-03-18 16:09:52'),
-(66, 'ACTIVA', '0.00', 579, '2019-03-14 13:03:13', '2019-03-14 13:03:13');
+(66, 'ACTIVA', '0.00', 579, '2019-03-14 13:03:13', '2019-03-14 13:03:13'),
+(67, 'ACTIVA', '0.00', 580, '2019-04-03 20:04:11', '2019-04-03 20:04:11');
 
 -- --------------------------------------------------------
 
@@ -2210,9 +2220,9 @@ INSERT INTO `users` (`id`, `name`, `phone`, `email`, `password`, `costo_clic`, `
 (1, 'Heriberto Valencia', '3014751', 'prueba@metalbit.co', '$2y$10$oX30Ts4767sRvW3PD/CRGe3YhYZ.XqTVDXIQJU4NkR4eRPOk5.OK6', '0.00', 'SI', 525, 'foHnT1Mudd2jBNnOWpvsXeKLcEfJ4qU8ax8mccXh22VC2ZtP6cx18CTOWGxv', '2018-08-09 04:02:48', '2019-03-07 18:47:38', 36, 10, NULL, NULL, '1'),
 (2, 'Bruno Valenica', '123456', 'bruno@gmail.com', '$2y$10$wDjYL1KFNql.03tvWn/Vce/dIqSfWmsJ5X4aJq42bHTynnZS/DTTG', '300.00', 'SI', 526, 'c8Oxuh8Q7BF0ATONGnlmOajDJzh9FXMjUwG3Yf8NIaIbS8bklSrncuPkKFST', '2018-08-09 04:02:48', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
 (3, 'David Cabrera', '3147684576', 'cabrera.davidf@gmail.com', '$2y$10$P72/hwGX/cscp.IyGsWWSun9i.RwMvre1XtxBfbLTEUqc3COAs4/i', '300.00', 'SI', 535, 'qnrczWP8IjEsgCyPbQriJRQMzjhQKxfzYi5G9LdcNC04IlRPUJ65TBgjRcfP', '2018-10-27 01:27:14', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
-(5, 'edgar gmail', '73232504', 'edgar.guzman21@gmail.com', '$2y$10$enPRe5F0VI.SurAGdWHxruhne2FvsBMg6j5up06xY9d1RHhAqFZkK', '300.00', 'SI', 539, 'GdyXcqJVNVmBAu9YOcOWfsN0A3L4JWWjkA1g6nc3reMk4BbYvJOYdkwfAnDH', '2018-11-14 03:36:01', '2019-03-07 14:02:40', 28, 9, NULL, NULL, '1'),
-(554, 'miguelrios', '3165287824', 'miguel.rios@prismaweb.ne\r\n', '$2y$10$1BdagLqcENUvaqroFCINXOs.6h8B8Vf20f/Yuv5J8Jvch/RP4e/Je', '300.00', 'SI', 538, NULL, '2018-10-31 01:23:35', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
-(555, 'Edi samuel', '123489544', 'adrian.vargas.2018@outlook.com', '$2y$10$XoCCXoj5zEU7FTpLNiES8uLZLPeOLniPEqILKlURW.hsWNFfpVcvu', '300.00', 'SI', 540, 'krcEe16yJ9qre5EUO9JimealDqMi07USVeqRzCME0avU42t0jv6nyCHM7iFu', '2018-11-16 22:12:37', '2019-03-19 16:33:31', 95, 35, '0000222222', '/archivos/certificaciones/555.pdf', '1'),
+(5, 'edgar gmail', '73232504', 'edgar.guzman21@gmail.com', '$2y$10$enPRe5F0VI.SurAGdWHxruhne2FvsBMg6j5up06xY9d1RHhAqFZkK', '300.00', 'SI', 539, 'ociaBQVdEoQ692bRj9U61lhZdokgH2AymM7Tq4xqpPlYOCzw8nUMLZkElbJ8', '2018-11-14 03:36:01', '2019-03-07 14:02:40', 28, 9, NULL, NULL, '1'),
+(554, 'miguelrios', '3165287824', 'miguel.rios@prismaweb.ne\r\n', '$2y$10$1BdagLqcENUvaqroFCINXOs.6h8B8Vf20f/Yuv5J8Jvch/RP4e/Je', '300.00', 'SI', 538, NULL, '2018-10-31 01:23:35', '2019-04-03 20:02:02', 0, 0, NULL, NULL, '0'),
+(555, 'Edi samuel', '123489544', 'adrian.vargas.2018@outlook.com', '$2y$10$XoCCXoj5zEU7FTpLNiES8uLZLPeOLniPEqILKlURW.hsWNFfpVcvu', '300.00', 'SI', 540, 'rTuk7Jho8QLNrWarB3RQ1OK8RGgpbrOKVAW075oAYcqTO3s49BeZyEetzwxj', '2018-11-16 22:12:37', '2019-04-11 14:32:07', 98, 36, '0000222222', '/archivos/certificaciones/555.pdf', '1'),
 (563, 'Heriberot valencia', '12345644', 'hvhvalenci@gmail.com', '$2y$10$91jp7sB4vNni.sdO3GPhIulRO.ua3j6et1FysNR7fB3hc0M4xhpa6', '300.00', 'SI', 548, 'SimxFt1ab3XBSFjhNXEmhMWsJDUQjjznSpN3HgJUg8R0MEurYR9sBRLxMwmr', '2018-12-01 00:40:50', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
 (564, 'Heriberto Valencia munioz', '123456789', 'heriimperativo@hotmail.com', '$2y$10$5rPVtz9zdkNdtW90BAIVnugTfumvkRHKzU926WkLrG9CF51wL2NwK', '300.00', 'SI', 549, NULL, '2018-12-01 01:05:25', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
 (565, 'Miguel Rios', '123456789', 'miguelrios1@hotmail.com', '$2y$10$dd44UdniR7pbXbJXlrWNYOrHQV6zUy7iuX95eZeDhVD8liDL7rIRy', '300.00', 'SI', 550, NULL, '2018-12-01 01:22:17', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
@@ -2222,9 +2232,10 @@ INSERT INTO `users` (`id`, `name`, `phone`, `email`, `password`, `costo_clic`, `
 (572, 'Soporte Prisma Web', '00000000', 'soporte@prismaweb.net', '$2y$10$VJWee5nsKmIN4BhnfKKntORgbnASufgnz.FCG5cOXog9mswbhq9MS', '300.00', 'SI', 557, NULL, '2018-12-13 15:35:49', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
 (573, 'Francisco Niño', '3166913626', 'paconino33@hotmail.com', '$2y$10$C7q3ysEtEWGNY4diaqB8pOsa9FapGmfFqVnHPklYJ.syK5w07Z90W', '300.00', 'SI', 558, NULL, '2018-12-18 21:22:15', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
 (575, 'EDGAR Hotmail 2', '123566666', 'adrian.vargas.2018@hotmail.com.co', '$2y$10$lTcO.GGEBA/Y/uUPK0gCIOxwRSpSQAFQy3KonvfktOBtL.c6nQrvu', '300.00', 'SI', 559, NULL, '2019-01-29 17:00:10', '2019-03-07 14:02:40', 0, 0, NULL, NULL, '1'),
-(576, 'EDGAR AREANDINA', '315879642', 'eguzman30@estudiantes.areandina.edu.co', '$2y$10$Xcfk9vbk5UI2OOXN5zSurOd62StQch/6xCxGfC3e5JD6UFHNe9rba', '300.00', 'SI', 560, 'it9JcSNhCLSerbjDzj1e3wpBX9wvTFxxJsyoei48mtR2LlQ0z51p692gs3bZ', '2019-01-31 02:09:37', '2019-03-14 13:07:50', 0, 0, NULL, NULL, '1'),
-(578, 'edgar mohan gmail', '3158790445', 'edgar.devmohan@gmail.com', '$2y$10$GBoB1fMYtfk4mDx1x9hIvOAH4TICeMOUfvF16lXU0E3aiSzhkjWdi', '300.00', 'SI', 562, 'r2Ft1j3j2gZMF1HQcrSwoaeHEVmB8oMXAO5gHb4Q9bpIa9UE9UNoagq9AllD', '2019-03-07 12:58:03', '2019-03-07 23:01:59', 13, 3, '0565656565', '/archivos/certificaciones/578.pdf', '1'),
-(579, 'Stalin Chacon', '3114461157', 'stalin1@misena.edu.co', '$2y$10$CeIcUm2E/UDwNnRl90S7Aeu0pwLrXABOBRZqeFz/a9jDKNRl6Z3rG', '500.00', 'SI', 563, NULL, '2019-03-14 13:03:11', '2019-03-14 13:03:11', 3, 1, NULL, NULL, '1');
+(576, 'EDGAR AREANDINA', '315879642', 'eguzman30@estudiantes.areandina.edu.c', '$2y$10$Xcfk9vbk5UI2OOXN5zSurOd62StQch/6xCxGfC3e5JD6UFHNe9rba', '300.00', 'SI', 560, 'it9JcSNhCLSerbjDzj1e3wpBX9wvTFxxJsyoei48mtR2LlQ0z51p692gs3bZ', '2019-01-31 02:09:37', '2019-03-14 13:07:50', 0, 0, NULL, NULL, '1'),
+(578, 'edgar mohan gmail', '3158790445', 'edgar.devmohan@gmail.com', '$2y$10$GBoB1fMYtfk4mDx1x9hIvOAH4TICeMOUfvF16lXU0E3aiSzhkjWdi', '300.00', 'SI', 562, 'R2kDBIw0D17zqxxRtZbwFfaUwHxAik2ZVtx61eUR6jt8hj7ITTKmqLMR4gpk', '2019-03-07 12:58:03', '2019-03-07 23:01:59', 13, 3, '0565656565', '/archivos/certificaciones/578.pdf', '1'),
+(579, 'Stalin Chacon', '3114461157', 'stalin1@misena.edu.co', '$2y$10$CeIcUm2E/UDwNnRl90S7Aeu0pwLrXABOBRZqeFz/a9jDKNRl6Z3rG', '500.00', 'SI', 563, NULL, '2019-03-14 13:03:11', '2019-03-14 13:03:11', 3, 1, NULL, NULL, '1'),
+(580, 'edgar uniandina', '123456789', 'eguzman30@estudiantes.areandina.edu.co', '$2y$10$7DFesz31K4psfjdLKuH/nu3kv3x.K1P66YOU9GB0v1hYrvP8UCvl6', '500.00', 'SI', 564, '2NNGBYPCNmjdg6cx1UmEMRXEk0Wi0GGtELUCS8HFAnxOdJ8u8Kyu77OdYLpZ', '2019-04-03 20:04:11', '2019-04-03 20:06:21', 3, 1, NULL, NULL, '1');
 
 -- --------------------------------------------------------
 
@@ -2433,7 +2444,7 @@ ALTER TABLE `detalle_clic_anuncios`
 -- AUTO_INCREMENT for table `detalle_horario_usuario`
 --
 ALTER TABLE `detalle_horario_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
 
 --
 -- AUTO_INCREMENT for table `detalle_recargas`
@@ -2457,7 +2468,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `payus`
@@ -2475,7 +2486,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `recargas`
 --
 ALTER TABLE `recargas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -2487,7 +2498,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=580;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=581;
 
 --
 -- AUTO_INCREMENT for table `variables`

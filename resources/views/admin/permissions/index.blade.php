@@ -21,7 +21,7 @@
     <div class="box-body">
         <table id="permission-table"class="table table-bordered table-striped">
           <thead>
-            <tr>
+            <tr class="bg-success">
               <th>ID</th>
               <th>Identificador</th>
               <th>Nombre</th>
@@ -30,10 +30,10 @@
           </thead>
           <tbody>
             @foreach ($permissions as $permission)
-                <tr>
-                  <td>{{ $permission->id }}</td>
+                <tr >
+                  <td class="bg-info">{{ $permission->id }}</td>
                   <td>{{ $permission->name }}</td>
-                  <td>{{ $permission->display_name }}</td>
+                  <td class="bg-info">{{ $permission->display_name }}</td>
                   <td>
                     @can('update',$permission)
                         <a href="{{route('permissions.edit', $permission)}}" class="btn btn btn-primary"><i class="fa fa-edit"></i></a>
