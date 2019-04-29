@@ -14,31 +14,31 @@ use DB;
 
 class Anuncios extends Model
 {
-    //
+    
     protected $fillable = ['id','cod_anuncio','tipo_anuncio','ubicacion','cod_postal','localidad','departamento','ciudad', 'moneda','nombre_moneda','criptomoneda','nombre_cripto_moneda','banco','margen','precio_minimo_moneda','limite_min','limite_max','lugar','terminos','user_id','estado_anuncio'
   	];
 
   /**
    * funcion que me retorna un conjuto de anuncios listos para mostra en la tabla
-   * @param  [type] $anuncios_consultados [description]
-   * @return [type]                       [description]
+   * @param  [type] $anuncios_consultados [arreglo de anunios consultados]
+   * @return [array]                      [arreglo de anuncios]
    */
   public function ver_anuncios($anuncios_consultados){
                                            
-  		   $tipo="PRODUCTION";
+  		  $tipo="PRODUCTION";
          
          
-         if(config('app.debug')){
+        if(config('app.debug')){
               $tipo='TEST';  
-         }   
+        }   
   		   
-         $pu = Payu::where("type",$tipo)->get();
-  		   $guzzle=new GuzzleModel();
-         $coinmarketcap=$guzzle->get_response_listings();
-         //dd($anuncios_consultados);
-         $v=0;
-         //genero respuesta para anuncios de ventas
-         $arr_anuncios=array();
+        $pu = Payu::where("type",$tipo)->get();
+  		  $guzzle=new GuzzleModel();
+        $coinmarketcap=$guzzle->get_response_listings();
+        //dd($anuncios_consultados);
+        $v=0;
+        //genero respuesta para anuncios de ventas
+        $arr_anuncios=array();
          
         
         foreach ($anuncios_consultados as $key => $value) {
@@ -237,9 +237,9 @@ class Anuncios extends Model
 
   /**
    * [permite consultar los comenatarios de cada anuncio] 
-   * @param  [type] $id     [description]
-   * @param  [type] $limite [description]
-   * @return [type]         [description]
+   * @param  [int] $id     [id del anuncio]
+   * @param  [int] $limite [limite de consulta de comenmtarios a consultar]
+   * @return [Collection]  [arreglo con los comentarios consultados]
    */
   public function ver_comentarios($id,$limite){
     
@@ -266,7 +266,11 @@ class Anuncios extends Model
     }
     return $cal_precio;
   }
-
+  /**
+   * Funcion para registrar las ventas realizadas 
+   * @param  [array] $req [variable enviada de tipo $_REQUEST]
+   * @return [view]      [retorna una vista con los datos correspondientes para mostrar, dependiendo del resultado del proceso]
+   */
   public function registro_venta_anuncio($req){
     //dd($req);
     switch ($req['transactionState']) {

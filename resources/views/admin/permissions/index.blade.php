@@ -8,7 +8,7 @@
     <ol class="breadcrumb">
       <li><a href="{{route('welcome')}}"><i class="fa fa-dashboard">  Inicio</i></a></li>
       <li class="active">Permisos</li>
-    </0l>
+    </ol>
 
 @endsection
 
@@ -33,7 +33,7 @@
                 <tr >
                   <td class="bg-info">{{ $permission->id }}</td>
                   <td>{{ $permission->name }}</td>
-                  <td class="bg-info">{{ $permission->display_name }}</td>
+                  <td class="bg-info">{{   $permission->display_name }}</td>
                   <td>
                     @can('update',$permission)
                         <a href="{{route('permissions.edit', $permission)}}" class="btn btn btn-primary"><i class="fa fa-edit"></i></a>

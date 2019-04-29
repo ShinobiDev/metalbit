@@ -17,7 +17,11 @@ class Recargas extends Model
   protected $fillable = [
       'status', 'valor', 'user_id',
   ];
-
+  /**
+   * [registro_recargas funcion para registrar las recargas hechas por un cliente]
+   * @param  [type] $req [array de tipo $_REQUEST que contiene la información del apgo emitido por payu]
+   * @return [type]      [description]
+   */
   public function registro_recargas($req){
   	//dd($req);
   	switch ($req['transactionState']) {

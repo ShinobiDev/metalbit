@@ -57,9 +57,9 @@ class User extends Authenticatable
     }  
     /**
      * Funcion para consulatr el horario de un usuario
-     * @param  [type] $id  [description]
-     * @param  [type] $dia [description]
-     * @return [type]      [description]
+     * @param  [int] $id  [id del usuario que desea consultar sus horarios]
+     * @param  [string] $dia [# del dia]
+     * @return [array]      [arreglo con los datos necesarios para consultar y acceder a los horarios]
      */
     public function ver_horarios($id,$dia){
         $dia_n="";

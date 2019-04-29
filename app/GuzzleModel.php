@@ -8,8 +8,7 @@ use App\User;
 //Clase para consultar API coinmarketcap
 class GuzzleModel extends Model
 {
-    //
-    
+    //URL DE LA API V2 DE COINMARKET    
     private $url_base="https://api.coinmarketcap.com/v2/";
     private $client;
     
@@ -17,12 +16,15 @@ class GuzzleModel extends Model
     	$this->client = new \GuzzleHttp\Client();    	
     }
     
-    //retorna el listado de monedas
+    /**
+     * [get_response_listings fucnion que consulta el listado de todas las monedas que contien coinmarket]
+     * @return [type] [description]
+     */
     public function get_response_listings(){
 		
 
         try{
-             //dd($this->url_base.'listings/');
+             
                     $res = $this->client->request('GET', $this->url_base.'listings/');
                     //dd($res);
                     if($res->getStatusCode()==200){
@@ -33,7 +35,7 @@ class GuzzleModel extends Model
                         
                     }           
         }catch(\Exception $ex){
-              //dd($ex);
+              
               \Log::error($ex);   
               $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
                             ->join("roles","model_has_roles.role_id","roles.id")
@@ -44,13 +46,15 @@ class GuzzleModel extends Model
                     
         }
     }
-    /*
-    consulta de la api
-    $limite = "limite de resultados max 100",
-    $orden = orden de resultados solo permite id,
-    $inicia = numero de inicio de la consulta ,
-    $convert = tipo de moneda que quiere convertir
-    */ 
+    
+   /**
+    * [get_response_ticker consulta de la api de coinmarket]
+    * @param  [int] $limite  [imite de resultados max 100]
+    * @param  [string] $orden   [orden de resultados solo permite id]
+    * @param  [int] $inicia  [numero de inicio de la consulta]
+    * @param  [string] $convert [ipo de moneda que quiere convertir]
+    * @return [json_encode]          [description]
+    */
     public function get_response_ticker($limite,$orden,$inicia,$convert){
     		
         try{
@@ -109,10 +113,12 @@ class GuzzleModel extends Model
                     
         }
     }
-    /*
-    consulta de la api para especifica moneda
-    $id_cripto_currency = "id de la moneda",
-    $convert = "moneda a la que quiere convertir",    
+ 
+   /**
+    * [get_specific_currency consulta de la api para especifica moneda]
+    * @param  [int] $id_cripto_currency [id de la moneda]
+    * @param  [string] $convert            [moneda a la que quiere convertir]
+    * @return [json_encode]                     [valores especificos para la moneda solitada]
     */
     public function get_specific_currency($id_cripto_currency,$convert){
         try{
@@ -151,11 +157,12 @@ class GuzzleModel extends Model
         }
 	    	
 
-    	
-    }
-     /*
-    consulta de la api para especifica moneda fiduciaria
-       
+        	
+        }
+   
+   /**
+    * [get_fiat_currency     consulta de la api para especifica moneda fiduciaria]
+    * @return [array] [arreglo con las divisas permitidas]
     */
     public function get_fiat_currency(){
         $currency_for_contry=[

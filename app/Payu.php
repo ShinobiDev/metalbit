@@ -11,7 +11,13 @@ class Payu extends Model
       'API_KEY','merchantId','accountId','urlResponse','urlConfirm', 'urlApi','urlError','type_encrypt',
       'razon_social','nit','tel_contacto'
   	];
-
+    /**
+     * [hashear Funcion para crear firma para pagos en payu]
+     * @param  [type] $ref_pago [referencia de pago de la factura]
+     * @param  [type] $monto    [valor a pagar en payu]
+     * @param  [type] $moneda   [moneda con la que se desea hacel pago]
+     * @return [string]           [firma creada con los datos ingresados]
+     */
   	public function hashear($ref_pago,$monto,$moneda){
   			$val=0;
         if(config("app.debug")==true){

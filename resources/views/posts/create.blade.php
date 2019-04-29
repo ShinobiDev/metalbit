@@ -16,12 +16,8 @@
 
             <p>
         <ul>
-              {{-- <li>
-                Para que se muestren sus anuncios, debe tener ciptomonedas en su cartera {{config('app.name')}}. Necesita al menos 0,04 BTC para publicar anuncios con métodos de pago online o al menos 0,04 BTC para anuncios locales (operaciones en efectivo).
-              </li> --}}
               <li>Determinados métodos de pago requieren tener la identificación verificada antes de hacer visibles los anuncios.</li>
               <li>Cada operación completada cuesta a los anunciantes un <strong class="text-red">{{$porcentaje[0]->valor}} %</strong> del importe total de la operación.
-                <!--<a href="/fees">Vea la lista de todas las comisiones en la página Comisiones</a>.-->
               </li>
               <li>
                   Una vez abierta una operación, el precio no se puede cambiar, excepto los casos en los que hay un error evidente en el precio.
@@ -30,7 +26,7 @@
                     No se permite comprar ni vender criptomendas en nombre de otras personas (correduría).
               </li>
               <li>
-                    Solo puede usar cuentas de pago registradas a su propio nombre (¡no se aceptan pagos de terceros!).</li> <li>Debe especificar sus datos de pago en el anuncio o en el chat de la operación.
+                    Solo puede usar cuentas de pago registradas a su propio nombre (<b>¡no se aceptan pagos de terceros!</b>).</li> <li>Debe especificar sus datos de pago en el anuncio o en el chat de la operación.
                </li>
                <li>
                       Todas las comunicaciones se deben llevar a cabo en <a href="/">{{config('app.name')}}</a>.
@@ -57,7 +53,7 @@
 
                <h3>
                 Para que tus anuncios sean visibles, debes tener saldo en la cuenta de recarga.
-                Recuerda que cada click de tu anuncio tiene un valor de: <span class="text-primary">$</span> <b class="text-red">{{number_format(auth()->user()->costo_clic,2,",",".")}}</b> COP
+                Recuerda que cada click de tu anuncio tiene un valor de: <span class="text-primary">$</span> <b class="text-red">{{number_format(auth()->user()->costo_clic,2,",",".")}}</b> <span class="text-primary">COP</span>
               </h3>
               <h2 class="text-primary">BALANCE DE RECARGA: $ <b class="text-red" >{{number_format($recarga->valor,2,",",".")}}</b> COP</h2>
 
@@ -68,7 +64,7 @@
 
                     <h3>
                       <i class="fa fa-info-circle"></i>
-                      <b>¿Quiere aumentar su visibilidad?</b>, los anuncios son ordenados orgánicamente situando primero a los usuarios que tengan un mayor valor de recarga total
+                      <b class="text-red">¿Quiere aumentar su visibilidad?</b>, los anuncios son ordenados orgánicamente situando primero a los usuarios que tengan un mayor valor de recarga total
                     </h3>
                 </div>
 
@@ -88,7 +84,7 @@
                   </div>
                 </div> <br>
                  <div class="col-md-7 two-col-help-text">
-                  <strong>¿Qué tipo de anuncio desea crear?. Si desea vender o comprar asegúrese de tener criptomonedas en su cartera de <span class="text-primary">{{config('app.name')}}</span>.</strong>
+                  <strong><b class="text-red">¿Qué tipo de anuncio desea crear?</b>. Si desea vender o comprar asegúrese de tener criptomonedas en su cartera de <span class="text-primary">{{config('app.name')}}</span>.</strong>
                </div>
            </div>
             <br><br>
@@ -227,8 +223,7 @@ $('#sel_cripto').on('change', function(e) {
         }
 
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjK1P7ObTN9d1kZ8LTVU-mvoY8Uc2it1w&libraries=places&callback=iniciarApp"
+<script src="https://maps.googleapis.com/maps/api/js?key={{$keygplages->valor}}&libraries=places&callback=iniciarApp"
         async defer></script>
 <script src="{{asset('js/placesapi.js')}}"></script>
 

@@ -845,7 +845,7 @@ class UsersController extends Controller
                            'pagos.transactionState',
                            'pagos.transactionQuantity',
                            'pagos.transation_value',
-                           'pagos.transaction_value_pagado',                          
+                           'pagos.transaction_value_pagado',                        
                            'pagos.id_anuncio',
                            'pagos.id_user_compra',
                            'pagos.metodo_pago',
@@ -898,10 +898,7 @@ class UsersController extends Controller
                 ->with('nombre_banco',$nombre_banco)
                 ->with('url_certificacion',$url_certificacion)
                 ->with('direccion_oficina',$direccion_oficina)
-                ->with('horario',$horario);
-
-
-        
+                ->with('horario',$horario);        
 
         }else{
             abort(404);

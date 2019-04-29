@@ -14,7 +14,11 @@ class CuponesCampania extends Model
     //
     //
    
-
+    /**
+     * Función para registrar los cupones en la base de datos
+     * @param  [int] $length [cantidad de cupones que se desean crear]
+     * @return [string]         [código del cupon creado]
+     */
     public static function crear_cupon($length){
           $chars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
           $clen   = strlen( $chars )-1;
@@ -36,7 +40,17 @@ class CuponesCampania extends Model
     public function usuario(){
         return $this->belongsTo('App\User','id_usuario_canje');
     }  
-
+    /**
+     * Funcion para redimr el cupon de recargas 
+     * @param  [string] $cupon                 [el código del cupon a canjear]
+     * @param  [date] $fecha_canje           [fecha de canje]
+     * @param  [int] $id_usuario_canje      [id usuario que canjea]
+     * @param  [string] $transaccion_canje     [código de transacción donde se va a realizar el canje]
+     * @param  [string] $tipo_de_campania      [tipo de campaña ]
+     * @param  [decimal] $monto_valor_a_redimir [valor a canjear en el cupon]
+     * @param  [decimal] $valor_pagado          [valor pagado por el cliente que desea canjear el cupon]
+     * @return [array]                        [contieen información del proceso respuesta, mensaje y id de campaña]
+     */
     public static function  redimir_cupon_recargas($cupon,$fecha_canje,$id_usuario_canje,$transaccion_canje,$tipo_de_campania,$monto_valor_a_redimir,$valor_pagado){
         
         $camp=CuponesCampania::where([
@@ -239,16 +253,16 @@ class CuponesCampania extends Model
       
     }
     /**
-     * [redimir_cupon_compra description]
-     * @param  [type] $cupon                 [description]
-     * @param  [type] $fecha_canje           [description]
-     * @param  [type] $id_usuario_canje      [description]
-     * @param  [type] $transaccion_canje     [description]
-     * @param  [type] $tipo_de_campania      [description]
-     * @param  [type] $monto_valor_a_redimir [description]
-     * @param  [type] $id_anuncio            [description]
-     * @param  [type] $saltar_validacion     [variable que permite saltar la validacion en caso de que el monto del tramite sea menor al del cupon]
-     * @return [type]                        [description]
+     * [redimir_cupon_compra Funcion paar redimir los cupones en las compras realizadas en la aplicación]
+     * @param  [string] $cupon                 [código del cupon a canjear]
+     * @param  [date] $fecha_canje           [fecha del canje]
+     * @param  [int] $id_usuario_canje      [id del usuario que desea canjear el cupon]
+     * @param  [string] $transaccion_canje     [código de la transacción donde se quiere realizar el canje]
+     * @param  [string] $tipo_de_campania      [tipo de campaña a la que pertenece el cupon]
+     * @param  [decimal] $monto_valor_a_redimir [valor por el cual se desea redimir el cupon]
+     * @param  [int] $id_anuncio            [id del anuncio donde se va a realizar el canje]
+     * @param  [boolean] $saltar_validacion     [variable que permite saltar la validacion en caso de que el monto del tramite sea menor al del cupon]
+     * @return [array]                        [contiene la información correspondiente a el canje realizado]
      */
     public static function  redimir_cupon_compra($cupon,$fecha_canje,$id_usuario_canje,$transaccion_canje,$tipo_de_campania,$monto_valor_a_redimir,$id_anuncio,$saltar_validacion,$moneda_pago){
       
@@ -438,7 +452,16 @@ class CuponesCampania extends Model
       
       
     }
-
+    /**
+     * [registro_canje funcion para registrar en la base de datos el registro exitos de un canje]
+     * @param  [int] $id_campania          [id de la campaña a la aque pertenece el cupon]
+     * @param  [string] $cupon                [código del cupon a registrar]
+     * @param  [string] $transaccion_canje    [código donde se realizo el canje]
+     * @param  [int] $id_usuario_canje     [id usuario que realizo el canje]
+     * @param  [decimal] $monto_valor_redimido [valor del cupon redimido]
+     * @param  [boolean] $free                 [validación para saber si el cupon es completo por el monto de la transacción o solo cubre un porcentaje o valor de la compra]
+     * @return [array]                       [arreglo con la respuesta del registro]
+     */
     public static function  registro_canje($id_campania,$cupon,$transaccion_canje,$id_usuario_canje,$monto_valor_redimido,$free){
           
           $c=Campania::where('id',$id_campania)->first();

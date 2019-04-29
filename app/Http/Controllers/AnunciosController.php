@@ -139,7 +139,8 @@ class AnunciosController extends Controller
                             ->with('listacriptos', (object)json_decode($listacriptos))
                             ->with("listamonedas",$listamonedas)
                             ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
-                            ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get());
+                            ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
+                            ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
             }
            
         /*}else{
