@@ -176,6 +176,15 @@ class User extends Authenticatable
                       'type'=>'0');
         }
     }
+    /**
+     * Funcion para registrar el pago pendiente para una recarga
+      * @param  [type] $a [codigo anuncio]
+     * @param  [type] $p [valor de la venta]
+     * @param  [type] $m [moneda para hacer el pago]
+     * @param  [type] $id_u [id_usuario]
+     * @param  [type] $cantidad [cantidad de monedas]
+     * @return [type]       [description]
+     */
     public function registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado){
         $dt=detalle_recargas::where([
                                       ["id_user",$id],
@@ -213,7 +222,7 @@ class User extends Authenticatable
         
     }
     /**
-     * Funcion para crear hash del pago en payu para anuncios
+     * Funcion para registrar el pago pendiente para una venta
       * @param  [type] $a [codigo anuncio]
      * @param  [type] $p [valor de la venta]
      * @param  [type] $m [moneda para hacer el pago]
