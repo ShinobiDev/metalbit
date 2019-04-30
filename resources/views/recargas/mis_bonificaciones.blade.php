@@ -20,7 +20,7 @@
   <div class="container">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Listado de usuarios</h3>
+          <h3 class="box-title text-success">Listado de bonificaciones</h3>
             
             
 
@@ -28,7 +28,7 @@
       <div class="box-body">
           <table id="bonificaciones-table" class="table table-bordered table-striped">
             <thead>
-              <tr>
+              <tr class="bg-red">
                 
                 <th>Referido</th>
                 <th>Tipo bonificación</th>
@@ -42,9 +42,9 @@
               @foreach ($bonificaciones as $bonificacion)
                   <tr>
                     
-                    <td class="text-center">{{ $bonificacion->name }}</td>
+                    <td class="text-center bg-success">{{ $bonificacion->name }}</td>
                     <td class="text-center">{{ $bonificacion->tipo_bonificacion }}</td>
-                    <td class="text-center">$ {{ number_format($bonificacion->valor,'0',',','.')}}</td>
+                    <td class="text-center bg-warning">$ {{ number_format($bonificacion->valor,'0',',','.')}}</td>
                     <td class="text-center">{{ $bonificacion->created_at }}</td>
                     
 

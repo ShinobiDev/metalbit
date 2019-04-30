@@ -2,7 +2,7 @@
 	
 	<label>Selecciona el tipo de pago de tu preferencia</label>
 	
-
+	
 	@if($ad->transaccion_pendiente['state']=='Pendiente')
 		
 		
@@ -231,7 +231,7 @@
 			      <td><span>+ 4x$1.000</span></td>
 				  <td><span id="spPagoTrans_{{$ad->id}}">{{number_format((($ad->limite_min*$pesos_por_mil->valor)/1000),0,',','.')}}</span></td>
 			    </tr>
-			    <<tr class="bg-success">
+			    <tr class="bg-success">
 			    	<th colspan="2">
 			    		<label class="text-success">Total a pagar </label>
 			    	</th>

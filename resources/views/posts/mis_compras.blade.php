@@ -20,12 +20,12 @@
   <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Listado de compras realizadas</h3>
+          <h3 class="box-title text-primary">Listado de compras realizadas</h3>
       </div>
       <div class="box-body">
           <table id="mis-compras-table" class="table table-bordered table-striped">
             <thead>
-              <tr>
+              <tr class="bg-green">
                 <th>Tipo</th>
                 <th>Estado compra</th>
                 <th>Vendedor</th>                
@@ -46,7 +46,7 @@
               {{--dd($mis_compras)--}}            
               @foreach ($mis_compras as $compra)
                   <tr id="row_{{$compra->id_pago}}">      
-                    <td>compra</td>          
+                    <td class="bg-info text-red"><strong>compra</strong></td>          
                     <td>
                       @if($compra->transactionState=="Pendiente")
                         <span class="text-danger">Pendiente por pago</span>
@@ -58,21 +58,21 @@
                         <span class="text-success">{{$compra->transactionState}}</span>
                       @endif
                     </td>       
-                    <td>{{$compra->name}}</td>          
+                    <td class="bg-warning">{{$compra->name}}</td>          
                                                 
-                    <td class="text-center">{{number_format($compra->transactionQuantity,2,',','.')}}</td>                                   
-                    <td class="text-center"><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
-                    <td class="text-center" style="width: 300px">${{number_format($compra->transation_value,2,',','.')}}</td>
-                    <td class="text-center" style="width: 300px">${{number_format($compra->transaction_value_pagado+$compra->valor_sobre_costo,2,',','.')}}</td>
-                    <td class="text-center">{{$compra->moneda_pago}}</td> 
-                    <td>
+                    <td class="text-center "><strong>{{number_format($compra->transactionQuantity,2,',','.')}}</strong></td>                                   
+                    <td class="text-center text-red bg-success"><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
+                    <td class="text-center text-primary" style="width: 300px"><span class="text-red">$</span> {{number_format($compra->transation_value,2,',','.')}}</td>
+                    <td class="text-center text-primary bg-danger" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transaction_value_pagado+$compra->valor_sobre_costo,2,',','.')}}</td>
+                    <td class="text-center text-success">{{$compra->moneda_pago}}</td> 
+                    <td class="bg-info">
                       <strong>
                         {{$compra->metodo_pago}}
                       </strong>
-                      ${{number_format($compra->valor_sobre_costo,2,',','.')}}
+                      <span class="text-red">$</span><span class="text-primary">{{number_format($compra->valor_sobre_costo,2,',','.')}}</span>
                     </td>                                    
                     <td><strong class="text-success">{{$compra->transactionId or 'Pendiente de compra'}}</strong></td>                                     
-                    <td>
+                    <td class="bg-warning">
                       @if($compra->code_wallet!='SIN REGISTRAR')
                         <span class="text-red">{{$compra->code_wallet}}</span>
                       @else
@@ -87,7 +87,7 @@
 
                     </td>                                   
                     <td><span class="text-success">{{$compra->hash_txid}}</span></td>
-                    <td><strong>{{$compra->updated_at}}</strong></td>
+                    <td class="bg-success"><strong>{{$compra->updated_at}}</strong></td>
                     <td>
                       
 
@@ -252,8 +252,8 @@
                           
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Información del medio de pago</h5>
+                                    <div class="modal-header bg-primary text-center">
+                                      <h5 class="modal-title " id="exampleModalLabel">Información del medio de pago</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                       </button>
@@ -262,11 +262,11 @@
                                             <i class="fa fa-info-circle"></i>
 
                                             @if($compra->metodo_pago=='Pago en efectivo')
-                                              <h5>METALBIT S.A.S.</h5>
+                                              <h5><strong>METALBIT S.A.S.</strong></h5>
                                             {{--<h5>Calle 114 #53 - 96 Bogotá D.C. - Colombia </h5>--}}
                                             {{--<h5>Horario: Lunes a Viernes de 8:00 a.m. - 12:30m y de 1:30 p.m. a 5:00 p.m. </h5>--}}
-                                            <h5>{{$direccion_oficina->valor}}</h5>
-                                            <h5>{{$horario->valor}}</h5>
+                                            <h5 class="text-primary"><strong>{{$direccion_oficina->valor}}</strong></h5>
+                                            <h5 class="text-success"><strong>{{$horario->valor}}</strong></h5>
                                             <a target="_blank" href="https://www.google.com/maps/place/Cl.+114+%2353-96,+Bogot%C3%A1/@4.6992389,-74.0641402,17z/data=!4m13!1m7!3m6!1s0x8e3f9ace4c6c14bd:0xb2d45afe3cfaa98a!2sCl.+114+%2353-96,+Bogot%C3%A1!3b1!8m2!3d4.699174!4d-74.0641315!3m4!1s0x8e3f9ace4c6c14bd:0xb2d45afe3cfaa98a!8m2!3d4.699174!4d-74.0641315?hl=es">Ver ubicación</a>
 
                                             @else

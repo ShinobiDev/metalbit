@@ -20,12 +20,12 @@
   <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Listado de ventas realizadas</h3>
+          <h3 class="box-title text-red">Listado de ventas realizadas</h3>
       </div>
       <div class="box-body">
           <table id="mis-ventas-table" class="table table-bordered table-striped">
             <thead>
-              <tr>
+              <tr class="bg-purple">
                 <th>Tipo</th>
                 <th>Estado venta</th>
                 <th>Comprador</th>                
@@ -45,8 +45,8 @@
               {{--dd($mis_ventas)--}}            
               @foreach ($mis_ventas as $venta)
                   <tr id="row_{{$venta->id_pago}}">      
-                    <td>venta</td>          
-                    <td>
+                    <td class="bg-danger text-red"><strong>venta</strong></td>          
+                    <td class="bg-info">
                       @if($venta->transactionState=="Pendiente")
                         <span class="text-danger">Pendiente por pago</span>
                       @elseif(($venta->transactionState == 'Pago Aceptado' && $venta->estado_pago =='PENDIENTE'))
@@ -57,20 +57,20 @@
                     </td>       
                     <td>{{$venta->name}}</td>          
                                                 
-                    <td>{{number_format($venta->transactionQuantity,2,',','.')}}</td>                                   
-                    <td><strong>{{$venta->nombre_cripto_moneda}}</strong></td>                                  
-                    <td style="width: 300px">${{number_format($venta->transation_value,2,',','.')}}</td>
+                    <td class="bg-success"><strong>{{number_format($venta->transactionQuantity,2,',','.')}}</strong></td>                                   
+                    <td class="bg-warning"><strong class="text-red">{{$venta->nombre_cripto_moneda}}</strong></td>                                  
+                    <td style="width: 300px" class="text-primary"><span class="text-red">$</span>{{number_format($venta->transation_value,2,',','.')}}</td>
 
                     @if($venta->transactionState=="Pago hecho al anunciante" || $venta->transactionState=="Pago confirmado por el anunciante")
 
-                      <td style="width: 300px">${{number_format($venta->transation_value-($venta->transation_value*($venta->porcentaje_pago/100)),0,',','.')}}</td>
+                      <td style="width: 300px" class=" bg-danger text-primary"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($venta->porcentaje_pago/100)),0,',','.')}}</td>
                     @else
-                       <td style="width: 300px">${{number_format($venta->transation_value-($venta->transation_value*($variable->valor/100)),0,',','.')}}</td>
+                       <td style="width: 300px" class=" bg-danger text-primary"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($variable->valor/100)),0,',','.')}}</td>
 
                     @endif  
 
 
-                    <td>{{$venta->moneda_pago}}</td>                                    
+                    <td class="text-red bg-success"><strong>{{$venta->moneda_pago}}</strong></td>                                    
                     <td><strong class="text-success">{{$venta->transactionId or 'Pendiente de venta'}}</strong></td>                                     
                     <td>
                       @if($venta->code_wallet!='SIN REGISTRAR')
@@ -86,8 +86,8 @@
                         
 
                     </td>                                   
-                    <td><span class="text-success">{{$venta->hash_txid}}</span></td>
-                    <td><span>{{$venta->updated_at}}</span></td>
+                    <td class="bg-info"><span class="text-success">{{$venta->hash_txid}}</span></td>
+                    <td class="bg-danger"><span>{{$venta->updated_at}}</span></td>
                     <td>
                       
 

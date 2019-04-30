@@ -29,7 +29,7 @@
       <div class="box-body">
           <table id="vistos-table" class="table table-striped table-codensed table-hover table-resposive">
               <thead>
-                <tr>
+                <tr class="bg-orange">
                   <th>Tipo transacción</th>
                   <th>Nombre usuario</th>
                   <th>Forma de Pago</th>
@@ -50,18 +50,18 @@
 
                     
                     <tr id="row_{{$ad->id_anuncio}}">      
-                      <td class="text-green text-center"><strong><h4>{{strtoupper($ad->tipo_anuncio)}}</h4></strong></td>
-                      <td>{{$ad->name}}</td>
-                      <td>{{$ad->banco }}</td>
-                      <td>{{$ad->ubicacion}}</td>
-                      <td style="width: 300px;">
+                      <td class="text-green text-center bg-warning"><strong><h4>{{strtoupper($ad->tipo_anuncio)}}</h4></strong></td>
+                      <td class="bg-danger">{{$ad->name}}</td>
+                      <td class="bg-info">{{$ad->banco }}</td>
+                      <td class="bg-warning">{{$ad->ubicacion}}</td>
+                      <td class="bg-success" style="width: 300px;">
                          <span class="text-blue"><h4>$  {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></h4></span> 
 
                      </td>
-                      <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                      <td style="width: 300px;">$ {{ number_format($ad->limite_min,2, ',', '.') }} /</br> $ {{ number_format($ad->limite_max,2, ',', '.')}} {{$ad->moneda}}</td>
-                      <td><h6>{{$ad->visto}}</h6></td>
-                      <td>
+                      <td class="bg-danger"><strong>{{$ad->cripto_moneda}}</strong></td>
+                      <td class="bg-info text-primary" style="width: 300px;"><span class="text-red">$</span> {{ number_format($ad->limite_min,2, ',', '.') }} /</br> <span class="text-red">$</span> {{ number_format($ad->limite_max,2, ',', '.')}} <span class="text-red">{{$ad->moneda}}</span></td>
+                      <td class="bg-warning"><h6>{{$ad->visto}}</h6></td>
+                      <td class="bg-success">
                         
                                       <button id="{{'btn_'.$ad->cod_anuncio}}" type="button" class="btn btn-success btn-block" data-toggle="modal" onclick="descontar_recargar('{{ 'infogen'.$ad->id}}','{{$ad->id}}','{{0}}','info')">
                                         Ver info
