@@ -32,7 +32,7 @@ class Anuncios extends Model
               $tipo='TEST';  
         }   
   		   
-        $pu = Payu::where("type",$tipo)->get();
+        
   		  $guzzle=new GuzzleModel();
         $coinmarketcap=$guzzle->get_response_listings();
         //dd($anuncios_consultados);
@@ -114,10 +114,10 @@ class Anuncios extends Model
 
                                         $vv=number_format(((float)number_format($value->limite_min / (float)number_format($precio_moneda,2,'.',''),2,'.',''))*number_format($precio_moneda_usd,2,'.',''),2,".","");
 
-                                        $hs=$pu[0]->hashear($cod,$vv,"USD");
+                                        
 
                                     }else{
-                                        $hs=$pu[0]->hashear($cod,$value->limite_min,$value->moneda);
+                                        
                                     }
                                     $u=new User();
 
@@ -194,13 +194,6 @@ class Anuncios extends Model
                                                         "name"=>$value->name,
                                                         "phone"=>$value->phone,
                                                         "id"=>$value->id,
-                                                        "merchantId"=>$pu[0]->merchantId,
-                                                        "accountId"=>$pu[0]->accountId,
-                                                        "hash"=>$hs,
-                                                        "resp"=>$pu[0]->urlResponse,
-                                                        "conf"=>$pu[0]->urlConfirm,
-                                                        "error"=>$pu[0]->urlError,
-                                                        "url_api"=>$pu[0]->urlApi,
                                                         "limite_clic"=>$value->valor,
                                                         "btn_info"=>$mostrar_info,
                                                         "btn_payu"=>$mostrar_payu,
@@ -247,6 +240,7 @@ class Anuncios extends Model
                             ->where([['id_anuncio',$id],['detalle_clic_anuncios.calificacion','<>',NULL]])
                             ->join('users','users.id','detalle_clic_anuncios.id_usuario')
                             ->limit($limite)
+                            ->where('opinion','<>',"")
                             ->get();
 
      return $comentarios;

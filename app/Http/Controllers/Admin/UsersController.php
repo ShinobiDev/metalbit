@@ -138,7 +138,7 @@ class UsersController extends Controller
             }else{
               $tipo="PRODUCTION";
             }
-          $py=Payu::where("type",$tipo)->get();
+          
           $ref=time()."-".date("s");
           $ad=[];
           $ref=time()."-".date("s");
@@ -171,9 +171,7 @@ class UsersController extends Controller
           //dd($transacciones);
           return view('admin.user.show')->with('user', $user)
                     ->with('recargas', $recargas)
-                    ->with("py",$py[0])
                     ->with("ref_code","rec_".$ref)
-                    ->with("hash",$pp->hashear("rec_".$ref,20000,"COP"))
                     ->with("ad",$ad)
                     ->with("transacciones",$transacciones)
                     ->with("variables",Variable::where('nombre','porcentaje_tramite')->get())

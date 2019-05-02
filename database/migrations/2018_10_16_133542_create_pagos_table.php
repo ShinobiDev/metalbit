@@ -25,8 +25,8 @@ class CreatePagosTable extends Migration
             $table->decimal('pay_value');
             $table->integer('id_anuncio');
             $table->integer('id_user_compra');
-            $table->string('moneda_pago');
-            $table->enum('estado_pago',['APROBADA', 'PENDIENTE', 'RECHAZADA')])->default('PENDIENTE');
+            $table->string('metodo_pago');
+            $table->enum('estado_pago',['APROBADA', 'PENDIENTE', 'RECHAZADA'])->default('PENDIENTE');
             $table->integer('calificacion');
             $table->string('opinion');
             //$table->foreign('id_anuncio')->references('id')->on('anuncios');

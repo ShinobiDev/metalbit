@@ -22,8 +22,9 @@ class CreateDetalleRecargasTable extends Migration
             $table->string("referencia_pago")->unique();
             $table->string("referencia_pago_pay_u")->unique();
              $table->string("metodo_pago");
-             $table->enum('estado_detalle_recarga',['APROBADA','PENDIENTE','RECHAZADA','REGISTRADA','PENDIENTE APROBACION'])->default('REGISTRADA')
+             $table->enum('estado_detalle_recarga',['APROBADA','PENDIENTE','RECHAZADA','REGISTRADA','PENDIENTE APROBACION'])->default('REGISTRADA');
             $table->timestamps();
+            $table->string('certificado_pago',256);
         });
     }
 

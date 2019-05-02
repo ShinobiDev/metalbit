@@ -55,7 +55,7 @@
                 Para que tus anuncios sean visibles, debes tener saldo en la cuenta de recarga.
                 Recuerda que cada click de tu anuncio tiene un valor de: <span class="text-primary">$</span> <b class="text-red">{{number_format(auth()->user()->costo_clic,2,",",".")}}</b> <span class="text-primary">COP</span>
               </h3>
-              <h2 class="text-orange">BALANCE DE RECARGA: <span class="text-primary">$</span> <b class="text-red" >{{number_format($recarga->valor,2,",",".")}}</b> <span class="text-primary">COP</span></h2>
+              <h2 class="text-orange">BALANCE DE RECARGA: <span class="text-primary">$</span> <b class="text-red" >{{$r = ($recarga != null) ? number_format($recarga->valor,2,",",".") : 0 }}</b> <span class="text-primary">COP</span></h2>
 
 
               <div id="identification_hint" class="col-md-12 display-none">

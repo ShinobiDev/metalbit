@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->integer('num_calificaciones');
             $table->string('cuenta_bancaria');
             $table->string('certificacion_bancaria');
-            $table->enum('estado',["0","1"])->defaul("1");
+            $table->enum('estado',["0","1"])->default("1");
 
         });
     }

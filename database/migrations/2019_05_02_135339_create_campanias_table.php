@@ -15,7 +15,6 @@ class CreateCampaniasTable extends Migration
     {
         Schema::create('campanias', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
             $table->string('nombre_campania');
             $table->enum('tipo_campania',['global', 'personal']);
             $table->enum('tipo_canje',['compra', 'recarga', 'regalo_recarga']);

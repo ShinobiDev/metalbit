@@ -537,14 +537,20 @@ class RecargasController extends Controller
           $recarga=Recargas::where([                      
                       ['user_id',$request['usuario']],                      
                     ])->get();
-
+          if(count($recarga)==0){
+            $r=0;
+          }else{
+            $r=$recarga->valor;
+          }
+          
           if($request['tipo_pago']==1 || $request['tipo_pago']==3){
-         
+            
             NotificacionAnuncio::dispatch($cliente[0], [
-                            ['medio_pago'=>config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf']],[$recarga[0],["valor"=>$request['valor_real'],'valor_a_pagar'=>$request['total_a_pagar'],"fecha"=>date('Y-m-d')]],"PagoRecargaTransaccion");
+                            ['medio_pago'=>config('app.url').'/archivos/certificación_bancaria_Metalbit_SAS.pdf']],[$r,["valor"=>$request['valor_real'],'valor_a_pagar'=>$request['total_a_pagar'],"fecha"=>date('Y-m-d')]],"PagoRecargaTransaccion");
 
           }else{
-            NotificacionAnuncio::dispatch($cliente[0], [],[$recarga[0],["valor"=>$request['valor_real'],"fecha"=>date('Y-m-d'),'valor_a_pagar'=>$request['total_a_pagar']]],"PagoRecargaEfectivo");
+
+            NotificacionAnuncio::dispatch($cliente[0], [],[$r,["valor"=>$request['valor_real'],"fecha"=>date('Y-m-d'),'valor_a_pagar'=>$request['total_a_pagar']]],"PagoRecargaEfectivo");
 
             
           }

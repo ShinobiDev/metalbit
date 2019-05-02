@@ -131,6 +131,7 @@ class AnunciosController extends Controller
            $listamonedas = $coinmarketcap->get_fiat_currency();
            $response  = $coinmarketcap->get_specific_currency(1,"COP");
            $coins = json_decode($response);
+           
            if(property_exists($coins,"respuesta")==true){
                 return redirect('/');
             }else{
@@ -295,7 +296,7 @@ class AnunciosController extends Controller
                         ->get();
         }   
         $ad_arr=new Anuncios();
-        //dd($anuncios_consultados);
+        
         $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
         
         //dd($arr_anuncios);

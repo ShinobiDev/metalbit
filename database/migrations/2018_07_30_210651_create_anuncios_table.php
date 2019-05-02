@@ -31,7 +31,7 @@ class CreateAnunciosTable extends Migration
             $table->string('precio_minimo_moneda');
             $table->string('limite_min');
             $table->string('limite_max');
-            $table->string('lugar');
+            $table->string('lugar')->nullable();
             $table->string('terminos');
             $table->enum("estado_anuncio",['sin publicar','activo','bloqueado','inactivo']);
             $table->integer('user_id');

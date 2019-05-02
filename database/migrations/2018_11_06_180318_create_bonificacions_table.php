@@ -15,7 +15,7 @@ class CreateBonificacionsTable extends Migration
     {
         Schema::create('bonificaciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum("tipo_bonificación",['REGISTRO', 'RECARGA']);
+            $table->enum("tipo_bonificacion",['REGISTRO', 'RECARGA']);
             $table->integer("fk_id_detalle_referido");
             $table->decimal("valor");
             $table->timestamps();
