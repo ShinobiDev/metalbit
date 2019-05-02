@@ -15,7 +15,7 @@ class CreateRecargasTable extends Migration
     {
         Schema::create('recargas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('status');
+            $table->enum('status',['ACTIVA', 'AGOTADA'])->defaul('ACTIVA');
             $table->string('valor');
             $table->string('user_id');
             $table->timestamps();

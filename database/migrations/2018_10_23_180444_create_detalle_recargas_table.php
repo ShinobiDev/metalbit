@@ -18,7 +18,11 @@ class CreateDetalleRecargasTable extends Migration
             $table->integer("id_user");
             $table->enum('tipo_recarga',['PAGO','BONIFICACION'])->default("PAGO");
             $table->decimal("valor_recarga");
+            $table->decimal("valor_pagado");
             $table->string("referencia_pago")->unique();
+            $table->string("referencia_pago_pay_u")->unique();
+             $table->string("metodo_pago");
+             $table->enum('estado_detalle_recarga',['APROBADA','PENDIENTE','RECHAZADA','REGISTRADA','PENDIENTE APROBACION'])->default('REGISTRADA')
             $table->timestamps();
         });
     }

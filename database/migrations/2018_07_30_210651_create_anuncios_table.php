@@ -23,16 +23,19 @@ class CreateAnunciosTable extends Migration
             $table->string('departamento')->nullable();
             $table->string('ciudad')->nullable();
             $table->string('moneda');
+            $table->string('nombre_moneda');
             $table->string('criptomoneda');
+            $table->string('nombre_cripto_moneda');
             $table->string('banco');
             $table->string('margen');
+            $table->string('precio_minimo_moneda');
             $table->string('limite_min');
             $table->string('limite_max');
             $table->string('lugar');
             $table->string('terminos');
+            $table->enum("estado_anuncio",['sin publicar','activo','bloqueado','inactivo']);
             $table->integer('user_id');
-            //$table->foreign('user_id')->references('id')->on('users');
-            
+            //$table->foreign('user_id')->references('id')->on('users');            
             $table->timestamps();
             
         });
