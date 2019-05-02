@@ -9,12 +9,12 @@
         
       <body class="server-prod session-anonymous">
         <div class="container">
-          <h1>Crea un anuncio para vender o comprar criptomonedas</h1>
+          <h1 class="text-primary">Crea un anuncio para vender o comprar criptomonedas</h1>
 
 
-          <h3 class="text-red">Normas y requisitos de anuncios</h2>
+          <h3 class="text-success">Normas y requisitos de anuncios</h2>
 
-            <p>
+           
         <ul>
               <li>Determinados métodos de pago requieren tener la identificación verificada antes de hacer visibles los anuncios.</li>
               <li>Cada operación completada cuesta a los anunciantes un <strong class="text-red">{{$porcentaje[0]->valor}} %</strong> del importe total de la operación.
@@ -35,8 +35,8 @@
                         Los métodos de pago marcados con la etiqueta <strong>Alto riesgo</strong> suponen un <strong>riesgo significante de fraude</strong>. Tenga cuidado y siempre verifique la identidad de sus socios en las operaciones al utilizar los métodos de pago de alto riesgo.
                 </li>
         </ul>
-            </p>
-              <br>
+           
+             
 
               <noscript>
           <div class="row">
@@ -51,11 +51,11 @@
             <div class="row">
 
 
-               <h3>
+               <h3 class="text-success">
                 Para que tus anuncios sean visibles, debes tener saldo en la cuenta de recarga.
                 Recuerda que cada click de tu anuncio tiene un valor de: <span class="text-primary">$</span> <b class="text-red">{{number_format(auth()->user()->costo_clic,2,",",".")}}</b> <span class="text-primary">COP</span>
               </h3>
-              <h2 class="text-primary">BALANCE DE RECARGA: $ <b class="text-red" >{{number_format($recarga->valor,2,",",".")}}</b> COP</h2>
+              <h2 class="text-orange">BALANCE DE RECARGA: <span class="text-primary">$</span> <b class="text-red" >{{number_format($recarga->valor,2,",",".")}}</b> <span class="text-primary">COP</span></h2>
 
 
               <div id="identification_hint" class="col-md-12 display-none">
@@ -71,21 +71,23 @@
               </div>
             </div>
 
-            <legend class="text-success">Tipo de intercambio</legend>
+            <legend class="text-success"><b>Crea tu anuncio</b></legend>
             <div class="row " id="">
-                <div id="" class="col-md-2 label-col form-group">
-                  <label for="" class="control-label requiredField text-red">Deseo...</label>
+                <div class="col-md-7 two-col-help-text">
+                  <strong><b class="text-red">¿Qué tipo de anuncio deseas crear?</b></strong>
                 </div>
-
+                <br>
+                <div id="" class="col-md-2 label-col form-group">
+                  <label for="" class="control-label requiredField text-orange"><strong>¡Deseo! ...</strong></label>
+                </div>
+                
                 <div class="col-md-3">
                   <div class="controls ">
                     <label class="radio text-primary"> <input type="radio" name="opera" id="venta" value="venta"  class="inicial add-adform-radio">Vender Criptomonedas</label>
                     <label class="radio text-success"> <input type="radio" name="opera" id="compra" value="compra"  class="inicial add-adform-radio">Comprar Criptomonedas</label>
                   </div>
                 </div> <br>
-                 <div class="col-md-7 two-col-help-text">
-                  <strong><b class="text-red">¿Qué tipo de anuncio desea crear?</b>. Si desea vender o comprar asegúrese de tener criptomonedas en su cartera de <span class="text-primary">{{config('app.name')}}</span>.</strong>
-               </div>
+                 
            </div>
             <br><br>
             <div id="div_anuncios" style="display: none">
