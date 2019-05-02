@@ -9,19 +9,15 @@
         
       <body class="server-prod session-anonymous">
         <div class="container">
-          <h1>Cree un anuncio para vender o comprar criptomonedas</h1>
+          <h1 class="text-primary">Crea un anuncio para vender o comprar criptomonedas</h1>
 
 
-          <h3>Normas y requisitos de anuncios</h2>
+          <h3 class="text-success">Normas y requisitos de anuncios</h2>
 
-            <p>
+           
         <ul>
-              {{-- <li>
-                Para que se muestren sus anuncios, debe tener ciptomonedas en su cartera MetalBit. Necesita al menos 0,04 BTC para publicar anuncios con métodos de pago online o al menos 0,04 BTC para anuncios locales (operaciones en efectivo).
-              </li> --}}
               <li>Determinados métodos de pago requieren tener la identificación verificada antes de hacer visibles los anuncios.</li>
-              <li>Cada operación completada cuesta a los anunciantes un 1% del importe total de la operación.
-                <!--<a href="/fees">Vea la lista de todas las comisiones en la página Comisiones</a>.-->
+              <li>Cada operación completada cuesta a los anunciantes un <strong class="text-red">{{$porcentaje[0]->valor}} %</strong> del importe total de la operación.
               </li>
               <li>
                   Una vez abierta una operación, el precio no se puede cambiar, excepto los casos en los que hay un error evidente en el precio.
@@ -30,17 +26,17 @@
                     No se permite comprar ni vender criptomendas en nombre de otras personas (correduría).
               </li>
               <li>
-                    Solo puede usar cuentas de pago registradas a su propio nombre (¡no se aceptan pagos de terceros!).</li> <li>Debe especificar sus datos de pago en el anuncio o en el chat de la operación.
+                    Solo puede usar cuentas de pago registradas a su propio nombre (<b>¡no se aceptan pagos de terceros!</b>).</li> <li>Debe especificar sus datos de pago en el anuncio o en el chat de la operación.
                </li>
                <li>
-                      Todas las comunicaciones se deben llevar a cabo en <a href="/">MetalBit</a>.
+                      Todas las comunicaciones se deben llevar a cabo en <a href="/">{{config('app.name')}}</a>.
                </li>
                 <li>
                         Los métodos de pago marcados con la etiqueta <strong>Alto riesgo</strong> suponen un <strong>riesgo significante de fraude</strong>. Tenga cuidado y siempre verifique la identidad de sus socios en las operaciones al utilizar los métodos de pago de alto riesgo.
                 </li>
         </ul>
-            </p>
-              <br>
+           
+             
 
               <noscript>
           <div class="row">
@@ -55,11 +51,11 @@
             <div class="row">
 
 
-               <h3>
+               <h3 class="text-success">
                 Para que tus anuncios sean visibles, debes tener saldo en la cuenta de recarga.
-                Recuerda que cada click de tu anuncio tiene un valor de: $ {{number_format(auth()->user()->costo_clic,2,",",".")}} COP
+                Recuerda que cada click de tu anuncio tiene un valor de: <span class="text-primary">$</span> <b class="text-red">{{number_format(auth()->user()->costo_clic,2,",",".")}}</b> <span class="text-primary">COP</span>
               </h3>
-              <h2>BALANCE DE RECARGA: $ {{number_format($recarga->valor,2,",",".")}} COP</h2>
+              <h2 class="text-orange">BALANCE DE RECARGA: <span class="text-primary">$</span> <b class="text-red" >{{number_format($recarga->valor,2,",",".")}}</b> <span class="text-primary">COP</span></h2>
 
 
               <div id="identification_hint" class="col-md-12 display-none">
@@ -68,28 +64,30 @@
 
                     <h3>
                       <i class="fa fa-info-circle"></i>
-                      ¿Quiere aumentar su visibilidad?, los anuncios son ordenados orgánicamente situando primero a los usuarios que tengan un mayor valor de recarga total
+                      <b class="text-red">¿Quiere aumentar su visibilidad?</b>, los anuncios son ordenados orgánicamente situando primero a los usuarios que tengan un mayor valor de recarga total
                     </h3>
                 </div>
 
               </div>
             </div>
 
-            <legend>Tipo de intercambio</legend>
+            <legend class="text-success"><b>Crea tu anuncio</b></legend>
             <div class="row " id="">
-                <div id="" class="col-md-2 label-col form-group">
-                  <label for="" class="control-label requiredField">Deseo...</label>
+                <div class="col-md-7 two-col-help-text">
+                  <strong><b class="text-red">¿Qué tipo de anuncio deseas crear?</b></strong>
                 </div>
-
+                <br>
+                <div id="" class="col-md-2 label-col form-group">
+                  <label for="" class="control-label requiredField text-orange"><strong>¡Deseo! ...</strong></label>
+                </div>
+                
                 <div class="col-md-3">
                   <div class="controls ">
-                    <label class="radio"> <input type="radio" name="opera" id="venta" value="venta"  class="inicial add-adform-radio">Vender Criptomonedas</label>
-                    <label class="radio"> <input type="radio" name="opera" id="compra" value="compra"  class="inicial add-adform-radio">Comprar Criptomonedas</label>
+                    <label class="radio text-primary"> <input type="radio" name="opera" id="venta" value="venta"  class="inicial add-adform-radio">Vender Criptomonedas</label>
+                    <label class="radio text-success"> <input type="radio" name="opera" id="compra" value="compra"  class="inicial add-adform-radio">Comprar Criptomonedas</label>
                   </div>
                 </div> <br>
-                 <div class="col-md-7 two-col-help-text">
-                  ¿Qué tipo de anuncio desea crear?. Si desea vender o comprar asegúrese de tener criptomonedas en su cartera de MetalBit.
-               </div>
+                 
            </div>
             <br><br>
             <div id="div_anuncios" style="display: none">
@@ -227,12 +225,5 @@ $('#sel_cripto').on('change', function(e) {
         }
 
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjK1P7ObTN9d1kZ8LTVU-mvoY8Uc2it1w&libraries=places&callback=iniciarApp"
-        async defer></script>
-<script src="{{asset('js/placesapi.js')}}"></script>
-
-
-
-
+@include('partials.googleplaces')
 @endsection

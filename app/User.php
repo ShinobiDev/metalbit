@@ -52,7 +52,15 @@ class User extends Authenticatable
 
       return $this->roles->pluck('display_name')->implode(', ');
     }
-
+    public function cupones(){
+        return $this->belongsTo('App\CuponesCampania','id_usuario_canje');
+    }  
+    /**
+     * Funcion para consulatr el horario de un usuario
+     * @param  [int] $id  [id del usuario que desea consultar sus horarios]
+     * @param  [string] $dia [# del dia]
+     * @return [array]      [arreglo con los datos necesarios para consultar y acceder a los horarios]
+     */
     public function ver_horarios($id,$dia){
         $dia_n="";
         //dd($dia);
@@ -75,9 +83,12 @@ class User extends Authenticatable
             case '6':
                 $dia_n="SABADO";
                 break;
-            case '7':
+            case '0':
                 $dia_n="DOMINGO";
                 break;
+            default:
+                $dia_n="LUNES";
+                break;        
         }
 
 
@@ -114,8 +125,147 @@ class User extends Authenticatable
 
 
         return array("respuesta"=>true,"horario"=>$horarios[0]);
+    }
+    /**
+     * Funcion para consultar si usuario tiene compra pendiente
+     * @param  [type] $id_anuncio [description]
+     * @param  [type] $id_usuario [description]
+     * @return [type]             [description]
+     */
+    public function compra_pendiente($id_anuncio,$id_usuario){
+        $pg=pagos::where([
+                ['id_anuncio',$id_anuncio],
+                ['id_user_compra',$id_usuario],
+                //['code_wallet','!=','SIN REGISTRAR'],
+                ['transactionState','Pendiente'],
+                //['pagos.transactionId','!=',null]
+            ])
+            ->orwhere([
+                ['id_anuncio',$id_anuncio],
+                ['id_user_compra',$id_usuario],
+                //['image_wallet','!=','SIN REGISTRAR'],
+                ['transactionState','Visto'],
+                //['pagos.transactionId','!=',null]
+            ])
+            ->get();
+        
+        if(count($pg)>0){
+          //var_dump($pg[0]->id_anuncio);   
+          //var_dump($pg[0]->transactionState);   
+          //dd($pg);   
+          return array("respuesta"=>true,
+                        "pago"=>$pg[0]->transactionId,
+                        "wallet"=>$pg[0]->code_wallet,
+                        'wallet_qr'=>$pg[0]->image_wallet,
+                        'quantity'=>$pg[0]->transactionQuantity,
+                        'value'=>$pg[0]->transaction_value_pagado,
+                        'value_transaccion'=>$pg[0]->transation_value,
+                        'value_sobre_costo'=>$pg[0]->valor_sobre_costo,
+                        'state'=>$pg[0]->transactionState,
+                        'type'=>$pg[0]->metodo_pago);
+        }else{
+          return array("respuesta"=>false,
+                      "pago"=>"0",
+                      "wallet"=>"",
+                      'wallet_qr'=>'0',
+                      'quantity'=>'0',
+                      'value'=>'0',                      
+                      'value_transaccion'=>'0',
+                      'value_sobre_costo'=>'0',
+                      'state'=>'0',
+                      'type'=>'0');
+        }
+    }
+    /**
+     * Funcion para registrar el pago pendiente para una recarga
+      * @param  [type] $a [codigo anuncio]
+     * @param  [type] $p [valor de la venta]
+     * @param  [type] $m [moneda para hacer el pago]
+     * @param  [type] $id_u [id_usuario]
+     * @param  [type] $cantidad [cantidad de monedas]
+     * @return [type]       [description]
+     */
+    public function registrar_recarga($id,$valor_recarga,$referencia_pago,$valor_pagado){
+        $dt=detalle_recargas::where([
+                                      ["id_user",$id],
+                                      ["estado_detalle_recarga","REGISTRADA"]
+                                    ])
+                                 ->get();
 
 
+        $pp=new Payu;
+        $hs=$pp->hashear($referencia_pago,$valor_pagado,"COP");                                 
+        if(count($dt)==0){
+            detalle_recargas::insert([
+                    'tipo_recarga' => "PAGO",
+                    'valor_recarga'=>$valor_recarga,
+                    'valor_pagado'=>$valor_pagado,
+                    'referencia_pago'=>$referencia_pago,
+                    'id_user'=>$id
+                ]);
+    
+        }else{
+          detalle_recargas::where([
+                                      ["id_user",$id],
+                                      ["estado_detalle_recarga","REGISTRADA"]
+                                      
+                                    ])
+                                  ->update([
+                                        "referencia_pago"=>$referencia_pago,
+                                        "valor_pagado"=>$valor_pagado,
+                                        'valor_recarga'=>$valor_recarga,
+
+                                      ]);
+        }
+        
+        return response()->json(["respuesta"=>true,'hash'=>$hs]);
+        
+    }
+    /**
+     * Funcion para registrar el pago pendiente para una venta
+      * @param  [type] $a [codigo anuncio]
+     * @param  [type] $p [valor de la venta]
+     * @param  [type] $m [moneda para hacer el pago]
+     * @param  [type] $id_u [id_usuario]
+     * @param  [type] $cantidad [cantidad de monedas]
+     * @return [type]       [description]
+     */
+    public function registrar_venta($a,$p,$m,$id_u,$cantidad){
+        $pu = Payu::all();
+         //dd(explode("-",$a)[1]);
+         $id_a=explode("-",$a);
+         if(count($id_a)>1){
+          $id_a=explode("-",$a)[1];
+         }else{
+          $id_a=$a;
+         }
+         $PG=DB::table('pagos')->where([
+                                    ["id_anuncio",$id_a],
+                                    ["transactionState","Pendiente"],
+                                    ["id_user_compra",$id_u]
+                                ])
+                                ->orwhere([
+                                    ["id_anuncio",$id_a],
+                                    ["transactionState","Visto"],
+                                    ["id_user_compra",$id_u]
+                                ])
+                                ->get();
+          //dd($PG);                                
+         if(count($PG)>0){
+            //dd($PG);
+            DB::table('pagos')
+                         ->where("id",$PG[0]->id)  
+                         ->update([
+                            "transactionQuantity"=>$cantidad,
+                            "transation_value"=>$p,
+                            "metodo_pago"=>'PENDIENTE',
+                            'updated_at'=>Carbon::now('America/Bogota')
+                            ]);
+            
+            
+         }
+         //dd($a,$p,$m,$id_u,$cantidad);
+         return response()->json(['respuesta'=>true,"valor"=>$pu[0]->hashear($a,$p,$m)]);
         
     }
 }

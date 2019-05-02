@@ -26,18 +26,22 @@
         </div>
         <div class="contenedor">
             <div class="descripcion">
-                <h5>{{($respuesta["description"])}}</h5>
-                <label>{{$respuesta["TX_VALUE"]}}</label>
+                @if(!empty($campania))
+                    <h5>{{($respuesta["description"])}} paga ${{number_format($respuesta["TX_VALUE"],0,',','.')}} y recibe ${{ number_format($recarga,0,',','.')}}</h5>
+                @else
+                    <h5>{{($respuesta["description"])}}</h5>
+                @endif                
+                <label>$ {{number_format($respuesta["TX_VALUE"],'0',',','.')}}</label>
                 <br>
                 <h5>Iva</h5>
                 <label>{{$respuesta['TX_TAX']}}</label>
                 <br>
                 <h5>Total</h5>
-                <label class="rj">{{$respuesta['TX_VALUE']}}</label>
+                <label class="rj">$ {{number_format($respuesta['TX_VALUE'],'0',',','.')}}</label>
             </div>
         </div>
         <div class="contenedor">
-            <p>Nota de Información adicional que se deseé mostrar</p>
+            <!--<p>Nota de Información adicional que se deseé mostrar</p>-->
 
             <a href="{{route('anuncios.index')}}" class="btn btn-default">Volver</a>
             <input type="button" value="Imprimir" class="btn" onclick="imprimir()">

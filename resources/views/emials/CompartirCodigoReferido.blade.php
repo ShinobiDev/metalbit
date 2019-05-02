@@ -3,10 +3,11 @@
 
 ![logo](http://metalbit.co/core/img/AzulMetalicoHor.png)
 
-Hola, soy {{$user->name}}, quiero invitarte a que te inscribas en METALBIT
+Hola
 
-debes seguir las instrucciones para registarte.
+Te sugiero este sitio web donde se pueden comprar y vender criptomonedas, de manera segura. 
 
+Yo ya estoy registrado y te sugiero registrarte, el registro es totalmente gratuito.
 
 #[Registrate aquí][1]
 [1]:{{$url}}  
@@ -15,3 +16,5 @@ debes seguir las instrucciones para registarte.
 Gracias, por seguir confiando en nosotros<br>
 {{ config('app.name') }}
 @endcomponent
+
+

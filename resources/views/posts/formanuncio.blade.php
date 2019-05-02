@@ -6,7 +6,7 @@
 
            <div class="row " id="row_id_ad-place">
               <div id="div_id_ad-place" class="col-md-2 label-col form-group">
-                <label for="id_ad-place" class="control-label requiredField"> Ubicación </label>
+                <label for="id_ad-place" class="control-label requiredField"> <b>Ubicación</b> </label>
              </div>
              <div class="col-md-3">
                <div class="controls">
@@ -22,16 +22,7 @@
              </div>
            </div>
            <div class="row " id="row_id_ad-online_provider">
-              {{-- <div id="div_id_ad-online_provider" class="col-md-2 label-col form-group">
-                <label for="id_ad-online_provider" class="control-label requiredField"> Forma de pago </label>
-              </div>
-              <div class="col-md-3">
-                <div class="controls">
-                  <select class="select form-control" id="id_ad-online_provider" name="ad-online_provider">
-                     <option value="NATIONAL_BANK">Transferencia bancaria nacional</option>
-                  </select>
-                </div>
-              </div> --}}
+              
                 <div class="col-md-7 two-col-help-text">
                    <div id="online-payment-method-description" style="display: none">
                             <strong id="payment-method-name"></strong>
@@ -47,7 +38,7 @@
                      </div>
                      <div id="online-buy-risk">
                        <p>
-                         La compra de criptomonedas online está protegida por el depósito en garantía de <a href="/">MetalBit</a>
+                         La compra de criptomonedas online está protegida por el depósito en garantía de <a href="/">{{config('app.name')}}</a>
                        </p>
                        <p>
                          Para más información, consulte <a target="_blank" href="/security/"><i class="icon icon-info"></i> nuestra guía de seguridad</a>.
@@ -62,11 +53,11 @@
             <legend>Más información</legend>
             <div class="row " id="row_id_ad-currency">
               <div id="div_id_ad-currency" class="col-md-2 label-col form-group">
-                <label for="id_ad-currency" class="control-label requiredField">Local Moneda</label>
+                <label for="id_ad-currency" class="control-label requiredField"> <b>Moneda Local</b></label>
               </div>
               <div class="col-md-3">
                 <div class="controls">
-                  <select class="moneda select form-control" id="sel_moneda" name="moneda">
+                  <select class="moneda select form-control select2" id="sel_moneda" name="moneda">
                         @foreach ($listamonedas as $key => $listamoneda)
 
                           <option value="{{$listamoneda['Currency']}}">{{$listamoneda['Country']}}</option>                          
@@ -84,11 +75,11 @@
               </div>
               <div class="row " id="row_id_ad-currency">
                 <div id="div_id_ad-currency" class="col-md-2 label-col form-group">
-                  <label for="id_ad-currency" class="control-label requiredField">Cripto Moneda</label>
+                  <label for="id_ad-currency" class="control-label requiredField"><b>Cripto Moneda</b></label>
                 </div>
                 <div class="col-md-3">
                   <div class="controls">
-                    <select class="select form-control" id="sel_cripto" name="criptomoneda">
+                    <select class="select form-control select2" id="sel_cripto" name="criptomoneda">
                         @foreach ($listacriptos as $key => $listacripto)
                           <option value="{{$listacripto->id}}">{{$listacripto->name}}</option>
                         @endforeach
@@ -107,7 +98,7 @@
                 </div>
               <div class="row " id="row_id_ad-bank_name">
                 <div id="div_id_ad-bank_name" class="col-md-2 label-col form-group">
-                  <label for="id_ad-bank_name" class="control-label ">Servicio de pagos / entidad bancaria</label>
+                  <label for="id_ad-bank_name" class="control-label "><b>Servicio de pagos / entidad bancaria</b></label>
                 </div>
                 <div class="col-md-3">
                   <div class="controls">
@@ -135,7 +126,7 @@
                       <!--CALCULO DEL VALOR DE VENTA-->
                       <div class="dynamic-info">
 
-                        <span class='price-info-text'>Precio del comercio con el valor actual de mercado
+                        <span class='price-info-text text-info'>Precio del comercio con el valor actual de mercado $
                         <strong id="precio_mon" class='price-info alert-success'>{{number_format($coins, 2, ',', '.')}}</strong>
                         <input id="hdPrecioMon" type="hidden" value="{{number_format($coins, 2, '.', '')}}">
                       </span>  
@@ -156,7 +147,7 @@
                  <div class="col-md-3">
                    <div class="controls">
 
-                    <span class='price-info-text'>Valor de ganancia por venta 
+                    <span class='price-info-text text-info'>Valor de ganancia por venta 
                             <strong id="precio_ganancia" class='price-info alert-success' > $ 0</strong>
                             <input type="hidden" id="por_gan_compra">
                     </span>
@@ -172,7 +163,7 @@
                   </div>
                   <!--VALOR DE VENTA SUGERIDO DE ACUERDO A LA GANANCIA-->
                    <div class="dynamic-info">
-                    <span class='price-info-text'>Valor total 
+                    <span class='price-info-text text-info'>Valor total $ 
                         <strong id="st_valor_total_venta" class='price-info alert-success'>{{number_format($coins, 2, ',', '.')}}</strong>
                         <input id="hd_valor_total_venta" type="hidden" value="{{number_format($coins, 2, '.', '')}}">
                     </span>
@@ -181,13 +172,13 @@
                 <div class="col-md-7 two-col-help-text">
                     Cómo se determina el precio de cambio a partir del precio de mercado horario. Para obtener más información acerca de las ecuaciones para determinar su precio de cambio vea
                     <!--<a target='_blank' href='/guides/equation-howto/'><i class='icon icon-external-link'></i> Preguntas más frecuentes sobre precios</a>-->.
-                    <b>Por favor, tenga en cuenta que el anunciante es siempre responsable de todas las tarifas de procesamiento de pagos.</b>
+                    <b class="text-red">Por favor, tenga en cuenta que el anunciante es siempre responsable de todas las tarifas de procesamiento de pagos.</b>
                 </div>
               </div>
               <!--LIMITE DE PRECIO DE MONEDA-->
               <div class="row " id="row_id_ad-min_amount">
                 <div id="div_id_ad-min_amount" class="col-md-2 label-col form-group">
-                  <label for="id_ad-min_amount" class="control-label ">Límite mín. de precio de moneda </label>
+                  <label for="id_ad-min_amount" class="control-label"><b>Límite mín. de precio de moneda</b> </label>
                 </div>
                 <div class="col-md-3">
                    <div class="input-group">
@@ -203,7 +194,7 @@
               <!--LIMITE MINIMO DE TRANSACCIONES-->
               <div class="row " id="row_id_ad-min_amount">
                 <div id="div_id_ad-min_amount" class="col-md-2 label-col form-group">
-                  <label for="id_ad-min_amount" class="control-label ">Límite mín. de transacciones </label>
+                  <label for="id_ad-min_amount" class="control-label "><b>Límite mín. de transacciones</b> </label>
                 </div>
                 <div class="col-md-3">
                    <div class="input-group">
@@ -219,7 +210,7 @@
               <!--LIMITE MAXIMO DE TRANSACCIONES-->
               <div class="row " id="row_id_ad-max_amount">
                 <div id="div_id_ad-max_amount" class="col-md-2 label-col form-group">
-                  <label for="id_ad-max_amount"  class="control-label ">Límite máx. de transacciones</label>
+                  <label for="id_ad-max_amount"  class="control-label "><b>Límite máx. de transacciones</b></label>
                 </div>
                 <div class="col-md-3">
                   <div class="input-group">
@@ -239,7 +230,7 @@
               </div>
                <div class="row " id="row_id_ad-meeting_point">
                  <div id="div_id_ad-meeting_point" class="col-md-2 label-col form-group">
-                   <label for="id_ad-meeting_point" class="control-label ">Lugares de encuentro</label>
+                   <label for="id_ad-meeting_point" class="control-label "><b>Lugares de encuentro</b></label>
                 </div>
                  <div class="col-md-3">
                    <div class="controls">
@@ -252,7 +243,7 @@
               </div>
               <div class="row " id="row_id_ad-other_info">
                   <div id="d  iv_id_ad-other_info" class="col-md-2 label-col form-group">
-                    <label for="id_ad-other_info" class="control-label ">Términos del comercio </label>
+                    <label for="id_ad-other_info" class="control-label "><b>Términos del comercio</b> </label>
                   </div>
                   <div class="col-md-6">
                     <div class="controls">

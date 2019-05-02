@@ -30,36 +30,50 @@
     <div class="box-body">
         <table id="users-table" class="table table-bordered table-striped">
           <thead>
-            <tr>
+            <tr class="btn-danger">
               <th>ID</th>
               <th>Nombre</th>
               <th>Email</th>
-              <th>Roles</th>
+              <th>Rol</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             @foreach ($users as $user)
                 <tr>
-                  <td>{{ $user->id }}</td>
+                  <td class="btn-info">{{ $user->id }}</td>
                   <td>{{ $user->name }}</td>
-                  <td>{{ $user->email }}</td>
+                  <td >{{ $user->email }}</td>
                   <td>{{ $user->getRoleNames()->implode(', ')}}</td>
-                  <td>
+                  <td class="text-red">{{ $user->estado == '1' ? 'Activo' : 'Deshabilitado'}}</td>
+                  <td class="btn-info">
                     @can ('view', $user)
                         <a href="{{route('users.show', $user)}}" class="btn btn-xs btn-warning"><i class="fa fa-eye"></i></a>
                     @endcan
-                    @can ('update', $user)
-                        <a href="{{route('users.edit', $user)}}" class="btn btn-xs btn-info"><i class="fa fa-pencil"></i></a>
-                    @endcan
-                    @can ('delete', $user)
-                      <form method="POST" action="{{route('users.destroy', $user)}}" style="display: inline">
-                        {{csrf_field()}} {{method_field('DELETE')}}
-                        <button class="btn btn-xs btn-danger" name="button" onclick="return confirm('¿Esta seguro de querer Eliminar  este usuario?')">
-                            <i class="fa fa-times"></i>
-                        </button>
-                      </form>
-                    @endcan
+                    @if($user->estado=='1')
+                      @can ('update', $user)
+                          <a href="{{route('users.edit', $user)}}" class="btn btn-xs btn-info"><i class="fa fa-pencil"></i></a>
+                      @endcan
+                    
+                      @can ('delete', $user)
+                        <form method="POST" action="{{route('users.destroy', $user)}}" style="display: inline">
+                          {{csrf_field()}} {{method_field('DELETE')}}
+                          <button class="btn btn-xs btn-danger" name="button" onclick="return confirm('¿Está seguro de querer deshabilitar este usuario?')">
+                              <i class="fa fa-times"></i>
+                          </button>
+                        </form>
+                      @endcan
+                    @else
+                      <form method="POST" action="{{route('users.habilitar', $user->id)}}" style="display: inline">
+                          {{csrf_field()}} 
+                          <button class="btn btn-xs btn-success" name="button" onclick="return confirm('¿Está seguro de querer habilitar este usuario de nuevo recuerda que una vez habilitado este usuario podrá ingresar nuevamente al sistema?')">
+                              
+                              <i class="fas fa-check"></i>
+                          </button>
+                        </form>
+                    @endif
+                    
                   </td>
                 </tr>
             @endforeach

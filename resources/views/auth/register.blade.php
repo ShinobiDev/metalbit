@@ -28,15 +28,29 @@
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail</label>
 
-                            <div class="col-md-6">
-                                <input max="30" id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" onchange="guardar_correo(this)"  required>
-
+                             <div class="col-md-6">
+                                @if(isset($_GET['e'])==false)
+                                    <input max="30" id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"  required>
+                                @elseif($_GET['e']=="")
+                                    <input max="30" id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"  required>
+                                @else
+                                    <input max="30" id="email" type="email" class="form-control" name="email" value="{{ $_GET['e'] }}"  required>    
+                                @endif
                                 @if ($errors->has('email'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
-                            </div>
+                            </div>   
+
+
+
+
+
+
+
+
+
                         </div>
 
                         <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
@@ -56,7 +70,7 @@
                             <label for="phone" class="col-md-4 control-label">Código referido (opcional)</label>
 
                             <div class="col-md-6">
-                                <input id="codigo_referido" type="text" class="form-control" name="codigo_referido" onchange="validar_codigo()"  value="{{ old('codigo_referido') }}" max="15">
+                                <input id="codigo_referido" type="text" class="form-control" name="codigo_referido" onchange="validar_codigo(this)"  value="{{ old('codigo_referido') }}" max="15">
 
                                 @if ($errors->has('codigo_referido'))
                                     <span class="help-block">
@@ -90,41 +104,27 @@
     </div>
 </div>
 @endsection
-<script type="text/javascript">
     
-    function guardar_correo(e){
-        sessionStorage.setItem("correo_usuario",e.value);
-    }
-    function validar_codigo(){
 
-        var cod=document.getElementById('codigo_referido');
-        
-        var p_error_cod=document.getElementById("p_error_cod");
-        
-        var dato="-";
-
-            if(cod.value!=""){
-                dato=cod.value;
+<script type="text/javascript">
+    function validar_codigo(e){
+            var p_error_cod=document.getElementById("p_error_cod");
+            var btn_register=document.getElementById("btn_register");
+     
+            if(e.value!=""){
+              peticion_ajax("GET","validar_codigo/"+e.value,function(rs){
+                    if(rs.respuesta){
+                          p_error_cod.style.display='none';
+                          btn_register.disabled=false;
+                    }else{
+                          p_error_cod.style.display='block';
+                          p_error_cod.innerHTML=rs.mensaje;
+                          btn_register.disabled=true;
+                    }
+              },{});
+            }else{
+                p_error_cod.style.display='none';
+                btn_register.disabled=false;
             }
-            mostrar_cargando("p_error_cod",20,"Validando ....")
-            peticion_ajax("GET","validar_codigo/"+dato,function(rs){
-                  if(rs.respuesta){
-                       
-                        p_error_cod.style.display='block';
-                        p_error_cod.innerHTML="Código es valido";
-                        p_error_cod.classList.remove('text-red');
-                        p_error_cod.classList.add('text-green');
-                  }else{
-                        p_error_cod.style.display='block';
-                        p_error_cod.innerHTML="Código no es valido";
-                        p_error_cod.classList.remove('text-green');
-                        p_error_cod.classList.add('text-red');
-
-                  }  
-                  
-            });    
-        
-        
-
     }
 </script>

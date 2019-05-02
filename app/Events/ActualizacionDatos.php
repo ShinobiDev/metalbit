@@ -9,7 +9,16 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-
+/*
+    |--------------------------------------------------------------------------
+    | ActualizacionDatos
+    |--------------------------------------------------------------------------
+    |
+    | Este evento tiene como finalidad generar una notificacion al correo electronico
+    | que el usuario quiere registrar como nuevo para su implementación se debe
+    | enviar los datos requeridos en este caso user y el nuevo correo 
+    |
+*/
 class ActualizacionDatos
 {
     use Dispatchable, SerializesModels;

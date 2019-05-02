@@ -31,22 +31,40 @@
                                 <label for="phone">Teléfono:</label>
                                 <input type="text" name="phone" value="{{old('phone', $user->phone)}}" class="form-control" minlength=6 maxlength=13>
                             </div>
-
                             <div class="form-group">
-                              <span class="help-block">Dejar en blanco si no
-
-                                quiere cambiar la contraseña</span>
-                                <label for="password">Contraseña</label>
-                                <input type="password" name="password"  class="form-control" placeholder="Nueva Contraseña">
-
+                                <label for="phone">Cuenta bancaria:</label>
+                                <input type="text" name="cuenta_bancaria" value="{{old('cuenta_bancaria', $user->cuenta_bancaria)}}" class="form-control" minlength=6 maxlength=13>
                             </div>
-
                             <div class="form-group">
-                                <label for="password_confirmation">Confirmar la Contraseña</label>
-                                <input type="password" name="password_confirmation"  class="form-control" placeholder="Confirmar contraseña">
-                            </div>
+                                <label for="phone">Certificación bancaria:</label>
+                                
+                                {{--dd($user->certificacion_bancaria)--}}
+                                @if($user->certificacion_bancaria != null)
+                                  <a href="{{config('app.url').$user->certificacion_bancaria}}" target="_blank" >DESCARGAR</a>
+                                @endif
+                                <div class="dropzone"></div>
 
-                            <button class="btn btn-primary btn-block"> <i class="fa fa-refresh"></i> Actualizar Usuario</button>
+                                
+                            </div>
+                            @if($user->estado=='1')
+                              <div class="form-group">
+                                <span class="help-block">Dejar en blanco si no quiere cambiar la contraseña</span>
+                                  <label for="password">Contraseña</label>
+                                  <input type="password" name="password"  class="form-control" placeholder="Nueva Contraseña">
+
+                              </div>
+
+                              <div class="form-group">
+                                  <label for="password_confirmation">Confirmar la contraseña</label>
+                                  <input type="password" name="password_confirmation"  class="form-control" placeholder="Confirmar contraseña">
+                              </div>
+
+                              <button class="btn btn-primary btn-block"> <i class="fa fa-refresh"></i> Actualizar usuario</button>
+                            @else
+                                @role('Admin')
+                                  <h1 class="text-red">Este usuario esta deshabilitado</h1>
+                                @endrole
+                            @endif  
 
                   </form>
               </div>
@@ -128,7 +146,7 @@
           </div>
            <!--PERMISOS--> 
           <div class="box box-primary">
-              <div class="box-header with-border">
+              {{--<div class="box-header with-border">
                     <div class="box-title ">
                         <h3> <i class="fa fa-unlock-alt"></i> Permisos</h3>
                     </div>
@@ -154,7 +172,7 @@
                     @endforelse
                 </ul>
                 @endrole
-              </div>
+              </div>--}}
 
             </div>
       </div>
@@ -176,5 +194,30 @@
             document.getElementById("dia_estado_"+id).innerHTML=rs.estado;
           });
       }
+    </script>
+
+    
+@endsection
+@section('scripts')
+    <!--
+     * Aqui gestiono dropzone 
+     * @type {String}
+     -->
+    <script type="text/javascript">
+      new Dropzone('.dropzone',{
+        //url:"/",
+        url:"{{config('app.url')}}"+"/actualizar_certificacion_bancaria/{{$user->id}}",
+        dictDefaultMessage:"Sube aquí tu Certificación bancaria (solo se permiten archivos en formato PDF)",
+        maxFiles:1,
+        maxFilesize:10,//MB
+        acceptedFiles: ".pdf",
+        dictMaxFilesExceeded:"Solo esta permitido subir un archivo",
+        dictInvalidFileType:"Solo esta permitido subir archivos pdf",
+        headers:{
+          'X-CSRF-TOKEN':'{{csrf_token()}}'
+        }
+      });
+      Dropzone.autoDiscover=false;
+
     </script>
 @endsection

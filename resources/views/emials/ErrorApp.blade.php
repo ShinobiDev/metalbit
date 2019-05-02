@@ -13,7 +13,7 @@ Estimad@ {{$user->name}}, algo esta sucediendo con la app.
 {{$error}}
 
 #[ir a la web][1]
-[1]:http://metalbit.co/core/#
+[1]:http://metalbit.co/core/
  
 
 

@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Recargas;
+use App\Variable;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Events\UserWasCreated;
 use Illuminate\Support\Facades\Auth;
 use DB;
+
 
 class RegisterController extends Controller
 {
@@ -76,52 +78,70 @@ class RegisterController extends Controller
         $cod=User::select("codigo_referido")->orderBy("codigo_referido","DESC")->limit(1)->get();
         //dd($cod[0]->codigo_referido);
         //dd(((int)$cod[0]->codigo_referido+1));
+        $valor_clic=Variable::where('nombre','precio_clic_default')->first();
         $u = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
             'phone'=>$data['phone'],
-            'costo_clic'=>"50",
+            'costo_clic'=>$valor_clic->valor,
             'codigo_referido'=>((int)$cod[0]->codigo_referido+1),
+            'calificacion'=>3,
+            'num_calificaciones'=>1
         ]);
          $u->assignRole('Comerciante');
-         DB::table('detalle_horario_usuario')->insert([
-                                        [
+         DB::table('detalle_horario_usuario')->insert([                                       
+                                         [
                                             'id_user'=>$u->id,
-                                            'dia'=>'LUNES'
+                                            'dia'=>'LUNES',
+                                            'horario'=>'08:00|17:00',
+                                            'estado_dia'=>'Abierto'
 
 
                                         ],
                                         [
                                             'id_user'=>$u->id,
-                                            'dia'=>'MARTES'
+                                            'dia'=>'MARTES',
+                                            'horario'=>'08:00|17:00',
+                                            'estado_dia'=>'Abierto'
 
                                         ],
                                         [
                                             'id_user'=>$u->id,
-                                            'dia'=>'MIERCOLES'
+                                            'dia'=>'MIERCOLES',
+                                            'horario'=>'08:00|17:00',
+                                            'estado_dia'=>'Abierto'
 
                                         ]
                                         ,
                                         [
                                             'id_user'=>$u->id,
-                                            'dia'=>'JUEVES'
+                                            'dia'=>'JUEVES',
+                                            'horario'=>'08:00|17:00',
+                                            'estado_dia'=>'Abierto'
 
 
                                         ],
                                         [
                                             'id_user'=>$u->id,
-                                            'dia'=>'VIERNES'
+                                            'dia'=>'VIERNES',
+                                            'horario'=>'08:00|17:00',
+                                            'estado_dia'=>'Abierto'
 
                                         ],
                                         [
                                             'id_user'=>$u->id,
-                                            'dia'=>'SABADO'
+                                            'dia'=>'SABADO',
+                                            'horario'=>'08:00|17:00',
+                                            'estado_dia'=>'Cerrado'
+
 
                                         ],
                                         [
                                             'id_user'=>$u->id,
-                                            'dia'=>'DOMINGO'
+                                            'dia'=>'DOMINGO',
+                                            'horario'=>'08:00|17:00',
+                                            'estado_dia'=>'Cerrado'
 
                                         ]
                                     ]);
@@ -135,7 +155,8 @@ class RegisterController extends Controller
                                                 "referencia_pago"=>time().$u->id,
                                                  "referencia_pago_pay_u"=>time().$u->id,
                                                  "metodo_pago"=>"BONIFICACION REGISTRO REFERIDO ",
-                                                 "tipo_recarga"=>"BONIFICACION"
+                                                 "tipo_recarga"=>"BONIFICACION",
+                                                 'estado_detalle_recarga'=>'APROBADA'
                                                     ]
                                             );
             DB::table("detalle_referidos")->insert([
@@ -158,8 +179,6 @@ class RegisterController extends Controller
         //Regrar al usuario
 
         Recargas::create(["status"=>"ACTIVA","valor"=>"0","user_id"=>$u->id]);
-
-
 
 
        return $u;

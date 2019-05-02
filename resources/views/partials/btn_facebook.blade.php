@@ -13,7 +13,7 @@
 @php
  $url=urlencode(config('app.url').'/register_landing/'.$user->codigo_referido)
 @endphp
-<div class="fb-share-button" data-href="{{config('app.url')}}/register_landing/{{$user->codigo_referido}}" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="btn btn-primary" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{$url}}   &amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Compartir</a></div>
+<div class="fb-share-button" data-href="{{config('app.url')}}/register_landing/{{$user->codigo_referido}}" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="btn btn-danger" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{$url}}   &amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Compartir</a></div>
 
 <!--
 <div class="fb-share-button" data-href="{{config('app.url')}}/register_landing/{{$user->codigo_referido}}" data-layout="button_count" data-size="small" data-mobile-iframe="true">Compartir</div>

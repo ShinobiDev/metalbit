@@ -14,31 +14,31 @@ use DB;
 
 class Anuncios extends Model
 {
-    //
+    
     protected $fillable = ['id','cod_anuncio','tipo_anuncio','ubicacion','cod_postal','localidad','departamento','ciudad', 'moneda','nombre_moneda','criptomoneda','nombre_cripto_moneda','banco','margen','precio_minimo_moneda','limite_min','limite_max','lugar','terminos','user_id','estado_anuncio'
   	];
 
   /**
    * funcion que me retorna un conjuto de anuncios listos para mostra en la tabla
-   * @param  [type] $anuncios_consultados [description]
-   * @return [type]                       [description]
+   * @param  [type] $anuncios_consultados [arreglo de anunios consultados]
+   * @return [array]                      [arreglo de anuncios]
    */
   public function ver_anuncios($anuncios_consultados){
-       
-       
-                                     
-                                    
-  		 $tipo="PRODUCTION";
-         if(config('app.debug')){
+                                           
+  		  $tipo="PRODUCTION";
+         
+         
+        if(config('app.debug')){
               $tipo='TEST';  
-         }   
-  		 $pu = Payu::where("type",$tipo)->get();
-  		 $guzzle=new GuzzleModel();
-         $coinmarketcap=$guzzle->get_response_listings();
-         //dd($anuncios_consultados);
-         $v=0;
-         //genero respuesta para anuncios de ventas
-         $arr_anuncios=array();
+        }   
+  		   
+        $pu = Payu::where("type",$tipo)->get();
+  		  $guzzle=new GuzzleModel();
+        $coinmarketcap=$guzzle->get_response_listings();
+        //dd($anuncios_consultados);
+        $v=0;
+        //genero respuesta para anuncios de ventas
+        $arr_anuncios=array();
          
         
         foreach ($anuncios_consultados as $key => $value) {
@@ -67,6 +67,11 @@ class Anuncios extends Model
                * @var [type]
                */
               $visto="";//=Carbon::now('America/Bogota')->format('M d, Y h:i A');
+              /**
+               * [Variable para identificar si el usuario tiene una transaccion pendiente]
+               * @var boolean
+               */
+              $transaccion_pendiente=[];
 
               
             //dd($value);
@@ -119,25 +124,28 @@ class Anuncios extends Model
                                     $horarios=$u->ver_horarios($value->user_id,date('w'));
 
                                     if(( (float)$value->valor < (float)$value->costo_clic) || (float)$value->valor == 0 ){
-                                            $mostrar_info=false;
+                                            //$mostrar_info=false;
+                                            $mostrar_payu=false;
                                     }
                                    
                                     //var_dump($mostrar_info);
                                     //dd($horarios);
                                     if($horarios['respuesta']==false){
-                                      $mostrar_info=false;                                      
+                                      //$mostrar_info=false;                                      
                                     }
 
-                                     if(Auth()->user()!=null){
+                                     if(auth()->user()!=null){
 
 
                                        	  $dtc=DB::table('detalle_clic_anuncios')
                                        					->where([
   	                                     							['id_anuncio',$value->id],
-  	                                     							['id_usuario',Auth()->user()->id]
+  	                                     							['id_usuario',auth()->user()->id],
+                                                      ['tipo','<>','compra']
                                        							])->get();
                                           //valido si no existe comentario del usuario  logueado        
                                           if(count($dtc)>0){
+                                             
                                            		$f=new Carbon($dtc[0]->updated_at);
                                            		$visto=$f->format('M d, Y h:i A');
                                               $id_detalle_clic=$dtc[0]->id;
@@ -146,8 +154,12 @@ class Anuncios extends Model
                                                 $mostrar_calificar=false;
                                             }
                                             
-                                         	}		
-                                     }                                    
+                                         	}	
+                                     }                                 
+                                     if(auth()->user()!=null){
+                                      $transaccion_pendiente=$u->compra_pendiente($value->id,auth()->user()->id); 
+                                     }   
+                                     
 
                                      //obtener los comentarios
                                      //dd([$precio_moneda,number_format($value->limite_min,0,'','')]);
@@ -198,9 +210,8 @@ class Anuncios extends Model
                                                         "id_detalle_clic"=>$id_detalle_clic,
                                                         "comentarios"=>$comentarios,
                                                         "estado_anuncio"=>$value->estado_anuncio,
-                                                        "horario"=>$horarios['horario']
-
-
+                                                        "horario"=>$horarios['horario'],
+                                                        "transaccion_pendiente"=>$transaccion_pendiente
                                                     ];
 
                                 }
@@ -210,6 +221,9 @@ class Anuncios extends Model
                               //dd($value);
                               //AlertAnuncio::dispatch($email[0], $value,$limite_clic[0]->valor);
                               NotificacionAnuncio::dispatch($email[0], $value,$limite_clic[0]->valor,"CriptoMonedaInhabilitada");
+                              Anuncios::where('id',$value->id)->update([
+                                                    "estado_anuncio",'0'
+                                                ]);
                         }
 
 
@@ -223,9 +237,9 @@ class Anuncios extends Model
 
   /**
    * [permite consultar los comenatarios de cada anuncio] 
-   * @param  [type] $id     [description]
-   * @param  [type] $limite [description]
-   * @return [type]         [description]
+   * @param  [int] $id     [id del anuncio]
+   * @param  [int] $limite [limite de consulta de comenmtarios a consultar]
+   * @return [Collection]  [arreglo con los comentarios consultados]
    */
   public function ver_comentarios($id,$limite){
     
@@ -252,40 +266,70 @@ class Anuncios extends Model
     }
     return $cal_precio;
   }
-
+  /**
+   * Funcion para registrar las ventas realizadas 
+   * @param  [array] $req [variable enviada de tipo $_REQUEST]
+   * @return [view]      [retorna una vista con los datos correspondientes para mostrar, dependiendo del resultado del proceso]
+   */
   public function registro_venta_anuncio($req){
-    //dd($req['transactionState']);
+    //dd($req);
     switch ($req['transactionState']) {
     case 4:
       //aprobada
 
         $comprador=User::where("email",$req['buyerEmail'])->get();
-        
+        $cupon=CuponesCampania::where('transaccion_donde_se_aplico',$req['referenceCode'])->first();   
         $p=DB::table("pagos")->where("transactionId",$req['reference_pol'])->get();
         $empresa=Payu::all();
         //dd([$p,$comprador[0]->id]);
         $id_ad=explode("-",$req['referenceCode'])[1];  
+        $rp=recargas::where('user_id',$comprador[0]->id)->get();
         if(count($p)>0){
             if($p[0]->transactionId==$req['reference_pol']){
               //el pago ya se habia registrado con otro estado
               if($p[0]->estado_pago=="APROBADA"){
-                $msn="Ya habías registrado esta referencia de pago";
+                $msn="Ya habías registrado esta referencia de pago.";
 
                 return view('payu.error_payu')->with("mensaje",$msn); 
                 
-              }else{    
+              }else{   
+              if(!empty($cupon)){
+                  $bono=$cupon->campania->valor_de_descuento;
+                  $valor_pagado=$rp[0]->valor_recarga;
+
+                  //actualizo el estado del cupon a canjeado pagado
+                  CuponesCampania::where('id',$cupon->id)
+                                   ->update([
+                                      'estado'=>'canjeado_pagado'
+                                   ]);   
+              }else{
+                $bono=0;
+                $valor_pagado=$req['TX_VALUE'];
+              }
+
                 $msn="Hemos registrado tu compra";
 
-                DB::table("pagos")->where("id",$p[0]->id)->update(["estado_pago"=>"APROBADA"]);
+                DB::table("pagos")
+                          ->where("id",$p[0]->id)
+                          ->update(["estado_pago"=>"APROBADA",
+                                    'transactionState'=>'Pago aceptado',
+                                    'transactionStatePayu'=>$req['transactionState'],
+                                    'moneda_pago'=>$req['currency']
+                                  ]);
 
-              $anuncio=Anuncios::where("id",$id_ad)->get();
-              //dd($anuncio);
-              $anunciante=User::where("id",$anuncio[0]->user_id)->get();
-
-                //aqui debo enviar los datos de confirmación a la cuenta de correo
-                NotificacionAnuncio::dispatch($comprador[0], $anunciante[0],[],"CompraExitosa");
-                NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0]],$p[0]->transation_value,"CompraExitosaAnunciante");
-                return view('payu.confirmar_payu')->with("respuesta",$req)
+                $anuncio=Anuncios::where("id",$id_ad)->get();
+                //dd($anuncio);
+                $anunciante=User::where("id",$anuncio[0]->user_id)->get();
+                $pg=pagos::where([
+                      'transactionId' => $req['reference_pol']
+                    ])->get();
+                          //aqui debo enviar los datos de confirmación a la cuenta de correo
+                NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],[],"CompraExitosa");
+                NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],$p[0]->transation_value,"CompraExitosaAnunciante");
+                return view('payu.confirmar_payu')
+                    ->with("campania",CuponesCampania::where('transaccion_donde_se_aplico',$req['referenceCode'])->first())
+                    ->with("respuesta",$req)
+                    ->with("pago",$valor_pagado)
                     ->with("empresa",$empresa)
                     ->with("cliente",$comprador)
                     ->with("estado","Aprobada")
@@ -297,7 +341,7 @@ class Anuncios extends Model
         }else{
 
           if(count($comprador)==0){
-            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en MetalBit ";
+            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en ".config('app.name');
 
             return view('payu.error_payu')->with("mensaje",$msn);
           }else{
@@ -305,7 +349,7 @@ class Anuncios extends Model
                   ->where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ["metodo_pago","PENDIENTE"]
+                      ["estado_pago","PENDIENTE"]
                     ])->get();
             if(count($pg)>0){
                   $empresa=Payu::all();
@@ -317,11 +361,13 @@ class Anuncios extends Model
                       ->where([
                           ["id_anuncio",$id_ad],
                           ['id_user_compra',$comprador[0]->id],
-                          ["metodo_pago","PENDIENTE"]
+                          ["estado_pago","PENDIENTE"]
                         ])
                       ->update([
                      'transactionId' => $req['reference_pol'],
-                     'transactionState'=>$req['transactionState'],
+                     'transactionStatePayu'=>$req['transactionState'],
+                     'transactionState'=>'Pago aceptado',
+                     'moneda_pago'=>$req['currency'],
                      'transation_value' => $req['TX_VALUE'],
                       "metodo_pago"=>$req['lapPaymentMethod'],
                       "estado_pago"=>"APROBADA",
@@ -331,10 +377,12 @@ class Anuncios extends Model
                     $anuncio=Anuncios::where("id",$id_ad)->get();
                     //dd($anuncio);
                     $anunciante=User::where("id",$anuncio[0]->user_id)->get();
-
+                    $pg=pagos::where([
+                      'transactionId' => $req['reference_pol']
+                    ])->get();
                           //aqui debo enviar los datos de confirmación a la cuenta de correo
-                    NotificacionAnuncio::dispatch($comprador[0], $anunciante[0],[],"CompraExitosa");
-                    NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0]],$req['TX_VALUE'],"CompraExitosaAnunciante");   
+                    NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0],['url'=>config('app.url')]],[],"CompraExitosa");
+                    NotificacionAnuncio::dispatch($anunciante[0], [$comprador[0],$anuncio[0],$pg[0],['url'=>config('app.url')]  ],$req['TX_VALUE'],"CompraExitosaAnunciante");   
             }else{
 
                 $msn="Esta referencia de pago no corresponde a ningna registrada en nuestro sistema, por favor verifica con tu plataforma de pagos ";  
@@ -343,17 +391,6 @@ class Anuncios extends Model
                 return view('payu.error_payu')->with("mensaje",$msn);
             }
               
-
-              /*DB::table("pagos")->insert([
-                'transactionId' => $req['reference_pol'],
-                'transactionQuantity'=>explode(" cant # ", $req['description'])[1],
-                'transactionState'=>$req['transactionState'],
-                 'transation_value' => $req['TX_VALUE'],
-                 'id_anuncio'=>$id_ad,
-                  "metodo_pago"=>$req['lapPaymentMethod'],
-               'id_user_compra'=>$comprador[0]->id  ]
-            );*/
-
 
           }
           
@@ -370,9 +407,9 @@ class Anuncios extends Model
         //pendiente de confirmacion efecty
         $comprador=User::where("email",$req['buyerEmail'])->get();
         $p=DB::table("pagos")->where("transactionId",$req['reference_pol'])->get();
+        //dd($p,$comprador);
         $id_ad=explode("-",$req['referenceCode'])[1];  
-        //dd([$p,$comprador[0],$id_ad]);
-        //dd($comprador);
+        //dd(explode("-",$req['referenceCode']),$id_ad);
         if(count($p)>0){
             if($p[0]->transactionId==$req['reference_pol']){
               $msn="Ya habías registrado esta referencia de pago, su estado actual es: ".$p[0]->estado_pago;
@@ -381,7 +418,7 @@ class Anuncios extends Model
               
         }else{
           if(count($comprador)==0){
-            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en MetalBit ";
+            $msn="Los datos de este usuario no corresponde a ninguno que este registrado en ".config('app.name');
 
             return view('payu.error_payu')->with("mensaje",$msn);
           }else{
@@ -389,42 +426,50 @@ class Anuncios extends Model
               //dd($empresa);
               $id_ad=explode("-",$req['referenceCode'])[1];
               //dd([$comprador[0]->id,$id_ad]);  
+              /*dd([DB::table("pago")
+                  ->where([
+                      ["id_anuncio",(int)$id_ad],
+                      ['id_user_compra',$comprador[0]->id],
+                      ["metodo_pago","PENDIENTE"]
+                    ])->get(),$comprador[0]->id,(int)$id_ad]);*/
               DB::table("pagos")
                   ->where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ["metodo_pago","PENDIENTE"]
+                      ['transactionState','Visto'],
+                    ])
+                  ->orwhere([
+                      ["id_anuncio",$id_ad],
+                      ['id_user_compra',$comprador[0]->id],
+                      ['transactionState','Visto'],
                     ])
                   ->update([
                  'transactionId' => $req['reference_pol'],
-                 'transactionState'=>$req['transactionState'],
+                 'transactionState'=>'Pendiente',
+                 'transactionStatePayu'=>$req['transactionState'],
                  'transation_value' => $req['TX_VALUE'],
                   "metodo_pago"=>$req['lapPaymentMethod'],
                   "estado_pago"=>"PENDIENTE",
+                  'moneda_pago'=>$req['currency'],
                   "updated_at"=>Carbon::now('America/Bogota')
                ]);
 
-
-
-              /*DB::table("pagos")->insert([
-                'transactionId' => $req['reference_pol'],
-                'transactionState'=>$req['transactionState'],
-                'transactionQuantity'=>explode(" cant # ", $req['description'])[1],
-                 'transation_value' => $req['TX_VALUE'],
-                 'id_anuncio'=>$id_ad,
-                  "metodo_pago"=>$req['lapPaymentMethod'],
-                  "estado_pago"=>"PENDIENTE",
-               'id_user_compra'=>$comprador[0]->id  ]
-              );*/
           }
-          
+          //dd($req['reference_pol']);
           $anuncio=Anuncios::where("id",$id_ad)->get();
+          //dd($anuncio,$id_ad);
           $anunciante=User::where(".id",$anuncio[0]->user_id)->get();
+          $pg=pagos::where([
+                      ["id_anuncio",$id_ad],
+                      ['id_user_compra',$comprador[0]->id],
+                      //['transactionId' , $req['reference_pol']]
+                    ])->get();
+          //dd( [$comprador[0],$anunciante[0],$anuncio[0],$pg]);
           //aqui debo enviar los datos de confirmación a la cuenta de correo
-          NotificacionAnuncio::dispatch($comprador[0], [],[],"CompraPendiente");
+          NotificacionAnuncio::dispatch($comprador[0], [$anunciante[0],$anuncio[0],$pg[0]],[],"CompraPendiente");
           
           //dd($anunciante[0]);
-          NotificacionAnuncio::dispatch($anunciante[0],[$comprador[0],$anuncio[0]],$req['TX_VALUE'],"CompraPendienteAnunciante");
+          NotificacionAnuncio::dispatch($anunciante[0],[$comprador[0],$anuncio[0],$pg[0]],$req['TX_VALUE'],"CompraPendienteAnunciante");
 
           return view('payu.confirmar_payu')->with("respuesta",$req)
                     ->with("empresa",$empresa)
@@ -442,13 +487,10 @@ class Anuncios extends Model
                   ->where([
                       ["id_anuncio",$id_ad],
                       ['id_user_compra',$comprador[0]->id],
-                      ["metodo_pago","PENDIENTE"]
+                      ["estado_pago","PENDIENTE"]
                     ])->get();
 
         if(count($pg)>0){
-            
-            
-            
             //rechazada
             DB::table("pagos")
                ->where([
@@ -457,11 +499,12 @@ class Anuncios extends Model
                       ])
                ->update([
                   'transactionId' => $req['reference_pol'],
-                  'transactionState'=>$req['transactionState'],              
+                  'transactionStatePayu'=>$req['transactionState'],              
                   'transation_value' => $req['TX_VALUE'],
                   'metodo_pago'=>$req['lapPaymentMethod'],
+                  'moneda_pago'=>$req['currency'],
                   'estado_pago'=>"RECHAZADA" ]);        
-            NotificacionAnuncio::dispatch($comprador[0], [],[],"CompraRechazada");
+            NotificacionAnuncio::dispatch($comprador[0], [$pg[0]],[],"CompraRechazada");
               
             $msn="Tu pago ha sido rechazado, intentalo nuevamente o comunícate con tu banco o entidad de pagos para verificar, que esta sucediendo";  
         }else{

@@ -20,7 +20,7 @@
   <div class="container">
     <div class="box box-primary">
       <div class="box-header">
-          <h3 class="box-title">Listado de usuarios</h3>
+          <h3 class="box-title text-success">Listado de bonificaciones</h3>
             
             
 
@@ -28,12 +28,12 @@
       <div class="box-body">
           <table id="bonificaciones-table" class="table table-bordered table-striped">
             <thead>
-              <tr>
-                <th>Items</th>
+              <tr class="bg-red">
+                
                 <th>Referido</th>
-                <th>Tipo bonificacion</th>
-                <th>Valor bonificacion</th>
-                <th>Fecha última bonificacion</th>
+                <th>Tipo bonificación</th>
+                <th>Valor bonificación</th>
+                <th>Fecha bonificación</th>
                 
               </tr>
             </thead>
@@ -41,11 +41,11 @@
                         
               @foreach ($bonificaciones as $bonificacion)
                   <tr>
-                    <td>{{ $bonificacion->id }}</td>
-                    <td>{{ $bonificacion->name }}</td>
-                    <td>{{ $bonificacion->tipo_bonificacion }}</td>
-                    <td>{{ $bonificacion->valor}}</td>
-                    <td>{{ $bonificacion->created_at }}</td>
+                    
+                    <td class="text-center bg-success">{{ $bonificacion->name }}</td>
+                    <td class="text-center">{{ $bonificacion->tipo_bonificacion }}</td>
+                    <td class="text-center bg-warning">$ {{ number_format($bonificacion->valor,'0',',','.')}}</td>
+                    <td class="text-center">{{ $bonificacion->created_at }}</td>
                     
 
                     
@@ -70,6 +70,7 @@
               $(document).ready(function() {
               $('#bonificaciones-table').DataTable( {
                   dom: 'Bfrtip',
+                  responsive:true,
                   buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                   language:
                     {
@@ -104,6 +105,7 @@
               $(document).ready(function() {
               $('#mis_bonificaciones-table').DataTable( {
                   dom: 'Bfrtip',
+                  responsive:true,
                   buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                   language:
                     {

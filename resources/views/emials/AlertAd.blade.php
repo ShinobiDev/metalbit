@@ -8,7 +8,7 @@ Estimad@ {{$user->name}}, Tus clic se esta agotando
 ## BALANCE DE RECARGA{{$recarga}} ##
 
 #[Recarga][1]
-[1]:{{$url}}#
+[1]:{{$url}}
 
 Gracias,<br>
 {{ config('app.name') }}

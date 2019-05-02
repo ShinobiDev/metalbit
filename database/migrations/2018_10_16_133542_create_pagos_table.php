@@ -20,6 +20,7 @@ class CreatePagosTable extends Migration
             $table->string('transation_value');
             $table->string('id_anuncio');
             $table->integer('id_user_compra');
+            $table->string('moneda_pago');
             //$table->foreign('id_anuncio')->references('id')->on('anuncios');
             $table->timestamps();    
         });

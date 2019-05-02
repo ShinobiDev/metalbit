@@ -9,10 +9,10 @@ Estimad@ {{$user->name}}, Tu saldo de recarga se ha agotado.
 Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios puedan
 ver tus datos de contacto.
 
-## BALANCE DE RECARGA {{$recarga}} ##
+## BALANCE DE RECARGA $ {{number_format($recarga,0,',','.')}} ##
 
 #[Recarga][1]
-[1]:{{$url}}#
+[1]:{{$url}}
   No dejes agotar tu recarga, para que puedan seguir viendo tu anuncio.
 
 

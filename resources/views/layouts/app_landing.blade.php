@@ -15,6 +15,7 @@
     <meta property="og:title"         content="{{config('app.name')}} " />
     <meta property="og:description"   content="Registrate en Metalbit y podras vender o comprar criptomonedas" />
     <meta property="og:image"         content="{{asset('img/AzulMetalicoHor_logo.png')}}" />
+    <link rel="icon" href="http://metalbit.co/wp-content/uploads/2018/10/cropped-Icono-32x32.png" sizes="32x32">
 
 
 
