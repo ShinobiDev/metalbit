@@ -1,15 +1,15 @@
 <!--ventas-->
 
  <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
-    <div class="box box-primary">
+    <div class="box box-success">
       <div class="box-header">
-          <h3 class="box-title text-green">Venta de criptomonedas</h3>
+          <h3 class="box-title text-primary">Venta de criptomonedas</h3>
             @guest
-              <a href="{{route('login')}}" class="btn btn-primary pull-right btn-lg" >
+              <a href="{{route('login')}}" class="btn btn-success pull-right btn-lg" >
                   <i class="fa fa-user-plus"> Crea un anuncio</i>
               </a>
               @else 
-               <a href="{{route('anuncios.create')}}" class="btn btn-primary pull-right btn-lg" >
+               <a href="{{route('anuncios.create')}}" class="btn btn-success pull-right btn-lg" >
                   <i class="fa fa-user-plus"> Crea un anuncio</i>
               </a>
               @endguest 

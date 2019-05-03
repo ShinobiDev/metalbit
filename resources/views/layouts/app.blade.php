@@ -31,7 +31,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-default navbar-static-top" style="background-color: #f2f1fb" >
             <div class="col-md-12 col-md-offset-0 col-lg-12 col-lg-offset-0 col-sm-12 col-sm-offset-0">
                 <div class="col-2 col-md-2 navbar-header">
                     <!-- Collapsed Hamburger -->

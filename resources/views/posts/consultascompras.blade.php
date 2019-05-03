@@ -5,11 +5,11 @@
         <h3 class="box-title text-green">Compra de criptomonedas</h3>
 
             @guest
-            <a href="{{route('login')}}" class="btn btn-success pull-right btn-lg" >
+            <a href="{{route('login')}}" class="btn btn-primary pull-right btn-lg" >
                 <i class="fa fa-user-plus"> Crea un anuncio</i>
             </a>
             @else
-             <a href="{{route('anuncios.create')}}" class="btn btn-success pull-right btn-lg" >
+             <a href="{{route('anuncios.create')}}" class="btn btn-primary pull-right btn-lg" >
                 <i class="fa fa-user-plus"> Crea un anuncio</i>
             </a>
             @endguest
