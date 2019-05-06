@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Events\CompartirCodigo;
 use App\Events\NotificacionAnuncio;
+use DB;
 use App\Anuncios;
 use App\Recargas;
-use App\GuzzleModel;
+use App\CurlModel;
 use App\Payu;
 use App\User;
 use App\pagos;
 use App\Variable;
-use DB;
 use Carbon\Carbon;
 
 
@@ -126,23 +126,31 @@ class AnunciosController extends Controller
 
        $this->authorize('create', new Anuncios); 
       //if(auth()->user()!=NULL){
-           $coinmarketcap = new GuzzleModel();
-           $listacriptos = $coinmarketcap->get_response_listings();
-           $listamonedas = $coinmarketcap->get_fiat_currency();
-           $response  = $coinmarketcap->get_specific_currency(1,"COP");
-           $coins = json_decode($response);
+           $coinmarketcap = new CurlModel();
            
-           if(property_exists($coins,"respuesta")==true){
-                return redirect('/');
-            }else{
+           $listacriptos = $coinmarketcap->get_response_listings();
+           
+           $listamonedas = $coinmarketcap->get_fiat_currency();
+           
+           $res  = (array)$coinmarketcap->get_specific_currency(1,"COP");
+          
+           if(array_key_exists("data", $res)){
+            
+              $coin=(array)$res['data'];
+            
+              //dd($listacriptos->data,$listamonedas,$coin['1']->quote->COP->price);
               return view('posts.create')
-                            ->with('coins',$coins->quotes->COP->price)
-                            ->with('listacriptos', (object)json_decode($listacriptos))
+                            ->with('coins',$coin['1']->quote->COP->price)
+                            ->with('listacriptos', $listacriptos->data)
                             ->with("listamonedas",$listamonedas)
                             ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
                             ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
                             ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
-            }
+            
+           }else{
+                dd($coins["status"]->error_message);
+           }
+           
            
         /*}else{
 
@@ -226,7 +234,7 @@ class AnunciosController extends Controller
         }
         
 
-        $coinmarketcap = new GuzzleModel();
+        $coinmarketcap = new CurlModel();
         $listacriptos = $coinmarketcap->get_response_listings();
         $listamonedas = $coinmarketcap->get_fiat_currency();
         $response  = $coinmarketcap->get_specific_currency(1,"COP");
@@ -451,9 +459,10 @@ class AnunciosController extends Controller
     
 
     public function obtener_valor_moneda_valida($id_cripto,$moneda){
-        $guzzle=new GuzzleModel();
-        $vv=$guzzle->get_specific_currency($id_cripto,$moneda);
-        return response()->json(json_decode($vv));
+
+        $curl=new CurlModel();
+        $vv=$curl->get_specific_currency($id_cripto,$moneda);
+        return response()->json((array)$vv->data);
     }
     public function cambiar_estado_anuncio($id,$estado){
         $ad=Anuncios::where('id',$id)->get();

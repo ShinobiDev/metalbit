@@ -100,7 +100,7 @@
       </body>
 @endsection
 
-@include('partials.scripts')
+
 
 @section('scripts')
 
@@ -195,9 +195,12 @@ $('#sel_cripto').on('change', function(e) {
         @moneda tipo de moneda fiduciaria
 
         */
+       var rss;
         function consultar_precio_moneda(crip,moneda){
 
           peticion_ajax("get", "obtener_valor_moneda_valida/"+crip+"/"+moneda,function(rs){
+            rss=rs;
+            console.log(rss);
               calcular_valores(rs.quotes[moneda].price);
           });
         }
@@ -225,5 +228,6 @@ $('#sel_cripto').on('change', function(e) {
         }
 
 </script>
-@include('partials.googleplaces')
+
 @endsection
+@include('partials.googleplaces')

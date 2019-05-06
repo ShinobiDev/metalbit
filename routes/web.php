@@ -129,3 +129,4 @@ Route::get('confirmation_recarga',function(){
 	$r=new App\Recargas;
 	return $r->registro_recargas($_REQUEST);	
 });
+

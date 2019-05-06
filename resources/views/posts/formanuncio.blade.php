@@ -50,7 +50,7 @@
           </fieldset>
 
           <fieldset>
-            <legend>Más información</legend>
+            <legend class="text-red">Más información</legend>
             <div class="row " id="row_id_ad-currency">
               <div id="div_id_ad-currency" class="col-md-2 label-col form-group">
                 <label for="id_ad-currency" class="control-label requiredField"> <b>Moneda Local</b></label>
@@ -256,7 +256,7 @@
               </div>                  
               </fieldset>
               <hr>
-              <input type="hidden" name="user_id" value="{{Auth::user()->id }}" class="form-control">
+              <input type="hidden" name="user_id" value="{{auth::user()->id }}" class="form-control">
               <div class="form-group"> <div class="controls ">
                      <input type="submit" name="submit" value="Publicar anuncio" class="btn btn-success" id="submit-id-submit" /> </div>
               </div>
