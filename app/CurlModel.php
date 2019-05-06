@@ -217,10 +217,17 @@ class CurlModel extends Model
                 $this->curl = curl_init(); // Get cURL resource
                 // Set cURL options
 
-                $response=$this->start_curl($url,$parameters);
+                $response=json_decode($this->start_curl($url,$parameters));
+                
+                if($response->status->error_code==0){
+                    $r=(array)$response->data; 
+                    
+                    return $r[$id_cripto_currency];
+                }else{
+                    dd($coins["status"]->error_message);
+                }
 
                 
-                return json_decode($response); // print json decoded response
                 $this->finish_curl(); // Close request
         			
             }else{

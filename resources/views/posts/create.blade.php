@@ -64,7 +64,7 @@
 
                     <h3>
                       <i class="fa fa-info-circle"></i>
-                      <b class="text-red">¿Quiere aumentar su visibilidad?</b>, los anuncios son ordenados orgánicamente situando primero a los usuarios que tengan un mayor valor de recarga total
+                      <b class="text-red">¿Quieres aumentar la visibilidad de tus anuncios?</b>, los anuncios son ordenados orgánicamente situando primero a los usuarios que tengan un mayor valor de recarga total
                     </h3>
                 </div>
 
@@ -195,13 +195,13 @@ $('#sel_cripto').on('change', function(e) {
         @moneda tipo de moneda fiduciaria
 
         */
-       var rss;
+       
         function consultar_precio_moneda(crip,moneda){
 
           peticion_ajax("get", "obtener_valor_moneda_valida/"+crip+"/"+moneda,function(rs){
-            rss=rs;
-            console.log(rss);
-              calcular_valores(rs.quotes[moneda].price);
+
+              console.log(rs.quote[moneda].price);
+              calcular_valores(rs.quote[moneda].price);
           });
         }
 
@@ -227,7 +227,46 @@ $('#sel_cripto').on('change', function(e) {
           document.getElementById(hd).value=val+"."+num[1];
         }
 
-</script>
+        function publicar_anuncio(){
+              var data=$('#ad-form').serializarFormulario();
+              console.log(data);
+              enviar_peticion_publicar_anuncio(data);
+        }
+        function enviar_peticion_publicar_anuncio(data){
+          mostrar_cargando("msn_load",10,"Estamos registrando tu anuncio, danos un momento, por favor...");
+          $.ajax({
+              type: "POST",
+              url: "{{route('anuncios.store')}}",
+              data: data,
+              success: function(rs){
+                
+                document.getElementById('msn_load').innerHTML=rs.mensaje;
+                document.getElementById('msn_load').style.color = "#ff0000";
+                document.getElementById("id_ad-place").value="";
+                document.getElementById("id_ad-bank_name").value="";
+                document.getElementById("margen").value="";
+                document.getElementById("precio_minimo_moneda").value="";
+                document.getElementById("id_ad-min_amount").value="";
+                document.getElementById("id_ad-max_amount").value="";
+                document.getElementById("id_ad-meeting_point").value="";
+                document.getElementById("id_ad-other_info").value="";
+                
+                
 
-@endsection
+
+              },
+              error:function(rs){
+                console.log(rs);
+                console.log(rs.responseText);
+                console.log(JSON.parse(rs.responseText).errors.email);
+                //alert(JSON.parse(rs.responseText).errors.email);
+                document.getElementById('msn_load').innerHTML=JSON.parse(rs.responseText).errors.email;
+              }
+              
+            });
+        }
+
+</script>
 @include('partials.googleplaces')
+@endsection
+

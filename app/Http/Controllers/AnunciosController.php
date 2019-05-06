@@ -125,37 +125,28 @@ class AnunciosController extends Controller
     {
 
        $this->authorize('create', new Anuncios); 
-      //if(auth()->user()!=NULL){
+
            $coinmarketcap = new CurlModel();
            
            $listacriptos = $coinmarketcap->get_response_listings();
            
            $listamonedas = $coinmarketcap->get_fiat_currency();
            
-           $res  = (array)$coinmarketcap->get_specific_currency(1,"COP");
-          
-           if(array_key_exists("data", $res)){
+           $coin  = $coinmarketcap->get_specific_currency(1,"COP");
+              
             
-              $coin=(array)$res['data'];
-            
-              //dd($listacriptos->data,$listamonedas,$coin['1']->quote->COP->price);
+              
               return view('posts.create')
-                            ->with('coins',$coin['1']->quote->COP->price)
+                            ->with('coins',$coin->quote->COP->price)
                             ->with('listacriptos', $listacriptos->data)
                             ->with("listamonedas",$listamonedas)
                             ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
                             ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
                             ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
             
-           }else{
-                dd($coins["status"]->error_message);
-           }
+          
            
-           
-        /*}else{
-
-           return redirect('/');
-        }*/
+       
     }
 
     /**
@@ -222,32 +213,37 @@ class AnunciosController extends Controller
               'estado_anuncio'=>"sin publicar"
               ]
          );
-                //dd($posts);
+               //dd($posts);
         $recarga=Recargas::where("user_id",$data['user_id'])->get();
-        
+        if(count($recarga)>0){
+            $r=$recarga[0]->valor;
+        }else{
+            $r=0;
+        }
         //NOTIFICACION AL ANUNCIANTE
-        NotificacionAnuncio::dispatch(auth()->user(), $posts,$recarga[0]->valor,"AnuncioCreado");
+        NotificacionAnuncio::dispatch(auth()->user(), $posts,$r,"AnuncioCreado");
         $uadmin=User::role('admin')->get();
-        //dd($uadmin);
+        
         foreach ($uadmin as $key => $value) {
-            NotificacionAnuncio::dispatch($value, [$posts,auth()->user(),['url'=>config("app.url").'/all/'.$value->id]],$recarga[0]->valor,"AnuncioCreadoAdmin");
+            NotificacionAnuncio::dispatch($value, [$posts,auth()->user(),['url'=>config("app.url").'/all/'.$value->id]],$r,"AnuncioCreadoAdmin");
         }
         
 
-        $coinmarketcap = new CurlModel();
+        
+        /*$coinmarketcap = new CurlModel();
         $listacriptos = $coinmarketcap->get_response_listings();
         $listamonedas = $coinmarketcap->get_fiat_currency();
-        $response  = $coinmarketcap->get_specific_currency(1,"COP");
-        $coins = json_decode($response);
+        $coins  = $coinmarketcap->get_specific_currency(1,"COP");
         return redirect()->route('anuncios.create')
-                            ->with('coins',$coins->quotes->COP->price)
+                            ->with('coins',$coins->quote->COP->price)
                             ->with('listacriptos', (object)json_decode($listacriptos))
                             ->with("listamonedas",$listamonedas)
                             ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
-                            ->with('success', 'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado');
+                            ->with('success', 'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado');*/
+           return response()->json(["respuesta"=>true,"mensaje"=>'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado']);
         }else{
-            return back()->with('error', 'El valor de venta o compra mínimo no debe ser menor al valor máximo');
-            
+            /*return back()->with('error', 'El valor de venta o compra mínimo no debe ser menor al valor máximo');*/
+            return response()->json(["respuesta"=>false,"mensaje"=>'El valor de venta o compra mínimo no debe ser menor al valor máximo']);
         }
     }
 
@@ -462,7 +458,7 @@ class AnunciosController extends Controller
 
         $curl=new CurlModel();
         $vv=$curl->get_specific_currency($id_cripto,$moneda);
-        return response()->json((array)$vv->data);
+        return response()->json($vv);
     }
     public function cambiar_estado_anuncio($id,$estado){
         $ad=Anuncios::where('id',$id)->get();

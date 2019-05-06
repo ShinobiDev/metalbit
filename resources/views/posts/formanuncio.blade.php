@@ -106,7 +106,7 @@
                   </div>
                </div>
                <div class="col-md-7 two-col-help-text">
-                    Opcional. Nombre o código del banco o proveedor de pagos. Para transferencias internacionales, especifique el código SWIFT / BIC del banco
+                    <b>Opcional</b>. Nombre o código del banco o proveedor de pagos. Para transferencias internacionales, especifique el código SWIFT / BIC del banco
               </div>
              </div>
 
@@ -188,7 +188,7 @@
                    </div>
                  </div>
                  <div class="col-md-7 two-col-help-text">
-                    Opcional. Límite mínimo de precio de moneda.
+                    <b>Opcional</b>. Límite mínimo de precio de moneda.
                   </div>
               </div>
               <!--LIMITE MINIMO DE TRANSACCIONES-->
@@ -220,7 +220,7 @@
                   </div>
                 </div>
                 <div class="col-md-7 two-col-help-text">
-                    Opcional. Límite máximo de transacción por intercambio. Para ventas online, el saldo de su cartera de <a href="/">MetalBit</a> también puede limitar el límite máximo en un intercambio.
+                    <b>Opcional</b>. Límite máximo de transacción por intercambio. Para ventas online, el saldo de su cartera de <a href="/">MetalBit</a> también puede limitar el límite máximo en un intercambio.
                 </div>
               </div>
               <div class="row " id="row_id_ad-opening_hours">
@@ -238,7 +238,9 @@
                    </div>
                  </div>
                  <div class="col-md-7 two-col-help-text">
-                      Lugares donde prefiere realizar el intercambio en efectivo. Ej. un café Internet o restaurante local.
+                      Lugares donde prefiere realizar el intercambio en efectivo. <i>
+                        Ej. un café Internet o restaurante local.
+                      </i>
                   </div>
               </div>
               <div class="row " id="row_id_ad-other_info">
@@ -251,14 +253,15 @@
                     </div>
                   </div>
                   <div class="col-md-4 two-col-help-text">
-                     Otra información que usted desea decir acerca de su transacción. Ejemplo 1: <!--<b>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, póngase en contacto con MetalBit.com/ad/1234</b>.--><b>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, realiza el pago a través de Payu y pongase en contacto conmigo</b>. Ejemplo 2: <b>Por favor, haga la solicitud solo cuando puede completar el pago con dinero en efectivo en el plazo de 12 horas</b>.
+                     Otra información que usted desea decir acerca de su transacción. <b>Ejemplo 1:</b> <!--<b>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, póngase en contacto con MetalBit.com/ad/1234</b>.--><i>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, realiza el pago a través de Payu y pongase en contacto conmigo</i>. <b>Ejemplo 2</b>: <i>Por favor, haga la solicitud solo cuando puede completar el pago con dinero en efectivo en el plazo de 12 horas</i>.
                  </div>
               </div>                  
               </fieldset>
               <hr>
+              <span id="msn_load"></span>
               <input type="hidden" name="user_id" value="{{auth::user()->id }}" class="form-control">
               <div class="form-group"> <div class="controls ">
-                     <input type="submit" name="submit" value="Publicar anuncio" class="btn btn-success" id="submit-id-submit" /> </div>
+                     <input type="button" name="submit" value="Publicar anuncio" class="btn btn-primary" id="submit-id-submit" onclick="publicar_anuncio()" /> </div>
               </div>
 
 </form>

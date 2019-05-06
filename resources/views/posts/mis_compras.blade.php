@@ -62,7 +62,7 @@
                                                 
                     <td class="text-center "><strong>{{number_format($compra->transactionQuantity,2,',','.')}}</strong></td>                                   
                     <td class="text-center text-red bg-success"><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
-                    <td class="text-center text-primary" style="width: 300px"><span class="text-red">$</span> {{number_format($compra->transation_value,2,',','.')}}</td>
+                    <td class="text-center text-primary" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transation_value,2,',','.')}}</td>
                     <td class="text-center text-primary bg-danger" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transaction_value_pagado+$compra->valor_sobre_costo,2,',','.')}}</td>
                     <td class="text-center text-success">{{$compra->moneda_pago}}</td> 
                     <td class="bg-info">

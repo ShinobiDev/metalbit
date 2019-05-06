@@ -265,7 +265,7 @@ class User extends Authenticatable
             
          }
          //dd($a,$p,$m,$id_u,$cantidad);
-         return response()->json(['respuesta'=>true,"valor"=>$pu[0]->hashear($a,$p,$m)]);
+         return response()->json(['respuesta'=>true]);
         
     }
 }
