@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Events\NotificacionError;
 use App\User;
 use App\Variable;
+use App\CriptoMonedas;
 //Clase para consultar API coinmarketcap
 class CurlModel extends Model
 {
@@ -30,12 +31,10 @@ class CurlModel extends Model
     private function start_curl($direccion,$parameters){
                     
                 $url = $this->url_base.$direccion;    
-                $key="73013bbc-c7f1-494e-81c6-97f7bbd64ecd";
-
-
+               
                 $headers = [
                   'Accepts: application/json',
-                  'X-CMC_PRO_API_KEY: '.$key
+                  'X-CMC_PRO_API_KEY: '.$this->key_coin
                 ];
 
                 $qs = http_build_query($parameters); // query string encode the parameters
@@ -62,22 +61,33 @@ class CurlModel extends Model
 
         try{
                 $url = 'v1/cryptocurrency/listings/latest';
-
+                //la coversión esta limitada de acuerdo al plan
                 $parameters = [
                   'start' => '1',
                   'limit' => '5',
-                  'convert' => 'COP'
+                  'convert' => Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor
                 ];
 
 
                 $this->curl = curl_init(); // Get cURL resource
                 // Set cURL options
-
-                $response=$this->start_curl($url,$parameters);
-
-
-                return json_decode($response); // print json decoded response
-                $this->finish_curl(); // Close request
+                $response=json_decode($this->start_curl($url,$parameters));
+                
+                if($response->status->error_code==0){
+                    return $response;
+                    //print json decoded response
+                    $this->finish_curl(); // Close request
+                }else{
+                    
+                     \Log::error("Api coinmarker error => ".$response->status->error_message);   
+                      $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
+                                    ->join("roles","model_has_roles.role_id","roles.id")
+                                    ->where("roles.name","Admin")
+                                    ->get();     
+                      NotificacionError::dispatch($email[0],"Api coinmarker error => ".$response->status->error_message);  
+                      return $response;
+                }
+                
 
                    
         }catch(\Exception $ex){
@@ -92,28 +102,21 @@ class CurlModel extends Model
                     
         }
     }
-    
+    /**
+     * [get_response_listings fucnion que consulta el listado de todas las monedas que contien coinmarket, pero almacenadas en la base de datos, esta tabla se actualizara de acuerdo a la programación del cron ConsultarCriptoMonedas]
+     * @return [type] [description]
+     */
     public function get_response_listings_cache(){
         
 
         try{
-                $url = 'v1/cryptocurrency/listings/latest';
-
-                $parameters = [
-                  'start' => '1',
-                  'limit' => '5',
-                  'convert' => 'COP'
-                ];
-
-
-                $this->curl = curl_init(); // Get cURL resource
-                // Set cURL options
-
-                $response=$this->start_curl($url,$parameters);
-
-
-                return json_decode($response); // print json decoded response
-                $this->finish_curl(); // Close request
+               $response=CriptoMonedas::all();
+               $arr=[];
+               $arr['status']=(object)['error_code'=>0];
+               foreach ($response as $key => $value) {
+                    $arr['data'][$key]=(object)['id'=>$value->id_moneda,'name'=>$value->nombre_moneda];    
+               }
+               return (object)$arr;
 
                    
         }catch(\Exception $ex){
@@ -128,72 +131,8 @@ class CurlModel extends Model
                     
         }
     }
-   /**
-    * [get_response_ticker consulta de la api de coinmarket]
-    * @param  [int] $limite  [imite de resultados max 100]
-    * @param  [string] $orden   [orden de resultados solo permite id]
-    * @param  [int] $inicia  [numero de inicio de la consulta]
-    * @param  [string] $convert [ipo de moneda que quiere convertir]
-    * @return [json_encode]          [description]
-    */
-    public function get_response_ticker($limite,$orden,$inicia,$convert){
-    		
-        try{
-            $string_add="";
-    		
-        	if($limite!="null"){
-        		$string_add.="?limit=".$limite;
-        	}
-        	
-        	if($orden!="null"){
-        		
-        		$string_add.="&sort=".$orden;
-        		
-        		
-        	}
-        	
-        	if($inicia!="null"){
-        	
-        		$string_add="?start=".$inicia;	
-        		if($limite!="null"){
-        			$string_add.="&limit=".$limite;
-        			if($orden!="null"){
-        				$string_add.="&sort=".$orden;		
-        			}
-        		}
-
-        		
-        	}
-
-
-        	if($convert!="null"){
-        		$string_add="?convert=".$convert;
-        		if($limite!="null"){
-        			$string_add.="&limit=".$limite;
-        		}
-        	}
-        	
-        	$res = $this->client->request('GET', $this->url_base.'ticker/'.$string_add);
-        	if($res->getStatusCode()==200){
-    			$js=json_decode($res->getBody());		
-    			return json_encode($js->data);
-    		}else{
-    			return json_encode($js->data);
-    			
-    		}
-
-         }catch(\Exception $ex){
-              //dd($ex);
-              \Log::error($ex);  
-              $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
-                            ->join("roles","model_has_roles.role_id","roles.id")
-                            ->where("roles.name","Admin")
-                            ->get();     
-              NotificacionError::dispatch($email[0],$ex->getMessage());        
-              //return json_encode(["error"=>"Este id de moneda no existe","respuesta"=>false]);
-                    
-        }
-    }
+  
+   
  
    /**
     * [get_specific_currency consulta de la api para especifica moneda]
@@ -224,7 +163,13 @@ class CurlModel extends Model
                     
                     return $r[$id_cripto_currency];
                 }else{
-                    dd($coins["status"]->error_message);
+                    \Log::error($response->status->error_message); 
+                      $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
+                                    ->join("roles","model_has_roles.role_id","roles.id")
+                                    ->where("roles.name","Admin")
+                                    ->get();     
+                      NotificacionError::dispatch($email[0],$response->status->error_message);  
+                     
                 }
 
                 
@@ -241,7 +186,7 @@ class CurlModel extends Model
                             ->where("roles.name","Admin")
                             ->get();     
               NotificacionError::dispatch($email[0],$ex->getMessage());         
-              return json_encode(["error"=>"Ha ocurrido un error en la app","respuesta"=>false]);
+              return json_encode(["error"=>"Ha ocurrido un error en la app, ya se ha notifificado a losa dministradores","respuesta"=>false]);
                     
         }
 	    	

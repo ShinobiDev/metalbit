@@ -30,7 +30,7 @@ class Anuncios extends Model
         
   		  foreach ($monedas as $key => $m) {
           $arr=$curl->get_specific_currency($m->criptomoneda,$m->moneda);
-
+          
           if(property_exists($arr,"respuesta")==false){
             $pivote=(array)$arr->quote;
             

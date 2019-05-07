@@ -48,7 +48,7 @@
                   <td class="bg-success">{{$ad->banco }}</td>
                   <td><b>{{$ad->ubicacion}}</b></td>
                   <td class="bg-danger">
-                     <span class="text-blue ">$ {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></span> 
+                     <span class="text-blue">$ {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></span> 
 
                  </td>
                   <td class="text-center"><strong class="text-red">{{$ad->cripto_moneda}}</strong></td>

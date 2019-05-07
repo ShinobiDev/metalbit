@@ -58,16 +58,22 @@
               <div class="col-md-3">
                 <div class="controls">
                   <select class="moneda select form-control select2" id="sel_moneda" name="moneda">
-                        @foreach ($listamonedas as $key => $listamoneda)
+                        @forelse ($listamonedas as $key => $listamoneda)
 
-                          <option value="{{$listamoneda['Currency']}}">{{$listamoneda['Country']}}</option>                          
-                        @endforeach
+                          <option value="{{$listamoneda['Currency']}}">{{$listamoneda['Country']}}</option>
+                        @empty
+                          <option value=""></option>                            
+                        @endforelse
                   </select>
                   @php
                       $mr=(array)$listamonedas;
                   @endphp
-
-                  <input id="hd_moneda" type="hidden" name="nombre_moneda" value="{{$mr[0]['Country']}}">
+                  
+                  @if(count($mr)>0)
+                    <input id="hd_moneda" type="hidden" name="nombre_moneda" value="{{$mr[0]['Country']}}">
+                  @else
+                  <input id="hd_moneda" type="hidden" name="nombre_moneda" value="0">
+                  @endif
                 </div>
               </div>
               <div class="col-md-7 two-col-help-text">
@@ -80,9 +86,11 @@
                 <div class="col-md-3">
                   <div class="controls">
                     <select class="select form-control select2" id="sel_cripto" name="criptomoneda">
-                        @foreach ($listacriptos as $key => $listacripto)
+                        @forelse ($listacriptos as $key => $listacripto)
                           <option value="{{$listacripto->id}}">{{$listacripto->name}}</option>
-                        @endforeach
+                        @empty
+                           <option value=""></option> 
+                        @endforelse
 
                     </select>
                         @php
@@ -90,7 +98,11 @@
                         @endphp
                         
                     
-                    <input id="hd_cripto" type="hidden" name="nombre_cripto_moneda" value="{{$cr[0]->name}}">
+                    @if(count($cr)>0)
+                      <input id="hd_cripto" type="hidden" name="nombre_cripto_moneda" value="{{$cr[0]->name}}">
+                    @else
+                      <input id="hd_cripto" type="hidden" name="nombre_cripto_moneda" value="">
+                    @endif
                   </div>
                 </div>
                 <div class="col-md-7 two-col-help-text">

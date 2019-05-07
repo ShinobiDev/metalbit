@@ -136,21 +136,25 @@ class AnunciosController extends Controller
 
            $coinmarketcap = new CurlModel();
            
-           $listacriptos = $coinmarketcap->get_response_listings();
+           $listacriptos = $coinmarketcap->get_response_listings_cache();
            
-           $listamonedas = $coinmarketcap->get_fiat_currency();
+           if($listacriptos->status->error_code==0){
+               $listamonedas = $coinmarketcap->get_fiat_currency();
            
-           $coin  = $coinmarketcap->get_specific_currency(1,"COP");
-              
-            
-              
-              return view('posts.create')
-                            ->with('coins',$coin->quote->COP->price)
-                            ->with('listacriptos', $listacriptos->data)
-                            ->with("listamonedas",$listamonedas)
-                            ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
-                            ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
-                            ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
+               $coin  = $coinmarketcap->get_specific_currency(1,Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor);
+                $price=(array)$coin->quote;  
+                          
+               return view('posts.create')
+                                ->with('coins',$price[Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor]->price)
+                                ->with('listacriptos', $listacriptos->data)
+                                ->with("listamonedas",$listamonedas)
+                                ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
+                                ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
+                                ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
+           }else{
+            return back()->with('error', 'Ha ocurrido un error, al cargar el formulario de creación de anuncios, ye hemos informado a los administradores, estamos trabajando para solucionar el problema');
+           }
+           
             
           
            
@@ -235,19 +239,7 @@ class AnunciosController extends Controller
         foreach ($uadmin as $key => $value) {
             NotificacionAnuncio::dispatch($value, [$posts,auth()->user(),['url'=>config("app.url").'/all/'.$value->id]],$r,"AnuncioCreadoAdmin");
         }
-        
-
-        
-        /*$coinmarketcap = new CurlModel();
-        $listacriptos = $coinmarketcap->get_response_listings();
-        $listamonedas = $coinmarketcap->get_fiat_currency();
-        $coins  = $coinmarketcap->get_specific_currency(1,"COP");
-        return redirect()->route('anuncios.create')
-                            ->with('coins',$coins->quote->COP->price)
-                            ->with('listacriptos', (object)json_decode($listacriptos))
-                            ->with("listamonedas",$listamonedas)
-                            ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
-                            ->with('success', 'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado');*/
+     
            return response()->json(["respuesta"=>true,"mensaje"=>'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado']);
         }else{
             /*return back()->with('error', 'El valor de venta o compra mínimo no debe ser menor al valor máximo');*/
@@ -693,7 +685,7 @@ class AnunciosController extends Controller
                                     'estado_pago'=>'PENDIENTE',
                                     'transactionState'=>'Pago aceptado',
                                     'transactionStatePayu'=>4,
-                                    'moneda_pago'=>'COP',
+                                    'moneda_pago'=>Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor,
                                     'updated_at'=>Carbon::now('America/Bogota'),
                                     'numero_transaccion'=>$request['numero_transaccion']
                                   ]);
@@ -740,7 +732,7 @@ class AnunciosController extends Controller
                           ->update(["estado_pago"=>"APROBADA",
                                     'transactionState'=>'Pago aceptado',
                                     'transactionStatePayu'=>4,
-                                    'moneda_pago'=>'COP',
+                                    'moneda_pago'=>Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor,
                                     'updated_at'=>Carbon::now('America/Bogota')
                                     
                                   ]);
