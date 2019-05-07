@@ -140,7 +140,7 @@
                 </form>
             </div>
             <div class="modal-body">
-               <h4> <b class="text-primary">Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}</h4>
+               <h4> <b class="text-primary">Horario de atención:  </b> <b>Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}</b></h4>
                
             </div>
             <div class="modal-body">

@@ -597,8 +597,9 @@
                     if(e.respuesta){
                       
                       document.getElementById('msnMensajeCompra_'+id).classList.remove('text-red');
-                      document.getElementById('msnMensajeCompra_'+id).  classList.add('text-success');    
+                      document.getElementById('msnMensajeCompra_'+id).  classList.add('text-primary');    
                       document.getElementById('msnMensajeCompra_'+id).innerHTML=e.mensaje;
+                      document.getElementById("txt_btn_compra_"+id).innerHTML="Compra pendiente";
                       if(document.getElementById('anc_pendiente_'+id)!=null){
                           document.getElementById('anc_pendiente_'+id).href="{{config('app.url')}}"+'/ver_mis_compras/'+id_usuario+'/?id='+e.refpago;
                           

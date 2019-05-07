@@ -106,7 +106,7 @@
                   </div>
                </div>
                <div class="col-md-7 two-col-help-text">
-                    <b>Opcional</b>. Nombre o código del banco o proveedor de pagos. Para transferencias internacionales, especifique el código SWIFT / BIC del banco
+                    <b>Opcional</b>. Nombre o código del banco o proveedor de pagos. Para transferencias internacionales, especifique el código <b>SWIFT / BIC</b> del banco
               </div>
              </div>
 
@@ -118,7 +118,7 @@
                     <!--Valor de ganacia -->
                      <div class="input-group">
                        <input class="numberinput form-control" id="margen" name="margen" step="any" type="number" value="0" required/>
-                       <span class="input-group-addon">%
+                       <span class="input-group-addon bg-orange">%
                        </span>
 
                        
@@ -183,7 +183,7 @@
                 <div class="col-md-3">
                    <div class="input-group">
                       <input class="numberinput form-control" id="precio_minimo_moneda"  type="text" min="0"  onchange="formatear(this,'precio_minimo_moneda_hd')" required/>
-                      <span class=" modi input-group-addon">COP</span>
+                      <span class=" modi input-group-addon bg-red">COP</span>
                       <input class="numberinput form-control" id="precio_minimo_moneda_hd" name="precio_minimo_moneda" type="hidden" />
                    </div>
                  </div>
@@ -199,12 +199,12 @@
                 <div class="col-md-3">
                    <div class="input-group">
                       <input class="numberinput form-control" id="id_ad-min_amount"  type="text" min="0"  onchange="formatear(this,'limite_min_hd')" required/>
-                        <span class=" modi input-group-addon">COP</span>
+                        <span class=" modi input-group-addon bg-green">COP</span>
                         <input class="numberinput form-control" id="limite_min_hd" name="limite_min" type="hidden" />
                    </div>
                  </div>
                  <div class="col-md-7 two-col-help-text">
-                    Opcional. Límite mínimo de transacción por intercambio.
+                    <b>Opcional</b>. Límite mínimo de transacción por intercambio.
                   </div>
               </div>
               <!--LIMITE MAXIMO DE TRANSACCIONES-->
@@ -216,11 +216,11 @@
                   <div class="input-group">
                     <input class="numberinput form-control" id="id_ad-max_amount"  type="text" min="0"  onchange="formatear(this,'limite_max_hd')" required/>
                     <input class="numberinput form-control" id="limite_max_hd" name="limite_max" type="hidden" />
-                    <span class="modi input-group-addon">COP</span>
+                    <span class="modi input-group-addon bg-blue">COP</span>
                   </div>
                 </div>
                 <div class="col-md-7 two-col-help-text">
-                    <b>Opcional</b>. Límite máximo de transacción por intercambio. Para ventas online, el saldo de su cartera de <a href="/">MetalBit</a> también puede limitar el límite máximo en un intercambio.
+                    <b>Opcional</b>. Límite máximo de transacción por intercambio. Para ventas online, el saldo de su cartera de <a href="/">{{config('app.name')}}</a> también puede limitar el límite máximo en un intercambio.
                 </div>
               </div>
               <div class="row " id="row_id_ad-opening_hours">
@@ -239,7 +239,7 @@
                  </div>
                  <div class="col-md-7 two-col-help-text">
                       Lugares donde prefiere realizar el intercambio en efectivo. <i>
-                        Ej. un café Internet o restaurante local.
+                        <b>Ej.</b> un café Internet o restaurante local.
                       </i>
                   </div>
               </div>

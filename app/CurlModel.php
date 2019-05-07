@@ -40,7 +40,7 @@ class CurlModel extends Model
 
                 $qs = http_build_query($parameters); // query string encode the parameters
                 $request = "{$url}?{$qs}"; // create the request URL
-
+                
                 curl_setopt_array($this->curl, array(
                   CURLOPT_URL => $request,            // set the request URL
                   CURLOPT_HTTPHEADER => $headers,     // set the headers 
@@ -203,7 +203,7 @@ class CurlModel extends Model
     */
     public function get_specific_currency($id_cripto_currency,$convert){
         try{
-    		$string_add="";
+            $string_add="";
     		if($id_cripto_currency!="null"){
                 $url = 'v1/cryptocurrency/quotes/latest';
 

@@ -54,7 +54,7 @@
                      <span class="text-blue"><h5> <span class="text-red">$</span> {{$ad->precio_moneda}} <span class="text-red">{{$ad->moneda}}</span></h5></span> 
 
                  </td>
-                  <td><strong>{{$ad->cripto_moneda}}</strong></td>
+                  <td class="text-center"><strong>{{$ad->cripto_moneda}}</strong></td>
                   <td class="bg-danger text-primary" style="width: 200px"><span class="text-red">$</span> {{ number_format($ad->limite_min,2, ',', '.') }} / </br><span class="text-red">$</span>{{ number_format($ad->limite_max,2, ',', '.')}} <strong class="text-red">{{$ad->moneda}}</strong></td>
                    <td style="width: 250px">
                       @role('Admin')

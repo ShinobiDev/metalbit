@@ -56,10 +56,8 @@ class AnunciosController extends Controller
             }
         }
 
-
-         //dd($arr);
         if(count($arr)>0){
-           $anuncios_consultados= Anuncios::select("anuncios.id",
+           $anuncios_consultados = Anuncios::select("anuncios.id",
                              "anuncios.cod_anuncio",
                              "anuncios.tipo_anuncio",
                              "anuncios.ubicacion",
@@ -93,12 +91,22 @@ class AnunciosController extends Controller
                         //->orderBy("anuncios.id","DESC")
                         ->orderBy("recargas.valor","DESC")
                         ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
+                        
         }   
-        //dd($anuncios_consultados);
+
         $ad_arr=new Anuncios();
-        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
-          
-         //dd($arr_anuncios); 
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
+ 
         if(auth()->user()!=null){
             return view('welcome')
                     ->with('anuncios',$arr_anuncios)
@@ -298,10 +306,19 @@ class AnunciosController extends Controller
                         ->where("anuncios.user_id",auth()->user()->id)
                         ->orderBy('estado_anuncio','DESC')
                         ->get();
+
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
         }   
         $ad_arr=new Anuncios();
         
-        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
         
         //dd($arr_anuncios);
         return view('welcome')
@@ -365,10 +382,20 @@ class AnunciosController extends Controller
                         ->join("recargas","recargas.user_id","users.id")
                         ->orderBy("anuncios.estado_anuncio","DESC")
                         ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
         }   
         $ad_arr=new Anuncios();
         //dd($anuncios_consultados);
-        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
         
         //dd($arr_anuncios);
         return view('welcome')

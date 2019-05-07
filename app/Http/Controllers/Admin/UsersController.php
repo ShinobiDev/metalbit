@@ -451,12 +451,24 @@ class UsersController extends Controller
                 ->join('anuncios','anuncios.id','detalle_clic_anuncios.id_anuncio')
                 ->join('users','users.id','anuncios.user_id')
                 ->join("recargas","recargas.user_id","users.id")
-                ->where('detalle_clic_anuncios.id_usuario',Auth()->user()->id)
+                ->where('detalle_clic_anuncios.id_usuario',auth()->user()->id)
+                ->where("anuncios.estado_anuncio","activo")
                 ->orderBy('detalle_clic_anuncios.updated_at','DESC')
                 ->get();
 
+                $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->join('detalle_clic_anuncios','detalle_clic_anuncios.id_anuncio','anuncios.id')
+                        ->where('detalle_clic_anuncios.id_usuario',auth()->user()->id)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
        $ad_arr=new Anuncios();
-       $arr_anuncios = $ad_arr->ver_anuncios($ad_saw);
+       $arr_anuncios = $ad_arr->ver_anuncios($ad_saw,$monedas);
 
       
       return view('posts.mis_anuncios_vistos')
