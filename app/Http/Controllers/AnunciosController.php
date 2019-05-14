@@ -123,6 +123,211 @@ class AnunciosController extends Controller
         }
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_compras()
+    {
+        $u=auth()->user();
+
+        $anuncios_consultados=array();
+
+        if($u!=null){
+            //dd($u->id);
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+            $arr=[];
+            $i=0;
+            //dd($uc);
+            foreach ($uc as $key => $value) {
+                if(auth()->user()->id!=$value->id){
+                         $arr[$i++]=$value->id;
+                }
+            }
+        }else{
+
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+
+            $arr=[];
+            $i=0;
+            foreach ($uc as $key => $value) {
+                
+                    $arr[$i++]=$value->id;
+                
+
+            }
+        }
+
+        if(count($arr)>0){
+           $anuncios_consultados = Anuncios::select("anuncios.id",
+                             "anuncios.cod_anuncio",
+                             "anuncios.tipo_anuncio",
+                             "anuncios.ubicacion",
+                             "anuncios.moneda",
+                             "anuncios.nombre_moneda",
+                             "anuncios.criptomoneda",
+                             "anuncios.nombre_cripto_moneda",
+                             "anuncios.banco",
+                             "anuncios.margen",
+                             "anuncios.precio_minimo_moneda",
+                             "anuncios.limite_min",
+                             "anuncios.limite_max",
+                             "anuncios.lugar",  
+                             "anuncios.terminos",
+                             "anuncios.estado_anuncio",
+                             "anuncios.user_id",
+                             "anuncios.created_at",
+                             "anuncios.created_at",
+                             "users.id as id_usuario",
+                             "users.name",
+                             "users.phone",
+                             "users.email",
+                             "users.costo_clic",
+                             "recargas.valor",
+                             DB::Raw("FORMAT(users.calificacion/users.num_calificaciones,1) as calificacion")   )
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where([["anuncios.estado_anuncio","activo"],['anuncios.tipo_anuncio','compra']])
+                        //->where("recargas.valor",'>',0)
+                        //->orderBy("anuncios.id","DESC")
+                        ->orderBy("recargas.valor","DESC")
+                        ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
+                        
+        }   
+
+        $ad_arr=new Anuncios();
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
+ 
+        if(auth()->user()!=null){
+            return view('welcome_compras')
+                    ->with('anuncios',$arr_anuncios)
+                    ->with("mis_anuncios",false)
+                    ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                    ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first());
+        }else{
+            return view('welcome_compras')
+                            ->with('anuncios',$arr_anuncios)
+                            ->with("mis_anuncios",false)
+                            ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                            ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first())
+                            ;
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_ventas()
+    {
+        $u=auth()->user();
+
+        $anuncios_consultados=array();
+
+        if($u!=null){
+            //dd($u->id);
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+            $arr=[];
+            $i=0;
+            //dd($uc);
+            foreach ($uc as $key => $value) {
+                if(auth()->user()->id!=$value->id){
+                         $arr[$i++]=$value->id;
+                }
+            }
+        }else{
+
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+
+            $arr=[];
+            $i=0;
+            foreach ($uc as $key => $value) {
+                
+                    $arr[$i++]=$value->id;
+                
+
+            }
+        }
+
+        if(count($arr)>0){
+           $anuncios_consultados = Anuncios::select("anuncios.id",
+                             "anuncios.cod_anuncio",
+                             "anuncios.tipo_anuncio",
+                             "anuncios.ubicacion",
+                             "anuncios.moneda",
+                             "anuncios.nombre_moneda",
+                             "anuncios.criptomoneda",
+                             "anuncios.nombre_cripto_moneda",
+                             "anuncios.banco",
+                             "anuncios.margen",
+                             "anuncios.precio_minimo_moneda",
+                             "anuncios.limite_min",
+                             "anuncios.limite_max",
+                             "anuncios.lugar",  
+                             "anuncios.terminos",
+                             "anuncios.estado_anuncio",
+                             "anuncios.user_id",
+                             "anuncios.created_at",
+                             "anuncios.created_at",
+                             "users.id as id_usuario",
+                             "users.name",
+                             "users.phone",
+                             "users.email",
+                             "users.costo_clic",
+                             "recargas.valor",
+                             DB::Raw("FORMAT(users.calificacion/users.num_calificaciones,1) as calificacion")   )
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where([["anuncios.estado_anuncio","activo"],['anuncios.tipo_anuncio','venta']])
+                        //->where("recargas.valor",'>',0)
+                        //->orderBy("anuncios.id","DESC")
+                        ->orderBy("recargas.valor","DESC")
+                        ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
+                        
+        }   
+
+        $ad_arr=new Anuncios();
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
+ 
+        if(auth()->user()!=null){
+            return view('welcome_ventas')
+                    ->with('anuncios',$arr_anuncios)
+                    ->with("mis_anuncios",false)
+                    ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                    ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first());
+        }else{
+            return view('welcome_ventas')
+                            ->with('anuncios',$arr_anuncios)
+                            ->with("mis_anuncios",false)
+                            ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                            ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first())
+                            ;
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -832,4 +1037,15 @@ class AnunciosController extends Controller
             return back()->with('error',"No ha sido posible registrar esta transacción, por favor revisa el estado actual, al parecer ya se habia registrado con anterioridad");
        }
     }
+    /**
+     * /Funcion para consultar los anunciantes
+     * @return [type] [description]
+     */
+    function anunciantes(){
+        $us=$uadmin=User::role('admin')->get();
+        
+        return view('posts.anunciantes')->with('usuarios',$us);
+    }
 }
+
+

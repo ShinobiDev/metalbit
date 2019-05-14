@@ -54,7 +54,7 @@
                         <ul class="nav navbar-nav">
                           <li>
                                <a href="{{route('anuncios.index')}}">Ver anuncios</a>
-                          </li>
+                          </li>                          
                           @role('Admin')
                             <li>
                                <a href="{{route('anuncios.create')}}">Crear anuncios
@@ -84,6 +84,12 @@
 
                           @endrole
                           @role('Comerciante')
+                            <!--<li>
+                               <a href="{{route('posts.compras')}}">Comprar</a>
+                            </li>
+                            <li>
+                               <a href="{{route('posts.ventas')}}">Vender</a>
+                            </li>-->
                             <li>
                                <a href="{{route('anuncios.create')}}">Crear anuncios</a>
                             </li>
