@@ -25,7 +25,8 @@ Auth::routes();
 Route::get('/','AnunciosController@index' )->name('posts.index');
 Route::get('/compras','AnunciosController@index_compras' )->name('posts.compras');
 Route::get('/ventas','AnunciosController@index_ventas' )->name('posts.ventas');
-Route::get('/anunciantes','AnunciosController@anunciantes')->name('post.anunciantes');
+Route::get('/compradores','AnunciosController@compradores')->name('post.compradores');
+Route::get('/vendedores','AnunciosController@vendedores')->name('post.vendedores');
 
 Route::resource('anuncios', 'AnunciosController');
 Route::get("hash/{cod_ad}/{monto}/{moneda}","AnunciosController@hash");

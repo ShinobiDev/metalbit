@@ -1041,10 +1041,22 @@ class AnunciosController extends Controller
      * /Funcion para consultar los anunciantes
      * @return [type] [description]
      */
-    function anunciantes(){
-        $us=$uadmin=User::role('admin')->get();
-        
-        return view('posts.anunciantes')->with('usuarios',$us);
+    function compradores(){
+        $u=$uadmin=User::role('comerciante')->select('id')->get();
+        //dump($u);
+
+        $us=Anuncios::where('tipo_anuncio','compra')->whereIn('user_id',$u)->select('user_id')->get();
+
+        return view('posts.compradores')->with('usuarios',User::whereIn("id",$us)->get());
+    }
+
+    function vendedores(){
+        $u=$uadmin=User::role('comerciante')->select('id')->get();
+        //dump($u);
+
+        $us=Anuncios::where('tipo_anuncio','venta')->whereIn('user_id',$u)->select('user_id')->get();
+
+        return view('posts.vendedores')->with('usuarios',User::whereIn("id",$us)->get());
     }
 }
 

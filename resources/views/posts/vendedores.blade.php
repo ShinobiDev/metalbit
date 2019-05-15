@@ -9,7 +9,7 @@
   <div class="col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1 col-sm-10 col-sm-offset-1">
     <div class="box box-success">
       <div class="box-header">
-          <h3 class="box-title text-red">Anunciantes registrados en {{config('app.name')}}</h3>
+          <h3 class="box-title text-red">Vendedores registrados en {{config('app.name')}}</h3>
       </div>
       <div class="box-body">
           <table id="usuarios-table" class="table table-bordered table-striped">
@@ -23,19 +23,21 @@
             </thead>
             <tbody>
               @foreach($usuarios as $u)
-                <td>
-                    <div >
-                        @for($i=1;$i<=$u->calificacion;$i++)
-                          @if($i<=3)
-                            <img  class="star" src="{{asset('img/star.png')}}">
-                          @endif
-                        @endfor  
-                    </div>
-                </td>
+                <tr>
+                    <td>
+                      <div >
+                          @for($i=1;$i<=$u->calificacion;$i++)
+                            @if($i<=3)
+                              <img  class="star" src="{{asset('img/star.png')}}">
+                            @endif
+                          @endfor  
+                      </div>
+                  </td>
 
-                <td><b class="text-info">{{$u->name}}</b></td>
-                <td><b class="text-red">{{$u->phone}}</b></td>
-                <td><b class="text-success">{{$u->email}}</b></td>
+                  <td><b class="text-info">{{$u->name}}</b></td>
+                  <td><b class="text-red">{{$u->phone}}</b></td>
+                  <td><b class="text-success">{{$u->email}}</b></td>
+                </tr>
               @endforeach
             </tbody>
           </table>
