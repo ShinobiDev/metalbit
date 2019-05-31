@@ -44,75 +44,79 @@
             <tbody>
               {{--dd($mis_ventas)--}}            
               @foreach ($mis_ventas as $venta)
-                  <tr id="row_{{$venta->id_pago}}">      
-                    <td class="bg-danger text-red"><strong>venta</strong></td>          
-                    <td class="bg-info">
-                      @if($venta->transactionState=="Pendiente")
-                        <span class="text-danger">Pendiente por pago</span>
-                      @elseif(($venta->transactionState == 'Pago Aceptado' && $venta->estado_pago =='PENDIENTE'))
-                        <span class="text-danger">Pago aceptado, pendiente confirmación entidad bancaria</span>
+                  @if($venta->transactionState!="Visto")
+                      <tr id="row_{{$venta->id_pago}}">      
+                      <td class="bg-danger text-red"><strong>venta</strong></td>          
+                      <td class="bg-info">
+                        @if($venta->transactionState=="Pendiente")
+                          <span class="text-danger">Pendiente por pago</span>
+                        @elseif(($venta->transactionState == 'Pago aceptado' || $venta->transactionState == 'Pago Aceptado') && $venta->estado_pago =='PENDIENTE')
+                          <span class="text-danger">Pago aceptado, pendiente confirmación entidad bancaria</span>
+                        @else
+                          <span class="text-success">{{$venta->transactionState}}</span>
+                        @endif
+                      </td>       
+                      <td class="text-center"><b>{{$venta->name}}</b></td>          
+                                                  
+                      <td class="bg-success text-center"><strong class="text-primary">{{number_format($venta->transactionQuantity,2,',','.')}}</strong></td>                                   
+                      <td class="bg-warning text-center"><strong class="text-red">{{$venta->nombre_cripto_moneda}}</strong></td>                                  
+                      <td style="width: 300px" class="text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value,2,',','.')}}</td>
+
+                      @if($venta->transactionState=="Pago hecho al anunciante" || $venta->transactionState=="Pago confirmado por el anunciante")
+
+                        <td style="width: 300px" class=" bg-danger text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($venta->porcentaje_pago/100)),0,',','.')}}</td>
                       @else
-                        <span class="text-success">{{$venta->transactionState}}</span>
-                      @endif
-                    </td>       
-                    <td class="text-center"><b>{{$venta->name}}</b></td>          
-                                                
-                    <td class="bg-success text-center"><strong class="text-primary">{{number_format($venta->transactionQuantity,2,',','.')}}</strong></td>                                   
-                    <td class="bg-warning text-center"><strong class="text-red">{{$venta->nombre_cripto_moneda}}</strong></td>                                  
-                    <td style="width: 300px" class="text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value,2,',','.')}}</td>
+                         <td style="width: 300px" class=" bg-danger text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($variable->valor/100)),0,',','.')}}</td>
 
-                    @if($venta->transactionState=="Pago hecho al anunciante" || $venta->transactionState=="Pago confirmado por el anunciante")
-
-                      <td style="width: 300px" class=" bg-danger text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($venta->porcentaje_pago/100)),0,',','.')}}</td>
-                    @else
-                       <td style="width: 300px" class=" bg-danger text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($variable->valor/100)),0,',','.')}}</td>
-
-                    @endif  
+                      @endif  
 
 
-                    <td class="text-red bg-success text-center"><strong>{{$venta->moneda_pago}}</strong></td>                                    
-                    <td><strong class="text-success text-center">{{$venta->transactionId or 'Pendiente de venta'}}</strong></td>                                     
-                    <td>
-                      @if($venta->code_wallet!='SIN REGISTRAR')
-                        <span class="text-red">{{$venta->code_wallet}}</span>
-                      @else
-                        Sin registrar
-                      @endif
+                      <td class="text-red bg-success text-center"><strong>{{$venta->moneda_pago}}</strong></td>                                    
+                      <td><strong class="text-success text-center">{{$venta->transactionId or 'Pendiente de venta'}}</strong></td>                                     
+                      <td>
+                        @if($venta->code_wallet!='SIN REGISTRAR')
+                          <span class="text-red">{{$venta->code_wallet}}</span>
+                        @else
+                          Sin registrar
+                        @endif
 
-                      @if($venta->image_wallet!='SIN REGISTRAR')
-                        <a target="_blank" href="{{config('app.url')}}/archivos/{{$venta->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
-                      @endif
+                        @if($venta->image_wallet!='SIN REGISTRAR' &&  $venta->image_wallet!="" )
+                          <a target="_blank" href="{{config('app.url')}}/archivos/{{$venta->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
+                        @else
+                         <h4 class="text-red">Sin registrar</h4>
+                        @endif
 
+                          
+
+                      </td>                                   
+                      <td class="bg-info"><span class="text-success">{{$venta->hash_txid}}</span></td>
+                      <td class="bg-danger"><span>{{$venta->updated_at}}</span></td>
+                      <td>
                         
 
-                    </td>                                   
-                    <td class="bg-info"><span class="text-success">{{$venta->hash_txid}}</span></td>
-                    <td class="bg-danger"><span>{{$venta->updated_at}}</span></td>
-                    <td>
-                      
-
-                      @if($venta->hash_txid=="SIN REGISTRAR" && $venta->transactionState != "Pendiente")
-                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$venta->id_pago}}">
-                            Registrar Hash/txid
-                         </button>
-                      @endif
-                       @if( $venta->transactionState == "Pago hecho al anunciante")
-                         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago{{$venta->id_pago}}">
-                           Confirmar pago hecho por {{config('app.name')}}
-                         </button>
-                      @endif
+                        @if(($venta->hash_txid=="SIN REGISTRAR" || $venta->hash_txid=="") && $venta->transactionState != "Pendiente")
+                           <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$venta->id_pago}}">
+                              Registrar Hash/txid
+                           </button>                         
+                        @endif
+                         @if( $venta->transactionState == "Pago hecho al anunciante")
+                           <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago{{$venta->id_pago}}">
+                             Confirmar pago hecho por {{config('app.name')}}
+                           </button>
+                        @endif
 
 
 
-                    </td>                                   
-                  </tr>
+                      </td>                                   
+                    </tr>
+                  @endif
               @endforeach
             </tbody>
           </table>
           {{--ventanas--}}
          @foreach ($mis_ventas as $venta)
                  
-                      @if($venta->hash_txid=="SIN REGISTRAR" && $venta->transactionState != "Pendiente")
+                      @if(($venta->hash_txid=="SIN REGISTRAR" || $venta->hash_txid=="") && $venta->transactionState != "Pendiente")
                          
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$venta->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -188,42 +192,7 @@
 @endsection
 
 @section('scripts')
-          <script type="text/javascript">
-              function subir_archivo(id,e){
-                    //e.preventDefault();
-                      mostrar_cargando("msnEspera_"+id,10,"Cargando ...");
-                      var Token =  '{{csrf_token()}}';
-                      var formData = new FormData();
-                      formData.append("file", $('#'+e.id).get(0).files[0]);
-                      formData.append("Token", Token);
-
-                      // Send the token every ajax request
-                      $.ajaxSetup({
-                          headers: { 'X-CSRF-Token' : Token }
-                      });
-
-                          $.ajax({        
-                                  url: "{{config('app.url')}}"+"/registrar_wallet_qr/"+id,
-                                  method: 'POST',
-                                  data: formData,
-                                  processData: false,
-                                  contentType: false,
-                                  cache: false,
-                                  success: function(data) {
-                                      document.getElementById("msnEspera_"+id).innerHTML=data.mensaje;
-                                  },
-                                  error:function(data){
-                                    console.log(data);
-                                    if(data.responseJSON.message=="The given data was invalid."){
-                                      document.getElementById("msnEspera_"+id).innerHTML="El formato del archivo debe ser .pdf";  
-                                    }else{
-                                      document.getElementById("msnEspera_"+id).innerHTML=data.responseJSON.message;
-                                    }
-                                    
-                                  }
-                          });
-                  }
-          </script>
+          
           <script>
             $(document).ready(function() {
                 console.log("5");

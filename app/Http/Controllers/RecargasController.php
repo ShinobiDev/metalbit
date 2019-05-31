@@ -537,10 +537,11 @@ class RecargasController extends Controller
           $recarga=Recargas::where([                      
                       ['user_id',$request['usuario']],                      
                     ])->get();
+          
           if(count($recarga)==0){
             $r=0;
           }else{
-            $r=$recarga->valor;
+            $r=$recarga[0]->valor;
           }
           
           if($request['tipo_pago']==1 || $request['tipo_pago']==3){

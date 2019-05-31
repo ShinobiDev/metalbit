@@ -193,15 +193,15 @@ class User extends Authenticatable
                                  ->get();
 
 
-        $pp=new Payu;
-        $hs=$pp->hashear($referencia_pago,$valor_pagado,"COP");                                 
+                                  
         if(count($dt)==0){
             detalle_recargas::insert([
                     'tipo_recarga' => "PAGO",
                     'valor_recarga'=>$valor_recarga,
                     'valor_pagado'=>$valor_pagado,
                     'referencia_pago'=>$referencia_pago,
-                    'id_user'=>$id
+                    'id_user'=>$id,
+                    'created_at'=>Carbon::now('America/Bogota')
                 ]);
     
         }else{
@@ -218,7 +218,7 @@ class User extends Authenticatable
                                       ]);
         }
         
-        return response()->json(["respuesta"=>true,'hash'=>$hs]);
+        return response()->json(["respuesta"=>true]);
         
     }
     /**
@@ -231,8 +231,8 @@ class User extends Authenticatable
      * @return [type]       [description]
      */
     public function registrar_venta($a,$p,$m,$id_u,$cantidad){
-        $pu = Payu::all();
-         //dd(explode("-",$a)[1]);
+       
+     
          $id_a=explode("-",$a);
          if(count($id_a)>1){
           $id_a=explode("-",$a)[1];

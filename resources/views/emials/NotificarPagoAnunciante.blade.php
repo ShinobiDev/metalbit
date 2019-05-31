@@ -13,9 +13,9 @@ Estimad@ {{$user->name}}, tenemos buenas noticias, tu pago ya esta listo en
 
 
 @component('mail::table')
-    | tipo | cantidad criptomoneda | criptomoneda |  valor compra | divisa | 
+    | tipo | cantidad criptomoneda | criptomoneda |  valor compra |valor pagado | divisa | 
     |:----------|:----------|:----------|:----------|:----------|
-    | {{$ad[0]->tipo_anuncio}} | {{$ad[0]->transactionQuantity}} | {{$ad[0]->nombre_cripto_moneda}} | ${{number_format($ad[0]->transation_value,'0',',','.')}} | {{$ad[0]->nombre_moneda}} | 
+    | {{$ad[0]->tipo_anuncio}} | {{$ad[0]->transactionQuantity}} | {{$ad[0]->nombre_cripto_moneda}} | ${{number_format($ad[0]->transation_value,'0',',','.')}} | ${{number_format($ad[0]->transation_value-($ad[0]->transation_value*$ad[0]->porcentaje_pago/100),'0',',','.')}} | {{$ad[0]->nombre_moneda}} | 
 @endcomponent
 
 {{$ad[2]['mensaje']}}

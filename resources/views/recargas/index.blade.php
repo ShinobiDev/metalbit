@@ -54,7 +54,7 @@
                     <td class="text-red">$ <span class="text-primary">{{ number_format($recarga->valor,0,',','.')}}</td>
                     <td>{{ $recarga->updated_at }}</span></td>
                     <td>
-                      <span id="spnMsn"></span>
+                      <span id="spnMsn{{ $recarga->id }}"></span>
                       <input id="rec_{{$recarga->id}}" type="number" value="{{ $recarga->costo_clic }}" onchange="cambiar_valor_clic('{{$recarga->id}}',this)"   /></td>
                     <td>
 
@@ -138,7 +138,7 @@
                     <td>{{ $mi_recarga->id }}.</td>
                     <td class="text-warning">{{ $mi_recarga->name }}</td>
                     <td >{{ $mi_recarga->tipo_recarga }}</td>
-                    <td class="text-red">{{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
+                    <td class="text-red"><span class="text-primary">$ </span>{{ number_format($mi_recarga->valor_recarga,0,',','.') }}</td>
                     <td class="text-red"><span class="text-primary">$ </span>{{ number_format($mi_recarga->valor_pagado,0,',','.') }}</td>
                     <td class="text-success">
                       {{$mi_recarga->metodo_pago}}
@@ -156,14 +156,13 @@
 
                     </td>
                     <td>{{$mi_recarga->referencia_pago}}</td>
-                    <td>{{ $mi_recarga->created_at }}</td>
+                    <td>{{ $mi_recarga->updated_at }}</td>
                     <td>
                       
                       @if($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && ($mi_recarga->metodo_pago=="Transferencia bancaria" || $mi_recarga->metodo_pago=="Consignacion bancaria") )
                          <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#confirmar_recarga{{$mi_recarga->referencia_pago_pay_u}}">Confirmar recarga</button>
-                        
-
-
+                      @elseif($mi_recarga->estado_detalle_recarga=='PENDIENTE APROBACION' && ($mi_recarga->metodo_pago=="Pago en efectivo" ))   
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#realizar_recarga{{$mi_recarga->id}}">Recargar {{$mi_recarga->name}}</button>   
                       @endif
                          
                          
@@ -318,7 +317,7 @@
      peticion_ajax("get","cambiar_valor_clic/"+id+"/"+e.value,function(rs){
 
       if(rs.respuesta){
-        document.getElementById("spnMsn").innerHTML=rs.mensaje;
+        document.getElementById("spnMsn"+id).innerHTML=rs.mensaje;
       }
         
         console.log(rs);

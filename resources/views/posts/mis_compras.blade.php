@@ -43,100 +43,105 @@
               </tr>
             </thead>
             <tbody>
-              {{--dd($mis_compras)--}}            
+              
+
               @foreach ($mis_compras as $compra)
-                  <tr id="row_{{$compra->id_pago}}">      
-                    <td class="bg-info text-red"><strong>compra</strong></td>          
-                    <td>
-                      @if($compra->transactionState=="Pendiente")
-                        <span class="text-danger">Pendiente por pago</span>
-                      @elseif($compra->transactionState == 'Pago confirmado por el anunciante' || $compra->transactionState == 'Pago hecho al anunciante')  
-                        <span class="text-success">Transacción finalizada</span>
-                      @elseif(($compra->transactionState == 'Pago Aceptado' && $compra->estado_pago =='PENDIENTE'))
-                            <span class="text-danger">Pago aceptado, pendiente confirmación entidad bancaria</span>
-                      @else
-                        <span class="text-success">{{$compra->transactionState}}</span>
-                      @endif
-                    </td>       
-                    <td class="bg-warning">{{$compra->name}}</td>          
-                                                
-                    <td class="text-center "><strong>{{number_format($compra->transactionQuantity,2,',','.')}}</strong></td>                                   
-                    <td class="text-center text-red bg-success"><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
-                    <td class="text-center text-primary" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transation_value,2,',','.')}}</td>
-                    <td class="text-center text-primary bg-danger" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transaction_value_pagado+$compra->valor_sobre_costo,2,',','.')}}</td>
-                    <td class="text-center text-success">{{$compra->moneda_pago}}</td> 
-                    <td class="bg-info">
-                      <strong>
-                        {{$compra->metodo_pago}}
-                      </strong>
-                      <span class="text-red">$</span><span class="text-primary">{{number_format($compra->valor_sobre_costo,2,',','.')}}</span>
-                    </td>                                    
-                    <td><strong class="text-success">{{$compra->transactionId or 'Pendiente de compra'}}</strong></td>                                     
-                    <td class="bg-warning">
-                      @if($compra->code_wallet!='SIN REGISTRAR')
-                        <span class="text-red">{{$compra->code_wallet}}</span>
-                      @else
-                        Sin registrar
-                      @endif
-
-                      @if($compra->image_wallet!='SIN REGISTRAR')
-                        <a target="_blank" href="{{config('app.url')}}/archivos/{{$compra->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
-                      @endif
-
+                  @if($compra->transactionState!='Visto')
+                      <tr id="row_{{$compra->id_pago}}">      
+                      <td class="bg-info text-red"><strong>compra</strong></td>          
+                      <td>
+                        @if($compra->transactionState=="Pendiente")
+                          <span class="text-danger">Pendiente por pago</span>
+                        @elseif($compra->transactionState == 'Pago confirmado por el anunciante' || $compra->transactionState == 'Pago hecho al anunciante')  
+                          <span class="text-success">Transacción finalizada</span>
+                        @elseif(($compra->transactionState == 'Pago Aceptado' && $compra->estado_pago =='PENDIENTE'))
+                              <span class="text-danger">Pago aceptado, pendiente confirmación entidad bancaria</span>
+                        @else
+                          <span class="text-success">{{$compra->transactionState}}</span>
+                        @endif
+                      </td>       
+                      <td class="bg-warning">{{$compra->name}}</td>          
+                                                  
+                      <td class="text-center "><strong>{{number_format($compra->transactionQuantity,2,',','.')}}</strong></td>                                   
+                      <td class="text-center text-red bg-success"><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                   
+                      <td class="text-center text-primary" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transation_value,2,',','.')}}</td>
+                      <td class="text-center text-primary bg-danger" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transaction_value_pagado+$compra->valor_sobre_costo,2,',','.')}}</td>
+                      <td class="text-center text-success">{{$compra->moneda_pago}}</td> 
+                      <td class="bg-info">
+                        <strong>
+                          {{$compra->metodo_pago}}
+                        </strong>
+                        <span class="text-red">$</span><span class="text-primary">{{number_format($compra->valor_sobre_costo,2,',','.')}}</span>
+                      </td>                                    
+                      <td><strong class="text-success">{{$compra->transactionId or 'Pendiente de compra'}}</strong></td>                                     
+                      <td class="bg-warning">
+                        @if($compra->code_wallet!='SIN REGISTRAR')
+                          <span class="text-red">{{$compra->code_wallet}}</span>
+                        @else
+                          Sin registrar
+                        @endif
                         
+                        @if($compra->image_wallet!='SIN REGISTRAR' && $compra->image_wallet!='')
+                          <a target="_blank" href="{{config('app.url')}}/archivos/{{$compra->image_wallet}}"><span class="text-primary">Ver wallet QR</span></a>
+                        @else
+                         <h4 class="text-red">Sin registrar  imagen código QR</h4>
+                        @endif
 
-                    </td>                                   
-                    <td><span class="text-success">{{$compra->hash_txid}}</span></td>
-                    <td class="bg-success"><strong>{{$compra->updated_at}}</strong></td>
-                    <td>
-                      
-
-                      @if($compra->code_wallet=="SIN REGISTRAR" && $compra->image_wallet=="SIN REGISTRAR")
-                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
-                            Registrar código wallet
-                        </button>
                           
-                      
-                      @else
 
-                        @if($compra->transactionState=="Moneda Envíada")
-                          <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#confirmar_transaccion{{$compra->id_pago}}">
-                              Confirmar transacción
-                            </button>
-                           
+                      </td>                                   
+                      <td><span class="text-success">{{$compra->hash_txid}}</span></td>
+                      <td class="bg-success"><strong>{{$compra->updated_at}}</strong></td>
+                      <td>
+                        
+           
+                        @if(($compra->code_wallet=="SIN REGISTRAR" || $compra->code_wallet=="") || ($compra->image_wallet=="SIN REGISTRAR" || $compra->image_wallet==""))
+                          <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                              Registrar código wallet
+                          </button>
+                            
+                        
+                        @else
+
+                          @if($compra->transactionState=="Moneda Envíada")
+                            <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#confirmar_transaccion{{$compra->id_pago}}">
+                                Confirmar transacción
+                              </button>
+                             
+                          @endif
+
+
+                          {{--<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
+                              Ver info
+                          </button>
+                            <!--VENTANA MODAL-->
+                           --}}
+                        @endif  
+                        
+                        @if($compra->transactionState=="Pendiente")
+                            <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#info_medio_pago_{{$compra->id_pago}}">
+                              Información medio de pago
+                          </button>
+                         
+                          @if($compra->metodo_pago=="Transferencia bancaria" ||  $compra->metodo_pago=='Consignacion bancaria' )
+
+                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_{{$compra->id_pago}}">
+                              Confirmar pago de transacción
+                          </button>
+                          @endif
                         @endif
 
 
-                        {{--<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#code_wallet_{{$compra->id_pago}}">
-                            Ver info
-                        </button>
-                          <!--VENTANA MODAL-->
-                         --}}
-                      @endif  
-                      
-                      @if($compra->transactionState=="Pendiente")
-                          <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#info_medio_pago_{{$compra->id_pago}}">
-                            Información medio de pago
-                        </button>
-                       
-                        @if($compra->metodo_pago=="Transferencia bancaria" ||  $compra->metodo_pago=='Consignacion bancaria' )
-
-                          <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#confirmar_pago_{{$compra->id_pago}}">
-                            Confirmar pago de transacción
-                        </button>
-                        @endif
-                      @endif
-
-
-                    </td>                                   
-                  </tr>
+                      </td>                                   
+                    </tr>
+                  @endif
               @endforeach
             </tbody>
           </table>
           {{--ventanas--}}
           @foreach ($mis_compras as $compra)
                     
-                      @if($compra->code_wallet=="SIN REGISTRAR" && $compra->image_wallet=="SIN REGISTRAR")
+                      @if(($compra->code_wallet=="SIN REGISTRAR" || $compra->code_wallet=="") || ($compra->image_wallet=="SIN REGISTRAR" || $compra->image_wallet==""))
                        
                           <!--VENTANA MODAL-->
                           <div class="modal fade" id="code_wallet_{{$compra->id_pago}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -160,11 +165,11 @@
                                                 <input type="text" name="codigo_wallet" placeholder="Ingresa aquí tu código wallet" class="textinput textInput form-control" {{--onchange="registrar_wallet_transaccion_realizada(this,'{{$compra->id_pago}}','{{$compra->id_anuncio}}')"--}} required >
                                             @endif
                                             
-                                            @if($compra->image_wallet != 'SIN REGISTRAR')  
+                                            @if($compra->image_wallet != 'SIN REGISTRAR' && $compra->image_wallet != '')  
                                               <a target="_blank" href="{{config('app.url')}}/archivos/transacciones/{{auth()->user()->id}}/{{$compra->id}}"><span class="text-primary">Ver wallet QR</span></a>
                                             @endif
 
-                                              <input type="file" id="flWallet_{{$compra->id_anuncio}}" name="wallet" onchange="subir_archivo('{{$compra->id_anuncio}}',this)">    
+                                              <input type="file" id="flWallet_{{$compra->id_anuncio}}" name="wallet" onchange="subir_archivo('{{$compra->id_anuncio}}',this,'{{$compra->transactionId}}')">    
 
 
 
@@ -351,13 +356,14 @@
 
 @section('scripts')
           <script type="text/javascript">
-              function subir_archivo(id,e){
+              function subir_archivo(id,e,t){
                     //e.preventDefault();
                       mostrar_cargando("msnEspera_"+id,10,"Cargando ...");
                       var Token =  '{{csrf_token()}}';
                       var formData = new FormData();
                       formData.append("file", $('#'+e.id).get(0).files[0]);
                       formData.append("Token", Token);
+                      formData.append('transaccion',t);
 
                       // Send the token every ajax request
                       $.ajaxSetup({

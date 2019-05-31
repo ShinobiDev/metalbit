@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Events\UserWasCreated;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use Carbon\Carbon;
 
 
 class RegisterController extends Controller
@@ -169,7 +170,8 @@ class RegisterController extends Controller
             DB::table('bonificaciones')->insert(
                                      ["tipo_bonificacion"=>"REGISTRO",
                                       "fk_id_detalle_referido"=>$dt_r[0]->id,
-                                      "valor"=>100   ]);
+                                      "valor"=>100,
+                                      'created_at'=>Carbon::now('America/Bogota')   ]);
 
             Recargas::where("user_id",$referente[0]->id)->increment("valor",100);
 

@@ -584,33 +584,87 @@ class UsersController extends Controller
      * @return [type]           [description]
      */
     public function registrar_wallet_qr(Request $request,$id){
-         //dd($id);
+         
          $this->validate(request(),[
             'file'=>'required|max:10240|mimetypes:application/pdf,image/png,image/jpeg'
         ]);
+        if(isset($_POST['transaccion']) ){
+                
+                if($_POST['transaccion'] != '0'){
 
-         $PG=DB::table('pagos')->where([
+                     $PG=DB::table('pagos')->where([
+                                   
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Pendiente"],
+                                    ["transactionId",$_POST['transaccion']],
+                                    
+                                ])
+                                ->orwhere([
+                                    
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Pago Aceptado"],
+                                    ["transactionId",$_POST['transaccion']],
+                                    
+                                ])
+                                ->orwhere([
+                                   
+                                    ["id_user_compra",auth()->user()->id],
+                                    ["transactionState","Visto"],
+                                    ["transactionId",$_POST['transaccion']],
+                                    
+                                ])
+                                ->get();
+                }else{
+
+                     $PG=DB::table('pagos')->where([
+                                            ["id_anuncio",$id],
+                                            ["id_user_compra",auth()->user()->id],
+                                            ["transactionState","Pendiente"],
+                                           
+                                            
+                                        ])
+                                        ->orwhere([
+                                            ["id_anuncio",$id],
+                                            ["id_user_compra",auth()->user()->id],
+                                            ["transactionState","Pago Aceptado"],
+                                            
+                                            
+                                        ])
+                                        ->orwhere([
+                                            ["id_anuncio",$id],
+                                            ["id_user_compra",auth()->user()->id],
+                                            ["transactionState","Visto"],
+                                            
+                                            
+                                        ])
+                                        ->get();
+                }
+        }else{
+
+             $PG=DB::table('pagos')->where([
                                     ["id_anuncio",$id],
                                     ["id_user_compra",auth()->user()->id],
                                     ["transactionState","Pendiente"],
-                                    //["image_wallet","=",'SIN REGISTRAR'],
+                                   
                                     
                                 ])
                                 ->orwhere([
                                     ["id_anuncio",$id],
                                     ["id_user_compra",auth()->user()->id],
                                     ["transactionState","Pago Aceptado"],
-                                    //["image_wallet","=",'SIN REGISTRAR'],
+                                    
                                     
                                 ])
                                 ->orwhere([
                                     ["id_anuncio",$id],
                                     ["id_user_compra",auth()->user()->id],
                                     ["transactionState","Visto"],
-                                    //["image_wallet","=",'SIN REGISTRAR'],
+                                    
                                     
                                 ])
                                 ->get();
+        } 
+        
                          
          
         
@@ -621,7 +675,7 @@ class UsersController extends Controller
                 $newname="/wallet.".explode(".",$_FILES['file']['name'])[1];
                 rename($filename,realpath(dirname($filename)).$newname);
 
-                //dd($PG[0]->id.$newname);
+               
 
                 DB::table('pagos')
                          ->where("id",$PG[0]->id)
@@ -990,6 +1044,7 @@ class UsersController extends Controller
                            'pagos.valor_sobre_costo',
                            'pagos.transactionId',
                            'pagos.code_wallet',
+                           'pagos.image_wallet',
                            'pagos.certificado_pago',
                            'pagos.hash_txid',
                            'pagos.moneda_pago',
@@ -1140,7 +1195,8 @@ class UsersController extends Controller
                     'anuncios.nombre_moneda',
                     'pagos.transactionQuantity',
                     'pagos.transation_value',
-                    'pagos.transactionId')
+                    'pagos.transactionId',
+                    'porcentaje_pago')
             ->join('anuncios','anuncios.id','pagos.id_anuncio')
             ->where('pagos.id',$id)->first();
       

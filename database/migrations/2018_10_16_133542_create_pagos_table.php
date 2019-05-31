@@ -20,7 +20,7 @@ class CreatePagosTable extends Migration
             $table->string('transactionState');
             $table->decimal('transactionQuantity');
             $table->string('transation_value');
-            $table->string('transaction_value_pagado');
+            $table->string('transaction_value_pagado')->default('0');
             $table->decimal('valor_sobre_costo');
             $table->decimal('pay_value');
             $table->integer('id_anuncio');

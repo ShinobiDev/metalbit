@@ -438,9 +438,8 @@ class CampaniasController extends Controller
 
                     
                     
-                    $pp = new Payu;
                     //dd($request['ref_pago'],$resultado['valor_dto'],"COP");
-                    $hash=$pp->hashear($request['ref_pago'],number_format($resultado['valor_dto'],0,'',''),"COP");
+                    $hash=false;
                       
                     $usuario=new User;
                     //dd($anuncio[0],$request['moneda_pago'],$request['usuario_que_redime'],$request['valor_dto'],$request['moneda_comprada']);
@@ -550,14 +549,13 @@ class CampaniasController extends Controller
                       }
 
 
-                      $pp = new Payu;
-                      $hash=$pp->hashear($request['ref_pago'],$request['valor_pago']-$resultado['dto'],"COP");
+
                         
 
-                      $usuario=new User;
-                      $usuario->registrar_recarga($request['usuario_que_redime'],$dto,$request['valor_pago']+$dto,$request['ref_pago']);
+                      /*$usuario=new User;
+                      $usuario->registrar_recarga($request['usuario_que_redime'],$dto,$request['valor_pago']+$dto,$request['ref_pago']);*/
                       
-                      return response()->json(['respuesta'=>true,'mensaje'=>'Cupón canjeado, ahora paga $ '.number_format($request['valor_pago']-$dto,0,',','.').' en lugar de $ '.number_format($request['valor_comprado'],0,',','.')." por tu trámite." ,'nuevo_valor'=>$request['valor_pago']-$dto,'nuevo_valor_compra'=>$request['valor_pago'],'compra_gratis'=>false,'hash_payu'=>$hash,'acumulable'=>$resultado['acumulable']]); 
+                      return response()->json(['respuesta'=>true,'mensaje'=>'Cupón canjeado, ahora paga $ '.number_format($request['valor_pago']-$dto,0,',','.').' en lugar de $ '.number_format($request['valor_comprado'],0,',','.')." por tu trámite." ,'nuevo_valor'=>$request['valor_pago']-$dto,'nuevo_valor_compra'=>$request['valor_pago'],'compra_gratis'=>false,'hash_payu'=>false,'acumulable'=>$resultado['acumulable']]); 
                     }
 
                     

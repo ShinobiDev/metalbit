@@ -16,6 +16,7 @@
             <div class="modal-body">
               <h5 class="modal-title" id="exampleModalLabel"><b>Ingresa la cantidad de {{$ad->moneda}} que quieres adquirir en {{$ad->cripto_moneda}}</b></h5>
                 <form method="POST" id="ad_form_{{$ad->id}}" action="{{--$ad->url_api--}}">
+                       <input type="hidden" value="{{$ad->moneda}}" id="currency_{{$ad->id}}">
                        <input  type="hidden" id="num_val_crip_moneda_{{$ad->id}}" value="{{$ad->precio_moneda_cf}}">
 
                        <input  type="hidden" id="id_crip_moneda_{{$ad->id}}" value="{{$ad->id_cripto_moneda}}">
@@ -92,7 +93,7 @@
                             <a  target="_blank" href="{{config('app.url')}}/archivos/{{$ad->transaccion_pendiente['wallet_qr']}}"><span class="text-primary">Ver wallet QR</span></a>
                           @endif
 
-                           <input type="file" id="flWallet_{{$ad->id}}" name="wallet" onchange="subir_archivo('{{$ad->id}}',this)">    
+                           <input type="file" id="flWallet_{{$ad->id}}" name="wallet" onchange="subir_archivo('{{$ad->id}}',this,0)">    
                          
 
                           <label id="msnEspera_{{$ad->id}}"></label>
@@ -166,13 +167,14 @@
 </div>
 
 <script type="text/javascript">
-  function subir_archivo(id,e){
+  function subir_archivo(id,e,t){
         //e.preventDefault();
           mostrar_cargando("msnEspera_"+id,10,"Cargando ...");
           var Token =  '{{csrf_token()}}';
           var formData = new FormData();
           formData.append("file", $('#'+e.id).get(0).files[0]);
           formData.append("Token", Token);
+          formData.append('transaccion',t);
 
           // Send the token every ajax request
           $.ajaxSetup({
