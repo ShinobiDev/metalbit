@@ -83,9 +83,7 @@ class Anuncios extends Model
               
             //dd($value);
             if($value->moneda!=null && $value->criptomoneda!=null){
-                        //consulto la api para obteenr valores
-                        //$jsvv=$curl->get_specific_currency($value->criptomoneda,$value->moneda);
-                        //debe buscar por la clave id_search la cual se creo teniendo encuenta el id y el nombre de la moneda
+                        
                        
                         
                         $jsvv=array_search(strval($value->criptomoneda.$value->moneda), array_column($arr_valores_monedas,'search'));
@@ -124,8 +122,7 @@ class Anuncios extends Model
                                             $mostrar_payu=false;
                                     }
                                    
-                                    //var_dump($mostrar_info);
-                                    //dd($horarios);
+                                    //
                                     if($horarios['respuesta']==false){
                                       //$mostrar_info=false;                                      
                                     }
@@ -213,7 +210,7 @@ class Anuncios extends Model
                         }
 
 
-            //}//fin if
+            
 
 
         }//fin foreach
