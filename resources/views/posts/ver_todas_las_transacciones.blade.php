@@ -67,7 +67,7 @@
                         <span class="text-success">{{$transaccion->transactionState}}</span>                      
                       @endif
                     </td>
-                    <td class="bg-success"><strong>{{$transaccion->name}}</strong></td>
+                    <td class="bg-success text-primary"><strong>{{$transaccion->name}}</strong></td>
                    <td>
                       @if($transaccion->cuenta_bancaria!="")
                        <span class="text-red"> {{$transaccion->cuenta_bancaria }}</span>
@@ -85,14 +85,14 @@
                   </td>
                    <td class="bg-warning"><strong class="text-info">{{$transaccion->email}}</strong></td>
                    <td><strong>{{$transaccion->phone}}</strong></td>
-                    <td class="bg-danger"><strong>{{$transaccion->transactionQuantity}}</strong></td>
-                    <td><strong>{{$transaccion->nombre_cripto_moneda}}</strong></td>
-                    <td class="bg-success">${{number_format($transaccion->transation_value,0,',','.')}}</td>
+                    <td class="bg-danger text-center text-primary"><strong>{{$transaccion->transactionQuantity}}</strong></td>
+                    <td class="text-center"><strong class="text-red">{{$transaccion->nombre_cripto_moneda}}</strong></td>
+                    <td class="bg-success"><span class="text-red">$</span><strong class="text-primary">{{number_format($transaccion->transation_value,0,',','.')}}</strong></td>
                     <td ><strong class="text-success">{{$transaccion->metodo_pago}}</strong></td>
-                    <td class="bg-info" >${{number_format($transaccion->valor_sobre_costo,0,',','.')}}</td>
-                    <td >${{number_format($transaccion->transaction_value_pagado+$transaccion->valor_sobre_costo,0,',','.')}}</td>
+                    <td class="bg-info" ><span class="text-red">$</span><strong class="text-primary">{{number_format($transaccion->valor_sobre_costo,0,',','.')}}</strong></td>
+                    <td ><span class="text-red">$</span><strong class="text-primary">{{number_format($transaccion->transaction_value_pagado+$transaccion->valor_sobre_costo,0,',','.')}}</strong></td>
                     <td class="bg-warning">{{$transaccion->moneda_pago}}</td>
-                    <td><strong>{{$transaccion->transactionId}}</strong></td>
+                    <td><strong class="text-red">{{$transaccion->transactionId}}</strong></td>
                     <td class="bg-danger"><strong>{{$transaccion->updated_at}}</strong></td>
                     
                     @if($transaccion->metodo_pago=='Transferencia bancaria' || $transaccion->metodo_pago=='Consignacion bancaria')
@@ -121,18 +121,18 @@
                       @foreach ($variables as $var)
 
                       @if($transaccion->transactionState=="Pago confirmado por el anunciante")
-                          {{$transaccion->porcentaje_pago}} %
+                          <strong class="text-primary">{{$transaccion->porcentaje_pago}}</strong> <b class="text-red">%</b>
                       @else
-                          {{$var->valor}} %
+                          <strong class="text-primary">{{$var->valor}}</strong> <b class="text-red">%</b>
                       @endif
                       
 
                     </td>
                         @if($transaccion->transactionState=="Pago hecho al anunciante" || $transaccion->transactionState=="Pago confirmado por el anunciante")
 
-                          <td ><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($transaccion->porcentaje_pago/100)),0,',','.')}}</strong></td>
+                          <td ><strong class="text-success"><span class="text-red">$</span>{{number_format($transaccion->transation_value-($transaccion->transation_value*($transaccion->porcentaje_pago/100)),0,',','.')}}</strong></td>
                         @else
-                          <td ><strong class="text-success">$ {{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</strong></td>
+                          <td ><strong class="text-success"><span class="text-red">$</span>{{number_format($transaccion->transation_value-($transaccion->transation_value*($var->valor/100)),0,',','.')}}</strong></td>
                         @endif  
                     <td >
 
@@ -309,12 +309,12 @@
                     language:
                       {
                         "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sLengthMenu":     "Mostrar _MENU_ anuncios",
                         "sZeroRecords":    "No se encontraron resultados",
                         "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfo":           "Mostrando anuncios del _START_ al _END_ de un total de _TOTAL_ anuncios",
+                        "sInfoEmpty":      "Mostrando anuncios del 0 al 0 de un total de 0 anuncios",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ anuncios)",
                         "sInfoPostFix":    "",
                         "sSearch":         "Buscar:",
                         "sUrl":            "",

@@ -13,9 +13,9 @@ class CreateBonificacionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('bonificacions', function (Blueprint $table) {
+        Schema::create('bonificaciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum("tipo_bonificación",['REGISTRO', 'RECARGA']);
+            $table->enum("tipo_bonificacion",['REGISTRO', 'RECARGA']);
             $table->integer("fk_id_detalle_referido");
             $table->decimal("valor");
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateBonificacionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bonificacions');
+        Schema::dropIfExists('bonificaciones');
     }
 }

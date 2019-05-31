@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         '\App\Console\Commands\ValidarTransaccion',
+        '\App\Console\Commands\ConsultarCriptoMonedas',
     ];
 
     /**
@@ -29,6 +30,8 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         $schedule->command('ValidarTransaccion:ValidarTransaccion')
                   ->daily();
+        $schedule->command('ConsultarCriptoMonedas')
+                  ->daily();                  
     }
 
     /**

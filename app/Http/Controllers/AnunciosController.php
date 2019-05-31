@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Events\CompartirCodigo;
 use App\Events\NotificacionAnuncio;
+use DB;
 use App\Anuncios;
 use App\Recargas;
-use App\GuzzleModel;
+use App\CurlModel;
 use App\Payu;
 use App\User;
 use App\pagos;
 use App\Variable;
-use DB;
 use Carbon\Carbon;
 
 
@@ -56,10 +56,8 @@ class AnunciosController extends Controller
             }
         }
 
-
-         //dd($arr);
         if(count($arr)>0){
-           $anuncios_consultados= Anuncios::select("anuncios.id",
+           $anuncios_consultados = Anuncios::select("anuncios.id",
                              "anuncios.cod_anuncio",
                              "anuncios.tipo_anuncio",
                              "anuncios.ubicacion",
@@ -93,12 +91,22 @@ class AnunciosController extends Controller
                         //->orderBy("anuncios.id","DESC")
                         ->orderBy("recargas.valor","DESC")
                         ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
+                        
         }   
-        //dd($anuncios_consultados);
+
         $ad_arr=new Anuncios();
-        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
-          
-         //dd($arr_anuncios); 
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
+ 
         if(auth()->user()!=null){
             return view('welcome')
                     ->with('anuncios',$arr_anuncios)
@@ -115,6 +123,211 @@ class AnunciosController extends Controller
         }
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_compras()
+    {
+        $u=auth()->user();
+
+        $anuncios_consultados=array();
+
+        if($u!=null){
+            //dd($u->id);
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+            $arr=[];
+            $i=0;
+            //dd($uc);
+            foreach ($uc as $key => $value) {
+                if(auth()->user()->id!=$value->id){
+                         $arr[$i++]=$value->id;
+                }
+            }
+        }else{
+
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+
+            $arr=[];
+            $i=0;
+            foreach ($uc as $key => $value) {
+                
+                    $arr[$i++]=$value->id;
+                
+
+            }
+        }
+
+        if(count($arr)>0){
+           $anuncios_consultados = Anuncios::select("anuncios.id",
+                             "anuncios.cod_anuncio",
+                             "anuncios.tipo_anuncio",
+                             "anuncios.ubicacion",
+                             "anuncios.moneda",
+                             "anuncios.nombre_moneda",
+                             "anuncios.criptomoneda",
+                             "anuncios.nombre_cripto_moneda",
+                             "anuncios.banco",
+                             "anuncios.margen",
+                             "anuncios.precio_minimo_moneda",
+                             "anuncios.limite_min",
+                             "anuncios.limite_max",
+                             "anuncios.lugar",  
+                             "anuncios.terminos",
+                             "anuncios.estado_anuncio",
+                             "anuncios.user_id",
+                             "anuncios.created_at",
+                             "anuncios.created_at",
+                             "users.id as id_usuario",
+                             "users.name",
+                             "users.phone",
+                             "users.email",
+                             "users.costo_clic",
+                             "recargas.valor",
+                             DB::Raw("FORMAT(users.calificacion/users.num_calificaciones,1) as calificacion")   )
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where([["anuncios.estado_anuncio","activo"],['anuncios.tipo_anuncio','compra']])
+                        //->where("recargas.valor",'>',0)
+                        //->orderBy("anuncios.id","DESC")
+                        ->orderBy("recargas.valor","DESC")
+                        ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
+                        
+        }   
+
+        $ad_arr=new Anuncios();
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
+ 
+        if(auth()->user()!=null){
+            return view('welcome_compras')
+                    ->with('anuncios',$arr_anuncios)
+                    ->with("mis_anuncios",false)
+                    ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                    ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first());
+        }else{
+            return view('welcome_compras')
+                            ->with('anuncios',$arr_anuncios)
+                            ->with("mis_anuncios",false)
+                            ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                            ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first())
+                            ;
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_ventas()
+    {
+        $u=auth()->user();
+
+        $anuncios_consultados=array();
+
+        if($u!=null){
+            //dd($u->id);
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+            $arr=[];
+            $i=0;
+            //dd($uc);
+            foreach ($uc as $key => $value) {
+                if(auth()->user()->id!=$value->id){
+                         $arr[$i++]=$value->id;
+                }
+            }
+        }else{
+
+            $uc=User::where([["confirmado","SI"],['estado','1']])->select("id")->get();
+
+            $arr=[];
+            $i=0;
+            foreach ($uc as $key => $value) {
+                
+                    $arr[$i++]=$value->id;
+                
+
+            }
+        }
+
+        if(count($arr)>0){
+           $anuncios_consultados = Anuncios::select("anuncios.id",
+                             "anuncios.cod_anuncio",
+                             "anuncios.tipo_anuncio",
+                             "anuncios.ubicacion",
+                             "anuncios.moneda",
+                             "anuncios.nombre_moneda",
+                             "anuncios.criptomoneda",
+                             "anuncios.nombre_cripto_moneda",
+                             "anuncios.banco",
+                             "anuncios.margen",
+                             "anuncios.precio_minimo_moneda",
+                             "anuncios.limite_min",
+                             "anuncios.limite_max",
+                             "anuncios.lugar",  
+                             "anuncios.terminos",
+                             "anuncios.estado_anuncio",
+                             "anuncios.user_id",
+                             "anuncios.created_at",
+                             "anuncios.created_at",
+                             "users.id as id_usuario",
+                             "users.name",
+                             "users.phone",
+                             "users.email",
+                             "users.costo_clic",
+                             "recargas.valor",
+                             DB::Raw("FORMAT(users.calificacion/users.num_calificaciones,1) as calificacion")   )
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where([["anuncios.estado_anuncio","activo"],['anuncios.tipo_anuncio','venta']])
+                        //->where("recargas.valor",'>',0)
+                        //->orderBy("anuncios.id","DESC")
+                        ->orderBy("recargas.valor","DESC")
+                        ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
+                        
+        }   
+
+        $ad_arr=new Anuncios();
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
+ 
+        if(auth()->user()!=null){
+            return view('welcome_ventas')
+                    ->with('anuncios',$arr_anuncios)
+                    ->with("mis_anuncios",false)
+                    ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                    ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first());
+        }else{
+            return view('welcome_ventas')
+                            ->with('anuncios',$arr_anuncios)
+                            ->with("mis_anuncios",false)
+                            ->with("comision_consignacion",Variable::where('nombre','comision_consignacion')->first())
+                            ->with("pesos_por_mil",Variable::where('nombre','pesos_por_mil')->first())
+                            ;
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -125,28 +338,32 @@ class AnunciosController extends Controller
     {
 
        $this->authorize('create', new Anuncios); 
-      //if(auth()->user()!=NULL){
-           $coinmarketcap = new GuzzleModel();
-           $listacriptos = $coinmarketcap->get_response_listings();
-           $listamonedas = $coinmarketcap->get_fiat_currency();
-           $response  = $coinmarketcap->get_specific_currency(1,"COP");
-           $coins = json_decode($response);
-           if(property_exists($coins,"respuesta")==true){
-                return redirect('/');
-            }else{
-              return view('posts.create')
-                            ->with('coins',$coins->quotes->COP->price)
-                            ->with('listacriptos', (object)json_decode($listacriptos))
-                            ->with("listamonedas",$listamonedas)
-                            ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
-                            ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
-                            ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
-            }
-           
-        /*}else{
 
-           return redirect('/');
-        }*/
+           $coinmarketcap = new CurlModel();
+           
+           $listacriptos = $coinmarketcap->get_response_listings_cache();
+           
+           if($listacriptos->status->error_code==0){
+               $listamonedas = $coinmarketcap->get_fiat_currency();
+           
+               $coin  = $coinmarketcap->get_specific_currency(1,Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor);
+                $price=(array)$coin->quote;  
+                          
+               return view('posts.create')
+                                ->with('coins',$price[Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor]->price)
+                                ->with('listacriptos', $listacriptos->data)
+                                ->with("listamonedas",$listamonedas)
+                                ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
+                                ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
+                                ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
+           }else{
+            return back()->with('error', 'Ha ocurrido un error, al cargar el formulario de creación de anuncios, ye hemos informado a los administradores, estamos trabajando para solucionar el problema');
+           }
+           
+            
+          
+           
+       
     }
 
     /**
@@ -213,32 +430,25 @@ class AnunciosController extends Controller
               'estado_anuncio'=>"sin publicar"
               ]
          );
-                //dd($posts);
+               //dd($posts);
         $recarga=Recargas::where("user_id",$data['user_id'])->get();
-        
-        //NOTIFICACION AL ANUNCIANTE
-        NotificacionAnuncio::dispatch(auth()->user(), $posts,$recarga[0]->valor,"AnuncioCreado");
-        $uadmin=User::role('admin')->get();
-        //dd($uadmin);
-        foreach ($uadmin as $key => $value) {
-            NotificacionAnuncio::dispatch($value, [$posts,auth()->user(),['url'=>config("app.url").'/all/'.$value->id]],$recarga[0]->valor,"AnuncioCreadoAdmin");
-        }
-        
-
-        $coinmarketcap = new GuzzleModel();
-        $listacriptos = $coinmarketcap->get_response_listings();
-        $listamonedas = $coinmarketcap->get_fiat_currency();
-        $response  = $coinmarketcap->get_specific_currency(1,"COP");
-        $coins = json_decode($response);
-        return redirect()->route('anuncios.create')
-                            ->with('coins',$coins->quotes->COP->price)
-                            ->with('listacriptos', (object)json_decode($listacriptos))
-                            ->with("listamonedas",$listamonedas)
-                            ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
-                            ->with('success', 'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado');
+        if(count($recarga)>0){
+            $r=$recarga[0]->valor;
         }else{
-            return back()->with('error', 'El valor de venta o compra mínimo no debe ser menor al valor máximo');
-            
+            $r=0;
+        }
+        //NOTIFICACION AL ANUNCIANTE
+        NotificacionAnuncio::dispatch(auth()->user(), $posts,$r,"AnuncioCreado");
+        $uadmin=User::role('admin')->get();
+        
+        foreach ($uadmin as $key => $value) {
+            NotificacionAnuncio::dispatch($value, [$posts,auth()->user(),['url'=>config("app.url").'/all/'.$value->id]],$r,"AnuncioCreadoAdmin");
+        }
+     
+           return response()->json(["respuesta"=>true,"mensaje"=>'Se ha creado un nuevo anuncio, una vez sea verificado que cumpla con nuestra política, serás notificado y el anuncio será publicado']);
+        }else{
+            /*return back()->with('error', 'El valor de venta o compra mínimo no debe ser menor al valor máximo');*/
+            return response()->json(["respuesta"=>false,"mensaje"=>'El valor de venta o compra mínimo no debe ser menor al valor máximo']);
         }
     }
 
@@ -293,10 +503,19 @@ class AnunciosController extends Controller
                         ->where("anuncios.user_id",auth()->user()->id)
                         ->orderBy('estado_anuncio','DESC')
                         ->get();
+
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
         }   
         $ad_arr=new Anuncios();
-        //dd($anuncios_consultados);
-        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
+        
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
         
         //dd($arr_anuncios);
         return view('welcome')
@@ -360,10 +579,20 @@ class AnunciosController extends Controller
                         ->join("recargas","recargas.user_id","users.id")
                         ->orderBy("anuncios.estado_anuncio","DESC")
                         ->get();
+            $monedas = Anuncios::select(
+                             "anuncios.criptomoneda",
+                            "anuncios.moneda")
+                        ->join("users","users.id","anuncios.user_id")
+                        ->join("recargas","recargas.user_id","users.id")
+                        ->whereIn("anuncios.user_id",$arr)
+                        ->where("anuncios.estado_anuncio","activo")
+                        ->groupBy('anuncios.criptomoneda')
+                        ->groupBy('anuncios.moneda')
+                        ->get();
         }   
         $ad_arr=new Anuncios();
         //dd($anuncios_consultados);
-        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados);
+        $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
         
         //dd($arr_anuncios);
         return view('welcome')
@@ -450,9 +679,10 @@ class AnunciosController extends Controller
     
 
     public function obtener_valor_moneda_valida($id_cripto,$moneda){
-        $guzzle=new GuzzleModel();
-        $vv=$guzzle->get_specific_currency($id_cripto,$moneda);
-        return response()->json(json_decode($vv));
+
+        $curl=new CurlModel();
+        $vv=$curl->get_specific_currency($id_cripto,$moneda);
+        return response()->json($vv);
     }
     public function cambiar_estado_anuncio($id,$estado){
         $ad=Anuncios::where('id',$id)->get();
@@ -660,7 +890,7 @@ class AnunciosController extends Controller
                                     'estado_pago'=>'PENDIENTE',
                                     'transactionState'=>'Pago aceptado',
                                     'transactionStatePayu'=>4,
-                                    'moneda_pago'=>'COP',
+                                    'moneda_pago'=>Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor,
                                     'updated_at'=>Carbon::now('America/Bogota'),
                                     'numero_transaccion'=>$request['numero_transaccion']
                                   ]);
@@ -707,7 +937,7 @@ class AnunciosController extends Controller
                           ->update(["estado_pago"=>"APROBADA",
                                     'transactionState'=>'Pago aceptado',
                                     'transactionStatePayu'=>4,
-                                    'moneda_pago'=>'COP',
+                                    'moneda_pago'=>Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor,
                                     'updated_at'=>Carbon::now('America/Bogota')
                                     
                                   ]);
@@ -807,4 +1037,27 @@ class AnunciosController extends Controller
             return back()->with('error',"No ha sido posible registrar esta transacción, por favor revisa el estado actual, al parecer ya se habia registrado con anterioridad");
        }
     }
+    /**
+     * /Funcion para consultar los anunciantes
+     * @return [type] [description]
+     */
+    function compradores(){
+        $u=$uadmin=User::role('comerciante')->select('id')->get();
+        //dump($u);
+
+        $us=Anuncios::where('tipo_anuncio','compra')->whereIn('user_id',$u)->select('user_id')->get();
+
+        return view('posts.compradores')->with('usuarios',User::whereIn("id",$us)->get());
+    }
+
+    function vendedores(){
+        $u=$uadmin=User::role('comerciante')->select('id')->get();
+        //dump($u);
+
+        $us=Anuncios::where('tipo_anuncio','venta')->whereIn('user_id',$u)->select('user_id')->get();
+
+        return view('posts.vendedores')->with('usuarios',User::whereIn("id",$us)->get());
+    }
 }
+
+

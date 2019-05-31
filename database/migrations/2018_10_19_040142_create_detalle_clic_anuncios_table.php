@@ -19,7 +19,12 @@ class CreateDetalleClicAnunciosTable extends Migration
             $table->integer('id_usuario');
             $table->decimal('costo');
             $table->string('tipo');
+            $table->integer('num_vistas');
+            $table->integer('calificacion');
+            $table->string('opinion');
+            $table->string('comentario');
             $table->timestamps();
+
         });
     }
 

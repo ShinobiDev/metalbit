@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\NotificacionAnuncio;
 use App\Recargas;
-use App\GuzzleModel;
+use App\CurlModel;
 use App\Payu;
 use App\User;
 use App\pagos;
@@ -23,19 +23,26 @@ class Anuncios extends Model
    * @param  [type] $anuncios_consultados [arreglo de anunios consultados]
    * @return [array]                      [arreglo de anuncios]
    */
-  public function ver_anuncios($anuncios_consultados){
-                                           
-  		  $tipo="PRODUCTION";
-         
-         
-        if(config('app.debug')){
-              $tipo='TEST';  
-        }   
-  		   
-        $pu = Payu::where("type",$tipo)->get();
-  		  $guzzle=new GuzzleModel();
-        $coinmarketcap=$guzzle->get_response_listings();
-        //dd($anuncios_consultados);
+  public function ver_anuncios($anuncios_consultados,$monedas){
+                                         
+  		  $curl=new CurlModel(); 
+        $arr_valores_monedas=[];
+        
+  		  foreach ($monedas as $key => $m) {
+          $arr=$curl->get_specific_currency($m->criptomoneda,$m->moneda);
+          
+          if(property_exists($arr,"respuesta")==false){
+            $pivote=(array)$arr->quote;
+            
+            $arr_valores_monedas[$key]=["search"=>strval($arr->id.$m->moneda),"criptomoneda"=>$arr->id,"moneda"=>$m->moneda,"precio"=>$pivote[$m->moneda]->price,"name"=>$arr->name];
+             
+          }
+        }
+        
+       
+        
+  		  
+
         $v=0;
         //genero respuesta para anuncios de ventas
         $arr_anuncios=array();
@@ -77,48 +84,37 @@ class Anuncios extends Model
             //dd($value);
             if($value->moneda!=null && $value->criptomoneda!=null){
                         //consulto la api para obteenr valores
-                        $vv=$guzzle->get_specific_currency($value->criptomoneda,$value->moneda);
+                        //$jsvv=$curl->get_specific_currency($value->criptomoneda,$value->moneda);
+                        //debe buscar por la clave id_search la cual se creo teniendo encuenta el id y el nombre de la moneda
                        
-                       
-                        $jsvv=json_decode($vv);
-
                         
+                        $jsvv=array_search(strval($value->criptomoneda.$value->moneda), array_column($arr_valores_monedas,'search'));
+                        
+                        
+                        if(array_key_exists($jsvv,$arr_valores_monedas)!=false){
 
-                        if(property_exists($jsvv,"respuesta")==false){
-
-                               $arr=(array)$jsvv->quotes;
-
-                                $precio_moneda_usd=$this->calc_precio_moneda($arr["USD"]->price,$value->margen,$value->precio_minimo_moneda);
-                                //precio base en USD
-                                //$precio_moneda_usd=(float)number_format(($arr["USD"]->price),2,".","")+(float)(number_format($arr["USD"]->price*$value->margen,2,'.','')/100);
-                                $precio_moneda=$this->calc_precio_moneda($arr[$value->moneda]->price,$value->margen,$value->precio_minimo_moneda);
-                                //precio base en moneda especificada en anucnio
-                                //$precio_moneda=(float)number_format(($arr[$value->moneda]->price),2,".","")+(float)(number_format($arr[$value->moneda]->price*$value->margen,2,'.','')/100);
+                               $pre=$arr_valores_monedas[$jsvv]['precio'];
+                              
+                                
+                                $precio_moneda=$this->calc_precio_moneda($pre,$value->margen,$value->precio_minimo_moneda);
+                    
 
                                 if($precio_moneda==0){
-                                    $precio_moneda=number_format($arr[$value->moneda]->price,2,'.','');
+                                    $precio_moneda=number_format($pre,2,'.','');
                                 }
 
                                
 
                                 
                                 if($value->tipo_anuncio=="venta"){
-                                    $desc="Venta de ".$jsvv->name;
+                                    $desc="Venta de ".$arr_valores_monedas[$jsvv]['name'];
                                 }else{
-                                    $desc="Compra de ".$jsvv->name;
+                                    $desc="Compra de ".$arr_valores_monedas[$jsvv]['name'];
                                 }
 
 
                                 $cod=$value->cod_anuncio."-".$value->id."-".time()."-".$key;
-                                    if($value->moneda != "BRL" && $value->moneda != "CLP" && $value->moneda != "COP" && $value->moneda != "MXN" && $value->moneda != "USD"){
-
-                                        $vv=number_format(((float)number_format($value->limite_min / (float)number_format($precio_moneda,2,'.',''),2,'.',''))*number_format($precio_moneda_usd,2,'.',''),2,".","");
-
-                                        $hs=$pu[0]->hashear($cod,$vv,"USD");
-
-                                    }else{
-                                        $hs=$pu[0]->hashear($cod,$value->limite_min,$value->moneda);
-                                    }
+                                    
                                     $u=new User();
 
                                     $horarios=$u->ver_horarios($value->user_id,date('w'));
@@ -177,11 +173,8 @@ class Anuncios extends Model
                                                         "precio_moneda"=>number_format($precio_moneda,2,',', '.'),
                                                         "precio_moneda_sf"=>$precio_moneda,
                                                         "precio_moneda_cf"=>number_format($precio_moneda,2,'.',''),
-                                                        "precio_moneda_usd"=>number_format($precio_moneda_usd,2,',', '.'),
-                                                        "precio_moneda_usd_sf"=>$precio_moneda_usd,
-                                                        "precio_moneda_usd_cf"=>number_format($precio_moneda_usd,2,'.',''),
-                                                        "cripto_moneda"=>$jsvv->name,
-                                                        "id_cripto_moneda"=>$jsvv->id,
+                                                        "cripto_moneda"=>$arr_valores_monedas[$jsvv]['name'],
+                                                        "id_cripto_moneda"=>$arr_valores_monedas[$jsvv]['criptomoneda'],
                                                         "moneda"=>$value->moneda,
                                                         "nombre_moneda"=>$value->nombre_moneda,
                                                         "margen_gananacia"=>$value->margen,
@@ -194,13 +187,6 @@ class Anuncios extends Model
                                                         "name"=>$value->name,
                                                         "phone"=>$value->phone,
                                                         "id"=>$value->id,
-                                                        "merchantId"=>$pu[0]->merchantId,
-                                                        "accountId"=>$pu[0]->accountId,
-                                                        "hash"=>$hs,
-                                                        "resp"=>$pu[0]->urlResponse,
-                                                        "conf"=>$pu[0]->urlConfirm,
-                                                        "error"=>$pu[0]->urlError,
-                                                        "url_api"=>$pu[0]->urlApi,
                                                         "limite_clic"=>$value->valor,
                                                         "btn_info"=>$mostrar_info,
                                                         "btn_payu"=>$mostrar_payu,
@@ -247,6 +233,7 @@ class Anuncios extends Model
                             ->where([['id_anuncio',$id],['detalle_clic_anuncios.calificacion','<>',NULL]])
                             ->join('users','users.id','detalle_clic_anuncios.id_usuario')
                             ->limit($limite)
+                            ->where('opinion','<>',"")
                             ->get();
 
      return $comentarios;

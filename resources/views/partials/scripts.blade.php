@@ -351,7 +351,7 @@
               dataType: 'html'
             });
         }
-        //funcion que extiende Js y serializa un formulario
+  //funcion que extiende Js y serializa un formulario
   $.fn.serializarFormulario = function()
       {
       var o = {};
@@ -395,7 +395,7 @@
       }else{
         return false;
       }
-    };
+  };
     /**
    * [Funcion para canjear los cupones de compra]
    * @param  {[type]} e  [description]
@@ -597,8 +597,9 @@
                     if(e.respuesta){
                       
                       document.getElementById('msnMensajeCompra_'+id).classList.remove('text-red');
-                      document.getElementById('msnMensajeCompra_'+id).  classList.add('text-success');    
+                      document.getElementById('msnMensajeCompra_'+id).  classList.add('text-primary');    
                       document.getElementById('msnMensajeCompra_'+id).innerHTML=e.mensaje;
+                      document.getElementById("txt_btn_compra_"+id).innerHTML="Compra pendiente";
                       if(document.getElementById('anc_pendiente_'+id)!=null){
                           document.getElementById('anc_pendiente_'+id).href="{{config('app.url')}}"+'/ver_mis_compras/'+id_usuario+'/?id='+e.refpago;
                           
@@ -901,32 +902,32 @@
 
 
 
-   function donde_estoy(id){
+  function donde_estoy(id){
 
-   document.getElementById("row_"+id).classList.add('fondo_fila');
+     document.getElementById("row_"+id).classList.add('fondo_fila');
     
-   sessionStorage.setItem('fila', id);
-   console.log(document.getElementById("row_"+id));
-   var ele=document.querySelectorAll(".fondo_fila");
-   console.log(ele.length);
-   if(ele.length>1){
-    for(var i = 0;i <= ele.length-1;i++){
-      ele[i].classList.remove('fondo_fila');
-      document.getElementById(ele[i].id).style.backgroundColor='#f9f9f9';
-      if(document.getElementById(ele[i].id) != null){          
-          document.getElementById("row_"+id).classList.add('fondo_fila');
-          document.getElementById("row_"+id).style.backgroundColor='#d9e3f1'; 
+     sessionStorage.setItem('fila', id);
+     console.log(document.getElementById("row_"+id));
+     var ele=document.querySelectorAll(".fondo_fila");
+     console.log(ele.length);
+     if(ele.length>1){
+      for(var i = 0;i <= ele.length-1;i++){
+        ele[i].classList.remove('fondo_fila');
+        document.getElementById(ele[i].id).style.backgroundColor='#f9f9f9';
+        if(document.getElementById(ele[i].id) != null){          
+            document.getElementById("row_"+id).classList.add('fondo_fila');
+            document.getElementById("row_"+id).style.backgroundColor='#d9e3f1'; 
+        }
       }
-    }
-      
-   
-   }else{
-    document.getElementById("row_"+id).style.backgroundColor='#d9e3f1'; 
-   }
+        
+     
+     }else{
+      document.getElementById("row_"+id).style.backgroundColor='#d9e3f1'; 
+     }
    
 
 
- }                
+  }                
  
      /**
       * Funcion para desplazar hacia la izq la tabla de medios de pagos

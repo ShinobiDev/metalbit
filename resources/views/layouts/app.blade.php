@@ -31,7 +31,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-default navbar-static-top" style="background-color: #f2f1fb" >
             <div class="col-md-12 col-md-offset-0 col-lg-12 col-lg-offset-0 col-sm-12 col-sm-offset-0">
                 <div class="col-2 col-md-2 navbar-header">
                     <!-- Collapsed Hamburger -->
@@ -54,7 +54,7 @@
                         <ul class="nav navbar-nav">
                           <li>
                                <a href="{{route('anuncios.index')}}">Ver anuncios</a>
-                          </li>
+                          </li>                          
                           @role('Admin')
                             <li>
                                <a href="{{route('anuncios.create')}}">Crear anuncios
@@ -84,6 +84,12 @@
 
                           @endrole
                           @role('Comerciante')
+                            <!--<li>
+                               <a href="{{route('posts.compras')}}">Comprar</a>
+                            </li>
+                            <li>
+                               <a href="{{route('posts.ventas')}}">Vender</a>
+                            </li>-->
                             <li>
                                <a href="{{route('anuncios.create')}}">Crear anuncios</a>
                             </li>

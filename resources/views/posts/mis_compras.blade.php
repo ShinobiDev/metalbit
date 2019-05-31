@@ -62,7 +62,7 @@
                                                 
                     <td class="text-center "><strong>{{number_format($compra->transactionQuantity,2,',','.')}}</strong></td>                                   
                     <td class="text-center text-red bg-success"><strong>{{$compra->nombre_cripto_moneda}}</strong></td>                                  
-                    <td class="text-center text-primary" style="width: 300px"><span class="text-red">$</span> {{number_format($compra->transation_value,2,',','.')}}</td>
+                    <td class="text-center text-primary" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transation_value,2,',','.')}}</td>
                     <td class="text-center text-primary bg-danger" style="width: 300px"><span class="text-red">$</span>{{number_format($compra->transaction_value_pagado+$compra->valor_sobre_costo,2,',','.')}}</td>
                     <td class="text-center text-success">{{$compra->moneda_pago}}</td> 
                     <td class="bg-info">
@@ -430,12 +430,12 @@
                     language:
                       {
                         "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sLengthMenu":     "Mostrar _MENU_ anuncios",
                         "sZeroRecords":    "No se encontraron resultados",
                         "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfo":           "Mostrando anuncios del _START_ al _END_ de un total de _TOTAL_ anuncios",
+                        "sInfoEmpty":      "Mostrando anuncios del 0 al 0 de un total de 0 anuncios",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ anuncios)",
                         "sInfoPostFix":    "",
                         "sSearch":         "Buscar:",
                         "sUrl":            "",

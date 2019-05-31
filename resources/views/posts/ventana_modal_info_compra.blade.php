@@ -22,7 +22,7 @@
             
       </div>
       <div class="modal-body">
-          <b>Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}
+          <b>Horario de atención:  </b> <b>Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}</b>
           
       </div>
       <div class="modal-body">

@@ -55,23 +55,23 @@
                         <span class="text-success">{{$venta->transactionState}}</span>
                       @endif
                     </td>       
-                    <td>{{$venta->name}}</td>          
+                    <td class="text-center"><b>{{$venta->name}}</b></td>          
                                                 
-                    <td class="bg-success"><strong>{{number_format($venta->transactionQuantity,2,',','.')}}</strong></td>                                   
-                    <td class="bg-warning"><strong class="text-red">{{$venta->nombre_cripto_moneda}}</strong></td>                                  
-                    <td style="width: 300px" class="text-primary"><span class="text-red">$</span>{{number_format($venta->transation_value,2,',','.')}}</td>
+                    <td class="bg-success text-center"><strong class="text-primary">{{number_format($venta->transactionQuantity,2,',','.')}}</strong></td>                                   
+                    <td class="bg-warning text-center"><strong class="text-red">{{$venta->nombre_cripto_moneda}}</strong></td>                                  
+                    <td style="width: 300px" class="text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value,2,',','.')}}</td>
 
                     @if($venta->transactionState=="Pago hecho al anunciante" || $venta->transactionState=="Pago confirmado por el anunciante")
 
-                      <td style="width: 300px" class=" bg-danger text-primary"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($venta->porcentaje_pago/100)),0,',','.')}}</td>
+                      <td style="width: 300px" class=" bg-danger text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($venta->porcentaje_pago/100)),0,',','.')}}</td>
                     @else
-                       <td style="width: 300px" class=" bg-danger text-primary"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($variable->valor/100)),0,',','.')}}</td>
+                       <td style="width: 300px" class=" bg-danger text-primary text-center"><span class="text-red">$</span>{{number_format($venta->transation_value-($venta->transation_value*($variable->valor/100)),0,',','.')}}</td>
 
                     @endif  
 
 
-                    <td class="text-red bg-success"><strong>{{$venta->moneda_pago}}</strong></td>                                    
-                    <td><strong class="text-success">{{$venta->transactionId or 'Pendiente de venta'}}</strong></td>                                     
+                    <td class="text-red bg-success text-center"><strong>{{$venta->moneda_pago}}</strong></td>                                    
+                    <td><strong class="text-success text-center">{{$venta->transactionId or 'Pendiente de venta'}}</strong></td>                                     
                     <td>
                       @if($venta->code_wallet!='SIN REGISTRAR')
                         <span class="text-red">{{$venta->code_wallet}}</span>
@@ -234,12 +234,12 @@
                     language:
                       {
                         "sProcessing":     "Procesando...",
-                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sLengthMenu":     "Mostrar _MENU_ anuncios",
                         "sZeroRecords":    "No se encontraron resultados",
                         "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfo":           "Mostrando anuncios del _START_ al _END_ de un total de _TOTAL_ anuncios",
+                        "sInfoEmpty":      "Mostrando anuncios del 0 al 0 de un total de 0 anuncios",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ anuncios)",
                         "sInfoPostFix":    "",
                         "sSearch":         "Buscar:",
                         "sUrl":            "",

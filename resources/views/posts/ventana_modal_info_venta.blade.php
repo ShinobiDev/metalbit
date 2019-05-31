@@ -15,7 +15,7 @@
             </div>
             <div class="modal-body">
               <h5 class="modal-title" id="exampleModalLabel"><b>Ingresa la cantidad de {{$ad->moneda}} que quieres adquirir en {{$ad->cripto_moneda}}</b></h5>
-                <form method="POST" id="ad_form_{{$ad->id}}" action="{{$ad->url_api}}">
+                <form method="POST" id="ad_form_{{$ad->id}}" action="{{--$ad->url_api--}}">
                        <input  type="hidden" id="num_val_crip_moneda_{{$ad->id}}" value="{{$ad->precio_moneda_cf}}">
 
                        <input  type="hidden" id="id_crip_moneda_{{$ad->id}}" value="{{$ad->id_cripto_moneda}}">
@@ -112,7 +112,22 @@
                             <a id="anc_pendiente_{{$ad->id}}" href="{{config('app.url').'/ver_mis_compras/'.auth()->user()->id.'/?id='.$ad->transaccion_pendiente['pago']}}"><span class=" text-primary">Ver estado de la compra</span></a>
                           @endif
                           @if(auth::user()->id!=$ad->id_anunciante)
-                            @include('payu.botonpayu')
+                             @if($ad->transaccion_pendiente['value']!='0' && $ad->transaccion_pendiente['value']!= null) 
+                                  @if($ad->transaccion_pendiente['pago']!=0 && $ad->transaccion_pendiente['pago'])
+                                    <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="hidden"   value="{{$ad->transaccion_pendiente['pago']}}" > 
+                                  @else
+                                    <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="hidden"   value="{{$ad->cod_anuncio}}" >
+                                  @endif
+                                   
+                                  <input id="hd_valor_venta_{{$ad->id}}" name="amount"        type="hidden"   value="{{number_format($ad->transaccion_pendiente['value'] ,0,'.','')
+                                  }}"   >  
+                                @else
+                                  <input id="referenceCode_{{$ad->id}}" name="referenceCode" type="hidden"   value="{{$ad->cod_anuncio}}" >
+                                  <input id="hd_valor_venta_{{$ad->id}}" name="amount"        type="hidden"   value="{{number_format($ad->limite_min ,0,'.','')
+                                  }}"   >
+                                @endif
+
+                            {{--@include('payu.botonpayu')--}}
                             @include('partials.btn_comprar')
 
 
@@ -125,7 +140,7 @@
                 </form>
             </div>
             <div class="modal-body">
-               <h4> <b class="text-primary">Horario de atención:  </b> Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}</h4>
+               <h4> <b class="text-primary">Horario de atención:  </b> <b>Desde {{explode("|",$ad->horario->horario)[0]}} hasta  {{explode("|",$ad->horario->horario)[1]}}</b></h4>
                
             </div>
             <div class="modal-body">

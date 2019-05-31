@@ -21,13 +21,6 @@
         @if($mis_anuncios==true)
             @section('content')
 
-
-
-               <!--se incluye seccion de tabla con anuncios de ventas-->
-               @include('posts.consultasventas_mis_anuncios')
-               <!--FIN se incluye seccion de tabla con anuncios de ventas-->
-
-
                <!--se incluye seccion de tabla con anuncios de compras-->
                @include('posts.consultascompras_mis_anuncios')
                <!--fin se incluye seccion de tabla con anuncios de compras-->
@@ -38,12 +31,7 @@
           @section('content')
 
              @include('partials.confirmar_correo')
-
-             <!--se incluye seccion de tabla con anuncios de ventas-->
-             @include('posts.consultasventas')
-             <!--FIN se incluye seccion de tabla con anuncios de ventas-->
-
-
+           
              <!--se incluye seccion de tabla con anuncios de compras-->
              @include('posts.consultascompras')
              <!--fin se incluye seccion de tabla con anuncios de compras-->

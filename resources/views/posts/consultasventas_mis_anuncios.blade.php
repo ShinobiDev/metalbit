@@ -39,7 +39,7 @@
                     {{--<td class="text-center"><strong><h3>{{$ad->cod_anuncio}}</h3></strong></td>--}}
                     <td class="text-green text-center bg-info"><strong><h4>Venta</h4></strong></td>
                     <td>
-                     <div style="margin-top: 15px">
+                     <div style="margin-top: 15px; margin-left: 6px">
                         @for($i=1;$i<=$ad->calificacion;$i++)
                           @if($i<=3)
                             <img  class="star" src="{{asset('img/star.png')}}">
@@ -54,13 +54,13 @@
 
 
                    </td>
-                    <td><strong>{{$ad->cripto_moneda}}</strong></td>
-                    <td class="bg-info text-primary" style="width: 200px;"><span class="text-red">$</span> {{ number_format($ad->limite_min,2, ',', '.') }} / </br><span class="text-red">$</span> {{ number_format($ad->limite_max,2, ',', '.')}} <strong class="text-red">{{$ad->moneda}}</strong></td>
-                    <td style="width: 250px">
+                    <td class="text-center"><strong>{{$ad->cripto_moneda}}</strong></td>
+                    <td class="bg-info text-primary" style="width: 200px;"><span class="text-red">$</span> {{ number_format($ad->limite_min,2, ',', '.') }} / </br><span class="text-red">$</span>{{ number_format($ad->limite_max,2, ',', '.')}} <strong class="text-red">{{$ad->moneda}}</strong></td>
+                    <td style="width: 350px">
                       @role('Admin')
                         
                         <div >
-                          <h5 id="h5_estado_{{$ad->id}}" class="text-red" style="width: 150px">{{$ad->estado_anuncio}}</h5>
+                          <h5 id="h5_estado_{{$ad->id}}" class="text-red" style="width: 50px">{{$ad->estado_anuncio}}</h5>
 
                           @if($ad->estado_anuncio=="sin publicar")
 
@@ -110,7 +110,7 @@
 
                       @role('Comerciante')
 
-                        <h5 id="h5_estado_{{$ad->id}}" class="text-red">{{$ad->estado_anuncio}}</h5>
+                        <h5 id="h5_estado_{{$ad->id}}" class="text-red" style="width: 50px">{{$ad->estado_anuncio}}</h5>
                         @if($ad->estado_anuncio=="activo")
                             <div>                              
                                <select class="form-control" onchange="cambiar_estado('{{$ad->id}}',this)">

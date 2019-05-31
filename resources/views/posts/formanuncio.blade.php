@@ -50,7 +50,7 @@
           </fieldset>
 
           <fieldset>
-            <legend>Más información</legend>
+            <legend class="text-red">Más información</legend>
             <div class="row " id="row_id_ad-currency">
               <div id="div_id_ad-currency" class="col-md-2 label-col form-group">
                 <label for="id_ad-currency" class="control-label requiredField"> <b>Moneda Local</b></label>
@@ -58,16 +58,22 @@
               <div class="col-md-3">
                 <div class="controls">
                   <select class="moneda select form-control select2" id="sel_moneda" name="moneda">
-                        @foreach ($listamonedas as $key => $listamoneda)
+                        @forelse ($listamonedas as $key => $listamoneda)
 
-                          <option value="{{$listamoneda['Currency']}}">{{$listamoneda['Country']}}</option>                          
-                        @endforeach
+                          <option value="{{$listamoneda['Currency']}}">{{$listamoneda['Country']}}</option>
+                        @empty
+                          <option value=""></option>                            
+                        @endforelse
                   </select>
                   @php
                       $mr=(array)$listamonedas;
                   @endphp
-
-                  <input id="hd_moneda" type="hidden" name="nombre_moneda" value="{{$mr[0]['Country']}}">
+                  
+                  @if(count($mr)>0)
+                    <input id="hd_moneda" type="hidden" name="nombre_moneda" value="{{$mr[0]['Country']}}">
+                  @else
+                  <input id="hd_moneda" type="hidden" name="nombre_moneda" value="0">
+                  @endif
                 </div>
               </div>
               <div class="col-md-7 two-col-help-text">
@@ -80,9 +86,11 @@
                 <div class="col-md-3">
                   <div class="controls">
                     <select class="select form-control select2" id="sel_cripto" name="criptomoneda">
-                        @foreach ($listacriptos as $key => $listacripto)
+                        @forelse ($listacriptos as $key => $listacripto)
                           <option value="{{$listacripto->id}}">{{$listacripto->name}}</option>
-                        @endforeach
+                        @empty
+                           <option value=""></option> 
+                        @endforelse
 
                     </select>
                         @php
@@ -90,7 +98,11 @@
                         @endphp
                         
                     
-                    <input id="hd_cripto" type="hidden" name="nombre_cripto_moneda" value="{{$cr[0]->name}}">
+                    @if(count($cr)>0)
+                      <input id="hd_cripto" type="hidden" name="nombre_cripto_moneda" value="{{$cr[0]->name}}">
+                    @else
+                      <input id="hd_cripto" type="hidden" name="nombre_cripto_moneda" value="">
+                    @endif
                   </div>
                 </div>
                 <div class="col-md-7 two-col-help-text">
@@ -106,7 +118,7 @@
                   </div>
                </div>
                <div class="col-md-7 two-col-help-text">
-                    Opcional. Nombre o código del banco o proveedor de pagos. Para transferencias internacionales, especifique el código SWIFT / BIC del banco
+                    <b>Opcional</b>. Nombre o código del banco o proveedor de pagos. Para transferencias internacionales, especifique el código <b>SWIFT / BIC</b> del banco
               </div>
              </div>
 
@@ -118,7 +130,7 @@
                     <!--Valor de ganacia -->
                      <div class="input-group">
                        <input class="numberinput form-control" id="margen" name="margen" step="any" type="number" value="0" required/>
-                       <span class="input-group-addon">%
+                       <span class="input-group-addon bg-orange">%
                        </span>
 
                        
@@ -183,12 +195,12 @@
                 <div class="col-md-3">
                    <div class="input-group">
                       <input class="numberinput form-control" id="precio_minimo_moneda"  type="text" min="0"  onchange="formatear(this,'precio_minimo_moneda_hd')" required/>
-                      <span class=" modi input-group-addon">COP</span>
+                      <span class=" modi input-group-addon bg-red">COP</span>
                       <input class="numberinput form-control" id="precio_minimo_moneda_hd" name="precio_minimo_moneda" type="hidden" />
                    </div>
                  </div>
                  <div class="col-md-7 two-col-help-text">
-                    Opcional. Límite mínimo de precio de moneda.
+                    <b>Opcional</b>. Límite mínimo de precio de moneda.
                   </div>
               </div>
               <!--LIMITE MINIMO DE TRANSACCIONES-->
@@ -199,12 +211,12 @@
                 <div class="col-md-3">
                    <div class="input-group">
                       <input class="numberinput form-control" id="id_ad-min_amount"  type="text" min="0"  onchange="formatear(this,'limite_min_hd')" required/>
-                        <span class=" modi input-group-addon">COP</span>
+                        <span class=" modi input-group-addon bg-green">COP</span>
                         <input class="numberinput form-control" id="limite_min_hd" name="limite_min" type="hidden" />
                    </div>
                  </div>
                  <div class="col-md-7 two-col-help-text">
-                    Opcional. Límite mínimo de transacción por intercambio.
+                    <b>Opcional</b>. Límite mínimo de transacción por intercambio.
                   </div>
               </div>
               <!--LIMITE MAXIMO DE TRANSACCIONES-->
@@ -216,11 +228,11 @@
                   <div class="input-group">
                     <input class="numberinput form-control" id="id_ad-max_amount"  type="text" min="0"  onchange="formatear(this,'limite_max_hd')" required/>
                     <input class="numberinput form-control" id="limite_max_hd" name="limite_max" type="hidden" />
-                    <span class="modi input-group-addon">COP</span>
+                    <span class="modi input-group-addon bg-blue">COP</span>
                   </div>
                 </div>
                 <div class="col-md-7 two-col-help-text">
-                    Opcional. Límite máximo de transacción por intercambio. Para ventas online, el saldo de su cartera de <a href="/">MetalBit</a> también puede limitar el límite máximo en un intercambio.
+                    <b>Opcional</b>. Límite máximo de transacción por intercambio. Para ventas online, el saldo de su cartera de <a href="/">{{config('app.name')}}</a> también puede limitar el límite máximo en un intercambio.
                 </div>
               </div>
               <div class="row " id="row_id_ad-opening_hours">
@@ -238,7 +250,9 @@
                    </div>
                  </div>
                  <div class="col-md-7 two-col-help-text">
-                      Lugares donde prefiere realizar el intercambio en efectivo. Ej. un café Internet o restaurante local.
+                      Lugares donde prefiere realizar el intercambio en efectivo. <i>
+                        <b>Ej.</b> un café Internet o restaurante local.
+                      </i>
                   </div>
               </div>
               <div class="row " id="row_id_ad-other_info">
@@ -251,14 +265,15 @@
                     </div>
                   </div>
                   <div class="col-md-4 two-col-help-text">
-                     Otra información que usted desea decir acerca de su transacción. Ejemplo 1: <!--<b>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, póngase en contacto con MetalBit.com/ad/1234</b>.--><b>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, realiza el pago a través de Payu y pongase en contacto conmigo</b>. Ejemplo 2: <b>Por favor, haga la solicitud solo cuando puede completar el pago con dinero en efectivo en el plazo de 12 horas</b>.
+                     Otra información que usted desea decir acerca de su transacción. <b>Ejemplo 1:</b> <!--<b>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, póngase en contacto con MetalBit.com/ad/1234</b>.--><i>Este anuncio es solo para las transacciones en efectivo. Si desea pagar en línea, realiza el pago a través de Payu y pongase en contacto conmigo</i>. <b>Ejemplo 2</b>: <i>Por favor, haga la solicitud solo cuando puede completar el pago con dinero en efectivo en el plazo de 12 horas</i>.
                  </div>
               </div>                  
               </fieldset>
               <hr>
-              <input type="hidden" name="user_id" value="{{Auth::user()->id }}" class="form-control">
+              <span id="msn_load"></span>
+              <input type="hidden" name="user_id" value="{{auth::user()->id }}" class="form-control">
               <div class="form-group"> <div class="controls ">
-                     <input type="submit" name="submit" value="Publicar anuncio" class="btn btn-success" id="submit-id-submit" /> </div>
+                     <input type="button" name="submit" value="Publicar anuncio" class="btn btn-primary" id="submit-id-submit" onclick="publicar_anuncio()" /> </div>
               </div>
 
 </form>

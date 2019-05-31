@@ -16,9 +16,9 @@ class UserTableSeeder extends Seeder
     {
 
         $adminRole = Role::create(['name' => 'Admin']);
-        $Roleusuario =  Role::create(['name' => 'Usuario']);
+        $Roleusuario =  Role::create(['name' => 'Comerciante']);
 
-        $viewUserpermission   = Permission::create(['name' => 'Ver Usuarios']);
+        /*$viewUserpermission   = Permission::create(['name' => 'Ver Usuarios']);
         $createUserpermission = Permission::create(['name' => 'Crear Usuarios']);
         $updateUserpermission = Permission::create(['name' => 'Editar Usuarios']);
         $deleteUserpermission = Permission::create(['name' => 'Eliminar Usuarios']);
@@ -34,18 +34,25 @@ class UserTableSeeder extends Seeder
                                                            'display_name' =>'Ver permisos']);
         $updatePermissionspermission = Permission::create(['name' => 'Editar Permisos',
                                                            'display_name' => 'Editar Permisos']);
+        */
 
 
         $admin = new User;
         $admin->name = 'Heriberto Valencia';
-        $admin->email = 'hvhvalencia3@gmail.com';
-        $admin->password = 'heriheri';
+        $admin->phone = '1234568';
+        $admin->email = 'edgar.guzman21@gmail.com';
+        $admin->password = bcrypt('123456');
+        $usuario->costo_clic="0";
+        $admin->estado = "1";
         $admin->save();
 
         $usuario = new User;
-        $usuario->name = 'Bruno Valenica';
-        $usuario->email = 'bruno@gmail.com';
-        $usuario->password = 'heriheri';
+        $usuario->name = 'Usuario prueba';
+        $admin->phone = '4545454';
+        $usuario->email = 'prueba@gmail.com';
+        $usuario->password = bcrypt('123456');
+        $usuario->costo_clic="500";
+        $usuario->estado = "1";
         $usuario->save();
 
         $admin->assignRole($adminRole);

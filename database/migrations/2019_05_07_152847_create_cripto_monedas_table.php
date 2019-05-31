@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRecargasTable extends Migration
+class CreateCriptoMonedasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateRecargasTable extends Migration
      */
     public function up()
     {
-        Schema::create('recargas', function (Blueprint $table) {
+        Schema::create('cripto_monedas', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('status',['ACTIVA', 'AGOTADA'])->defaul('ACTIVA');
-            $table->string('valor');
-            $table->string('user_id');
+            $table->integer('id_moneda');
+            $table->string('nombre_moneda');
+            $table->string('precio_moneda');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateRecargasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recargas');
+        Schema::dropIfExists('cripto_monedas');
     }
 }

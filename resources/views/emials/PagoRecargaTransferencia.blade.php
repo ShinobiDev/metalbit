@@ -27,7 +27,7 @@ Recuerda que debes tener saldo en la cuenta de recargas para que los usuarios pu
 ver tus datos de contacto.
 
 
-## BALANCE ACTUAL DE RECARGA $ {{number_format($recarga[0]->valor,0,',','.')}} ##
+## BALANCE ACTUAL DE RECARGA $ {{number_format($recarga[0],0,',','.')}} ##
 
 #[Recargar][2]
 [2]:{{$url}}

@@ -28,9 +28,7 @@
                <!--FIN se incluye seccion de tabla con anuncios de ventas-->
 
 
-               <!--se incluye seccion de tabla con anuncios de compras-->
-               @include('posts.consultascompras_mis_anuncios')
-               <!--fin se incluye seccion de tabla con anuncios de compras-->
+               
 
 
             @endsection
@@ -44,9 +42,7 @@
              <!--FIN se incluye seccion de tabla con anuncios de ventas-->
 
 
-             <!--se incluye seccion de tabla con anuncios de compras-->
-             @include('posts.consultascompras')
-             <!--fin se incluye seccion de tabla con anuncios de compras-->
+            
 
 
           @endsection
