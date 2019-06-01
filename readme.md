@@ -20,4 +20,5 @@ Metalbit es una aplicación para ofrecer anuncios para compra y venta de criptom
 
 	php artisan cache:clear
 ## Paso 3
-	NO ejecute la migración, el script de la base de datos (metal_bit_para_pruebas.sql) se encuentra en la carpeta db, los usuarios allí registrados tiene como defecto la clave '123456', para, si usted desea replicar el ambiente de producción, debe importar la base de datos (metal_bit_para_producccion.sql), en este caso las contraseñas debe ser recuperadas.
+
+NO ejecute la migración, el script de la base de datos (metal_bit_para_pruebas.sql) se encuentra en la carpeta db, los usuarios allí registrados tiene como defecto la clave '123456', para, si usted desea replicar el ambiente de producción, debe importar la base de datos (metal_bit_para_producccion.sql), en este caso las contraseñas debe ser recuperadas.
