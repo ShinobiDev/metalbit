@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 31, 2019 at 09:23 AM
+-- Generation Time: Jun 01, 2019 at 01:55 PM
 -- Server version: 10.2.12-MariaDB-log
 -- PHP Version: 7.2.7
 
@@ -3465,13 +3465,6 @@ CREATE TABLE `detalle_recargas` (
   `certificado_pago` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `detalle_recargas`
---
-
-INSERT INTO `detalle_recargas` (`id`, `id_user`, `tipo_recarga`, `valor_recarga`, `valor_pagado`, `referencia_pago`, `referencia_pago_pay_u`, `metodo_pago`, `estado_detalle_recarga`, `created_at`, `updated_at`, `certificado_pago`) VALUES
-(3, 584, '', '5000.00', '0.00', '1558121212584', '1558121212584', 'RECARGA GRATIS', 'APROBADA', '2019-05-17 18:26:52', '2019-05-17 18:26:52', '');
-
 -- --------------------------------------------------------
 
 --
@@ -3552,8 +3545,7 @@ INSERT INTO `model_has_roles` (`role_id`, `model_id`, `model_type`) VALUES
 (1, 572, 'App\\User'),
 (2, 581, 'App\\User'),
 (2, 582, 'App\\User'),
-(2, 583, 'App\\User'),
-(2, 584, 'App\\User');
+(2, 583, 'App\\User');
 
 -- --------------------------------------------------------
 
@@ -3568,7 +3560,7 @@ CREATE TABLE `pagos` (
   `transactionState` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `transactionQuantity` decimal(8,2) NOT NULL,
   `transation_value` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `transaction_value_pagado` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transaction_value_pagado` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `valor_sobre_costo` decimal(8,2) NOT NULL,
   `pay_value` decimal(8,2) NOT NULL,
   `id_anuncio` int(11) NOT NULL,
@@ -3677,8 +3669,7 @@ INSERT INTO `recargas` (`id`, `status`, `valor`, `user_id`, `created_at`, `updat
 (67, 'ACTIVA', '0.00', '572', '2019-03-19 23:04:09', '2019-03-19 23:04:09'),
 (69, 'ACTIVA', '0.00', '581', '2019-03-20 01:09:38', '2019-03-20 01:09:38'),
 (70, 'ACTIVA', '0.00', '582', '2019-03-23 02:40:26', '2019-03-23 02:40:26'),
-(71, 'ACTIVA', '0.00', '583', '2019-04-14 20:13:13', '2019-04-14 20:13:13'),
-(72, 'ACTIVA', '5000', '584', '2019-05-17 16:54:20', '2019-05-17 18:26:52');
+(71, 'ACTIVA', '0.00', '583', '2019-04-14 20:13:13', '2019-04-14 20:13:13');
 
 -- --------------------------------------------------------
 
@@ -3783,8 +3774,7 @@ INSERT INTO `users` (`id`, `name`, `phone`, `email`, `password`, `costo_clic`, `
 (572, 'Soporte Prisma Web', '00000000', 'soporte@prismaweb.net', '$2y$10$VJWee5nsKmIN4BhnfKKntORgbnASufgnz.FCG5cOXog9mswbhq9MS', '0.00', 'SI', 557, 'rhj4EdiRaENT6vrVFOgPqKlUvqqyrbiQAV5AUyTHYeeBn1Cwi5KsmZbsBlhj', '2018-12-13 20:35:49', '2019-03-07 19:02:40', 5, 1, '', '', '1'),
 (581, 'Luis Herrera', '3204296592', 'luisherresa13@gmail.com', '$2y$10$JVogSj..3Zi7yMJFuTgJf.UtOrCDm4/2SVc/GhIUIw7jcWzqUbWsC', '500.00', 'SI', 558, 'PiJGHXrkNMGEWzZEzN6dZGcgXgnjazkco5yVU9im8MRCyEUsGewfHSLjfkay', '2019-03-20 01:09:37', '2019-04-01 22:14:20', 3, 1, '', '', '1'),
 (582, 'David Felipe Cabrera', '3147684576', 'cabrera.davidf@gmail.com', '$2y$10$6YjxVAXKeWxYWtZgNGlqleIqJqUVqRdDGdoMMpCCXNuQF3L90DuZO', '500.00', 'SI', 559, 'jZOpnWHlx2XbralKvG7Nc5EPkMbQZIBA2tzksM7ZpVgaJ91uxAgqJxhOCRGJ', '2019-03-23 02:40:24', '2019-03-23 02:40:24', 3, 1, '', '', '1'),
-(583, 'pablo cesar', '3184155152', 'pablogil311@gmail.com', '$2y$10$1z9esP/Sh6ox/0pyPJUf.OPSYyV.cgDCcbaQTGU0tnSO9zIsouAM6', '500.00', 'SI', 560, NULL, '2019-04-14 20:13:11', '2019-04-14 20:13:11', 3, 1, '', '', '1'),
-(584, 'edgar guzman', '3158790445', 'edgar.guzman21@gmail.com', '$2y$10$wPs54ujJwgttpqYK4hysyOAWf/sHSRL4vRjcg84A8fhdOFzZiJDbK', '500.00', 'SI', 561, 'TwaHwSC3W9C5W81BTEwb7c1FMyNOB0OkqPOFYpeJ197yoeEbmmqsCgG2BHRH', '2019-05-17 16:54:20', '2019-05-17 18:13:39', 3, 1, '', '', '1');
+(583, 'pablo cesar', '3184155152', 'pablogil311@gmail.com', '$2y$10$1z9esP/Sh6ox/0pyPJUf.OPSYyV.cgDCcbaQTGU0tnSO9zIsouAM6', '500.00', 'SI', 560, NULL, '2019-04-14 20:13:11', '2019-04-14 20:13:11', 3, 1, '', '', '1');
 
 -- --------------------------------------------------------
 
@@ -4071,8 +4061,6 @@ ALTER TABLE `role_has_permissions`
   ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 COMMIT;
-
-ALTER TABLE `pagos` CHANGE `transaction_value_pagado` `transaction_value_pagado` VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1';
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
