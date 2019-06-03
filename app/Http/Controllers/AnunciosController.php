@@ -337,25 +337,30 @@ class AnunciosController extends Controller
     public function create()
     {
 
-       $this->authorize('create', new Anuncios); 
 
            $coinmarketcap = new CurlModel();
            
            $listacriptos = $coinmarketcap->get_response_listings_cache();
-           
+           ;
            if($listacriptos->status->error_code==0){
                $listamonedas = $coinmarketcap->get_fiat_currency();
-           
-               $coin  = $coinmarketcap->get_specific_currency(1,Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor);
-                $price=(array)$coin->quote;  
+               
+               $coin  = json_decode($coinmarketcap->get_specific_currency(1,Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor));
+               
+                if($coin->respuesta){
+                    $price=(array)$coin->quote;  
                           
-               return view('posts.create')
+                    return view('posts.create')
                                 ->with('coins',$price[Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor]->price)
                                 ->with('listacriptos', $listacriptos->data)
                                 ->with("listamonedas",$listamonedas)
                                 ->with("recarga",Recargas::where("user_id",auth()->user()->id)->select("valor")->first())
                                 ->with('porcentaje',Variable::where('nombre','porcentaje_tramite')->get())
-                                ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());
+                                ->with('keygplages',Variable::where('nombre','gooogleplaces')->select('valor')->first());    
+                }else{
+                    return back()->with('error', 'Ha ocurrido un error, al cargar el formulario de creación de anuncios, ye hemos informado a los administradores, estamos trabajando para solucionar el problema');
+                }
+                
            }else{
             return back()->with('error', 'Ha ocurrido un error, al cargar el formulario de creación de anuncios, ye hemos informado a los administradores, estamos trabajando para solucionar el problema');
            }
