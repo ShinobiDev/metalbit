@@ -10,7 +10,7 @@ use App\CriptoMonedas;
 //Clase para consultar API coinmarketcap
 class CurlModel extends Model
 {
-	private $url_base="https://sandbox.coinmarketcap.com/";
+	  private $url_base="https://sandbox.coinmarketcap.com/";
     private $client;
     private $key_coin;
     private $curl; 
@@ -158,9 +158,9 @@ class CurlModel extends Model
 
                 $this->curl = curl_init(); // Get cURL resource
                 // Set cURL options
-
+                
                 $response=json_decode($this->start_curl($url,$parameters));
-             
+                
                 if($response!=null){
 
                   if($response->status->error_code==0){
@@ -173,7 +173,7 @@ class CurlModel extends Model
                                       ->join("roles","model_has_roles.role_id","roles.id")
                                       ->where("roles.name","Admin")
                                       ->get();     
-                        NotificacionError::dispatch($email[0],$response->status->error_message);  
+                        //NotificacionError::dispatch($email[0],$response->status->error_message);  
                        
                   }
                   $this->finish_curl(); // Close request
@@ -186,7 +186,7 @@ class CurlModel extends Model
                                       ->get(); 
 
                         /*NotificacionError::dispatch($email[0],"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar");*/
-                   return json_encode(["error"=>"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar","respuesta"=>false]);
+                   return json_encode(false);
                 }
         			
             }else{
@@ -194,7 +194,7 @@ class CurlModel extends Model
                                       ->join("roles","model_has_roles.role_id","roles.id")
                                       ->where("roles.name","Admin")
                                       ->get();     
-                        NotificacionError::dispatch($email[0],"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar");
+                        /*NotificacionError::dispatch($email[0],"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar");*/
                 return json_encode(["error"=>"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar","respuesta"=>false]);
             }  
         }catch(\Exception $ex){
@@ -204,7 +204,7 @@ class CurlModel extends Model
                             ->join("roles","model_has_roles.role_id","roles.id")
                             ->where("roles.name","Admin")
                             ->get();     
-              NotificacionError::dispatch($email[0],$ex->getMessage());         
+              //NotificacionError::dispatch($email[0],$ex->getMessage());         
               return json_encode(["error"=>"Ha ocurrido un error en la app, ya se ha notifificado a losa dministradores","respuesta"=>false]);
                     
         }
