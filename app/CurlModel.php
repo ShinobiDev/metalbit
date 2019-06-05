@@ -31,7 +31,7 @@ class CurlModel extends Model
     private function start_curl($direccion,$parameters){
                     
                 $url = $this->url_base.$direccion;    
-               
+                
                 $headers = [
                   'Accepts: application/json',
                   'X-CMC_PRO_API_KEY: '.$this->key_coin
@@ -46,6 +46,7 @@ class CurlModel extends Model
                   CURLOPT_RETURNTRANSFER => 1         // ask for raw response instead of bool
                 ));
                 // Send the request, save the response
+
                 return curl_exec($this->curl); 
                     
     }
@@ -141,8 +142,10 @@ class CurlModel extends Model
     * @return [json_encode]                     [valores especificos para la moneda solitada]
     */
     public function get_specific_currency($id_cripto_currency,$convert){
+
         try{
             $string_add="";
+
     		if($id_cripto_currency!="null"){
                 $url = 'v1/cryptocurrency/quotes/latest';
 
@@ -157,25 +160,41 @@ class CurlModel extends Model
                 // Set cURL options
 
                 $response=json_decode($this->start_curl($url,$parameters));
-                
-                if($response->status->error_code==0){
+             
+                if($response!=null){
+
+                  if($response->status->error_code==0){
                     $r=(array)$response->data; 
                     
                     return $r[$id_cripto_currency];
-                }else{
-                    \Log::error($response->status->error_message); 
-                      $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
-                                    ->join("roles","model_has_roles.role_id","roles.id")
-                                    ->where("roles.name","Admin")
-                                    ->get();     
-                      NotificacionError::dispatch($email[0],$response->status->error_message);  
-                     
-                }
-
+                  }else{
+                       \Log::error($response->status->error_message); 
+                        $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
+                                      ->join("roles","model_has_roles.role_id","roles.id")
+                                      ->where("roles.name","Admin")
+                                      ->get();     
+                        NotificacionError::dispatch($email[0],$response->status->error_message);  
+                       
+                  }
+                  $this->finish_curl(); // Close request
                 
-                $this->finish_curl(); // Close request
+                
+                }else{
+                        $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
+                                      ->join("roles","model_has_roles.role_id","roles.id")
+                                      ->where("roles.name","Admin")
+                                      ->get(); 
+
+                        /*NotificacionError::dispatch($email[0],"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar");*/
+                   return json_encode(["error"=>"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar","respuesta"=>false]);
+                }
         			
             }else{
+                $email=User::join("model_has_roles","users.id","model_has_roles.model_id")
+                                      ->join("roles","model_has_roles.role_id","roles.id")
+                                      ->where("roles.name","Admin")
+                                      ->get();     
+                        NotificacionError::dispatch($email[0],"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar");
                 return json_encode(["error"=>"Por favor ingresa un id de la cripto moneda que quieres convertir o consultar","respuesta"=>false]);
             }  
         }catch(\Exception $ex){

@@ -89,7 +89,7 @@ class RegisterController extends Controller
             'codigo_referido'=>((int)$cod[0]->codigo_referido+1),
             'calificacion'=>3,
             'num_calificaciones'=>1,
-            'estado'=>1
+            'estado'=>'1'
         ]);
          $u->assignRole('Comerciante');
          DB::table('detalle_horario_usuario')->insert([                                       
