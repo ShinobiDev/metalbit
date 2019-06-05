@@ -16,9 +16,17 @@ Metalbit es una aplicación para ofrecer anuncios para compra y venta de criptom
 
 	sudo chmod 777 -R logs
 
-## Paso 2 limpiar el cache de la aplicación, debe hacerlo desde la raiz
+## Paso 2 Cree el archivo .env
+Agrege los datos necesesarios segun el modelo del archivo .env llamado .env.example
 
-	php artisan cache:clear
-## Paso 3
+## Paso 3 Crear Key
+
+	php artisan key:generate
+
+## Paso 4 Limpiar Cache de la aplicación
+	
+	php artisan cache:clear	
+
+## Paso 5
 
 NO ejecute la migración, el script de la base de datos (metal_bit_para_pruebas.sql) se encuentra en la carpeta db, los usuarios allí registrados tiene como defecto la clave '123456', para, si usted desea replicar el ambiente de producción, debe importar la base de datos (metal_bit_para_producccion.sql), en este caso las contraseñas debe ser recuperadas.
