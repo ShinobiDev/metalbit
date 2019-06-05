@@ -29,9 +29,11 @@ class Anuncios extends Model
         $arr_valores_monedas=[];
         
   		  foreach ($monedas as $key => $m) {
+          
           $arr=$curl->get_specific_currency($m->criptomoneda,$m->moneda);
           
           if(property_exists($arr,"respuesta")==false){
+            
             $pivote=(array)$arr->quote;
             
             $arr_valores_monedas[$key]=["search"=>strval($arr->id.$m->moneda),"criptomoneda"=>$arr->id,"moneda"=>$m->moneda,"precio"=>$pivote[$m->moneda]->price,"name"=>$arr->name];
@@ -47,7 +49,7 @@ class Anuncios extends Model
         //genero respuesta para anuncios de ventas
         $arr_anuncios=array();
          
-        
+      
         foreach ($anuncios_consultados as $key => $value) {
              /**
                * [$mostrar_info description] variable para validar la visibilidad del boton información
@@ -81,7 +83,7 @@ class Anuncios extends Model
               $transaccion_pendiente=[];
 
               
-            //dd($value);
+            
             if($value->moneda!=null && $value->criptomoneda!=null){
                         
                        
@@ -89,124 +91,127 @@ class Anuncios extends Model
                         $jsvv=array_search(strval($value->criptomoneda.$value->moneda), array_column($arr_valores_monedas,'search'));
                         
                         
-                        if(array_key_exists($jsvv,$arr_valores_monedas)!=false){
+                        if($jsvv!=false){
+                            if(array_key_exists($jsvv,$arr_valores_monedas)!=false){
 
-                               $pre=$arr_valores_monedas[$jsvv]['precio'];
-                              
+                                 $pre=$arr_valores_monedas[$jsvv]['precio'];
                                 
-                                $precio_moneda=$this->calc_precio_moneda($pre,$value->margen,$value->precio_minimo_moneda);
-                    
+                                  
+                                  $precio_moneda=$this->calc_precio_moneda($pre,$value->margen,$value->precio_minimo_moneda);
+                      
 
-                                if($precio_moneda==0){
-                                    $precio_moneda=number_format($pre,2,'.','');
-                                }
+                                  if($precio_moneda==0){
+                                      $precio_moneda=number_format($pre,2,'.','');
+                                  }
 
-                               
+                                 
 
-                                
-                                if($value->tipo_anuncio=="venta"){
-                                    $desc="Venta de ".$arr_valores_monedas[$jsvv]['name'];
-                                }else{
-                                    $desc="Compra de ".$arr_valores_monedas[$jsvv]['name'];
-                                }
-
-
-                                $cod=$value->cod_anuncio."-".$value->id."-".time()."-".$key;
-                                    
-                                    $u=new User();
-
-                                    $horarios=$u->ver_horarios($value->user_id,date('w'));
-
-                                    if(( (float)$value->valor < (float)$value->costo_clic) || (float)$value->valor == 0 ){
-                                            //$mostrar_info=false;
-                                            $mostrar_payu=false;
-                                    }
-                                   
-                                    //
-                                    if($horarios['respuesta']==false){
-                                      //$mostrar_info=false;                                      
-                                    }
-
-                                     if(auth()->user()!=null){
+                                  
+                                  if($value->tipo_anuncio=="venta"){
+                                      $desc="Venta de ".$arr_valores_monedas[$jsvv]['name'];
+                                  }else{
+                                      $desc="Compra de ".$arr_valores_monedas[$jsvv]['name'];
+                                  }
 
 
-                                       	  $dtc=DB::table('detalle_clic_anuncios')
-                                       					->where([
-  	                                     							['id_anuncio',$value->id],
-  	                                     							['id_usuario',auth()->user()->id],
-                                                      ['tipo','<>','compra']
-                                       							])->get();
-                                          //valido si no existe comentario del usuario  logueado        
-                                          if(count($dtc)>0){
-                                             
-                                           		$f=new Carbon($dtc[0]->updated_at);
-                                           		$visto=$f->format('M d, Y h:i A');
-                                              $id_detalle_clic=$dtc[0]->id;
-                                            if($dtc[0]->calificacion!=null){
+                                  $cod=$value->cod_anuncio."-".$value->id."-".time()."-".$key;
+                                      
+                                      $u=new User();
 
-                                                $mostrar_calificar=false;
-                                            }
-                                            
-                                         	}	
-                                     }                                 
-                                     if(auth()->user()!=null){
-                                      $transaccion_pendiente=$u->compra_pendiente($value->id,auth()->user()->id); 
-                                     }   
+                                      $horarios=$u->ver_horarios($value->user_id,date('w'));
+
+                                      if(( (float)$value->valor < (float)$value->costo_clic) || (float)$value->valor == 0 ){
+                                              //$mostrar_info=false;
+                                              $mostrar_payu=false;
+                                      }
                                      
+                                      //
+                                      if($horarios['respuesta']==false){
+                                        //$mostrar_info=false;                                      
+                                      }
 
-                                     //obtener los comentarios
-                                     //dd([$precio_moneda,number_format($value->limite_min,0,'','')]);
-                                     $comentarios=$this->ver_comentarios($value->id,5);
- 
-                                        $arr_anuncios[$v++]=(object)[
-                                                         "id_anunciante"=>$value->user_id,
-                                                        "id_anuncio"=>$value->id,
-                                                        "cod_anuncio"=>$cod,
-                                                        "tipo_anuncio"=>$value->tipo_anuncio,
-                                                        //"descripcion"=>$desc." cant # ".number_format($value->limite_min / (float)number_format($precio_moneda,2,".",""),2,",","."),
-                                                        "descripcion"=>"Pagos y recargas Metalbit",
-                                                        "banco"=>$value->banco,
-                                                        "ubicacion"=>$value->ubicacion,
-                                                        "precio_moneda"=>number_format($precio_moneda,2,',', '.'),
-                                                        "precio_moneda_sf"=>$precio_moneda,
-                                                        "precio_moneda_cf"=>number_format($precio_moneda,2,'.',''),
-                                                        "cripto_moneda"=>$arr_valores_monedas[$jsvv]['name'],
-                                                        "id_cripto_moneda"=>$arr_valores_monedas[$jsvv]['criptomoneda'],
-                                                        "moneda"=>$value->moneda,
-                                                        "nombre_moneda"=>$value->nombre_moneda,
-                                                        "margen_gananacia"=>$value->margen,
-                                                        "limite_min"=>$value->limite_min,
-                                                        "limite_max"=>$value->limite_max,
-                                                        "terminos"=>$value->terminos,
-                                                        "costo_clic"=>$value->costo_clic,
-                                                        "lugar"=>$value->lugar,
-                                                        "correo_ofertante"=>$value->email,
-                                                        "name"=>$value->name,
-                                                        "phone"=>$value->phone,
-                                                        "id"=>$value->id,
-                                                        "limite_clic"=>$value->valor,
-                                                        "btn_info"=>$mostrar_info,
-                                                        "btn_payu"=>$mostrar_payu,
-                                                        "btn_calificar"=>$mostrar_calificar,
-                                                        "calificacion"=>$value->calificacion,
-                                                        "visto"=>$visto,
-                                                        "id_detalle_clic"=>$id_detalle_clic,
-                                                        "comentarios"=>$comentarios,
-                                                        "estado_anuncio"=>$value->estado_anuncio,
-                                                        "horario"=>$horarios['horario'],
-                                                        "transaccion_pendiente"=>$transaccion_pendiente
-                                                    ];
-
-                                }
+                                       if(auth()->user()!=null){
 
 
-                        }else{
-                              //dd($value);
-                              //AlertAnuncio::dispatch($email[0], $value,$limite_clic[0]->valor);
-                              NotificacionAnuncio::dispatch($email[0], $value,$limite_clic[0]->valor,"CriptoMonedaInhabilitada");
-                              Anuncios::where('id',$value->id)->update([
-                                                    "estado_anuncio",'0'
-                                                ]);
+                                            $dtc=DB::table('detalle_clic_anuncios')
+                                                  ->where([
+                                                        ['id_anuncio',$value->id],
+                                                        ['id_usuario',auth()->user()->id],
+                                                        ['tipo','<>','compra']
+                                                      ])->get();
+                                            //valido si no existe comentario del usuario  logueado        
+                                            if(count($dtc)>0){
+                                               
+                                                $f=new Carbon($dtc[0]->updated_at);
+                                                $visto=$f->format('M d, Y h:i A');
+                                                $id_detalle_clic=$dtc[0]->id;
+                                              if($dtc[0]->calificacion!=null){
+
+                                                  $mostrar_calificar=false;
+                                              }
+                                              
+                                            } 
+                                       }                                 
+                                       if(auth()->user()!=null){
+                                        $transaccion_pendiente=$u->compra_pendiente($value->id,auth()->user()->id); 
+                                       }   
+                                       
+
+                                       //obtener los comentarios
+                                       //dd([$precio_moneda,number_format($value->limite_min,0,'','')]);
+                                       $comentarios=$this->ver_comentarios($value->id,5);
+
+                                          $arr_anuncios[$v++]=(object)[
+                                                           "id_anunciante"=>$value->user_id,
+                                                          "id_anuncio"=>$value->id,
+                                                          "cod_anuncio"=>$cod,
+                                                          "tipo_anuncio"=>$value->tipo_anuncio,
+                                                          //"descripcion"=>$desc." cant # ".number_format($value->limite_min / (float)number_format($precio_moneda,2,".",""),2,",","."),
+                                                          "descripcion"=>"Pagos y recargas Metalbit",
+                                                          "banco"=>$value->banco,
+                                                          "ubicacion"=>$value->ubicacion,
+                                                          "precio_moneda"=>number_format($precio_moneda,2,',', '.'),
+                                                          "precio_moneda_sf"=>$precio_moneda,
+                                                          "precio_moneda_cf"=>number_format($precio_moneda,2,'.',''),
+                                                          "cripto_moneda"=>$arr_valores_monedas[$jsvv]['name'],
+                                                          "id_cripto_moneda"=>$arr_valores_monedas[$jsvv]['criptomoneda'],
+                                                          "moneda"=>$value->moneda,
+                                                          "nombre_moneda"=>$value->nombre_moneda,
+                                                          "margen_gananacia"=>$value->margen,
+                                                          "limite_min"=>$value->limite_min,
+                                                          "limite_max"=>$value->limite_max,
+                                                          "terminos"=>$value->terminos,
+                                                          "costo_clic"=>$value->costo_clic,
+                                                          "lugar"=>$value->lugar,
+                                                          "correo_ofertante"=>$value->email,
+                                                          "name"=>$value->name,
+                                                          "phone"=>$value->phone,
+                                                          "id"=>$value->id,
+                                                          "limite_clic"=>$value->valor,
+                                                          "btn_info"=>$mostrar_info,
+                                                          "btn_payu"=>$mostrar_payu,
+                                                          "btn_calificar"=>$mostrar_calificar,
+                                                          "calificacion"=>$value->calificacion,
+                                                          "visto"=>$visto,
+                                                          "id_detalle_clic"=>$id_detalle_clic,
+                                                          "comentarios"=>$comentarios,
+                                                          "estado_anuncio"=>$value->estado_anuncio,
+                                                          "horario"=>$horarios['horario'],
+                                                          "transaccion_pendiente"=>$transaccion_pendiente
+                                                      ];
+
+                                  }
+
+
+                            }else{
+                                  //dd($value);
+                                  //AlertAnuncio::dispatch($email[0], $value,$limite_clic[0]->valor);
+                                  $email=User::where('id',$value->user_id)->get();
+                                  NotificacionAnuncio::dispatch($email[0], $value,$value->valor,"CriptoMonedaInhabilitada");
+                                  /*Anuncios::where('id',$value->id)->update([
+                                                        "estado_anuncio"=>'inactivo'
+                                                    ]);*/
+                            }
                         }
 
 

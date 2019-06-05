@@ -27,6 +27,7 @@ class AnunciosController extends Controller
      */
     public function index()
     {
+
         $u=auth()->user();
 
         $anuncios_consultados=array();
@@ -91,6 +92,7 @@ class AnunciosController extends Controller
                         //->orderBy("anuncios.id","DESC")
                         ->orderBy("recargas.valor","DESC")
                         ->get();
+
             $monedas = Anuncios::select(
                              "anuncios.criptomoneda",
                             "anuncios.moneda")
@@ -101,12 +103,12 @@ class AnunciosController extends Controller
                         ->groupBy('anuncios.criptomoneda')
                         ->groupBy('anuncios.moneda')
                         ->get();
-                        
+    
         }   
-
+    
         $ad_arr=new Anuncios();
         $arr_anuncios = $ad_arr->ver_anuncios($anuncios_consultados,$monedas);
- 
+        
         if(auth()->user()!=null){
             return view('welcome')
                     ->with('anuncios',$arr_anuncios)
@@ -345,9 +347,9 @@ class AnunciosController extends Controller
            if($listacriptos->status->error_code==0){
                $listamonedas = $coinmarketcap->get_fiat_currency();
                
-               $coin  = json_decode($coinmarketcap->get_specific_currency(1,Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor));
+               $coin  = $coinmarketcap->get_specific_currency(1,Variable::where('nombre','moneda_por_defecto')->select('valor')->first()->valor);
                
-                if($coin->respuesta){
+                if($coin!=false){
                     $price=(array)$coin->quote;  
                           
                     return view('posts.create')
